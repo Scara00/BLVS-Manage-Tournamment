@@ -39,5 +39,6 @@ npx playwright install chromium   # solo per i test e2e
 - `src/app/` — route (App Router)
 - `src/components/ui/` — componenti shadcn/ui (aggiungili con `npx shadcn@latest add <nome>`)
 - `src/lib/` — utility (`cn` in `utils.ts`, client Supabase in `supabase/`)
+- `src/proxy.ts` — Proxy Next.js (ex middleware): rinnova la sessione Supabase a ogni richiesta (`updateSession` in `src/lib/supabase/proxy.ts`). Senza variabili d'ambiente Supabase il refresh è disattivato con un warning, così build/e2e funzionano anche senza progetto collegato.
 - `e2e/` — test Playwright; i test unitari stanno accanto al codice (`*.test.tsx`)
 - Alias di import: `@/*` → `src/*`
