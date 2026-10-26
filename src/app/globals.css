@@ -4,12 +4,94 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * BLVS Court design tokens. Source of truth: src/lib/design-tokens/tokens.ts.
+ * Change both files together: tokens-css.test.ts checks they match.
+ */
+
+/* Literal tokens: spacing, radius and type scale. `static` always emits
+   the variables, so var(--spacing-*) works even without a utility using it. */
+@theme static {
+  --spacing-space-1: 0.25rem;
+  --spacing-space-2: 0.5rem;
+  --spacing-space-3: 0.75rem;
+  --spacing-space-4: 1rem;
+  --spacing-space-5: 1.5rem;
+  --spacing-space-6: 2rem;
+  --spacing-space-7: 3rem;
+  --spacing-space-8: 4rem;
+  --spacing-space-9: 6rem;
+  --spacing-inset-sm: 0.75rem;
+  --spacing-inset: 1rem;
+  --spacing-inset-lg: 1.5rem;
+  --spacing-stack-sm: 0.5rem;
+  --spacing-stack: 1rem;
+  --spacing-stack-lg: 2rem;
+
+  --radius-none: 0px;
+  --radius-full: 9999px;
+
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: 1.25rem;
+  --text-base: 1rem;
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.75rem;
+  --text-xl: 1.25rem;
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 2rem;
+  --text-3xl--line-height: 2.5rem;
+  --text-4xl: 2.5rem;
+  --text-4xl--line-height: 3rem;
+}
+
 @theme inline {
+  --font-sans: var(--font-figtree);
+  --font-heading: var(--font-outfit);
+  --font-mono: var(--font-mono-blvs);
+
+  /* BLVS brand colours: bg-tape, text-live-fg, bg-reg-open-bg, … */
+  --color-brand-accent: var(--blvs-accent);
+  --color-tape: var(--blvs-tape);
+  --color-tape-strong: var(--blvs-tape-strong);
+  --color-tape-soft: var(--blvs-tape-soft);
+  --color-neutral-0: var(--blvs-neutral-0);
+  --color-neutral-50: var(--blvs-neutral-50);
+  --color-neutral-100: var(--blvs-neutral-100);
+  --color-neutral-200: var(--blvs-neutral-200);
+  --color-neutral-300: var(--blvs-neutral-300);
+  --color-neutral-400: var(--blvs-neutral-400);
+  --color-neutral-500: var(--blvs-neutral-500);
+  --color-neutral-600: var(--blvs-neutral-600);
+  --color-neutral-700: var(--blvs-neutral-700);
+  --color-neutral-800: var(--blvs-neutral-800);
+  --color-neutral-900: var(--blvs-neutral-900);
+  --color-success-fg: var(--blvs-success-fg);
+  --color-success-bg: var(--blvs-success-bg);
+  --color-error-fg: var(--blvs-error-fg);
+  --color-error-bg: var(--blvs-error-bg);
+  --color-warning-fg: var(--blvs-warning-fg);
+  --color-warning-bg: var(--blvs-warning-bg);
+  --color-info-fg: var(--blvs-info-fg);
+  --color-info-bg: var(--blvs-info-bg);
+  --color-live-fg: var(--blvs-live-fg);
+  --color-live-bg: var(--blvs-live-bg);
+  --color-reg-draft-fg: var(--blvs-reg-draft-fg);
+  --color-reg-draft-bg: var(--blvs-reg-draft-bg);
+  --color-reg-open-fg: var(--blvs-reg-open-fg);
+  --color-reg-open-bg: var(--blvs-reg-open-bg);
+  --color-reg-closed-fg: var(--blvs-reg-closed-fg);
+  --color-reg-closed-bg: var(--blvs-reg-closed-bg);
+  --color-reg-cancelled-fg: var(--blvs-reg-cancelled-fg);
+  --color-reg-cancelled-bg: var(--blvs-reg-cancelled-bg);
+
+  /* shadcn semantic colours, remapped onto the brand in :root. */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,83 +130,101 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Light theme only: dark mode is a follow-up. */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.53 0.22 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
+  --blvs-primary: #000000;
+  --blvs-primary-foreground: #ffffff;
+  --blvs-tape: #ffcc00;
+  --blvs-tape-strong: #febe10;
+  --blvs-tape-soft: #fff3b7;
+  --blvs-accent: #536dab;
+  --blvs-neutral-0: #ffffff;
+  --blvs-neutral-50: #fbfbfc;
+  --blvs-neutral-100: #f2f2f3;
+  --blvs-neutral-200: #e3e3e4;
+  --blvs-neutral-300: #c9caca;
+  --blvs-neutral-400: #b1b2b2;
+  --blvs-neutral-500: #6b6c6c;
+  --blvs-neutral-600: #4a4a4c;
+  --blvs-neutral-700: #333333;
+  --blvs-neutral-800: #282828;
+  --blvs-neutral-900: #000000;
+  --blvs-success-fg: #0f5c2e;
+  --blvs-success-bg: #e3f4e8;
+  --blvs-error-fg: #b3261e;
+  --blvs-error-bg: #fbe9e7;
+  --blvs-warning-fg: #7a4100;
+  --blvs-warning-bg: #fff3b7;
+  --blvs-info-fg: #1f3a7a;
+  --blvs-info-bg: #e6ebf6;
+  --blvs-live-fg: #ffffff;
+  --blvs-live-bg: #a3001b;
+  --blvs-reg-draft-fg: #282828;
+  --blvs-reg-draft-bg: #e3e3e4;
+  --blvs-reg-open-fg: #000000;
+  --blvs-reg-open-bg: #ffcc00;
+  --blvs-reg-closed-fg: #ffffff;
+  --blvs-reg-closed-bg: #282828;
+  --blvs-reg-cancelled-fg: #b3261e;
+  --blvs-reg-cancelled-bg: #fbe9e7;
+  --blvs-background: #ffffff;
+  --blvs-foreground: #282828;
+  --blvs-muted-foreground: #6b6c6c;
+  --blvs-border: #e3e3e4;
+  --blvs-input: #6b6c6c;
+  --blvs-ring: #000000;
 
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: var(--blvs-background);
+  --foreground: var(--blvs-foreground);
+  --card: var(--blvs-neutral-0);
+  --card-foreground: var(--blvs-foreground);
+  --popover: var(--blvs-neutral-0);
+  --popover-foreground: var(--blvs-foreground);
+  --primary: var(--blvs-primary);
+  --primary-foreground: var(--blvs-primary-foreground);
+  --secondary: var(--blvs-neutral-100);
+  --secondary-foreground: var(--blvs-neutral-900);
+  --muted: var(--blvs-neutral-100);
+  --muted-foreground: var(--blvs-muted-foreground);
+  --accent: var(--blvs-tape);
+  --accent-foreground: var(--blvs-primary);
+  --destructive: var(--blvs-error-fg);
+  --border: var(--blvs-border);
+  --input: var(--blvs-input);
+  --ring: var(--blvs-ring);
+  --chart-1: var(--blvs-tape);
+  --chart-2: var(--blvs-accent);
+  --chart-3: var(--blvs-neutral-800);
+  --chart-4: var(--blvs-neutral-400);
+  --chart-5: var(--blvs-tape-strong);
+  --radius: 0px;
+  --sidebar: var(--blvs-neutral-50);
+  --sidebar-foreground: var(--blvs-foreground);
+  --sidebar-primary: var(--blvs-primary);
+  --sidebar-primary-foreground: var(--blvs-primary-foreground);
+  --sidebar-accent: var(--blvs-tape);
+  --sidebar-accent-foreground: var(--blvs-primary);
+  --sidebar-border: var(--blvs-border);
+  --sidebar-ring: var(--blvs-ring);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-size: 16px;
+    @apply font-sans;
+  }
   body {
     @apply bg-background text-foreground;
   }
-  html {
-    @apply font-sans;
+  /* Scores and times: the mono token always uses tabular figures. */
+  .font-mono,
+  code,
+  kbd,
+  samp,
+  pre {
+    font-variant-numeric: tabular-nums;
   }
 }
