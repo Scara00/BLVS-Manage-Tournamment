@@ -1,0 +1,107 @@
+{
+  "components.json": {
+    "mtime": 1793044712.3817627,
+    "ast_hash": "fc5c9e9a7b93eeb2f7b4e1ce0959e4a6",
+    "semantic_hash": ""
+  },
+  "e2e/home.spec.ts": {
+    "mtime": 1793044830.1160746,
+    "ast_hash": "8683013a397c8b7a2d737fbfdd869828",
+    "semantic_hash": ""
+  },
+  "eslint.config.mjs": {
+    "mtime": 1793044673.0,
+    "ast_hash": "dfa1f5f6a7037bf39dc510f30b180002",
+    "semantic_hash": ""
+  },
+  "next.config.ts": {
+    "mtime": 1793044673.0,
+    "ast_hash": "59ace8843cd0f04a4328b2189aead87b",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1793044871.9350317,
+    "ast_hash": "9d6f34de00c4fa5ca8fc24d737326a75",
+    "semantic_hash": ""
+  },
+  "playwright.config.ts": {
+    "mtime": 1793044888.322126,
+    "ast_hash": "c83f96b7219bfb6f802d3c13de0a4b4b",
+    "semantic_hash": ""
+  },
+  "src/app/layout.tsx": {
+    "mtime": 1793044743.3043854,
+    "ast_hash": "683f59c8214c82f347c1510425daf663",
+    "semantic_hash": ""
+  },
+  "src/app/page.test.tsx": {
+    "mtime": 1793044830.1115322,
+    "ast_hash": "e1af95f3ec00d4874499a0ca70eef825",
+    "semantic_hash": ""
+  },
+  "src/app/page.tsx": {
+    "mtime": 1793044751.5594969,
+    "ast_hash": "655311af3cdcc6779da33735edff7fd6",
+    "semantic_hash": ""
+  },
+  "src/components/ui/button.tsx": {
+    "mtime": 1793044719.127012,
+    "ast_hash": "2700bddde0ac66fc6f2fc1b56fcfdc2d",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase/client.ts": {
+    "mtime": 1793044850.7349224,
+    "ast_hash": "9ecfe22ca45db53a66d97baf88a6e3f0",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase/env.ts": {
+    "mtime": 1793044964.5683534,
+    "ast_hash": "4a48c4580aeb04098378da854e3cc29e",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase/server.ts": {
+    "mtime": 1793044850.7369971,
+    "ast_hash": "3c82b886bdea102df54c87078fee2918",
+    "semantic_hash": ""
+  },
+  "src/lib/utils.ts": {
+    "mtime": 1793044719.1275306,
+    "ast_hash": "0482d21cfeab8cfcfe44f94927e45afb",
+    "semantic_hash": ""
+  },
+  "src/test/setup.ts": {
+    "mtime": 1793044830.109303,
+    "ast_hash": "522e3714e0d342c9b24b23367d8a85b2",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1793044673.0,
+    "ast_hash": "ee17fd1c97c735e9f3564e3f5251f125",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1793044690.0,
+    "ast_hash": "c98dbebb744eadc1acc4b9f58bfe0f42",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1793045007.2245324,
+    "ast_hash": "3f81db6e3d5df30af93f289f9e52c1a2",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase/proxy.test.ts": {
+    "mtime": 1793044983.0935857,
+    "ast_hash": "6c12180cdc033e23533be86237674a1c",
+    "semantic_hash": ""
+  },
+  "src/lib/supabase/proxy.ts": {
+    "mtime": 1793044970.8134108,
+    "ast_hash": "dd8d0b81a04defe32014c486f32bb9c5",
+    "semantic_hash": ""
+  },
+  "src/proxy.ts": {
+    "mtime": 1793044964.5725951,
+    "ast_hash": "899b4d57f6a19e2bd377ce640e3af58c",
+    "semantic_hash": ""
+  }
+}
