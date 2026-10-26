@@ -65,9 +65,8 @@ describe("updateSession", () => {
 
   it("registra gli errori di refresh ma non quelli di sessione assente", async () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { AuthSessionMissingError, AuthApiError } = await import(
-      "@supabase/supabase-js"
-    );
+    const { AuthSessionMissingError, AuthApiError } =
+      await import("@supabase/supabase-js");
     createServerClient.mockReturnValue({ auth: { getClaims } });
     const updateSession = await loadUpdateSession();
 
