@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite";
+import { fontVariables } from "../src/lib/fonts";
 import "../src/app/globals.css";
 
 /** Reference viewports for the app: phone (390 px) and desktop (1440 px). */
@@ -36,6 +37,7 @@ const preview: Preview = {
   decorators: [
     (Story) => {
       document.documentElement.lang = "it";
+      document.documentElement.classList.add(...fontVariables);
       return Story();
     },
   ],
