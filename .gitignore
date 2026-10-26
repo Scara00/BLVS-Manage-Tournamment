@@ -49,3 +49,7 @@ next-env.d.ts
 
 # graphify cache
 /graphify-out/cache/
+
+# storybook
+/storybook-static/
+*storybook.log
