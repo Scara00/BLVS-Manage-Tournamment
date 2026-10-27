@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { AvvioFaseLinks } from "@/components/admin-avvio-fase/avvio-fase-links";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
 import type { GestioneTappaView } from "@/lib/tappe/gestione-format";
@@ -135,6 +136,12 @@ export function GestioneTappa({
       </Sezione>
 
       <TabelloniRiepilogo tabelloni={tappa.tabelloni} />
+
+      <AvvioFaseLinks
+        tappaId={tappa.id}
+        stato={tappa.stato}
+        tabelloni={tappa.tabelloni}
+      />
 
       <Link
         href={ADMIN_TAPPE_PATH}

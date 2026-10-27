@@ -31,3 +31,24 @@ describe("applyLiveEvent: partite da inserire", () => {
     expect(second.pendingScores).toEqual([{ ...stage, count: 2 }]);
   });
 });
+
+describe("applyLiveEvent: fase avviata", () => {
+  it("aggiunge il tabellone anche a uno snapshot senza fasi", () => {
+    const phase = {
+      id: "cagliari:F",
+      stageId: "cagliari",
+      label: "Tappa 3 · Cagliari, femminile",
+      category: "F" as const,
+      phase: "gironi_iniziali" as const,
+      matches: 6,
+    };
+    const next = applyLiveEvent(empty, {
+      type: "phase-started",
+      phase,
+      seq: 4,
+      savedAt: "2026-06-14T08:05:00.000Z",
+    });
+    expect(next.phases).toEqual([phase]);
+    expect(next.seq).toBe(4);
+  });
+});
