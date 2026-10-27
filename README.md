@@ -34,6 +34,8 @@ supabase db reset       # applica le migrazioni e carica i dati demo
 supabase link --project-ref <ref> && supabase db push   # applica le migrazioni al progetto remoto
 ```
 
+Per collegare il progetto di produzione (migrazioni, Auth, variabili, primo admin) segui [docs/supabase-produzione.md](docs/supabase-produzione.md).
+
 Account demo (solo in locale): `admin@blvs.test` (admin), `marco.rossi@blvs.test`, `giulia.colombo@blvs.test` e gli altri giocatori in `seed.sql`; password `Demo-BLVS-2026!`.
 
 - **Tabelle**: `utenti` (profilo di `auth.users`: ruolo, categoria, email unica senza distinzione di maiuscole), `tappe`, `tabelloni` (sempre M e F, creati da un trigger), `iscrizioni` (un giocatore per riga, unica per utente e tappa), `gironi`, `partite` + `partita_giocatori` (squadre A/B a rotazione), `punteggi` (con `versione` per la concorrenza ottimistica), `registro` (scritto dai trigger, in sola aggiunta), `consensi` (storico in sola aggiunta), `auth_rate_limits`.
