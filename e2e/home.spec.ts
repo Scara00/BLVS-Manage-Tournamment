@@ -9,6 +9,14 @@ test("la home mostra il titolo e la lingua italiana", async ({ page }) => {
   ).toBeVisible();
 });
 
+test("il layout monta la regione delle notifiche", async ({ page }) => {
+  await page.goto("/");
+  // The Toaster from src/components/providers.tsx portals into <body>.
+  const region = page.getByRole("region", { name: "Notifiche" });
+  await expect(region).toBeAttached();
+  await expect(region).toHaveAttribute("aria-live", "polite");
+});
+
 test("la home rispetta WCAG 2.2 AA", async ({ page }) => {
   await page.goto("/");
   await expectNoA11yViolations(page);

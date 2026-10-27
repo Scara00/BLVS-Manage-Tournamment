@@ -130,6 +130,43 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Scoreboard motion (src/components/scoreboard). ~300 ms per flip: the old
+   top flap falls, then the new bottom flap lands. */
+@theme {
+  --animate-flip-top: blvs-flip-top 150ms ease-in both;
+  --animate-flip-bottom: blvs-flip-bottom 150ms ease-out 150ms both;
+  --animate-tape-snap: blvs-tape-snap 250ms ease-out both;
+
+  @keyframes blvs-flip-top {
+    from {
+      transform: perspective(4em) rotateX(0deg);
+    }
+    to {
+      transform: perspective(4em) rotateX(-90deg);
+    }
+  }
+  @keyframes blvs-flip-bottom {
+    from {
+      transform: perspective(4em) rotateX(90deg);
+    }
+    to {
+      transform: perspective(4em) rotateX(0deg);
+    }
+  }
+  /* «Scatta»: the tape snaps across, overshoots, settles. */
+  @keyframes blvs-tape-snap {
+    0% {
+      transform: scaleX(0);
+    }
+    70% {
+      transform: scaleX(1.04);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+}
+
 /* Light theme only: dark mode is a follow-up. */
 :root {
   --blvs-primary: #000000;
@@ -208,15 +245,31 @@
   --sidebar-ring: var(--blvs-ring);
 }
 
+/*
+ * App shell: height of the sticky topbar (sticky from md only), kept clear
+ * by scroll-padding when focus or an anchor scrolls the page. TopbarHeight
+ * overwrites it with the measured height; these are the no-JS fallbacks.
+ */
+:root {
+  --app-topbar-h: 0rem;
+}
+@media (min-width: 48rem) {
+  :root {
+    --app-topbar-h: 4rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
     font-size: 16px;
+    scroll-padding-top: calc(var(--app-topbar-h) + var(--spacing-space-4));
     @apply font-sans;
   }
   body {
+    overflow-wrap: break-word;
     @apply bg-background text-foreground;
   }
   /* Scores and times: the mono token always uses tabular figures. */
@@ -226,5 +279,42 @@
   samp,
   pre {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Safety net behind useReducedMotion(): near-instant instead of `none`, so
+   animationend still fires and FlipDigits settles on the final digit. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-flip-top,
+  .animate-flip-bottom,
+  .animate-tape-snap {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
+  }
+}
+
+/*
+ * Two-tone focus ring: a 2px background-coloured band hugging the control
+ * and a 2px `--ring` band outside it, so it stays visible on white, on
+ * black (primary buttons) and on tape yellow.
+ */
+@utility focus-ring {
+  outline-style: none;
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--background);
+  }
+}
+
+/*
+ * Same ring on a wrapper (e.g. a radio card) whose child holds focus. Only
+ * the outline: the wrapper's own box-shadow marks the selected state, and
+ * the 2px offset gap shows the page background as the light band.
+ */
+@utility focus-ring-within {
+  &:has(:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
   }
 }

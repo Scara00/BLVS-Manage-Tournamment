@@ -35,9 +35,13 @@ const preview: Preview = {
     viewport: { value: "desktop1440", isRotated: false },
   },
   decorators: [
-    (Story) => {
-      document.documentElement.lang = "it";
-      document.documentElement.classList.add(...fontVariables);
+    (Story, { parameters }) => {
+      const html = document.documentElement;
+      html.lang = "it";
+      html.classList.add(...fontVariables);
+      // `parameters.text200`: 200% text (WCAG 1.4.4). Components size in rem,
+      // so this scales them too. Reset it, the static build reuses the page.
+      html.style.fontSize = parameters.text200 ? "200%" : "";
       return Story();
     },
   ],
