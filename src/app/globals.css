@@ -130,6 +130,43 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Scoreboard motion (src/components/scoreboard). ~300 ms per flip: the old
+   top flap falls, then the new bottom flap lands. */
+@theme {
+  --animate-flip-top: blvs-flip-top 150ms ease-in both;
+  --animate-flip-bottom: blvs-flip-bottom 150ms ease-out 150ms both;
+  --animate-tape-snap: blvs-tape-snap 250ms ease-out both;
+
+  @keyframes blvs-flip-top {
+    from {
+      transform: perspective(4em) rotateX(0deg);
+    }
+    to {
+      transform: perspective(4em) rotateX(-90deg);
+    }
+  }
+  @keyframes blvs-flip-bottom {
+    from {
+      transform: perspective(4em) rotateX(90deg);
+    }
+    to {
+      transform: perspective(4em) rotateX(0deg);
+    }
+  }
+  /* «Scatta»: the tape snaps across, overshoots, settles. */
+  @keyframes blvs-tape-snap {
+    0% {
+      transform: scaleX(0);
+    }
+    70% {
+      transform: scaleX(1.04);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+}
+
 /* Light theme only: dark mode is a follow-up. */
 :root {
   --blvs-primary: #000000;
@@ -226,5 +263,16 @@
   samp,
   pre {
     font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Safety net behind useReducedMotion(): near-instant instead of `none`, so
+   animationend still fires and FlipDigits settles on the final digit. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-flip-top,
+  .animate-flip-bottom,
+  .animate-tape-snap {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
   }
 }
