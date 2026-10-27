@@ -183,6 +183,24 @@ export const contrastPairs: readonly ContrastPair[] = [
     kind: "score",
   },
   {
+    name: "FlipDigits: cifra su nero",
+    fg: color.primaryForeground,
+    bg: color.primary,
+    kind: "score",
+  },
+  {
+    name: "Fase Silver",
+    fg: neutral[800],
+    bg: neutral[100],
+    kind: "text",
+  },
+  {
+    name: "Fase Silver: bordo",
+    fg: color.input,
+    bg: neutral[100],
+    kind: "graphic",
+  },
+  {
     name: "Iscrizioni: bozza",
     fg: color.reg.draft.fg,
     bg: color.reg.draft.bg,

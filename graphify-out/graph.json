@@ -346,6 +346,42 @@
       "norm_label": "viewports"
     },
     {
+      "label": "storybook-scoreboard.spec.ts",
+      "file_type": "code",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L1",
+      "id": "e2e_storybook_scoreboard_spec",
+      "community": 17,
+      "norm_label": "storybook-scoreboard.spec.ts"
+    },
+    {
+      "label": "StoryIndex",
+      "file_type": "code",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L4",
+      "id": "e2e_storybook_scoreboard_spec_storyindex",
+      "community": 17,
+      "norm_label": "storyindex"
+    },
+    {
+      "label": "VIEWPORTS",
+      "file_type": "code",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L11",
+      "id": "e2e_storybook_scoreboard_spec_viewports",
+      "community": 17,
+      "norm_label": "viewports"
+    },
+    {
+      "label": "scoreboardStories()",
+      "file_type": "code",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L16",
+      "id": "e2e_storybook_scoreboard_spec_scoreboardstories",
+      "community": 17,
+      "norm_label": "scoreboardstories()"
+    },
+    {
       "label": "eslint.config.mjs",
       "file_type": "code",
       "source_file": "eslint.config.mjs",
@@ -387,7 +423,7 @@
       "source_file": "package.json",
       "source_location": "L1",
       "id": "package",
-      "community": 2,
+      "community": 4,
       "norm_label": "package.json"
     },
     {
@@ -396,7 +432,7 @@
       "source_file": "package.json",
       "source_location": "L2",
       "id": "package_name",
-      "community": 2,
+      "community": 4,
       "norm_label": "name"
     },
     {
@@ -405,7 +441,7 @@
       "source_file": "package.json",
       "source_location": "L3",
       "id": "package_version",
-      "community": 2,
+      "community": 4,
       "norm_label": "version"
     },
     {
@@ -414,7 +450,7 @@
       "source_file": "package.json",
       "source_location": "L4",
       "id": "package_private",
-      "community": 2,
+      "community": 4,
       "norm_label": "private"
     },
     {
@@ -909,7 +945,7 @@
       "source_file": "package.json",
       "source_location": "L62",
       "id": "package_engines",
-      "community": 2,
+      "community": 4,
       "norm_label": "engines"
     },
     {
@@ -918,7 +954,7 @@
       "source_file": "package.json",
       "source_location": "L63",
       "id": "package_engines_node",
-      "community": 2,
+      "community": 4,
       "norm_label": "node"
     },
     {
@@ -1019,6 +1055,573 @@
       "id": "app_page_home",
       "community": 11,
       "norm_label": "home()"
+    },
+    {
+      "label": "category-label.stories.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_category_label_stories",
+      "community": 18,
+      "norm_label": "category-label.stories.tsx"
+    },
+    {
+      "label": "Story",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L14",
+      "id": "scoreboard_category_label_stories_story",
+      "community": 18,
+      "norm_label": "story"
+    },
+    {
+      "label": "Default",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L16",
+      "id": "scoreboard_category_label_stories_default",
+      "community": 18,
+      "norm_label": "default"
+    },
+    {
+      "label": "Femminile",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L18",
+      "id": "scoreboard_category_label_stories_femminile",
+      "community": 18,
+      "norm_label": "femminile"
+    },
+    {
+      "label": "category-label.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.test.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_category_label_test",
+      "community": 18,
+      "norm_label": "category-label.test.tsx"
+    },
+    {
+      "label": "category-label.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_category_label",
+      "community": 18,
+      "norm_label": "category-label.tsx"
+    },
+    {
+      "label": "labels",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L3",
+      "id": "scoreboard_category_label_labels",
+      "community": 18,
+      "norm_label": "labels"
+    },
+    {
+      "label": "Category",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L5",
+      "id": "scoreboard_category_label_category",
+      "community": 18,
+      "norm_label": "category"
+    },
+    {
+      "label": "CategoryLabelProps",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L7",
+      "id": "scoreboard_category_label_categorylabelprops",
+      "community": 18,
+      "norm_label": "categorylabelprops"
+    },
+    {
+      "label": "CategoryLabel()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L13",
+      "id": "scoreboard_category_label_categorylabel",
+      "community": 18,
+      "norm_label": "categorylabel()"
+    },
+    {
+      "label": "flip-digits.stories.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_flip_digits_stories",
+      "community": 12,
+      "norm_label": "flip-digits.stories.tsx"
+    },
+    {
+      "label": "Story",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L16",
+      "id": "scoreboard_flip_digits_stories_story",
+      "community": 12,
+      "norm_label": "story"
+    },
+    {
+      "label": "Default",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L18",
+      "id": "scoreboard_flip_digits_stories_default",
+      "community": 12,
+      "norm_label": "default"
+    },
+    {
+      "label": "RiduzioneMovimento",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L20",
+      "id": "scoreboard_flip_digits_stories_riduzionemovimento",
+      "community": 12,
+      "norm_label": "riduzionemovimento"
+    },
+    {
+      "label": "Interattivo",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L24",
+      "id": "scoreboard_flip_digits_stories_interattivo",
+      "community": 12,
+      "norm_label": "interattivo"
+    },
+    {
+      "label": "Orario",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L37",
+      "id": "scoreboard_flip_digits_stories_orario",
+      "community": 12,
+      "norm_label": "orario"
+    },
+    {
+      "label": "flip-digits.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_flip_digits_test",
+      "community": 18,
+      "norm_label": "flip-digits.test.tsx"
+    },
+    {
+      "label": "accessibleTexts()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L7",
+      "id": "scoreboard_flip_digits_test_accessibletexts",
+      "community": 18,
+      "norm_label": "accessibletexts()"
+    },
+    {
+      "label": "hidden()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L19",
+      "id": "scoreboard_flip_digits_test_hidden",
+      "community": 18,
+      "norm_label": "hidden()"
+    },
+    {
+      "label": "flip-digits.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_flip_digits",
+      "community": 18,
+      "norm_label": "flip-digits.tsx"
+    },
+    {
+      "label": "FlipDigitsProps",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L13",
+      "id": "scoreboard_flip_digits_flipdigitsprops",
+      "community": 18,
+      "norm_label": "flipdigitsprops"
+    },
+    {
+      "label": "FlipDigits()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L28",
+      "id": "scoreboard_flip_digits_flipdigits",
+      "community": 18,
+      "norm_label": "flipdigits()"
+    },
+    {
+      "label": "Half()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L84",
+      "id": "scoreboard_flip_digits_half",
+      "community": 18,
+      "norm_label": "half()"
+    },
+    {
+      "label": "FlipCell()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L113",
+      "id": "scoreboard_flip_digits_flipcell",
+      "community": 18,
+      "norm_label": "flipcell()"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L1",
+      "id": "scoreboard_index",
+      "community": 18,
+      "norm_label": "index.ts"
+    },
+    {
+      "label": "phase-badge.stories.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_phase_badge_stories",
+      "community": 21,
+      "norm_label": "phase-badge.stories.tsx"
+    },
+    {
+      "label": "Story",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L14",
+      "id": "scoreboard_phase_badge_stories_story",
+      "community": 21,
+      "norm_label": "story"
+    },
+    {
+      "label": "Default",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L16",
+      "id": "scoreboard_phase_badge_stories_default",
+      "community": 21,
+      "norm_label": "default"
+    },
+    {
+      "label": "Fasi",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L18",
+      "id": "scoreboard_phase_badge_stories_fasi",
+      "community": 21,
+      "norm_label": "fasi"
+    },
+    {
+      "label": "RiduzioneMovimento",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L28",
+      "id": "scoreboard_phase_badge_stories_riduzionemovimento",
+      "community": 21,
+      "norm_label": "riduzionemovimento"
+    },
+    {
+      "label": "phase-badge.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.test.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_phase_badge_test",
+      "community": 21,
+      "norm_label": "phase-badge.test.tsx"
+    },
+    {
+      "label": "phase-badge.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_phase_badge",
+      "community": 21,
+      "norm_label": "phase-badge.tsx"
+    },
+    {
+      "label": "phases",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L3",
+      "id": "scoreboard_phase_badge_phases",
+      "community": 21,
+      "norm_label": "phases"
+    },
+    {
+      "label": "Phase",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L16",
+      "id": "scoreboard_phase_badge_phase",
+      "community": 21,
+      "norm_label": "phase"
+    },
+    {
+      "label": "PhaseBadgeProps",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L18",
+      "id": "scoreboard_phase_badge_phasebadgeprops",
+      "community": 21,
+      "norm_label": "phasebadgeprops"
+    },
+    {
+      "label": "PhaseBadge()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L24",
+      "id": "scoreboard_phase_badge_phasebadge",
+      "community": 21,
+      "norm_label": "phasebadge()"
+    },
+    {
+      "label": "score-digits.stories.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_score_digits_stories",
+      "community": 25,
+      "norm_label": "score-digits.stories.tsx"
+    },
+    {
+      "label": "Story",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L14",
+      "id": "scoreboard_score_digits_stories_story",
+      "community": 25,
+      "norm_label": "story"
+    },
+    {
+      "label": "Default",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L16",
+      "id": "scoreboard_score_digits_stories_default",
+      "community": 25,
+      "norm_label": "default"
+    },
+    {
+      "label": "Toni",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L18",
+      "id": "scoreboard_score_digits_stories_toni",
+      "community": 25,
+      "norm_label": "toni"
+    },
+    {
+      "label": "Classifica",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L28",
+      "id": "scoreboard_score_digits_stories_classifica",
+      "community": 25,
+      "norm_label": "classifica"
+    },
+    {
+      "label": "RiduzioneMovimento",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L41",
+      "id": "scoreboard_score_digits_stories_riduzionemovimento",
+      "community": 25,
+      "norm_label": "riduzionemovimento"
+    },
+    {
+      "label": "score-digits.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.test.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_score_digits_test",
+      "community": 25,
+      "norm_label": "score-digits.test.tsx"
+    },
+    {
+      "label": "score-digits.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_score_digits",
+      "community": 25,
+      "norm_label": "score-digits.tsx"
+    },
+    {
+      "label": "tones",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L3",
+      "id": "scoreboard_score_digits_tones",
+      "community": 25,
+      "norm_label": "tones"
+    },
+    {
+      "label": "ScoreDigitsProps",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L9",
+      "id": "scoreboard_score_digits_scoredigitsprops",
+      "community": 25,
+      "norm_label": "scoredigitsprops"
+    },
+    {
+      "label": "ScoreDigits()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L22",
+      "id": "scoreboard_score_digits_scoredigits",
+      "community": 25,
+      "norm_label": "scoredigits()"
+    },
+    {
+      "label": "tape.stories.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_tape_stories",
+      "community": 18,
+      "norm_label": "tape.stories.tsx"
+    },
+    {
+      "label": "Story",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L19",
+      "id": "scoreboard_tape_stories_story",
+      "community": 18,
+      "norm_label": "story"
+    },
+    {
+      "label": "Default",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L21",
+      "id": "scoreboard_tape_stories_default",
+      "community": 18,
+      "norm_label": "default"
+    },
+    {
+      "label": "Spessa",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L23",
+      "id": "scoreboard_tape_stories_spessa",
+      "community": 18,
+      "norm_label": "spessa"
+    },
+    {
+      "label": "RiduzioneMovimento",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L27",
+      "id": "scoreboard_tape_stories_riduzionemovimento",
+      "community": 18,
+      "norm_label": "riduzionemovimento"
+    },
+    {
+      "label": "tape.test.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.test.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_tape_test",
+      "community": 18,
+      "norm_label": "tape.test.tsx"
+    },
+    {
+      "label": "tape.tsx",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L1",
+      "id": "scoreboard_tape",
+      "community": 18,
+      "norm_label": "tape.tsx"
+    },
+    {
+      "label": "TapeProps",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L6",
+      "id": "scoreboard_tape_tapeprops",
+      "community": 18,
+      "norm_label": "tapeprops"
+    },
+    {
+      "label": "Tape()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L17",
+      "id": "scoreboard_tape_tape",
+      "community": 18,
+      "norm_label": "tape()"
+    },
+    {
+      "label": "use-prefers-reduced-motion.test.ts",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L1",
+      "id": "scoreboard_use_prefers_reduced_motion_test",
+      "community": 18,
+      "norm_label": "use-prefers-reduced-motion.test.ts"
+    },
+    {
+      "label": "use-prefers-reduced-motion.ts",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L1",
+      "id": "scoreboard_use_prefers_reduced_motion",
+      "community": 18,
+      "norm_label": "use-prefers-reduced-motion.ts"
+    },
+    {
+      "label": "subscribe()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L7",
+      "id": "scoreboard_use_prefers_reduced_motion_subscribe",
+      "community": 18,
+      "norm_label": "subscribe()"
+    },
+    {
+      "label": "getSnapshot()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L14",
+      "id": "scoreboard_use_prefers_reduced_motion_getsnapshot",
+      "community": 18,
+      "norm_label": "getsnapshot()"
+    },
+    {
+      "label": "getServerSnapshot()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L21",
+      "id": "scoreboard_use_prefers_reduced_motion_getserversnapshot",
+      "community": 18,
+      "norm_label": "getserversnapshot()"
+    },
+    {
+      "label": "usePrefersReducedMotion()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L26",
+      "id": "scoreboard_use_prefers_reduced_motion_useprefersreducedmotion",
+      "community": 18,
+      "norm_label": "useprefersreducedmotion()"
+    },
+    {
+      "label": "useReducedMotion()",
+      "file_type": "code",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L34",
+      "id": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "community": 18,
+      "norm_label": "usereducedmotion()"
     },
     {
       "label": "button.stories.tsx",
@@ -1125,7 +1728,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L1",
       "id": "design_system_colori_stories",
-      "community": 18,
+      "community": 15,
       "norm_label": "colori.stories.tsx"
     },
     {
@@ -1134,7 +1737,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L14",
       "id": "design_system_colori_stories_groups",
-      "community": 18,
+      "community": 15,
       "norm_label": "groups"
     },
     {
@@ -1143,7 +1746,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L71",
       "id": "design_system_colori_stories_swatch",
-      "community": 18,
+      "community": 15,
       "norm_label": "swatch()"
     },
     {
@@ -1152,7 +1755,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L101",
       "id": "design_system_colori_stories_swatchgrid",
-      "community": 18,
+      "community": 15,
       "norm_label": "swatchgrid()"
     },
     {
@@ -1161,7 +1764,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L111",
       "id": "design_system_colori_stories_kind_label",
-      "community": 18,
+      "community": 15,
       "norm_label": "kind_label"
     },
     {
@@ -1170,7 +1773,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L117",
       "id": "design_system_colori_stories_pairstable",
-      "community": 18,
+      "community": 15,
       "norm_label": "pairstable()"
     },
     {
@@ -1179,7 +1782,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L206",
       "id": "design_system_colori_stories_coloripage",
-      "community": 18,
+      "community": 15,
       "norm_label": "coloripage()"
     },
     {
@@ -1188,7 +1791,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L242",
       "id": "design_system_colori_stories_story",
-      "community": 18,
+      "community": 15,
       "norm_label": "story"
     },
     {
@@ -1197,7 +1800,7 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L244",
       "id": "design_system_colori_stories_colori",
-      "community": 18,
+      "community": 15,
       "norm_label": "colori"
     },
     {
@@ -1413,7 +2016,7 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L1",
       "id": "design_tokens_contrast_test",
-      "community": 18,
+      "community": 15,
       "norm_label": "contrast.test.ts"
     },
     {
@@ -1422,7 +2025,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L1",
       "id": "design_tokens_contrast",
-      "community": 18,
+      "community": 15,
       "norm_label": "contrast.ts"
     },
     {
@@ -1431,7 +2034,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L4",
       "id": "design_tokens_contrast_thresholds",
-      "community": 18,
+      "community": 15,
       "norm_label": "thresholds"
     },
     {
@@ -1440,7 +2043,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L14",
       "id": "design_tokens_contrast_hextorgb",
-      "community": 18,
+      "community": 15,
       "norm_label": "hextorgb()"
     },
     {
@@ -1449,7 +2052,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L26",
       "id": "design_tokens_contrast_relativeluminance",
-      "community": 18,
+      "community": 15,
       "norm_label": "relativeluminance()"
     },
     {
@@ -1458,7 +2061,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L35",
       "id": "design_tokens_contrast_contrastratio",
-      "community": 18,
+      "community": 15,
       "norm_label": "contrastratio()"
     },
     {
@@ -1467,7 +2070,7 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L43",
       "id": "design_tokens_contrast_formatratio",
-      "community": 18,
+      "community": 15,
       "norm_label": "formatratio()"
     },
     {
@@ -1503,7 +2106,7 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L20",
       "id": "design_tokens_css_vars_colortokenentry",
-      "community": 18,
+      "community": 15,
       "norm_label": "colortokenentry"
     },
     {
@@ -1521,7 +2124,7 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L41",
       "id": "design_tokens_css_vars_colorentries",
-      "community": 18,
+      "community": 15,
       "norm_label": "colorentries"
     },
     {
@@ -1946,6 +2549,24 @@
       "id": "src_proxy_config",
       "community": 9,
       "norm_label": "config"
+    },
+    {
+      "label": "match-media.ts",
+      "file_type": "code",
+      "source_file": "src/test/match-media.ts",
+      "source_location": "L1",
+      "id": "test_match_media",
+      "community": 18,
+      "norm_label": "match-media.ts"
+    },
+    {
+      "label": "mockMatchMedia()",
+      "file_type": "code",
+      "source_file": "src/test/match-media.ts",
+      "source_location": "L7",
+      "id": "test_match_media_mockmatchmedia",
+      "community": 18,
+      "norm_label": "mockmatchmedia()"
     },
     {
       "label": "setup.ts",
@@ -2382,9 +3003,9 @@
       "source_file": ".storybook/preview.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "storybook_preview",
-      "target": "lib_fonts",
-      "confidence_score": 1.0
+      "target": "lib_fonts"
     },
     {
       "relation": "imports",
@@ -2393,9 +3014,9 @@
       "source_file": ".storybook/preview.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "storybook_preview",
-      "target": "lib_fonts_fontvariables",
-      "confidence_score": 1.0
+      "target": "lib_fonts_fontvariables"
     },
     {
       "relation": "contains",
@@ -2680,6 +3301,17 @@
       "target": "e2e_fixtures"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_fixtures",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2711,6 +3343,17 @@
       "confidence_score": 1.0,
       "source": "e2e_storybook_a11y_spec",
       "target": "e2e_fixtures_expectnoa11yviolations"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_fixtures_expectnoa11yviolations",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -2753,6 +3396,47 @@
       "confidence_score": 1.0,
       "source": "e2e_storybook_a11y_spec",
       "target": "e2e_storybook_a11y_spec_viewports"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_fixtures_test",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_storybook_scoreboard_spec_scoreboardstories",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_storybook_scoreboard_spec_storyindex",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "e2e/storybook-scoreboard.spec.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "e2e_storybook_scoreboard_spec",
+      "target": "e2e_storybook_scoreboard_spec_viewports",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3003,9 +3687,9 @@
       "source_file": "package.json",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "package_scripts",
-      "target": "package_scripts_tokens_contrast",
-      "confidence_score": 1.0
+      "target": "package_scripts_tokens_contrast"
     },
     {
       "relation": "contains",
@@ -3484,9 +4168,9 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_layout",
-      "target": "lib_fonts",
-      "confidence_score": 1.0
+      "target": "lib_fonts"
     },
     {
       "relation": "imports",
@@ -3495,9 +4179,9 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_layout",
-      "target": "lib_fonts_fontvariables",
-      "confidence_score": 1.0
+      "target": "lib_fonts_fontvariables"
     },
     {
       "relation": "imports_from",
@@ -3506,9 +4190,9 @@
       "source_file": "src/app/layout.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "app_layout",
-      "target": "lib_utils",
-      "confidence_score": 1.0
+      "target": "lib_utils"
     },
     {
       "relation": "imports_from",
@@ -3530,6 +4214,1094 @@
       "confidence_score": 1.0,
       "source": "app_page",
       "target": "app_page_home"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_stories",
+      "target": "scoreboard_category_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_stories",
+      "target": "scoreboard_category_label_categorylabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_stories",
+      "target": "scoreboard_category_label_stories_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_stories",
+      "target": "scoreboard_category_label_stories_femminile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.stories.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_stories",
+      "target": "scoreboard_category_label_stories_story",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_test",
+      "target": "scoreboard_category_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_category_label_test",
+      "target": "scoreboard_category_label_categorylabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "scoreboard_category_label",
+      "target": "scoreboard_category_label_category",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "scoreboard_category_label",
+      "target": "scoreboard_category_label_categorylabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_category_label",
+      "target": "scoreboard_category_label_categorylabelprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/category-label.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_category_label",
+      "target": "scoreboard_category_label_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_category_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_category_label_category",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_category_label_categorylabelprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_category_label_categorylabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_flipdigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_stories_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_stories_interattivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_stories_orario",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_stories_riduzionemovimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "scoreboard_flip_digits_stories_story",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "ui_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.stories.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_stories",
+      "target": "ui_button_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "scoreboard_flip_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "scoreboard_flip_digits_flipdigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "scoreboard_flip_digits_test_accessibletexts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "scoreboard_flip_digits_test_hidden",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "test_match_media",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_test",
+      "target": "test_match_media_mockmatchmedia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_flip_digits_flipcell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_flip_digits_flipdigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_flip_digits_flipdigitsprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_flip_digits_half",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_use_prefers_reduced_motion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_flip_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_flip_digits_flipdigitsprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/scoreboard/flip-digits.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "scoreboard_flip_digits_flipdigits",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion"
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_flip_digits_flipdigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_phase_badge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_phase_badge_phase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_phase_badge_phasebadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_phase_badge_phasebadgeprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_score_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_score_digits_scoredigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_score_digits_scoredigitsprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_tape_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_tape_tapeprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_use_prefers_reduced_motion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_use_prefers_reduced_motion_useprefersreducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "re-export",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/index.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "scoreboard_index",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge_phasebadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge_stories_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge_stories_fasi",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge_stories_riduzionemovimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.stories.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_stories",
+      "target": "scoreboard_phase_badge_stories_story",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_test",
+      "target": "scoreboard_phase_badge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge_test",
+      "target": "scoreboard_phase_badge_phasebadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge",
+      "target": "scoreboard_phase_badge_phase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge",
+      "target": "scoreboard_phase_badge_phasebadge",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge",
+      "target": "scoreboard_phase_badge_phasebadgeprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/phase-badge.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_phase_badge",
+      "target": "scoreboard_phase_badge_phases",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_scoredigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_stories_classifica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_stories_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_stories_riduzionemovimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_stories_story",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.stories.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_stories",
+      "target": "scoreboard_score_digits_stories_toni",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_test",
+      "target": "scoreboard_score_digits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits_test",
+      "target": "scoreboard_score_digits_scoredigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits",
+      "target": "scoreboard_score_digits_scoredigits",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits",
+      "target": "scoreboard_score_digits_scoredigitsprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/score-digits.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_score_digits",
+      "target": "scoreboard_score_digits_tones",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape_stories_default",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape_stories_riduzionemovimento",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape_stories_spessa",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape_stories_story",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.stories.tsx",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "scoreboard_tape_stories",
+      "target": "scoreboard_tape_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_tape_test",
+      "target": "scoreboard_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.test.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_tape_test",
+      "target": "scoreboard_tape_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_tape_test",
+      "target": "test_match_media",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_tape_test",
+      "target": "test_match_media_mockmatchmedia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scoreboard_tape",
+      "target": "scoreboard_tape_tape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "scoreboard_tape",
+      "target": "scoreboard_tape_tapeprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_tape",
+      "target": "scoreboard_use_prefers_reduced_motion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_tape",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/components/scoreboard/tape.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "scoreboard_tape_tape",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_test",
+      "target": "scoreboard_use_prefers_reduced_motion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_test",
+      "target": "scoreboard_use_prefers_reduced_motion_useprefersreducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_test",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_test",
+      "target": "test_match_media",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.test.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_test",
+      "target": "test_match_media_mockmatchmedia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion",
+      "target": "scoreboard_use_prefers_reduced_motion_getserversnapshot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion",
+      "target": "scoreboard_use_prefers_reduced_motion_getsnapshot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion",
+      "target": "scoreboard_use_prefers_reduced_motion_subscribe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion",
+      "target": "scoreboard_use_prefers_reduced_motion_useprefersreducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion",
+      "target": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
+      "target": "scoreboard_use_prefers_reduced_motion_useprefersreducedmotion",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -3660,9 +5432,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L244",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_colori",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_colori"
     },
     {
       "relation": "contains",
@@ -3670,9 +5442,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L206",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_coloripage",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_coloripage"
     },
     {
       "relation": "contains",
@@ -3680,9 +5452,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_groups",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_groups"
     },
     {
       "relation": "contains",
@@ -3690,9 +5462,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_kind_label",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_kind_label"
     },
     {
       "relation": "contains",
@@ -3700,9 +5472,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_pairstable",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_pairstable"
     },
     {
       "relation": "contains",
@@ -3710,9 +5482,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L242",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_story",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_story"
     },
     {
       "relation": "contains",
@@ -3720,9 +5492,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_swatch",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_swatch"
     },
     {
       "relation": "contains",
@@ -3730,9 +5502,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_colori_stories_swatchgrid",
-      "confidence_score": 1.0
+      "target": "design_system_colori_stories_swatchgrid"
     },
     {
       "relation": "imports_from",
@@ -3741,9 +5513,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_doc_page",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page"
     },
     {
       "relation": "imports",
@@ -3752,9 +5524,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_doc_page_docpage",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docpage"
     },
     {
       "relation": "imports",
@@ -3763,9 +5535,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_system_doc_page_docsection",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docsection"
     },
     {
       "relation": "imports_from",
@@ -3774,9 +5546,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_contrast",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast"
     },
     {
       "relation": "imports",
@@ -3785,9 +5557,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_contrast_contrastratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_contrastratio"
     },
     {
       "relation": "imports",
@@ -3796,9 +5568,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_contrast_formatratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_formatratio"
     },
     {
       "relation": "imports",
@@ -3807,9 +5579,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_contrast_thresholds",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_thresholds"
     },
     {
       "relation": "imports_from",
@@ -3818,9 +5590,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_css_vars",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars"
     },
     {
       "relation": "imports",
@@ -3829,9 +5601,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_css_vars_colorentries",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_colorentries"
     },
     {
       "relation": "imports",
@@ -3840,9 +5612,9 @@
       "source_file": "src/design-system/colori.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_colori_stories",
-      "target": "design_tokens_css_vars_colortokenentry",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_colortokenentry"
     },
     {
       "relation": "calls",
@@ -3872,9 +5644,9 @@
       "source_file": "src/design-system/doc-page.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_doc_page",
-      "target": "design_system_doc_page_docpage",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docpage"
     },
     {
       "relation": "contains",
@@ -3882,9 +5654,9 @@
       "source_file": "src/design-system/doc-page.tsx",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_doc_page",
-      "target": "design_system_doc_page_docsection",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docsection"
     },
     {
       "relation": "imports_from",
@@ -3893,9 +5665,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_doc_page",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page"
     },
     {
       "relation": "imports_from",
@@ -3904,9 +5676,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_doc_page",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page"
     },
     {
       "relation": "imports",
@@ -3915,9 +5687,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_doc_page_docpage",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docpage"
     },
     {
       "relation": "imports",
@@ -3926,9 +5698,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_doc_page_docpage",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docpage"
     },
     {
       "relation": "imports",
@@ -3937,9 +5709,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_doc_page_docsection",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docsection"
     },
     {
       "relation": "imports",
@@ -3948,9 +5720,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_doc_page_docsection",
-      "confidence_score": 1.0
+      "target": "design_system_doc_page_docsection"
     },
     {
       "relation": "contains",
@@ -3958,9 +5730,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_densities",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_densities"
     },
     {
       "relation": "contains",
@@ -3968,9 +5740,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_scale",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_scale"
     },
     {
       "relation": "contains",
@@ -3978,9 +5750,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_scalelist",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_scalelist"
     },
     {
       "relation": "contains",
@@ -3988,9 +5760,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_spacing",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_spacing"
     },
     {
       "relation": "contains",
@@ -3998,9 +5770,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L109",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_spaziatura",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_spaziatura"
     },
     {
       "relation": "contains",
@@ -4008,9 +5780,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_spaziaturapage",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_spaziaturapage"
     },
     {
       "relation": "contains",
@@ -4018,9 +5790,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_story",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_story"
     },
     {
       "relation": "contains",
@@ -4028,9 +5800,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_system_spaziatura_stories_suffix",
-      "confidence_score": 1.0
+      "target": "design_system_spaziatura_stories_suffix"
     },
     {
       "relation": "imports_from",
@@ -4039,9 +5811,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_tokens_css_vars",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars"
     },
     {
       "relation": "imports",
@@ -4050,9 +5822,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_tokens_css_vars_remtopx",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_remtopx"
     },
     {
       "relation": "imports",
@@ -4061,9 +5833,9 @@
       "source_file": "src/design-system/spaziatura.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_spaziatura_stories",
-      "target": "design_tokens_css_vars_themeliterals",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_themeliterals"
     },
     {
       "relation": "contains",
@@ -4071,9 +5843,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_matches",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_matches"
     },
     {
       "relation": "contains",
@@ -4081,9 +5853,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_step",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_step"
     },
     {
       "relation": "contains",
@@ -4091,9 +5863,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_step_class",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_step_class"
     },
     {
       "relation": "contains",
@@ -4101,9 +5873,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_story",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_story"
     },
     {
       "relation": "contains",
@@ -4111,9 +5883,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L184",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_tipografia",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_tipografia"
     },
     {
       "relation": "contains",
@@ -4121,9 +5893,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_system_tipografia_stories_tipografiapage",
-      "confidence_score": 1.0
+      "target": "design_system_tipografia_stories_tipografiapage"
     },
     {
       "relation": "imports_from",
@@ -4132,9 +5904,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_tokens_css_vars",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars"
     },
     {
       "relation": "imports",
@@ -4143,9 +5915,9 @@
       "source_file": "src/design-system/tipografia.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_system_tipografia_stories",
-      "target": "design_tokens_css_vars_remtopx",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_remtopx"
     },
     {
       "relation": "contains",
@@ -4218,9 +5990,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast"
     },
     {
       "relation": "imports",
@@ -4229,9 +6001,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast_contrastratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_contrastratio"
     },
     {
       "relation": "imports",
@@ -4240,9 +6012,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast_formatratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_formatratio"
     },
     {
       "relation": "imports",
@@ -4251,9 +6023,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast_hextorgb",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_hextorgb"
     },
     {
       "relation": "imports",
@@ -4262,9 +6034,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast_relativeluminance",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_relativeluminance"
     },
     {
       "relation": "imports",
@@ -4273,9 +6045,9 @@
       "source_file": "src/lib/design-tokens/contrast.test.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_test",
-      "target": "design_tokens_contrast_thresholds",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_thresholds"
     },
     {
       "relation": "contains",
@@ -4283,9 +6055,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast",
-      "target": "design_tokens_contrast_contrastratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_contrastratio"
     },
     {
       "relation": "contains",
@@ -4293,9 +6065,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast",
-      "target": "design_tokens_contrast_formatratio",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_formatratio"
     },
     {
       "relation": "contains",
@@ -4303,9 +6075,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast",
-      "target": "design_tokens_contrast_hextorgb",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_hextorgb"
     },
     {
       "relation": "contains",
@@ -4313,9 +6085,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast",
-      "target": "design_tokens_contrast_relativeluminance",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_relativeluminance"
     },
     {
       "relation": "contains",
@@ -4323,9 +6095,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast",
-      "target": "design_tokens_contrast_thresholds",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_thresholds"
     },
     {
       "relation": "calls",
@@ -4334,9 +6106,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_relativeluminance",
-      "target": "design_tokens_contrast_hextorgb",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_hextorgb"
     },
     {
       "relation": "calls",
@@ -4345,9 +6117,9 @@
       "source_file": "src/lib/design-tokens/contrast.ts",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_contrast_contrastratio",
-      "target": "design_tokens_contrast_relativeluminance",
-      "confidence_score": 1.0
+      "target": "design_tokens_contrast_relativeluminance"
     },
     {
       "relation": "contains",
@@ -4355,9 +6127,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_colorentries",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_colorentries"
     },
     {
       "relation": "contains",
@@ -4365,9 +6137,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_colortokenentry",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_colortokenentry"
     },
     {
       "relation": "contains",
@@ -4375,9 +6147,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_flatten",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_flatten"
     },
     {
       "relation": "contains",
@@ -4385,9 +6157,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_fontthemevars",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_fontthemevars"
     },
     {
       "relation": "contains",
@@ -4395,9 +6167,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_kebab",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_kebab"
     },
     {
       "relation": "contains",
@@ -4405,9 +6177,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L87",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_remtopx",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_remtopx"
     },
     {
       "relation": "contains",
@@ -4415,9 +6187,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_scopedname",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_scopedname"
     },
     {
       "relation": "contains",
@@ -4425,9 +6197,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_theme_aliases",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_theme_aliases"
     },
     {
       "relation": "contains",
@@ -4435,9 +6207,9 @@
       "source_file": "src/lib/design-tokens/css-vars.ts",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "design_tokens_css_vars",
-      "target": "design_tokens_css_vars_themeliterals",
-      "confidence_score": 1.0
+      "target": "design_tokens_css_vars_themeliterals"
     },
     {
       "relation": "contains",
@@ -4445,9 +6217,9 @@
       "source_file": "src/lib/fonts.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_fonts",
-      "target": "lib_fonts_figtree",
-      "confidence_score": 1.0
+      "target": "lib_fonts_figtree"
     },
     {
       "relation": "contains",
@@ -4455,9 +6227,9 @@
       "source_file": "src/lib/fonts.ts",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_fonts",
-      "target": "lib_fonts_fontvariables",
-      "confidence_score": 1.0
+      "target": "lib_fonts_fontvariables"
     },
     {
       "relation": "contains",
@@ -4465,9 +6237,9 @@
       "source_file": "src/lib/fonts.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_fonts",
-      "target": "lib_fonts_mono",
-      "confidence_score": 1.0
+      "target": "lib_fonts_mono"
     },
     {
       "relation": "contains",
@@ -4475,9 +6247,9 @@
       "source_file": "src/lib/fonts.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_fonts",
-      "target": "lib_fonts_outfit",
-      "confidence_score": 1.0
+      "target": "lib_fonts_outfit"
     },
     {
       "relation": "imports_from",
@@ -5062,6 +6834,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/test/match-media.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "test_match_media",
+      "target": "test_match_media_mockmatchmedia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
@@ -5411,5 +7193,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "a8525caaeea15028a17385949a54bcd40420fe15"
+  "built_at_commit": "2a5a9cf485a36326bcabf8f1d2ee1526f896b968"
 }
