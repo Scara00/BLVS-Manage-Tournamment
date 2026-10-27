@@ -11,6 +11,7 @@ const empty: LiveSnapshot = {
   matches: [],
   groups: [],
   overall: [],
+  pendingScores: [],
 };
 const match: LiveMatch = {
   id: "m1",

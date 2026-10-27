@@ -151,3 +151,87 @@ export const demoRegistrations: readonly DemoRegistration[] = [
     received: "10 giugno",
   },
 ];
+
+export type DemoAdminStage = {
+  id: string;
+  name: string;
+  date: string;
+  status:
+    | "bozza"
+    | "iscrizioni_aperte"
+    | "iscrizioni_chiuse"
+    | "in_corso"
+    | "conclusa"
+    | "annullata";
+  /** [M, F]: registered players, seats and Gold/Silver phase. */
+  boards: readonly [DemoAdminBoard, DemoAdminBoard];
+  pendingScores: number;
+};
+
+export type DemoAdminBoard = {
+  registered: number;
+  seats: number;
+  phase: "gold" | "silver" | null;
+};
+
+/**
+ * The admin view of the calendar: the public stages plus a draft and a
+ * finished one. The stage in progress is racing today.
+ */
+export const demoAdminStages: readonly DemoAdminStage[] = [
+  {
+    id: "lignano",
+    name: "Tappa 0 · Lignano",
+    date: "31 maggio – 1 giugno",
+    status: "conclusa",
+    boards: [
+      { registered: 16, seats: 16, phase: "silver" },
+      { registered: 14, seats: 16, phase: "silver" },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "jesolo",
+    name: "Tappa 1 · Jesolo",
+    date: "14–15 giugno",
+    status: "in_corso",
+    boards: [
+      { registered: 16, seats: 16, phase: "gold" },
+      { registered: 12, seats: 16, phase: "silver" },
+    ],
+    pendingScores: 3,
+  },
+  {
+    id: "rimini",
+    name: "Tappa 2 · Rimini",
+    date: "28–29 giugno",
+    status: "iscrizioni_aperte",
+    boards: [
+      { registered: 9, seats: 16, phase: null },
+      { registered: 17, seats: 16, phase: null },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "cagliari",
+    name: "Tappa 3 · Cagliari",
+    date: "12–13 luglio",
+    status: "iscrizioni_chiuse",
+    boards: [
+      { registered: 16, seats: 16, phase: "gold" },
+      { registered: 16, seats: 16, phase: "gold" },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "pescara",
+    name: "Tappa 4 · Pescara",
+    date: "26–27 luglio",
+    status: "bozza",
+    boards: [
+      { registered: 0, seats: 24, phase: null },
+      { registered: 0, seats: 24, phase: null },
+    ],
+    pendingScores: 0,
+  },
+];
