@@ -248,6 +248,11 @@ otp_expiry = 3600
 subject = "Conferma il tuo indirizzo email · BLVS"
 content_path = "./supabase/templates/conferma-email.html"
 
+# BLVS-16: sent to both the old and the new address (double_confirm_changes).
+[auth.email.template.email_change]
+subject = "Conferma il cambio di indirizzo email · BLVS"
+content_path = "./supabase/templates/conferma-nuova-email.html"
+
 [auth.email.template.recovery]
 subject = "Reimposta la password · BLVS"
 content_path = "./supabase/templates/reimposta-password.html"

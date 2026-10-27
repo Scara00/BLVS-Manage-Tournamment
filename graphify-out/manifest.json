@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "e2e/layout.spec.ts": {
-    "mtime": 1793094261.3209927,
-    "ast_hash": "12ec053bc6f8ce252b69aed7d001732e",
+    "mtime": 1793094306.1137104,
+    "ast_hash": "40bd25d612740e314806374eeafcaedb",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/classifica/page.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/nav-items.ts": {
-    "mtime": 1793094109.991224,
-    "ast_hash": "f4a84772252b6874ef2d281fb3e50e92",
+    "mtime": 1793094306.119897,
+    "ast_hash": "685b8213b41b978712bae3487470a154",
     "semantic_hash": ""
   },
   "src/components/layout/page-container.tsx": {
@@ -415,13 +415,13 @@
     "semantic_hash": ""
   },
   "src/components/layout/player-nav.test.tsx": {
-    "mtime": 1793094109.9913568,
-    "ast_hash": "b940d345276f641bdede876c4c033e17",
+    "mtime": 1793094306.1201706,
+    "ast_hash": "6f0d3b4fef798a1d22c444893da08fe9",
     "semantic_hash": ""
   },
   "src/components/layout/player-nav.tsx": {
-    "mtime": 1793094109.9914165,
-    "ast_hash": "d21fe4cf445b17a11d05d2585f6f853f",
+    "mtime": 1793094306.1203833,
+    "ast_hash": "e333de6c40420b14ab68d6051e0fb0c6",
     "semantic_hash": ""
   },
   "src/components/layout/sign-out-button.test.tsx": {
@@ -555,8 +555,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/field.tsx": {
-    "mtime": 1793094109.996507,
-    "ast_hash": "4734973d352096fd63c2de81d9cfe353",
+    "mtime": 1793094306.1223845,
+    "ast_hash": "c18ab7a25b10606fcdae8021e8e3dd7b",
     "semantic_hash": ""
   },
   "src/components/ui/input.stories.tsx": {
@@ -1280,8 +1280,8 @@
     "semantic_hash": ""
   },
   "src/lib/email/auth-templates.ts": {
-    "mtime": 1793094219.0383463,
-    "ast_hash": "350deef62de9b1e8d3aaf0bcc671b3bf",
+    "mtime": 1793094306.1225452,
+    "ast_hash": "37a06c67c9ab55bce09652fb085138c6",
     "semantic_hash": ""
   },
   "src/lib/email/queue.test.ts": {
@@ -1295,13 +1295,13 @@
     "semantic_hash": ""
   },
   "src/lib/email/render.test.tsx": {
-    "mtime": 1793094110.0008411,
-    "ast_hash": "d5a99a61df11e5536e4fb0a73e5f4daa",
+    "mtime": 1793094306.1227624,
+    "ast_hash": "d5eea1864d02b69b30ed5494f8647647",
     "semantic_hash": ""
   },
   "src/lib/email/render.tsx": {
-    "mtime": 1793094110.0013096,
-    "ast_hash": "1a3166f58f0ba07b253b4e30041a44c7",
+    "mtime": 1793094306.1229913,
+    "ast_hash": "9cffa4651dd57c03382a7624bd37afec",
     "semantic_hash": ""
   },
   "src/lib/email/templates/conferma-email.tsx": {
@@ -1747,6 +1747,131 @@
   "src/lib/navigation/auth-paths.ts": {
     "mtime": 1793094261.3298154,
     "ast_hash": "f2d5d67768309aeafe840eeea446ed5d",
+    "semantic_hash": ""
+  },
+  "e2e/profilo.spec.ts": {
+    "mtime": 1793094306.1139696,
+    "ast_hash": "c153481ac35c479f38b4f944257d5e52",
+    "semantic_hash": ""
+  },
+  "e2e/storybook-profilo.spec.ts": {
+    "mtime": 1793094306.1142013,
+    "ast_hash": "cd5d03beede48327374821db8ddf516a",
+    "semantic_hash": ""
+  },
+  "e2e/supabase/profilo.spec.ts": {
+    "mtime": 1793094306.114412,
+    "ast_hash": "a7081f1b8d175172dc451bd6cc2a544d",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/profilo/modifica/page.tsx": {
+    "mtime": 1793094306.118534,
+    "ast_hash": "04dd4e4768b0c20d8a8124df49090850",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/profilo/page.tsx": {
+    "mtime": 1793094306.1187043,
+    "ast_hash": "d16977442c00d0f74f4da959ecce06d9",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/categoria.ts": {
+    "mtime": 1793094306.1206307,
+    "ast_hash": "60dfdea3c032adff12a26dcec2f45363",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/index.ts": {
+    "mtime": 1793094306.120982,
+    "ast_hash": "57404b4b3155a04f24ee62c8fa6685fd",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo-form.tsx": {
+    "mtime": 1793094306.121206,
+    "ast_hash": "32f5cb40c441dc1e44737390e139b40b",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo-loading.tsx": {
+    "mtime": 1793094306.1213555,
+    "ast_hash": "55e2023d0d4121eccf52d8bad079e68c",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo-sessione-scaduta.tsx": {
+    "mtime": 1793094306.1215136,
+    "ast_hash": "bcca76025d597c1257ac931af0d93265",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo-view.tsx": {
+    "mtime": 1793094306.1217077,
+    "ast_hash": "3a42adff30c30721701d453a1a6ba331",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo.stories.tsx": {
+    "mtime": 1793094306.1218705,
+    "ast_hash": "974c147c8badc5ac5057150df1bc02d7",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/profilo.test.tsx": {
+    "mtime": 1793094306.122026,
+    "ast_hash": "1add73b63ce2dc306feed23feff33615",
+    "semantic_hash": ""
+  },
+  "src/components/profilo/unsaved-changes-guard.tsx": {
+    "mtime": 1793094306.1221702,
+    "ast_hash": "228077db57dc5475a3363ed92df7d29f",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/conferma-nuova-email.tsx": {
+    "mtime": 1793094306.1231842,
+    "ast_hash": "097c38ddcab525dbff69aa071edc58b8",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/actions.test.ts": {
+    "mtime": 1793094306.1233692,
+    "ast_hash": "49b265dad33ebb4faf8a1a43d18803c5",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/actions.ts": {
+    "mtime": 1793094306.1235194,
+    "ast_hash": "339c8e417643686aa3de62e60b5fb038",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/paths.ts": {
+    "mtime": 1793094306.1236742,
+    "ast_hash": "bd66e7df6429162004591c9aa6393e52",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/profilo.db.test.ts": {
+    "mtime": 1793094306.1238594,
+    "ast_hash": "968e58b13b7e01285e0b7b0282d3191d",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/read.ts": {
+    "mtime": 1793094306.1239982,
+    "ast_hash": "afbba12e4482bf98d5df310811ada7c4",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/types.ts": {
+    "mtime": 1793094306.1241574,
+    "ast_hash": "53c907bfc1cd73a4a8d40b1ec5fa84e5",
+    "semantic_hash": ""
+  },
+  "src/lib/profilo/validation.ts": {
+    "mtime": 1793094306.1243382,
+    "ast_hash": "ad9feb5c1d9bd66d3b7173114a43b92f",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027316000_profilo_categoria.sql": {
+    "mtime": 1793094306.1247015,
+    "ast_hash": "53b6c162a434ce7810cd81a945ba14a6",
+    "semantic_hash": ""
+  },
+  "supabase/tests/database/profilo.test.sql": {
+    "mtime": 1793094306.1250036,
+    "ast_hash": "81d1c4e194cb1560a0c1cbf3f35a0ca5",
+    "semantic_hash": ""
+  },
+  "supabase/templates/conferma-nuova-email.html": {
+    "mtime": 1793094306.124854,
+    "ast_hash": "696d425cb53159a81f9dff75ff20431e",
     "semantic_hash": ""
   }
 }

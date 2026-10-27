@@ -30,6 +30,17 @@ const casi = [
     heading: "Tappa annullata",
     link: "https://blvs.example/tappe/rimini-2027",
   },
+  {
+    name: "conferma-nuova-email",
+    props: {
+      confirmationUrl: "https://blvs.example/auth/conferma?t=new&x=1",
+      currentEmail: "marco@example.it",
+      newEmail: "marco.rossi@example.it",
+    },
+    subject: "Conferma il cambio di indirizzo email · BLVS",
+    heading: "Conferma il cambio di indirizzo email",
+    link: "https://blvs.example/auth/conferma?t=new&x=1",
+  },
 ] as const;
 
 describe("renderEmail", () => {

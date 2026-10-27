@@ -3,6 +3,8 @@ export type NavItem = {
   label: string;
   /** Active only on an exact path match (for index routes like `/`). */
   exact?: boolean;
+  /** Secondary item also shown in the desktop bar (outside the menu). */
+  desktop?: boolean;
 };
 
 /** Player sections: always one tap away, on mobile too. */
@@ -15,6 +17,7 @@ export const playerPrimaryNav: readonly NavItem[] = [
 /** Secondary player links, behind the mobile «Menu» disclosure. */
 export const playerSecondaryNav: readonly NavItem[] = [
   { href: "/", label: "Home", exact: true },
+  { href: "/profilo", label: "Profilo", desktop: true },
 ];
 
 export const adminNav: readonly NavItem[] = [
