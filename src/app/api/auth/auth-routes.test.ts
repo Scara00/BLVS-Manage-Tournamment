@@ -9,6 +9,12 @@ const { signInWithPassword, signUp, signOut } = vi.hoisted(() => ({
   signUp: vi.fn(),
   signOut: vi.fn(),
 }));
+const { rememberPendingVerification } = vi.hoisted(() => ({
+  rememberPendingVerification: vi.fn(),
+}));
+vi.mock("@/lib/auth/email-verification/pending", () => ({
+  rememberPendingVerification,
+}));
 vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({ auth: { signInWithPassword, signUp, signOut } }),
 }));
@@ -46,6 +52,7 @@ beforeEach(() => {
   setRateLimitStore(createMemoryRateLimitStore());
   signInWithPassword.mockReset();
   signUp.mockReset();
+  rememberPendingVerification.mockReset();
   signOut.mockReset();
 });
 
@@ -161,6 +168,7 @@ describe("POST /api/auth/register", () => {
         },
       },
     });
+    expect(rememberPendingVerification).not.toHaveBeenCalled();
   });
 
   it("non accetta un ruolo dal client", async () => {
@@ -199,6 +207,10 @@ describe("POST /api/auth/register", () => {
     );
     expect(res.status).toBe(201);
     expect(await res.json()).toMatchObject({ connesso: false });
+    // BLVS-15: no session yet, the «Conferma email» page needs the address.
+    expect(rememberPendingVerification).toHaveBeenCalledWith(
+      "nuovo@example.it",
+    );
   });
 
   it("un'email già registrata, con maiuscole diverse, risponde 409 sul campo", async () => {

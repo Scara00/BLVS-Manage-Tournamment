@@ -39,8 +39,12 @@ test.describe("email di Supabase Auth con i modelli italiani", () => {
     expect(message.Subject).toBe("Conferma il tuo indirizzo email · BLVS");
     expect(message.HTML).toMatch(/<html[^>]*\slang="it"/);
 
-    const link = await getLatestLink(email, { match: /\/auth\/v1\/verify/ });
-    expect(new URL(link).searchParams.get("type")).toBe("signup");
+    // BLVS-15: the link goes to our route handler, which calls verifyOtp.
+    const link = await getLatestLink(email, {
+      match: /\/registrati\/conferma-email\/verifica\?/,
+    });
+    expect(new URL(link).searchParams.get("type")).toBe("email");
+    expect(new URL(link).searchParams.get("token_hash")).toBeTruthy();
   });
 
   test("reimpostazione password: arriva a Mailpit con il link", async () => {

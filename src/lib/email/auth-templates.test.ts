@@ -29,7 +29,7 @@ describe.each(SUPABASE_AUTH_TEMPLATES)(
       }
       expect(readFileSync(target, "utf8")).toBe(html);
       expect(html).toMatch(/<html[^>]*\slang="it"/);
-      expect(html).toContain(`href="${href}"`);
+      expect(html).toContain(`href="${href.replaceAll("&", "&amp;")}"`);
     });
 
     it("config.toml lo usa con l'oggetto in italiano", async () => {

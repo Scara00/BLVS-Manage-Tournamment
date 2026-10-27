@@ -715,8 +715,8 @@
     "semantic_hash": ""
   },
   "src/app/api/auth/auth-routes.test.ts": {
-    "mtime": 1793094110.156426,
-    "ast_hash": "9ab4fcb515160a9d7fc6c9035e7a35f3",
+    "mtime": 1793094226.555945,
+    "ast_hash": "5f082abe9664525816702b9c1125a327",
     "semantic_hash": ""
   },
   "src/app/api/auth/login/route.ts": {
@@ -730,8 +730,8 @@
     "semantic_hash": ""
   },
   "src/app/api/auth/register/route.ts": {
-    "mtime": 1793094110.1565273,
-    "ast_hash": "c58ee150f2426d8eea1bcd81b80f5203",
+    "mtime": 1793094207.8914423,
+    "ast_hash": "5f228ddde0957d2f4df22014d74fcc0b",
     "semantic_hash": ""
   },
   "src/lib/api/responses.ts": {
@@ -1235,8 +1235,8 @@
     "semantic_hash": ""
   },
   "e2e/supabase/email.spec.ts": {
-    "mtime": 1793094110.0551805,
-    "ast_hash": "bb377cce1836d31a593ce72d30eecd3d",
+    "mtime": 1793094142.2856903,
+    "ast_hash": "026d8a3eba777c3d5d09e551784caf10",
     "semantic_hash": ""
   },
   "e2e/supabase/env.ts": {
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "playwright.supabase.config.ts": {
-    "mtime": 1793094110.0573125,
-    "ast_hash": "8e768d2d1b18bc73c9dda0563d66c59c",
+    "mtime": 1793094219.0387244,
+    "ast_hash": "4f24d4fa5dffc87bd417c7f0d5238bf9",
     "semantic_hash": ""
   },
   "src/lib/audit/eventi.ts": {
@@ -1275,13 +1275,13 @@
     "semantic_hash": ""
   },
   "src/lib/email/auth-templates.test.ts": {
-    "mtime": 1793094110.05967,
-    "ast_hash": "340e8b2564563cc436d31a4e18bdca4e",
+    "mtime": 1793094219.038483,
+    "ast_hash": "580a6824bdabd04f51df3fa07f4193d9",
     "semantic_hash": ""
   },
   "src/lib/email/auth-templates.ts": {
-    "mtime": 1793094110.0597599,
-    "ast_hash": "598eba3733c54a5f57d638776d08357a",
+    "mtime": 1793094219.0383463,
+    "ast_hash": "350deef62de9b1e8d3aaf0bcc671b3bf",
     "semantic_hash": ""
   },
   "src/lib/email/queue.test.ts": {
@@ -1305,8 +1305,8 @@
     "semantic_hash": ""
   },
   "src/lib/email/templates/conferma-email.tsx": {
-    "mtime": 1793094110.0014317,
-    "ast_hash": "ae10e4029e2730f5963138d5dd0cd426",
+    "mtime": 1793094142.2942886,
+    "ast_hash": "1734ce41504ef73a97e4864596a759f9",
     "semantic_hash": ""
   },
   "src/lib/email/templates/email-action.tsx": {
@@ -1360,8 +1360,8 @@
     "semantic_hash": ""
   },
   "supabase/templates/conferma-email.html": {
-    "mtime": 1793094110.0066307,
-    "ast_hash": "2d6b3f4551e5a9c9a9d2829399f72da9",
+    "mtime": 1793094142.295027,
+    "ast_hash": "f2f934e935ef97d708a82ecb09908748",
     "semantic_hash": ""
   },
   "src/app/(password)/layout.tsx": {
@@ -1527,6 +1527,126 @@
   "supabase/migrations/20261027300000_consenso_data_informativa.sql": {
     "mtime": 1793094110.1580498,
     "ast_hash": "43411ebc30d6b7dc98d6920f17efc458",
+    "semantic_hash": ""
+  },
+  "e2e/email-verify.spec.ts": {
+    "mtime": 1793094142.285335,
+    "ast_hash": "cabc548486e38e90e031579fc111d785",
+    "semantic_hash": ""
+  },
+  "e2e/supabase/email-verify.spec.ts": {
+    "mtime": 1793094142.2855232,
+    "ast_hash": "1a3f2864933c8c025aeaac49bbfcd344",
+    "semantic_hash": ""
+  },
+  "src/app/api/auth/conferma-email/conferma-email-routes.test.ts": {
+    "mtime": 1793094142.2899368,
+    "ast_hash": "ca0452faf0c8ddb999975f91fda85cab",
+    "semantic_hash": ""
+  },
+  "src/app/api/auth/conferma-email/reinvio/route.ts": {
+    "mtime": 1793094142.2901762,
+    "ast_hash": "c2c4522d0f9d53b8555a14081f7b3c8d",
+    "semantic_hash": ""
+  },
+  "src/app/api/iscrizioni/iscrizioni-route.test.ts": {
+    "mtime": 1793094142.290637,
+    "ast_hash": "3465587536bba4883b1bb652a2b8899c",
+    "semantic_hash": ""
+  },
+  "src/app/api/iscrizioni/route.ts": {
+    "mtime": 1793094142.2907898,
+    "ast_hash": "ba1b60ebd8e075f76b475e90cca72e79",
+    "semantic_hash": ""
+  },
+  "src/app/registrati/conferma-email/layout.tsx": {
+    "mtime": 1793094142.290972,
+    "ast_hash": "387bbec1d8989cdcacff2fb8b8596e74",
+    "semantic_hash": ""
+  },
+  "src/app/registrati/conferma-email/page.tsx": {
+    "mtime": 1793094142.291155,
+    "ast_hash": "2fcd43af6a5d091ceb71d0da861e57af",
+    "semantic_hash": ""
+  },
+  "src/app/registrati/conferma-email/verifica/route.ts": {
+    "mtime": 1793094142.291417,
+    "ast_hash": "4b69a1504f169f3d474c4dc6ba26907c",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/email-preview.tsx": {
+    "mtime": 1793094142.2916467,
+    "ast_hash": "0bca2949b9c11fe0ba4f68f07581b63f",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/email-verify-screen.stories.tsx": {
+    "mtime": 1793094142.2918139,
+    "ast_hash": "2dc9c16c11a149b7936d5cafee4f5a05",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/email-verify-screen.tsx": {
+    "mtime": 1793094142.2919965,
+    "ast_hash": "4ac328c1c44266c97c76ac6ff1de9117",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/email-verify.test.tsx": {
+    "mtime": 1793094142.2922015,
+    "ast_hash": "3c1e7571a67c706690ba54bb72b1e2db",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/index.ts": {
+    "mtime": 1793094142.292379,
+    "ast_hash": "0964eb4f9a9cec5ef795df885efdb3b8",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/registration-steps.tsx": {
+    "mtime": 1793094142.2925165,
+    "ast_hash": "cf981774474486bada50adf57726db59",
+    "semantic_hash": ""
+  },
+  "src/components/email-verify/resend-panel.tsx": {
+    "mtime": 1793094142.292672,
+    "ast_hash": "edfc7ca3462d4c65b2df38043d88650b",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/email-verification/constants.ts": {
+    "mtime": 1793094142.2929027,
+    "ast_hash": "8976e68f9b8c90966cd1437036339779",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/email-verification/email-verification.test.ts": {
+    "mtime": 1793094142.293083,
+    "ast_hash": "e876731f22228124bb9ef7fc188e7912",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/email-verification/format.ts": {
+    "mtime": 1793094142.2932472,
+    "ast_hash": "195b873a9700e42edd195a16c4497c1b",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/email-verification/pending.ts": {
+    "mtime": 1793094142.2934208,
+    "ast_hash": "b377bbf5f29b919b8a0b17a174c9de8a",
+    "semantic_hash": ""
+  },
+  "src/lib/db/email-confermata.test.ts": {
+    "mtime": 1793094142.2936285,
+    "ast_hash": "5bbbe9c9717ee2e736e52192b333b3f9",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/conferma-email-copy.ts": {
+    "mtime": 1793094142.2940674,
+    "ast_hash": "5a8799b8635762a653b39de678d3ab96",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/messages.ts": {
+    "mtime": 1793094142.2944705,
+    "ast_hash": "dbeceefd790bcb5365303ce06d0f0962",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027315000_conferma_email_iscrizioni.sql": {
+    "mtime": 1793094142.2948174,
+    "ast_hash": "ad1ffb83de29cd66cc85bf4be13abac0",
     "semantic_hash": ""
   }
 }

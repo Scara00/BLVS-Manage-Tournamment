@@ -9,6 +9,10 @@ import { defineConfig } from "@playwright/test";
  * The app flows (e.g. password reset) also need Next.js pointed at that
  * stack: it is built and started on PLAYWRIGHT_SUPABASE_APP_PORT, only when
  * the stack's env is present (the specs skip themselves otherwise).
+ *
+ * BLVS-15: that includes the flows that follow an email link
+ * (e2e/supabase/email-verify.spec.ts); the specs rebase the link onto
+ * baseURL, so the app need not run on `site_url`'s port.
  */
 const PORT = Number(process.env.PLAYWRIGHT_SUPABASE_APP_PORT ?? 3200);
 const baseURL = `http://localhost:${PORT}`;
@@ -35,6 +39,8 @@ export default defineConfig({
             ENFORCE_HTTPS: "false",
             NEXT_PUBLIC_SUPABASE_URL: supabaseUrl,
             NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: publishableKey,
+            SUPABASE_SECRET_KEY:
+              process.env.SECRET_KEY ?? process.env.SERVICE_ROLE_KEY ?? "",
           },
         }
       : undefined,

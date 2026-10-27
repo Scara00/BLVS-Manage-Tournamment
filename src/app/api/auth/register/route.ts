@@ -5,6 +5,7 @@ import {
   malformedBody,
   readJsonObject,
 } from "@/lib/api/responses";
+import { rememberPendingVerification } from "@/lib/auth/email-verification/pending";
 import {
   CONFIRM_EMAIL_MESSAGE,
   EMAIL_TAKEN_MESSAGE,
@@ -73,6 +74,10 @@ export async function POST(request: NextRequest) {
   // With email confirmation on, Supabase answers an existing email with a
   // fake user that has no identities instead of an error.
   if (data.user && data.user.identities?.length === 0) return emailTaken();
+
+  // BLVS-15: no session until the email is confirmed; the «Conferma email»
+  // page reads the address and send time from this cookie.
+  if (!data.session) await rememberPendingVerification(values.email);
 
   const connesso = data.session != null;
   return Response.json(
