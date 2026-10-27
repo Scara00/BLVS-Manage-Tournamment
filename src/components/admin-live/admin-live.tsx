@@ -1,6 +1,11 @@
 "use client";
 
-import { AlertCircleIcon, ArrowLeftIcon, WifiOffIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ArrowLeftIcon,
+  PencilLineIcon,
+  WifiOffIcon,
+} from "lucide-react";
 import Link from "next/link";
 import {
   startTransition,
@@ -16,6 +21,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useOnline } from "@/hooks/use-online";
 import { CATEGORIE } from "@/lib/db/types";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
+import { punteggioPath } from "@/lib/punteggi/paths";
 import {
   avvioFasePath,
   CATEGORIA_NOME,
@@ -24,6 +30,7 @@ import {
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import {
   avanzamentoFase,
+  descriviPartita,
   faseCorrente,
   FASE_GIOCO_LABEL,
   FASE_PARTITA_LABEL,
@@ -236,17 +243,33 @@ export function AdminLive({
           inAttesa: pending ? inAttesa : null,
           disabled,
           describedBy: disabled ? OFFLINE_ID : undefined,
-          punteggio: (
-            <PunteggioDialog
-              partita={partita}
-              tappaId={view.tappa.id}
-              categoria={view.categoria}
-              action={punteggio}
-              disabled={disabled}
-              describedBy={disabled ? OFFLINE_ID : undefined}
-              onEsito={onEsitoDialog}
-            />
-          ),
+          // BLVS-41: a saved group score is corrected on w-admin-correzione
+          // (one set to 21, «Cosa cambia», impact on the next phase).
+          punteggio:
+            partita.stato === "conclusa" && partita.fase === "gironi" ? (
+              <Link
+                href={punteggioPath(view.tappa.id, partita.id)}
+                aria-label={`Correggi punteggio: ${descriviPartita(partita)}`}
+                className={buttonVariants({
+                  variant: "secondary",
+                  size: "campo",
+                  className: "max-w-full",
+                })}
+              >
+                <PencilLineIcon aria-hidden />
+                Correggi punteggio
+              </Link>
+            ) : (
+              <PunteggioDialog
+                partita={partita}
+                tappaId={view.tappa.id}
+                categoria={view.categoria}
+                action={punteggio}
+                disabled={disabled}
+                describedBy={disabled ? OFFLINE_ID : undefined}
+                onEsito={onEsitoDialog}
+              />
+            ),
         }}
       />
     );

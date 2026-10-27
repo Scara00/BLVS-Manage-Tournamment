@@ -24,6 +24,12 @@ import {
   descriviRisultato,
   setPartita,
 } from "@/lib/punteggi/format";
+import {
+  annuncioCosaCambia,
+  cosaCambia,
+} from "@/lib/punteggi/correzione/cosa-cambia";
+import { esitoScelta } from "@/lib/punteggi/correzione/format";
+import type { SceltaImpatto } from "@/lib/punteggi/correzione/types";
 import { punteggiPath, punteggioPath } from "@/lib/punteggi/paths";
 import { DURATA_ANNULLA_MS, spiegaRegolaSet } from "@/lib/punteggi/regola";
 import {
@@ -37,6 +43,8 @@ import type { SetPunteggio } from "@/lib/db/types";
 import type { SchedaPunteggio } from "@/lib/punteggi/types";
 import { validaPunteggio, type Lato } from "@/lib/punteggi/validazione";
 import { ConflittoPunteggio } from "./conflitto-punteggio";
+import { CosaCambia } from "./cosa-cambia";
+import { ImpattoFase } from "./impatto-fase";
 import { RiepilogoPunteggio } from "./riepilogo-punteggio";
 import { RigaSquadra } from "./riga-squadra";
 
@@ -179,6 +187,18 @@ export function InserimentoPunteggio({
   /** A choice was made in the dialog: focus then goes to the outcome. */
   const sceltaFatta = useRef(false);
 
+  // BLVS-41: the next phase already exists. The last request is kept so
+  // «Mantieni»/«Rigenera» send the same values (and version) again.
+  const [impatto, setImpatto] = useState<Extract<
+    PunteggioState,
+    { status: "impatto" }
+  > | null>(null);
+  const [impattoAperto, setImpattoAperto] = useState(false);
+  const [sceltaInCorso, setSceltaInCorso] = useState<SceltaImpatto | null>(
+    null,
+  );
+  const ultimoInvio = useRef<FormData | null>(null);
+
   const [visto, setVisto] = useState(state);
   if (state !== visto) {
     setVisto(state);
@@ -200,12 +220,21 @@ export function InserimentoPunteggio({
       setConflittoAperto(false);
       setSetsTenuti(null);
       setEsitoTieni(null);
+      setImpattoAperto(false);
     }
     if (state.status === "conflict") {
       setConflitto(state);
       setConflittoAperto(true);
+      setImpattoAperto(false);
       setAnnuncio("");
     }
+    if (state.status === "impatto") {
+      setImpatto(state);
+      setImpattoAperto(true);
+      setAnnuncio("");
+    }
+    if (state.status === "fieldErrors") setImpattoAperto(false);
+    // A failed request from the impact dialog stays inside it.
     if (state.status === "error") setConflittoAperto(false);
   }
 
@@ -249,7 +278,9 @@ export function InserimentoPunteggio({
         if (formRef.current) focusFirstInvalid(formRef.current);
       });
     }
-    if (state.status === "error") focusOn(erroreRef.current);
+    if (state.status === "error" && !impattoAperto) {
+      focusOn(erroreRef.current);
+    }
     if (state.status === "success") {
       clear();
       toast.add({
@@ -314,6 +345,24 @@ export function InserimentoPunteggio({
     const data = new FormData(event.currentTarget);
     valoriPrima.current = valoriDa(scheda);
     sceltaFatta.current = false;
+    ultimoInvio.current = data;
+    setSceltaInCorso(null);
+    startTransition(() => formAction(data));
+  };
+
+  /** «Mantieni» / «Rigenera»: the same request, with the choice. */
+  const scegli = (scelta: SceltaImpatto, spuntata: boolean) => {
+    if (!impatto || !ultimoInvio.current || !online || pending) return;
+    const data = new FormData();
+    for (const [k, v] of ultimoInvio.current.entries()) data.set(k, v);
+    data.set("versione", String(impatto.versione));
+    data.set("puntiA", String(impatto.mio.a));
+    data.set("puntiB", String(impatto.mio.b));
+    data.set("scelta", scelta);
+    data.set("conferma", spuntata ? "on" : "");
+    data.set("attesi", String(impatto.impatto.punteggiPersi));
+    sceltaFatta.current = true;
+    setSceltaInCorso(scelta);
     startTransition(() => formAction(data));
   };
 
@@ -349,6 +398,8 @@ export function InserimentoPunteggio({
     valoriPrima.current = ufficiale
       ? { a: String(ufficiale.a), b: String(ufficiale.b) }
       : { a: "", b: "" };
+    ultimoInvio.current = data;
+    setSceltaInCorso(null);
     startTransition(() => formAction(data));
   };
 
@@ -363,6 +414,16 @@ export function InserimentoPunteggio({
       : partita;
   const correzione = nota.stato === "conclusa" && nota.sets.length > 0;
   const attuale = setPartita(nota.sets);
+  // «Cosa cambia» follows the values; it is announced after a pause.
+  const girone = (scheda.girone ?? [partita]).map((p) =>
+    p.id === nota.id ? nota : p,
+  );
+  const cambio = correzione
+    ? cosaCambia(nota, girone, validaPunteggio(valori))
+    : null;
+  const esitoImpatto = salvato
+    ? esitoScelta(salvato.scelta, salvato.punteggiPersi ?? 0)
+    : null;
 
   return (
     <div
@@ -428,7 +489,12 @@ export function InserimentoPunteggio({
               : esitoAnnulla
                 ? esitoAnnulla.message
                 : salvato
-                  ? `${salvato.message}: ${descriviRisultato(partita, salvato.punteggio)}.`
+                  ? [
+                      `${salvato.message}: ${descriviRisultato(partita, salvato.punteggio)}.`,
+                      esitoImpatto,
+                    ]
+                      .filter(Boolean)
+                      .join(" ")
                   : null}
           </span>
         </p>
@@ -516,6 +582,19 @@ export function InserimentoPunteggio({
             </>
           ) : null}
         </p>
+        {cambio ? (
+          <CosaCambia
+            id={`${ids}-cosa-cambia`}
+            cambio={cambio}
+            vecchio={attuale}
+            nuovo={controllo.punti}
+            annuncio={
+              verifica && passo === "inserimento"
+                ? annuncioCosaCambia(cambio)
+                : ""
+            }
+          />
+        ) : null}
         <Button type="submit" size="campo" className="max-w-full self-start">
           Vai al riepilogo
         </Button>
@@ -527,6 +606,7 @@ export function InserimentoPunteggio({
           valori={controllo.punti}
           vincitore={controllo.vincitore}
           correzione={correzione}
+          cambio={cambio}
           headingRef={riepilogoRef}
           versione={versione}
           tappaId={tappa.id}
@@ -554,6 +634,30 @@ export function InserimentoPunteggio({
           onSovrascrivi={sovrascrivi}
           // After a choice focus goes to its outcome; after Esc back to
           // «Conferma e salva», with the admin's values still there.
+          finalFocus={() =>
+            sceltaFatta.current
+              ? (esitoRef.current ?? erroreRef.current ?? true)
+              : true
+          }
+        />
+      ) : null}
+
+      {impatto ? (
+        <ImpattoFase
+          open={impattoAperto}
+          onOpenChange={setImpattoAperto}
+          impatto={impatto.impatto}
+          erroreConferma={
+            state.status === "impatto" ? state.erroreConferma : null
+          }
+          avviso={state.status === "impatto" ? state.avviso : null}
+          errore={state.status === "error" ? state.message : null}
+          pending={pending}
+          online={online}
+          inCorso={sceltaInCorso}
+          onScegli={scegli}
+          // After a choice focus goes to its outcome; after «Annulla» or
+          // Esc back to «Conferma e salva», with the values kept.
           finalFocus={() =>
             sceltaFatta.current
               ? (esitoRef.current ?? erroreRef.current ?? true)

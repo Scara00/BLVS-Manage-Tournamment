@@ -1,3 +1,4 @@
+import type { ImpattoFase } from "@/lib/punteggi/correzione/types";
 import type {
   AnnullaPunteggioAction,
   SalvaPunteggioAction,
@@ -120,3 +121,98 @@ export const annullaFinto: AnnullaPunteggioAction = async () => ({
   status: "success",
   message: "Salvataggio annullato: il punteggio è tornato com'era.",
 });
+
+/** BLVS-41: a finished group, to correct its first match. */
+const gironeConcluso: PartitaPunteggio[] = [
+  { ...giaSalvata.partita, sets: [{ a: 21, b: 18 }] },
+  partita(2, [RINALDI, CONTI], [MORETTI, GALLO], {
+    stato: "conclusa",
+    sets: [{ a: 21, b: 15 }],
+    versione: 2,
+  }),
+  partita(3, [RINALDI, GALLO], [MORETTI, CONTI], {
+    stato: "conclusa",
+    sets: [{ a: 17, b: 21 }],
+    versione: 2,
+  }),
+];
+
+export const correzione: SchedaPunteggio = {
+  tappa,
+  partita: gironeConcluso[0],
+  girone: gironeConcluso,
+};
+
+/** w-admin-impatto-fase: two finals, one already scored. */
+export const impattoFase: ImpattoFase = {
+  punteggiPersi: 1,
+  partite: [
+    {
+      id: "jesolo-M-finale-1",
+      fase: "finale",
+      turno: 1,
+      stato: "conclusa",
+      sets: [{ a: 21, b: 19 }],
+      squadre: {
+        a: ["Luca Rinaldi", "Paolo Conti"],
+        b: ["Marco Moretti", "Andrea Gallo"],
+      },
+    },
+    {
+      id: "jesolo-M-finale-2",
+      fase: "finale",
+      turno: 2,
+      stato: "programmata",
+      sets: [],
+      squadre: {
+        a: ["Sara Ricci", "Elena Costa"],
+        b: ["Marta Greco", "Laura Fontana"],
+      },
+    },
+  ],
+};
+
+/**
+ * Like `correggi_punteggio`: with no choice it answers «impatto»;
+ * «Rigenera» needs the tick; then the correction is saved.
+ */
+export const salvaConImpatto: SalvaPunteggioAction = async (prev, formData) => {
+  const at = prev.status === "idle" ? 1 : prev.at + 1;
+  const mio = {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  };
+  const scelta = formData.get("scelta");
+  const versione = Number(formData.get("versione"));
+  if (!scelta || (scelta === "rigenera" && formData.get("conferma") !== "on")) {
+    return {
+      status: "impatto",
+      impatto: impattoFase,
+      mio,
+      versione,
+      erroreConferma: scelta
+        ? "Spunta la casella per confermare che perdi 1 punteggio."
+        : null,
+      avviso: null,
+      message:
+        "La fase successiva è già generata: scegli se mantenerla o rigenerarla.",
+      at,
+    };
+  }
+  return {
+    status: "success",
+    partitaId: String(formData.get("partitaId")),
+    versione: versione + 1,
+    punteggio: mio,
+    tipo: "correzione",
+    scelta: scelta === "rigenera" ? "rigenera" : "mantieni",
+    punteggiPersi: scelta === "rigenera" ? 1 : 0,
+    message: "Punteggio corretto",
+    at,
+  };
+};
+
+/** The request never reaches the server (network state). */
+export const salvaSenzaRete: SalvaPunteggioAction = async () => {
+  throw new TypeError("Failed to fetch");
+};

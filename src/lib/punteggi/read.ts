@@ -11,6 +11,7 @@ import type { ElencoPunteggi, SchedaPunteggio } from "./types";
 async function readElenco(
   tappaId: string,
   partitaId?: string,
+  { tutte = false } = {},
 ): Promise<ElencoPunteggi> {
   await connection();
   if (!readSupabaseEnv()) {
@@ -23,7 +24,11 @@ async function readElenco(
   }
   const user = await getCurrentUser();
   if (user?.ruolo !== "admin") forbidden();
-  const elenco = await leggiPunteggi(user.supabase, tappaId, partitaId);
+  const elenco = await leggiPunteggi(
+    user.supabase,
+    tappaId,
+    tutte ? undefined : partitaId,
+  );
   if (!elenco) notFound();
   return elenco;
 }
@@ -42,8 +47,13 @@ export async function readSchedaPunteggio(
   tappaId: string,
   partitaId: string,
 ): Promise<SchedaPunteggio> {
-  const elenco = await readElenco(tappaId, partitaId);
+  // The whole stage: «Cosa cambia» needs the other matches of the group.
+  const elenco = await readElenco(tappaId, partitaId, { tutte: true });
   const partita = elenco.partite.find((p) => p.id === partitaId);
   if (!partita) notFound();
-  return { tappa: elenco.tappa, partita };
+  return {
+    tappa: elenco.tappa,
+    partita,
+    girone: elenco.partite.filter((p) => p.gironeId === partita.gironeId),
+  };
 }

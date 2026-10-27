@@ -42,4 +42,9 @@ export type ElencoPunteggi = {
 export type SchedaPunteggio = {
   tappa: TappaPunteggi;
   partita: PartitaPunteggio;
+  /**
+   * BLVS-41: every match of the same group (this one included), so «Cosa
+   * cambia» can recompute the standing with the corrected score.
+   */
+  girone?: PartitaPunteggio[];
 };
