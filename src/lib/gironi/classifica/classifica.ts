@@ -319,6 +319,30 @@ export function classificaGirone(
   return { righe, parita, stato };
 }
 
+/**
+ * Every perfect tie of a group, decided or not: the standing with no admin
+ * decision applied. Re-deciding a tie (BLVS-38) looks it up here, since a
+ * decided tie no longer appears in `ClassificaGirone.parita`.
+ */
+export function paritaPerfette(
+  iscrizioni: readonly string[],
+  partite: readonly PartitaGirone[],
+  regola: RegolaClassifica = REGOLA_CLASSIFICA,
+): ParitaPerfetta[] {
+  return classificaGirone(iscrizioni, partite, { regola }).parita;
+}
+
+/**
+ * Head-to-head wins of each player of `gruppo`: wins in the matches where
+ * two of them stood on opposite teams (the «Scontri diretti» criterion).
+ */
+export function scontriDiretti(
+  gruppo: readonly string[],
+  partite: readonly PartitaGirone[],
+): Map<string, number> {
+  return vittorieScontriDiretti(new Set(gruppo), partiteValide(partite));
+}
+
 /** Whether `ordine` lists exactly the tied players, each once. */
 export function ordineValido(
   ordine: readonly string[],

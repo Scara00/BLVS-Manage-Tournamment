@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AdminLive, AdminLiveLoading } from "@/components/admin-live";
+import { ParitaGirone } from "@/components/admin-parita";
 import { PageContainer } from "@/components/layout/page-container";
 import {
   LiveAnnouncer,
   LiveBarConnected,
   LiveProvider,
 } from "@/components/live";
+import { risolviParita } from "@/lib/gironi/parita/actions";
+import { readParitaTabellone } from "@/lib/gironi/parita/read";
 import { readLiveSync } from "@/lib/live/read";
 import { parseCategoriaSegmento } from "@/lib/tappe/avvio/paths";
 import {
@@ -34,6 +37,22 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
     readAdminLive(id, categoria),
     readLiveSync(),
   ]);
+  // After the admin check of readAdminLive. BLVS-38: a finished group with
+  // a perfect tie shows it under its name.
+  const parita = await readParitaTabellone(view.tappa.id, categoria);
+  const extraGironi = Object.fromEntries(
+    parita
+      .filter((g) => g.parita.length > 0)
+      .map((g) => [
+        g.gironeId,
+        <ParitaGirone
+          key={g.gironeId}
+          girone={g}
+          risolvi={risolviParita}
+          className="border-2 border-primary p-space-3"
+        />,
+      ]),
+  );
   return (
     <LiveProvider initial={initial}>
       <div className="flex flex-col gap-stack">
@@ -46,6 +65,7 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
           view={view}
           azione={aggiornaPartita}
           punteggio={salvaPunteggio}
+          extraGironi={extraGironi}
         />
       </div>
     </LiveProvider>

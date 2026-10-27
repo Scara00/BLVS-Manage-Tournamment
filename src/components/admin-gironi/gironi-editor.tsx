@@ -2,7 +2,13 @@
 
 import { LockIcon, PlusIcon, TriangleAlertIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, useTransition } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type ReactNode,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { useOnline } from "@/hooks/use-online";
 import { annuncioModifica } from "@/lib/gironi/editor/annunci";
@@ -37,6 +43,11 @@ type GironiEditorProps = {
   spostaAperto?: { iscrizioneId: string; verso?: Destinazione };
   /** Storybook: a starting error message. */
   erroreIniziale?: string;
+  /**
+   * Extra content per group id, shown inside its card (BLVS-38: the
+   * «Parità da risolvere» signal and its dialog).
+   */
+  extraGironi?: Readonly<Record<string, ReactNode>>;
 };
 
 function focalizza(el: HTMLElement | null) {
@@ -58,6 +69,7 @@ export function GironiEditor({
   offline,
   spostaAperto,
   erroreIniziale,
+  extraGironi,
 }: GironiEditorProps) {
   const { tappa, categoria } = editor;
   const pathname = usePathname();
@@ -254,6 +266,7 @@ export function GironiEditor({
                 key={girone.id}
                 girone={girone}
                 drag={drag}
+                extra={extraGironi?.[girone.id]}
                 onElimina={() =>
                   esegui(
                     { tipo: "elimina", gironeId: girone.id },
