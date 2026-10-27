@@ -2,7 +2,7 @@ import { BodyReader } from "./validation";
 import { STATI_TAPPA } from "@/lib/db/types";
 
 export const TAPPA_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, created_at, updated_at, tabelloni (id, categoria)";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, created_at, updated_at, tabelloni (id, categoria)";
 
 /** Reads the writable fields of a stage; `partial` for PATCH. */
 export function readTappa(body: Record<string, unknown>, partial: boolean) {

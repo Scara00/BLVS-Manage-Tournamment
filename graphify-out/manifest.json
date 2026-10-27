@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1793100408.842593,
-    "ast_hash": "a9835ef4d4d3c9e049ff6b795c692d80",
+    "mtime": 1793100443.4188614,
+    "ast_hash": "e923ae9102d35ae8a338cd08c1edc085",
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793100408.833722,
-    "ast_hash": "21b3f5e2982b59748fb25bb042a1bf8f",
+    "mtime": 1793100443.413578,
+    "ast_hash": "de901e763341f1527b87f29d58961964",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
@@ -720,8 +720,8 @@
     "semantic_hash": ""
   },
   "src/lib/api/tappe.ts": {
-    "mtime": 1793100408.8676004,
-    "ast_hash": "b7495ee3760c7a2a7250f7f5d4492b3f",
+    "mtime": 1793100443.423285,
+    "ast_hash": "a7321ad2a6d8016495466de0af858608",
     "semantic_hash": ""
   },
   "src/lib/api/validation.ts": {
@@ -760,8 +760,8 @@
     "semantic_hash": ""
   },
   "src/lib/db/types.ts": {
-    "mtime": 1793100409.1100698,
-    "ast_hash": "fc0dc5d71ddc6063909b29f4da59f6b2",
+    "mtime": 1793100443.4235168,
+    "ast_hash": "1eaab87f679ed67587d0ec90405832f3",
     "semantic_hash": ""
   },
   "src/lib/supabase/admin.ts": {
@@ -1890,8 +1890,8 @@
     "semantic_hash": ""
   },
   "docs/supabase-produzione.md": {
-    "mtime": 1793100408.8339329,
-    "ast_hash": "9448cab5343e926e63df55f2e96476b9",
+    "mtime": 1793100443.4137948,
+    "ast_hash": "d717f3cbca3ccbbe75c42b2d4b52ae77",
     "semantic_hash": ""
   },
   "e2e/admin-tappa-nuova.spec.ts": {
@@ -2090,8 +2090,8 @@
     "semantic_hash": ""
   },
   "src/components/admin/tappe-table.tsx": {
-    "mtime": 1793100409.1089408,
-    "ast_hash": "bca54a114c7c328c25d31ef58ced93e2",
+    "mtime": 1793100498.150079,
+    "ast_hash": "00a4da8d283ac2239ad70a6496a6c9ef",
     "semantic_hash": ""
   },
   "src/lib/admin/riepilogo-tappe.db.test.ts": {
@@ -2137,6 +2137,176 @@
   "supabase/migrations/20261027317000_admin_dashboard_tappe.sql": {
     "mtime": 1793100409.1113372,
     "ast_hash": "b2280f8bde418d8644d857ed539bc59e",
+    "semantic_hash": ""
+  },
+  "e2e/admin-tappa.spec.ts": {
+    "mtime": 1793100443.4140625,
+    "ast_hash": "3dc071448b1ac809a69edd3764245cc4",
+    "semantic_hash": ""
+  },
+  "src/app/admin/(protetta)/tappe/[id]/page.tsx": {
+    "mtime": 1793100443.419993,
+    "ast_hash": "87658f7d61404cfcb54ef49bf09b877f",
+    "semantic_hash": ""
+  },
+  "src/app/api/cron/chiudi-iscrizioni/route.ts": {
+    "mtime": 1793100443.420495,
+    "ast_hash": "2cc38ab85163d4b35f918072a7ef2a84",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/tappe/route.ts": {
+    "mtime": 1793100443.420722,
+    "ast_hash": "69b7ff896ad6c343b83a045ae9d23789",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/cambio-stato.stories.tsx": {
+    "mtime": 1793100443.4209168,
+    "ast_hash": "a41f882155eb85834d45af42d368d848",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/cambio-stato.test.tsx": {
+    "mtime": 1793100443.4210882,
+    "ast_hash": "08bc997cbe5d2b3358782602a5bcba21",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/cambio-stato.tsx": {
+    "mtime": 1793100443.4213681,
+    "ast_hash": "005651aea543aae4f1120dedc3fb2dac",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/gestione-tappa-loading.tsx": {
+    "mtime": 1793100443.4215555,
+    "ast_hash": "b62a5f65ea460d4838181750f1905f0a",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/gestione-tappa.stories.tsx": {
+    "mtime": 1793100443.421725,
+    "ast_hash": "bd4d8a42b906ac2fa9f08b5c43424d45",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/gestione-tappa.tsx": {
+    "mtime": 1793100443.4219036,
+    "ast_hash": "cc77c7c3568e79fae59ddf523c98ec9d",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/index.ts": {
+    "mtime": 1793100443.4220488,
+    "ast_hash": "73fbd6667951b0d5812fe50e677eeeff",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/scadenza-form.tsx": {
+    "mtime": 1793100443.422243,
+    "ast_hash": "ba3a1d8b1eab1fcc13b10a2a8bd442e6",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/scadenza-iscrizioni.tsx": {
+    "mtime": 1793100443.4223738,
+    "ast_hash": "4cd1de1567d7ad651750beff6a5fb0e3",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/stato-badge.tsx": {
+    "mtime": 1793100443.4225008,
+    "ast_hash": "bf9c6fb5c88377c91d5c150f7a4a9975",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/stato-flusso.tsx": {
+    "mtime": 1793100443.4226465,
+    "ast_hash": "974d29bb9a849ffaacb24dfc1cfc7097",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/stories-data.ts": {
+    "mtime": 1793100443.422825,
+    "ast_hash": "6436fb04057ec74ce71284c99527c7a8",
+    "semantic_hash": ""
+  },
+  "src/components/admin-tappa/tabelloni-riepilogo.tsx": {
+    "mtime": 1793100443.422971,
+    "ast_hash": "5500207a5b616cd22517c6ef52c06f24",
+    "semantic_hash": ""
+  },
+  "src/hooks/use-online.ts": {
+    "mtime": 1793100443.4231014,
+    "ast_hash": "3f4c93f6cffd46295d4eb2be256a9b25",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/gestione-tappe-route.ts": {
+    "mtime": 1793100443.423687,
+    "ast_hash": "5402554bb1db6be8249601e0b7e05732",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/gestione-tappe.ts": {
+    "mtime": 1793100443.4238956,
+    "ast_hash": "59fbb7e9224a72c876cbc8759c950064",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/actions.test.ts": {
+    "mtime": 1793100443.424083,
+    "ast_hash": "337b1642b50587a13d9ac5cccf247910",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/actions.ts": {
+    "mtime": 1793100443.4242558,
+    "ast_hash": "6ea63774fe64fca11b3f4cce28529f72",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/chiusura-automatica.test.ts": {
+    "mtime": 1793100443.4244077,
+    "ast_hash": "027a4b08d4693b311382ebdad0ae9809",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/chiusura-automatica.ts": {
+    "mtime": 1793100443.4245827,
+    "ast_hash": "82582b126682096981b890cfc7decad6",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/gestione-format.test.ts": {
+    "mtime": 1793100443.4247417,
+    "ast_hash": "9583d50b87254dbb2dbb3eb6b388a6f3",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/gestione-format.ts": {
+    "mtime": 1793100443.4250154,
+    "ast_hash": "5e8ad868c6b8e63b7949589cb5e1bc0c",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/gestione-state.ts": {
+    "mtime": 1793100443.4251754,
+    "ast_hash": "9c786927cbf710208f015240d42a04a8",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/gestione.ts": {
+    "mtime": 1793100443.4253838,
+    "ast_hash": "62af57a1c6d39f3f4c773c704235d22b",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stato-tappa.db.test.ts": {
+    "mtime": 1793100443.4255507,
+    "ast_hash": "069e17e94346e29ca86179d9504ec5af",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stato.test.ts": {
+    "mtime": 1793100443.4257185,
+    "ast_hash": "8fa0e4e7f643434e6825d02a62f4769d",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stato.ts": {
+    "mtime": 1793100443.425905,
+    "ast_hash": "75b52f880d75163c9f64cc71b2b12792",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027320000_stato_tappa.sql": {
+    "mtime": 1793100443.4261096,
+    "ast_hash": "2083a9e6046ee9f74e542563d88f7f85",
+    "semantic_hash": ""
+  },
+  "supabase/tests/database/stato_tappa.test.sql": {
+    "mtime": 1793100443.4262545,
+    "ast_hash": "94741259dd594f2dc7d370669f682ab2",
+    "semantic_hash": ""
+  },
+  "vercel.json": {
+    "mtime": 1793100443.4263752,
+    "ast_hash": "fb7950c59975d42b63d071fb5c17880b",
     "semantic_hash": ""
   }
 }

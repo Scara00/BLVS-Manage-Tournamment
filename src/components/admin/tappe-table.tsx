@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ResponsiveTable,
   type ResponsiveTableColumn,
@@ -9,6 +10,7 @@ import {
   type AdminCategoria,
   type AdminTappa,
 } from "@/lib/admin/tappe";
+import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import { cn } from "@/lib/utils";
 import { StatoTappaBadge } from "./stato-tappa-badge";
 
@@ -62,7 +64,21 @@ function categoriaColumn(
 }
 
 const columns: ResponsiveTableColumn<AdminTappa>[] = [
-  { key: "nome", header: "Tappa", rowHeader: true, width: "26%" },
+  {
+    key: "nome",
+    header: "Tappa",
+    rowHeader: true,
+    width: "26%",
+    render: (row) => (
+      <Link
+        href={gestioneTappaPath(row.id)}
+        className="font-semibold underline decoration-2 underline-offset-4 focus-ring"
+      >
+        {row.nome}
+        <span className="sr-only">: gestisci la tappa</span>
+      </Link>
+    ),
+  },
   { key: "periodo", header: "Data", width: "16%" },
   {
     key: "stato",
