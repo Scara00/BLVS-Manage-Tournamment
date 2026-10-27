@@ -18,6 +18,9 @@ export const RECOVERY_LINK = `{{ .SiteURL }}${RESET_PASSWORD_PATH}?token_hash={{
  */
 export const CONFIRMATION_LINK = `{{ .SiteURL }}${EMAIL_VERIFY_CALLBACK_PATH}?token_hash={{ .TokenHash }}&type=email`;
 
+/** BLVS-16: email change uses GoTrue's own link (sent to both addresses). */
+export const EMAIL_CHANGE_LINK = "{{ .ConfirmationURL }}";
+
 /**
  * Supabase Auth sends the confirmation and password-reset emails itself
  * (supabase/config.toml, `[auth.email.template.*]`). Its templates are Go
@@ -48,9 +51,10 @@ export const SUPABASE_AUTH_TEMPLATES = [
   {
     key: "email_change",
     file: "conferma-nuova-email.html",
+    href: EMAIL_CHANGE_LINK,
     render: () =>
       renderEmail("conferma-nuova-email", {
-        confirmationUrl: "{{ .ConfirmationURL }}",
+        confirmationUrl: EMAIL_CHANGE_LINK,
         currentEmail: "{{ .Email }}",
         newEmail: "{{ .NewEmail }}",
       }),
