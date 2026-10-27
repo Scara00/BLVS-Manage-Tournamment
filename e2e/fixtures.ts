@@ -15,6 +15,25 @@ export function makeAxeBuilder(page: Page) {
 }
 
 /**
+ * Storybook's addon-a11y runs axe in the story iframe after each render; a
+ * second concurrent run throws "Axe is already running". Retry until it ends.
+ */
+async function analyzeWhenIdle(
+  page: Page,
+  configure: (builder: AxeBuilder) => AxeBuilder,
+) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await configure(makeAxeBuilder(page)).analyze();
+    } catch (error) {
+      const busy = String(error).includes("Axe is already running");
+      if (!busy || attempt >= 20) throw error;
+      await page.waitForTimeout(100);
+    }
+  }
+}
+
+/**
  * Fails the test on any WCAG 2.2 AA violation. Every e2e spec that visits a
  * page must call it once the page has settled.
  */
@@ -22,7 +41,7 @@ export async function expectNoA11yViolations(
   page: Page,
   configure: (builder: AxeBuilder) => AxeBuilder = (b) => b,
 ) {
-  const { violations } = await configure(makeAxeBuilder(page)).analyze();
+  const { violations } = await analyzeWhenIdle(page, configure);
   const report = violations
     .map(
       (v) =>
