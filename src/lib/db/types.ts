@@ -39,6 +39,10 @@ export type StatoPartita = (typeof STATI_PARTITA)[number];
 export const FASI_TABELLONE = ["gold", "silver"] as const;
 export type FaseTabellone = (typeof FASI_TABELLONE)[number];
 
+/** Game phase of a board, started by the admin (BLVS-29). */
+export const FASI_GIOCO = ["gironi_iniziali"] as const;
+export type FaseGioco = (typeof FASI_GIOCO)[number];
+
 export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
 export type FasePartita = (typeof FASI_PARTITA)[number];
 
@@ -94,6 +98,11 @@ export type Tabellone = {
   fase: FaseTabellone | null;
   /** When the board was concluded (BLVS-43); null while still open. */
   concluso_il: string | null;
+  /** Started game phase (BLVS-29, `avvia_fase`); null until it starts. */
+  fase_gioco: FaseGioco | null;
+  fase_avviata_il: string | null;
+  /** Version of its groups: +1 on every change saved by the editor (BLVS-28). */
+  versione_gironi: number;
 };
 
 export type Iscrizione = {
@@ -116,6 +125,19 @@ export type Punteggio = {
   versione: number;
   aggiornato_da: string | null;
   updated_at: string;
+};
+
+/** Admin's order for a perfect tie in a group (BLVS-27). */
+export type SpareggioGirone = {
+  id: string;
+  girone_id: string;
+  /** Fingerprint of the tie (`firmaParita`); the order applies only while it matches. */
+  firma: string;
+  /** Tied registration ids, best first. */
+  ordine: string[];
+  motivo: string;
+  deciso_da: string | null;
+  deciso_il: string;
 };
 
 export type VoceRegistro = {

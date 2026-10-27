@@ -13,6 +13,8 @@ import { isTransizionePermessa, requisitoApertura } from "@/lib/tappe/stato";
 export type DemoTappaGestione = {
   row: TappaGestioneRow;
   tabelloni: TabelloneRow[];
+  /** Maximum per board; the default (16) when missing. */
+  posti?: number;
 };
 
 type Store = Map<string, DemoTappaGestione>;
@@ -73,7 +75,7 @@ function seed(): Store {
         iscrizioni_chiuse_il: "2027-07-03T22:00:00Z",
         chiusura_automatica: true,
       },
-      tabelloni: [board("M", 14, 0), board("F", 10, 0)],
+      tabelloni: [board("M", 14, 0), board("F", 8, 0)],
     },
     {
       row: {
@@ -101,6 +103,7 @@ function store(): Store {
 
 function copy(tappa: DemoTappaGestione): DemoTappaGestione {
   return {
+    ...tappa,
     row: { ...tappa.row },
     tabelloni: tappa.tabelloni.map((t) => ({ ...t })),
   };
@@ -133,6 +136,23 @@ export function listDemoTappeGestione(): DemoTappaGestione[] {
 export function getDemoTappaGestione(id: string): DemoTappaGestione | null {
   const tappa = store().get(id);
   return tappa ? copy(tappa) : null;
+}
+
+/**
+ * BLVS-25: the registrants store (`iscritti-admin.ts`) writes back the
+ * counts of a board after an add or a removal, so every page agrees.
+ */
+export function aggiornaContiDemo(
+  id: string,
+  categoria: "M" | "F",
+  conti: { confermate: number; inAttesa: number },
+): void {
+  const board = store()
+    .get(id)
+    ?.tabelloni.find((t) => t.categoria === categoria);
+  if (!board) return;
+  board.confermate = conti.confermate;
+  board.inAttesa = conti.inAttesa;
 }
 
 export type DemoEsito =
@@ -181,6 +201,28 @@ export function aggiornaScadenzaDemo(id: string, chiudonoIl: Date): DemoEsito {
 }
 
 /**
+ * The group phase of one board started (BLVS-29): like `avvia_fase`, the
+ * board gets its group matches and a stage `iscrizioni_chiuse` moves to
+ * `in_corso`.
+ */
+export function segnaFaseAvviataDemo(
+  id: string,
+  categoria: "M" | "F",
+  partite: number,
+): DemoEsito {
+  const tappa = store().get(id);
+  if (!tappa) return "nonTrovata";
+  const tabellone = tappa.tabelloni.find((t) => t.categoria === categoria);
+  if (!tabellone) return "nonTrovata";
+  tabellone.fasiPartite = [
+    ...tabellone.fasiPartite.filter((f) => f !== "gironi"),
+    ...Array.from({ length: partite }, () => "gironi"),
+  ];
+  if (tappa.row.stato === "iscrizioni_chiuse") tappa.row.stato = "in_corso";
+  return "ok";
+}
+
+/**
  * Adds a stage for one e2e test, so parallel projects never share it.
  * Only reachable through the demo-only route `POST /api/demo/tappe`.
  */
@@ -188,12 +230,37 @@ export function creaDemoTappa({
   stato = "bozza",
   chiudonoIl,
   nome,
+  posti,
 }: {
   stato?: StatoTappa;
   chiudonoIl: string | null;
   nome?: string;
+  /** Maximum per board (BLVS-25 e2e fill a board). */
+  posti?: number;
 }): string {
   const id = `e2e-${crypto.randomUUID()}`;
+  aggiungiDemoTappa(id, { stato, chiudonoIl, nome, posti });
+  return id;
+}
+
+/** Adds a demo stage with a given id (e2e fixtures). */
+export function aggiungiDemoTappa(
+  id: string,
+  {
+    stato = "bozza",
+    chiudonoIl,
+    nome,
+    confermate = { M: 4, F: 3 },
+    posti,
+  }: {
+    stato?: StatoTappa;
+    chiudonoIl: string | null;
+    nome?: string;
+    confermate?: { M: number; F: number };
+    /** Maximum per board (BLVS-25 e2e fill a board). */
+    posti?: number;
+  },
+): void {
   store().set(id, {
     row: {
       id,
@@ -207,7 +274,7 @@ export function creaDemoTappa({
       iscrizioni_chiuse_il: null,
       chiusura_automatica: false,
     },
-    tabelloni: [board("M", 4, 1), board("F", 3, 0)],
+    tabelloni: [board("M", confermate.M, 1), board("F", confermate.F, 0)],
+    posti,
   });
-  return id;
 }

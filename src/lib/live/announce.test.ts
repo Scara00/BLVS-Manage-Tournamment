@@ -14,6 +14,24 @@ const match: LiveMatch = {
 const meta = { seq: 1, savedAt: "2026-06-14T08:30:00.000Z" };
 
 describe("announcementFor", () => {
+  it("annuncia l'avvio dei gironi di un tabellone", () => {
+    const event: LiveEvent = {
+      ...meta,
+      type: "phase-started",
+      phase: {
+        id: "cagliari:M",
+        stageId: "cagliari",
+        label: "Tappa 3 · Cagliari, maschile",
+        category: "M",
+        phase: "gironi_iniziali",
+        matches: 9,
+      },
+    };
+    expect(announcementFor(event)).toBe(
+      "Tappa 3 · Cagliari, maschile: iniziati i gironi, 9 partite da giocare",
+    );
+  });
+
   it("annuncia le partite da inserire della tappa", () => {
     const event: LiveEvent = {
       ...meta,

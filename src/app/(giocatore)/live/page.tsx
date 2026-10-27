@@ -18,7 +18,7 @@ async function LiveContent() {
     <LiveProvider initial={initial}>
       <div className="flex flex-col gap-stack">
         <LiveBarConnected />
-        <LiveAnnouncer types={["score", "group-standings"]} />
+        <LiveAnnouncer types={["score", "group-standings", "phase-started"]} />
         <LiveMatches />
       </div>
     </LiveProvider>

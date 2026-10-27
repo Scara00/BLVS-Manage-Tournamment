@@ -20,6 +20,11 @@ export function announcementFor(event: LiveEvent): string {
       return "Classifica generale aggiornata";
     case "pending-scores":
       return `${event.stage.label}: ${partiteDaInserireLabel(event.stage.count)}`;
+    case "phase-started": {
+      const { label, matches } = event.phase;
+      const partite = matches === 1 ? "1 partita" : `${matches} partite`;
+      return `${label}: iniziati i gironi, ${partite} da giocare`;
+    }
   }
 }
 
