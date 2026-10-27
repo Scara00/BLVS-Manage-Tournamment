@@ -8,18 +8,13 @@ import {
 } from "./auth-paths";
 
 describe("requiresSession", () => {
-  it.each([
-    "/",
-    "/classifica",
-    "/gironi/a",
-    "/admin",
-    "/admin/tappe",
-    "/registrati-ora",
-  ])("%s richiede l'accesso", (path) =>
-    expect(requiresSession(path)).toBe(true),
+  it.each(["/", "/gironi/a", "/admin", "/admin/tappe", "/registrati-ora"])(
+    "%s richiede l'accesso",
+    (path) => expect(requiresSession(path)).toBe(true),
   );
 
   it.each([
+    "/classifica",
     "/accesso",
     "/sessione-scaduta",
     "/privacy",

@@ -78,6 +78,32 @@ export type OverallStandingRow = {
   points: number;
 };
 
+/** One player of the overall standing (BLVS-44, w-classifica). */
+export type OverallPlayerRow = {
+  /** `utenti.id`: the same player across stages. */
+  playerId: string;
+  name: string;
+  /** Players level after every tie-break share it. */
+  position: number;
+  points: number;
+  stages: number;
+  /** Some points can still change: a board is not closed yet. */
+  provisional: boolean;
+  /** Shares the position with another player. */
+  tied: boolean;
+};
+
+/** The overall standing of one category and season (BLVS-44). */
+export type OverallStandings = {
+  /** `<M|F>:<season>`, or `<M|F>:tutte` for every season. */
+  id: string;
+  category: Categoria;
+  season: number | null;
+  rows: readonly OverallPlayerRow[];
+  /** What changed, said once by the announcer (e.g. «Tappa 2: punti definitivi»). */
+  change?: string | null;
+};
+
 /** Results still to enter for a stage raced today (admin banner). */
 export type PendingScores = {
   /** Stage id. */
@@ -129,6 +155,8 @@ export type LiveSnapshot = {
   matches: readonly LiveMatch[];
   groups: readonly GroupStandings[];
   overall: readonly OverallStandingRow[];
+  /** Per category and season; absent in snapshots from before BLVS-44. */
+  overallStandings?: readonly OverallStandings[];
   /** Per stage, only for the stages that published a count. */
   pendingScores: readonly PendingScores[];
   /** Boards whose phase started; absent in snapshots from before BLVS-29. */
@@ -143,7 +171,12 @@ export type LiveSync = { snapshot: LiveSnapshot; syncedAt: string };
 export type LiveEventPayload =
   | { type: "score"; match: LiveMatch }
   | { type: "group-standings"; group: GroupStandings }
-  | { type: "overall-standings"; rows: readonly OverallStandingRow[] }
+  | {
+      type: "overall-standings";
+      rows: readonly OverallStandingRow[];
+      /** BLVS-44: the standing of one category and season. */
+      standings?: OverallStandings;
+    }
   | { type: "pending-scores"; stage: PendingScores }
   | { type: "phase-started"; phase: PhaseStarted }
   | { type: "board-matches"; board: BoardMatches };
@@ -182,7 +215,13 @@ export function applyLiveEvent(
     case "group-standings":
       return { ...base, groups: upsert(snapshot.groups, event.group) };
     case "overall-standings":
-      return { ...base, overall: event.rows };
+      return {
+        ...base,
+        overall: event.rows,
+        overallStandings: event.standings
+          ? upsert(snapshot.overallStandings ?? [], event.standings)
+          : snapshot.overallStandings,
+      };
     case "pending-scores":
       return {
         ...base,
