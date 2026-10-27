@@ -5,6 +5,16 @@
 
 export type SetScore = readonly [home: number, away: number];
 
+/** One player of a King/Queen team; `id` is the registration id. */
+export type LivePlayer = { id: string; name: string };
+
+/** Match state, as `partite.stato`. */
+export type LiveMatchState =
+  | "programmata"
+  | "in_corso"
+  | "conclusa"
+  | "annullata";
+
 export type LiveMatch = {
   id: string;
   court: string;
@@ -14,11 +24,26 @@ export type LiveMatch = {
   home: string;
   away: string;
   sets: readonly SetScore[];
+  /*
+   * BLVS-36: optional, so older publishers stay valid. The player live
+   * screen (w-live) needs them to find the stage, the player's own match
+   * and the Gold/Silver board.
+   */
+  stageId?: string;
+  category?: "M" | "F";
+  /** Round of the group (1..3), orders a player's matches. */
+  round?: number;
+  state?: LiveMatchState;
+  /** Full names of both teams, home first. */
+  players?: { home: readonly LivePlayer[]; away: readonly LivePlayer[] };
 };
 
 export type GroupStandingRow = {
   position: number;
+  /** A pair, or one player in King/Queen standings. */
   pair: string;
+  /** Registration id of the player (King/Queen standings, BLVS-36). */
+  playerId?: string;
   played: number;
   won: number;
   points: number;
@@ -27,6 +52,9 @@ export type GroupStandingRow = {
 export type GroupStandings = {
   id: string;
   label: string;
+  /** BLVS-36: the stage and board of the group, when known. */
+  stageId?: string;
+  category?: "M" | "F";
   rows: readonly GroupStandingRow[];
 };
 

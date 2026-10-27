@@ -25,8 +25,14 @@ function eventGroupId(event: LiveEvent): string | undefined {
 export function LiveAnnouncer({
   types = LIVE_EVENT_TYPES,
   groupId,
+  filter: extraFilter,
+  format = announcementFor,
   intervalMs = ANNOUNCE_INTERVAL_MS,
 }: {
+  /** Further narrows the events read (e.g. one stage's). */
+  filter?: (event: LiveEvent) => boolean;
+  /** The sentence for an event; defaults to `announcementFor`. */
+  format?: (event: LiveEvent) => string;
   /** Which kinds of change this page announces. */
   types?: readonly LiveEvent["type"][];
   /** Only this group's results and standings (girone page). */
@@ -39,12 +45,15 @@ export function LiveAnnouncer({
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const filter = (event: LiveEvent) =>
     types.includes(event.type) &&
-    (groupId === undefined || eventGroupId(event) === groupId);
+    (groupId === undefined || eventGroupId(event) === groupId) &&
+    (extraFilter === undefined || extraFilter(event));
   const filterRef = useRef(filter);
+  const formatRef = useRef(format);
   const previousStatus = useRef<LiveStatus | null>(null);
 
   useEffect(() => {
     filterRef.current = filter;
+    formatRef.current = format;
   });
 
   const say = useRef((text: string) => {
@@ -65,7 +74,7 @@ export function LiveAnnouncer({
   useEffect(
     () =>
       subscribeEvents((event) => {
-        if (filterRef.current(event)) say.current(announcementFor(event));
+        if (filterRef.current(event)) say.current(formatRef.current(event));
       }),
     [subscribeEvents],
   );

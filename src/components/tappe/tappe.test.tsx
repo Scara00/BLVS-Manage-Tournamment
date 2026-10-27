@@ -96,8 +96,8 @@ describe("TappeElenco", () => {
       name: "In corso: Tappa 1 · Jesolo · Fase Gironi",
     });
     expect(
-      within(strip).getByRole("link", { name: "Segui la diretta" }),
-    ).toHaveAttribute("href", "/live");
+      within(strip).getByRole("link", { name: "Segui il live" }),
+    ).toHaveAttribute("href", "/tappe/jesolo/live");
   });
 
   it("senza tappe in corso niente striscia", () => {

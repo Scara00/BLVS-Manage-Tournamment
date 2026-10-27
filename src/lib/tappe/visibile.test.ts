@@ -7,6 +7,7 @@ describe("tappaDaPercorso", () => {
     ["/tappe/rimini", "rimini"],
     ["/tappe/rimini/", "rimini"],
     ["/tappe/rimini/iscrizione", "rimini"],
+    ["/tappe/jesolo/live", "jesolo"],
     ["/tappe/a%20b", "a b"],
     ["/tappe", null],
     ["/tappe/rimini/altro", null],

@@ -7,3 +7,8 @@ export {
   LiveMatches,
   LiveOverallStandings,
 } from "./live-views";
+export {
+  LiveTappa,
+  LiveTappaSessioneScaduta,
+  type LiveTappaProps,
+} from "./live-tappa";

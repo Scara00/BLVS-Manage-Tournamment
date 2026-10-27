@@ -1,11 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 import { isUuid } from "@/lib/api/validation";
+import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
 import { demoDettaglioTappa } from "@/lib/demo/tappa-dettaglio";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 
-/** w-tappa and w-iscrizione-ok: `/tappe/<id>` and `/tappe/<id>/iscrizione`. */
-const PAGINA_TAPPA = /^\/tappe\/([^/]+)(?:\/iscrizione)?\/?$/;
+/**
+ * w-tappa, w-iscrizione-ok and w-live: `/tappe/<id>`,
+ * `/tappe/<id>/iscrizione` and `/tappe/<id>/live`.
+ */
+const PAGINA_TAPPA = /^\/tappe\/([^/]+)(?:\/iscrizione|\/live)?\/?$/;
 
 /** No route matches it, so the root `not-found.tsx` answers with HTTP 404. */
 export const TAPPA_NON_TROVATA_PATH = "/_tappa-non-trovata";
@@ -29,8 +33,10 @@ export function tappaDaPercorso(pathname: string): string | null {
 export async function tappaVisibile(id: string): Promise<boolean> {
   const env = readSupabaseEnv();
   if (!env) {
-    const row = demoDettaglioTappa(id);
-    return row !== null && row.stato !== "bozza";
+    // The player calendar, or a stage created by the demo fixtures.
+    const stato =
+      demoDettaglioTappa(id)?.stato ?? getDemoTappaGestione(id)?.row.stato;
+    return stato !== undefined && stato !== "bozza";
   }
   if (!isUuid(id)) return false;
   const anon = createClient(env.url, env.publishableKey, {
