@@ -1,6 +1,16 @@
 import { createServerClient } from "@supabase/ssr";
 import { isAuthSessionMissingError } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  ADMIN_DEADLINE_COOKIE,
+  ADMIN_SESSION_API_PATH,
+  ADMIN_SESSION_EXPIRED_MESSAGE,
+  deadlineCookieOptions,
+  isAdminArea,
+  isExpired,
+  nextDeadline,
+  parseDeadline,
+} from "@/lib/admin/session-timeout";
 import { FORBIDDEN_MESSAGE } from "@/lib/api/responses";
 import {
   LOGIN_PATH,
@@ -10,6 +20,7 @@ import {
   sessionExpiredHref,
 } from "@/lib/navigation/auth-paths";
 import { RETURN_PARAM } from "@/lib/navigation/safe-return-path";
+import { now } from "@/lib/time/server-time";
 import { readSupabaseEnv } from "./env";
 
 let warnedMissingEnv = false;
@@ -46,6 +57,31 @@ function redirectKeepingCookies(
   const cacheControl = response.headers.get("cache-control");
   if (cacheControl) redirect.headers.set("cache-control", cacheControl);
   return redirect;
+}
+
+/** Router prefetches are not the admin doing something. */
+function isPrefetch(request: NextRequest): boolean {
+  return (
+    request.headers.has("next-router-prefetch") ||
+    request.headers.get("purpose") === "prefetch" ||
+    request.headers.get("sec-purpose")?.includes("prefetch") === true
+  );
+}
+
+/**
+ * Whether this admin request counts as activity and moves the idle deadline
+ * forward. The browser's status poll and prefetches do not; a missing
+ * deadline is always set.
+ */
+function movesAdminDeadline(
+  request: NextRequest,
+  deadline: number | null,
+): boolean {
+  if (deadline === null) return true;
+  const statusPoll =
+    request.nextUrl.pathname === ADMIN_SESSION_API_PATH &&
+    request.method === "GET";
+  return !statusPoll && !isPrefetch(request);
 }
 
 /**
@@ -117,6 +153,54 @@ export async function updateSession(request: NextRequest) {
   // means the session expired: say so, and remember where the user was.
   const { pathname, search } = request.nextUrl;
   const signedIn = Boolean(data?.claims?.sub);
+
+  // Admin idle timeout (BLVS-18): past the deadline the session is closed
+  // here, on every device request; otherwise activity moves it forward.
+  if (signedIn && isAdminArea(pathname)) {
+    const nowMs = now().getTime();
+    const deadline = parseDeadline(
+      request.cookies.get(ADMIN_DEADLINE_COOKIE)?.value,
+    );
+    if (deadline !== null && isExpired(deadline, nowMs)) {
+      try {
+        // Clears the auth cookies through setAll, which replaces `response`.
+        await supabase.auth.signOut({ scope: "local" });
+      } catch (signOutError) {
+        console.error(
+          "[auth] chiusura della sessione admin non riuscita",
+          signOutError,
+        );
+      }
+      response.cookies.set(ADMIN_DEADLINE_COOKIE, "", {
+        ...deadlineCookieOptions(),
+        maxAge: 0,
+      });
+      if (isAdminApi(request)) {
+        const expired = NextResponse.json(
+          { error: ADMIN_SESSION_EXPIRED_MESSAGE },
+          { status: 401 },
+        );
+        response.cookies
+          .getAll()
+          .forEach((cookie) => expired.cookies.set(cookie));
+        return expired;
+      }
+      if (isNavigation(request))
+        return redirectKeepingCookies(
+          request,
+          response,
+          sessionExpiredHref(`${pathname}${search}`),
+        );
+      return response;
+    }
+    if (movesAdminDeadline(request, deadline)) {
+      response.cookies.set(
+        ADMIN_DEADLINE_COOKIE,
+        String(nextDeadline(nowMs)),
+        deadlineCookieOptions(),
+      );
+    }
+  }
   if (isNavigation(request) && !signedIn && requiresSession(pathname)) {
     const from = `${pathname}${search}`;
     return redirectKeepingCookies(

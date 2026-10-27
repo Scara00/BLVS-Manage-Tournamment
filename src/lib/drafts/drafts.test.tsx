@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearDrafts,
+  flushDrafts,
   listDrafts,
   readDraft,
   restoreForm,
@@ -151,5 +152,35 @@ describe("useFormDraft", () => {
     expect(api.restoredAt).toBe("2026-10-27T12:00:00.000Z");
     act(() => api.clear());
     expect(readDraft("prova")).toBeNull();
+  });
+
+  it("flushDrafts salva subito le modifiche in sospeso, senza aspettare", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-27T12:00:00Z"));
+    const view = render(<DraftForm onReady={() => {}} />);
+    const nome = view.getByLabelText("Nome") as HTMLInputElement;
+    nome.value = "Giulia";
+    nome.dispatchEvent(new Event("input", { bubbles: true }));
+    expect(readDraft("prova")).toBeNull();
+
+    act(() => flushDrafts());
+    expect(readDraft("prova")?.values).toEqual({ nome: "Giulia" });
+
+    // Nothing pending: the timer does not write again.
+    localStorage.clear();
+    act(() => vi.advanceTimersByTime(600));
+    expect(readDraft("prova")).toBeNull();
+  });
+
+  it("salva anche quando la pagina viene lasciata (pagehide)", () => {
+    vi.useFakeTimers();
+    const view = render(<DraftForm onReady={() => {}} />);
+    const nome = view.getByLabelText("Nome") as HTMLInputElement;
+    nome.value = "Luca";
+    nome.dispatchEvent(new Event("input", { bubbles: true }));
+    act(() => {
+      window.dispatchEvent(new Event("pagehide"));
+    });
+    expect(readDraft("prova")?.values).toEqual({ nome: "Luca" });
   });
 });

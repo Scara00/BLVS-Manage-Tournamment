@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState, type RefObject } from "react";
 import { now } from "@/lib/time/server-time";
 import {
+  FLUSH_DRAFTS_EVENT,
   readDraft,
   removeDraft,
   restoreForm,
@@ -14,7 +15,8 @@ const SAVE_DELAY_MS = 500;
 
 /**
  * Keeps a local draft of `formRef`'s values while the user types, and puts
- * them back on the next visit. Call `clear()` once the form was sent. The
+ * them back on the next visit. Pending changes are written at once on
+ * `flushDrafts()` and on `pagehide`. Call `clear()` once the form was sent. The
  * page at `path` is where «Riprendi» on the expired-session page leads.
  */
 export function useFormDraft(
@@ -34,26 +36,36 @@ export function useFormDraft(
     }
 
     let timer: ReturnType<typeof setTimeout> | undefined;
-    const save = () => {
-      // Time of the change, not of the delayed write.
-      const changedAt = now().toISOString();
+    // Time of the last change not written yet, not of the delayed write.
+    let changedAt: string | null = null;
+    const write = () => {
       clearTimeout(timer);
-      timer = setTimeout(() => {
-        saveDraft({
-          id,
-          label,
-          path,
-          savedAt: changedAt,
-          values: serializeForm(form),
-        });
-      }, SAVE_DELAY_MS);
+      if (changedAt === null) return;
+      saveDraft({
+        id,
+        label,
+        path,
+        savedAt: changedAt,
+        values: serializeForm(form),
+      });
+      changedAt = null;
+    };
+    const save = () => {
+      changedAt = now().toISOString();
+      clearTimeout(timer);
+      timer = setTimeout(write, SAVE_DELAY_MS);
     };
     form.addEventListener("input", save);
     form.addEventListener("change", save);
+    // Session about to close, or the page is going away: write at once.
+    window.addEventListener(FLUSH_DRAFTS_EVENT, write);
+    window.addEventListener("pagehide", write);
     return () => {
       clearTimeout(timer);
       form.removeEventListener("input", save);
       form.removeEventListener("change", save);
+      window.removeEventListener(FLUSH_DRAFTS_EVENT, write);
+      window.removeEventListener("pagehide", write);
     };
   }, [formRef, id, label, path]);
 

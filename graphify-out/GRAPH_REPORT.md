@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 459 files · ~129,137 words
+- 475 files · ~135,272 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2091 nodes · 4617 edges · 128 communities (108 shown, 20 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 17 edges (avg confidence: 0.8)
+- 2170 nodes · 4839 edges · 121 communities (100 shown, 21 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 16 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f0a02325`
+- Built from commit: `b87cfb36`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -132,42 +132,35 @@
 - [[_COMMUNITY_Community 118|Community 118]]
 - [[_COMMUNITY_Community 119|Community 119]]
 - [[_COMMUNITY_Community 120|Community 120]]
-- [[_COMMUNITY_Community 121|Community 121]]
-- [[_COMMUNITY_Community 122|Community 122]]
-- [[_COMMUNITY_Community 123|Community 123]]
-- [[_COMMUNITY_Community 124|Community 124]]
-- [[_COMMUNITY_Community 125|Community 125]]
-- [[_COMMUNITY_Community 126|Community 126]]
-- [[_COMMUNITY_Community 127|Community 127]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `readSupabaseEnv()` - 47 edges
+1. `readSupabaseEnv()` - 49 edges
 2. `BodyReader` - 27 edges
 3. `buttonVariants` - 25 edges
 4. `jsonError()` - 25 edges
-5. `getCurrentUser()` - 23 edges
-6. `expectNoA11yViolations()` - 22 edges
-7. `PageContainer()` - 22 edges
-8. `Button()` - 22 edges
-9. `invalid()` - 22 edges
-10. `now()` - 22 edges
+5. `now()` - 25 edges
+6. `expectNoA11yViolations()` - 23 edges
+7. `PageContainer()` - 23 edges
+8. `Button()` - 23 edges
+9. `getCurrentUser()` - 23 edges
+10. `invalid()` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `confermaDaTastiera()` --calls--> `waitForAnimations()`  [EXTRACTED]
   e2e/admin-tappa.spec.ts → e2e/storybook-helpers.ts
-- `ClassificaContent()` --calls--> `readLiveSync()`  [EXTRACTED]
-  src/app/(giocatore)/classifica/page.tsx → src/lib/live/read.ts
-- `DashboardContent()` --calls--> `readAdminDashboard()`  [EXTRACTED]
-  src/app/admin/(protetta)/page.tsx → src/lib/admin/dashboard.ts
+- `GestioneContent()` --calls--> `readGestioneTappa()`  [EXTRACTED]
+  src/app/admin/(protetta)/tappe/[id]/page.tsx → src/lib/tappe/gestione.ts
 - `POST()` --calls--> `creaDemoTappaRoute()`  [INFERRED]
   src/app/api/demo/tappe/route.ts → src/lib/demo/gestione-tappe-route.ts
-- `Schermata()` --calls--> `partiteDaInserireOggi()`  [EXTRACTED]
-  src/components/admin/admin-dashboard.stories.tsx → src/lib/admin/tappe.ts
+- `reducer()` --calls--> `applyLiveEvent()`  [EXTRACTED]
+  src/components/live/live-provider.tsx → src/lib/live/types.ts
+- `today()` --calls--> `getServerTimeParts()`  [EXTRACTED]
+  src/lib/admin/tappe-read.ts → src/lib/time/server-time.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (128 total, 20 thin omitted)
+## Communities (121 total, 21 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
@@ -178,8 +171,8 @@ Cohesion: 0.07
 Nodes (28): devDependencies, @axe-core/playwright, @electric-sql/pglite, eslint, eslint-config-next, eslint-config-prettier, eslint-plugin-storybook, http-server (+20 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.15
-Nodes (18): Categoria, CATEGORIA_LABEL, CATEGORIA_TESTO, ProfiloFormProps, profilo, router, ProfiloView(), CAMPI_PROFILO (+10 more)
+Cohesion: 0.19
+Nodes (13): Categoria, CATEGORIA_LABEL, CATEGORIA_TESTO, ProfiloFormProps, CAMPI_PROFILO, CampoProfilo, initialProfiloFormState, PROFILO_MESSAGES (+5 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.09
@@ -194,28 +187,28 @@ Cohesion: 0.14
 Nodes (13): API, BLVS-Manage-Tournamment, CI, Database (Supabase), Deploy (Vercel), Email, Registro ed email, Registro (`public.registro`) (+5 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.18
-Nodes (11): dateFormatter, formatPolicyDate(), PRIVACY_CONTROLLER, PRIVACY_POLICY_VERSION, PrivacyPolicyVersion, PrivacySection, PrivacySectionId, metadata (+3 more)
+Cohesion: 0.14
+Nodes (14): dateFormatter, formatPolicyDate(), PRIVACY_CONTROLLER, PRIVACY_POLICY_VERSION, PrivacyPolicyVersion, PrivacySection, PrivacySectionId, metadata (+6 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.33
 Nodes (5): Branch e pull request, Branch protection di `main` (da configurare su GitHub), Contribuire, Prima di aprire la PR, Regole
 
 ### Community 9 - "Community 9"
-Cohesion: 0.17
-Nodes (8): nextConfig, enforceHttps(), isApiPath(), isHttpsEnforced(), config, RouteHandler, serve(), proxy()
+Cohesion: 0.07
+Nodes (34): Apertura, Chiusura, ErroreRete, InCorso, Offline, PermessoNegato, SessioneScaduta, Story (+26 more)
 
 ### Community 10 - "Community 10"
-Cohesion: 0.12
-Nodes (13): AT, view, Providers(), ConAzione, Demo(), Story, Testo200, Vuoto (+5 more)
+Cohesion: 0.08
+Nodes (24): Avviso, Demo(), ErroreProlungamento, Prolungamento, Scaduta, Story, Testo200, UltimiSecondi (+16 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.20
-Nodes (8): useMediaQuery(), AdminSidebar(), adminNav, isNavItemActive(), NavItem, playerPrimaryNav, playerSecondaryNav, useNavDisclosure()
+Cohesion: 0.08
+Nodes (21): metadata, initialSignOutState, SignOutState, useMediaQuery(), AdminSidebar(), AppShell(), adminNav, isNavItemActive() (+13 more)
 
 ### Community 12 - "Community 12"
-Cohesion: 0.13
-Nodes (18): ActionLink(), ErrorBoard(), ErrorBoardProps, ForbiddenContent(), Role, roleLabels, Default, Story (+10 more)
+Cohesion: 0.17
+Nodes (14): ActionLink(), ErrorBoard(), ErrorBoardProps, ForbiddenContent(), Role, roleLabels, Default, Story (+6 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.07
@@ -231,59 +224,59 @@ Nodes (8): analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, 
 
 ### Community 18 - "Community 18"
 Cohesion: 0.07
-Nodes (22): DialogModificheNonSalvate, marco, modifica, ModificaCaricamento, ModificaCategoriaBloccata, ModificaErroriCampi, ModificaInvioConErrori, ModificaInvioInCorso (+14 more)
+Nodes (23): ProfiloLoading(), DialogModificheNonSalvate, marco, modifica, ModificaCaricamento, ModificaCategoriaBloccata, ModificaErroriCampi, ModificaInvioConErrori (+15 more)
 
 ### Community 21 - "Community 21"
-Cohesion: 0.18
-Nodes (9): metadata, metadata, isAdminPath(), signIn(), signOut(), rateLimitedLoginMessage(), checkAuthAttempt(), clientIp() (+1 more)
+Cohesion: 0.06
+Nodes (29): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+21 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.18
-Nodes (18): mergeIds(), Checkbox(), CheckboxProps, Field(), Fieldset(), FieldSize, focusFirstInvalid(), useFieldControl() (+10 more)
+Cohesion: 0.11
+Nodes (26): AdminTappeSection(), filtroLabel(), StatoFilter(), AdminCategoria, AdminTappa, AdminTappaRpcRow, categorie(), contaPerStato() (+18 more)
 
 ### Community 26 - "Community 26"
 Cohesion: 0.22
 Nodes (5): auth, redirectMock, signInWithPassword, signOutMock, valid
 
 ### Community 27 - "Community 27"
-Cohesion: 0.16
-Nodes (12): Badge(), BadgeContent, BadgeProps, badgeVariants, Caricamento, Default, Errore, Pillola (+4 more)
+Cohesion: 0.13
+Nodes (15): stati, StatoTappaBadge(), Variant, Badge(), BadgeContent, BadgeProps, badgeVariants, Caricamento (+7 more)
 
 ### Community 28 - "Community 28"
-Cohesion: 0.09
-Nodes (40): STATI_TAPPA, aggiornaScadenzaDemo(), cambiaStatoDemo(), aggiornaScadenzaTappa(), cambiaStatoTappa(), esitoDemo(), messaggioDb(), motivoDb() (+32 more)
+Cohesion: 0.14
+Nodes (13): Schermata(), parseFiltroStato(), partiteDaInserireOggi(), readAdminTappe, metadata, metadata, PageContainer(), columns (+5 more)
 
 ### Community 29 - "Community 29"
-Cohesion: 0.13
-Nodes (24): createLiveBus(), getLiveBus(), globalForLive, LiveListener, at, empty, match, publishGroupStandings() (+16 more)
+Cohesion: 0.12
+Nodes (25): createLiveBus(), getLiveBus(), globalForLive, LiveListener, at, empty, match, publishGroupStandings() (+17 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.19
-Nodes (15): AdminCategoria, AdminTappa, AdminTappaRpcRow, categorie(), contaPosti(), demoAdminTappa(), descriviPosti(), isGiornoDiGara() (+7 more)
+Cohesion: 0.17
+Nodes (11): BordoCampo, Caricamento, ConDescrizione, Default, Disabilitato, Errore, Focus, Gruppo (+3 more)
 
 ### Community 31 - "Community 31"
 Cohesion: 0.12
-Nodes (15): Default, demo, Empty, FiltroBozze, initial, Loading, longText, LongText200 (+7 more)
+Nodes (22): CambioStato(), ConfrontoOraDopo(), GestioneTappa(), GestioneTappaProps, ScadenzaForm(), ScadenzaFormProps, ScadenzaIscrizioni(), StatoTappaBadge() (+14 more)
 
 ### Community 32 - "Community 32"
 Cohesion: 0.14
 Nodes (18): metadata, ModificaContent(), aggiornaProfilo(), confirmationRedirect(), EMAIL_TAKEN_CODES, errorState(), RATE_LIMIT_CODES, TRIGGER_HINTS (+10 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.05
-Nodes (47): withText200(), UnsavedChangesDialogProps, AlertDialog(), AlertDialogAction(), AlertDialogBody(), AlertDialogCancel(), AlertDialogContent(), AlertDialogDescription() (+39 more)
+Cohesion: 0.11
+Nodes (28): vista(), StatoIscrizione, listDemoTappeGestione(), adminClient(), chiudiScadute(), CATEGORIA_TABELLONE, FASE_DA_STATO, FASE_PARTITA (+20 more)
 
 ### Community 34 - "Community 34"
-Cohesion: 0.12
-Nodes (17): SignupInput, SignupResult, SignupValues, valid, CATEGORIE, Consenso, FASI_TABELLONE, Iscrizione (+9 more)
+Cohesion: 0.09
+Nodes (24): Default, demo, Empty, FiltroBozze, initial, Loading, longText, LongText200 (+16 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.11
-Nodes (25): count(), demoDashboard(), AdminDashboard, IscrizioneInAttesa, IscrizioneInAttesaRow, receivedFormat, toIscrizioneInAttesa(), readAdminDashboard() (+17 more)
+Cohesion: 0.13
+Nodes (27): STATI_TAPPA, STATO_TAPPA_LABEL, quando(), transizioneDi(), chiusura(), confrontoOraDopo(), CopyTransizione, EsitoScadenza (+19 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.05
-Nodes (51): AvvisoGironi(), AvvisoGironiProps, Avviso(), NuovaTappaForm(), NuovaTappaFormProps, NuovaTappaLoading(), NuovaTappaSessioneScaduta(), AvvisoGironi (+43 more)
+Cohesion: 0.19
+Nodes (16): mergeIds(), Checkbox(), CheckboxProps, Fieldset(), FieldSize, focusFirstInvalid(), useFieldControl(), controlVariants (+8 more)
 
 ### Community 37 - "Community 37"
 Cohesion: 0.20
@@ -294,32 +287,32 @@ Cohesion: 0.22
 Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story, Testo200
 
 ### Community 39 - "Community 39"
-Cohesion: 0.28
-Nodes (6): Default, RiduzioneMovimento, Spessa, Story, Tape(), TapeProps
+Cohesion: 0.15
+Nodes (9): liveRowAttributes(), Default, RiduzioneMovimento, Spessa, Story, Tape(), usePrefersReducedMotion(), useReducedMotion() (+1 more)
 
 ### Community 40 - "Community 40"
-Cohesion: 0.22
-Nodes (10): parseFiltroStato(), partiteDaInserireOggi(), readAdminTappe, columns, DashboardContent(), metadata, RaceDayBanner(), TappeContent() (+2 more)
+Cohesion: 0.13
+Nodes (16): Category, CategoryLabel(), CategoryLabelProps, labels, Default, Femminile, Story, Phase (+8 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.07
-Nodes (34): Apertura, Chiusura, ErroreRete, InCorso, Offline, PermessoNegato, SessioneScaduta, Story (+26 more)
+Cohesion: 0.15
+Nodes (25): StatoTappa, aggiornaScadenzaDemo(), board(), cambiaStatoDemo(), copy(), DemoEsito, DemoTappaGestione, getDemoTappaGestione() (+17 more)
 
 ### Community 42 - "Community 42"
-Cohesion: 0.11
-Nodes (8): MinimalShell(), SkipLink(), mobile, mobile, MovimentoRidotto, PaginaCompleta, Story, Testo200
+Cohesion: 0.06
+Nodes (25): ConBozze, Default, SessioneAdminChiusa, SessioneAdminChiusaSenzaBozze, SessioneAdminChiusaText200, Story, Text200, MinimalShell() (+17 more)
 
 ### Community 43 - "Community 43"
-Cohesion: 0.18
-Nodes (7): Phase, PrivacySampleRow(), SAMPLE_ROW, FlipDigits(), FlipDigitsProps, usePrefersReducedMotion(), useReducedMotion()
+Cohesion: 0.19
+Nodes (13): AvvisoGironi(), AvvisoGironiProps, NuovaTappaLoading(), daAvvisare(), PostiField(), PostiFieldProps, TABELLONE, avvisoGironiMessage() (+5 more)
 
 ### Community 44 - "Community 44"
 Cohesion: 0.22
 Nodes (8): ScoreDigits(), ScoreDigitsProps, Classifica, Default, RiduzioneMovimento, Story, Toni, tones
 
 ### Community 45 - "Community 45"
-Cohesion: 0.15
-Nodes (17): loginHref(), signupHref(), signupReturnPath(), withReturn(), metadata, boardName(), categoryText, SignupBoardPreview() (+9 more)
+Cohesion: 0.11
+Nodes (23): metadata, boardName(), SignupBoardPreview(), clearSignupDraft(), EMPTY_DRAFT, readSignupDraft(), saveSignupDraft(), SignupDraft (+15 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.10
@@ -334,12 +327,12 @@ Cohesion: 0.13
 Nodes (15): dependencies, @base-ui/react, class-variance-authority, cn, lucide-react, next, react, react-dom (+7 more)
 
 ### Community 50 - "Community 50"
-Cohesion: 0.16
-Nodes (20): LoginFormFromParams(), SessionExpired(), SessionExpiredFromParams(), describeReturnPath(), loginHref(), LoginReason, matches(), NAMED_PAGES (+12 more)
+Cohesion: 0.05
+Nodes (47): AdminLayout(), AdminSessionSnapshot, AdminSessionTimer, Options, AdminSessionWarning(), AdminSessionWarningProps, AdminSessionWatcher(), ADMIN_SESSION_MESSAGES (+39 more)
 
 ### Community 51 - "Community 51"
-Cohesion: 0.20
-Nodes (11): mergePendingScores(), PendingScoresBanner(), PendingScoresBannerView(), Default, jesolo, PiuTappe, Story, TuttoInserito (+3 more)
+Cohesion: 0.21
+Nodes (11): Disabilitata, MOLTE, MolteSchede, Predefinito, SEZIONI, Story, Testo200, Tabs() (+3 more)
 
 ### Community 52 - "Community 52"
 Cohesion: 0.33
@@ -350,8 +343,8 @@ Cohesion: 0.40
 Nodes (3): { rememberPendingVerification }, { signInWithPassword, signUp, signOut }, validRegistration
 
 ### Community 55 - "Community 55"
-Cohesion: 0.14
-Nodes (22): CambioStato(), CambioStatoProps, ConfrontoOraDopo(), GestioneTappa(), GestioneTappaProps, ScadenzaForm(), ScadenzaFormProps, ScadenzaIscrizioni() (+14 more)
+Cohesion: 0.08
+Nodes (36): { getCurrentUser }, Handler, HTTP_METHODS, modules, routes, count(), demoDashboard(), AdminDashboard (+28 more)
 
 ### Community 56 - "Community 56"
 Cohesion: 0.20
@@ -362,68 +355,64 @@ Cohesion: 0.25
 Nodes (7): Connessione, Live, Offline, Riconnessione, RiduzioneMovimento, Story, Testo200
 
 ### Community 58 - "Community 58"
-Cohesion: 0.24
-Nodes (16): invalid(), jsonError(), malformedBody(), readJsonObject(), limitAuthAttempt(), readSignup(), POST(), POST() (+8 more)
+Cohesion: 0.29
+Nodes (15): invalid(), jsonError(), malformedBody(), readJsonObject(), limitAuthAttempt(), POST(), POST(), hasRecentRecoverySession() (+7 more)
 
 ### Community 59 - "Community 59"
-Cohesion: 0.18
-Nodes (13): AuthAction, AuthAttemptCheck, createMemoryRateLimitStore(), createSupabaseRateLimitStore(), getStore(), RateLimitHit, RateLimitStore, Rule (+5 more)
+Cohesion: 0.17
+Nodes (14): AuthAction, AuthAttemptCheck, createMemoryRateLimitStore(), createSupabaseRateLimitStore(), getStore(), RateLimitHit, RateLimitStore, Rule (+6 more)
 
 ### Community 60 - "Community 60"
-Cohesion: 0.26
-Nodes (10): EmailVerifyState(), isConfirmed(), metadata, resolveState(), readOutcome(), formatCountdown(), formatExpiry(), formatValidity() (+2 more)
+Cohesion: 0.23
+Nodes (13): CAMPI_NUOVA_TAPPA, CampoNuovaTappa, NUOVA_TAPPA_MESSAGES, NuovaTappaValori, NuovaTappaValidation, posti(), ADESSO, validaNuovaTappa() (+5 more)
 
 ### Community 61 - "Community 61"
-Cohesion: 0.11
-Nodes (14): metadata, metadata, PageContainer(), Default, empty, FieldErrors, filled, Loading (+6 more)
+Cohesion: 0.32
+Nodes (6): readSignup(), SignupInput, SignupResult, SignupValues, valid, readSets()
 
 ### Community 62 - "Community 62"
 Cohesion: 0.09
-Nodes (26): SUPABASE_DIR, accodaEmail(), EmailAccodata, ErroreCodaEmail, props, EmailTemplateName, EmailTemplateProps, emailTemplates (+18 more)
+Nodes (25): SUPABASE_DIR, accodaEmail(), EmailAccodata, ErroreCodaEmail, props, EmailTemplateName, EmailTemplateProps, emailTemplates (+17 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.15
 Nodes (13): describeError(), EmailMessage, EmailQueueLogger, EmailQueueResult, EmailQueueStore, EmailTransport, processEmailQueue(), QueuedEmail (+5 more)
 
 ### Community 64 - "Community 64"
-Cohesion: 0.12
-Nodes (15): BordoCampo, Caricamento, ConIcona, Default, Dimensioni, Disabilitato, DisabilitatoConMotivo, Errore (+7 more)
+Cohesion: 0.20
+Nodes (8): AnteprimaForbidden(), Guasto(), AnteprimaErrore(), DraftFixtureForm(), AnteprimaBozza(), metadata, isErrorPreviewEnabled(), Field()
 
 ### Community 65 - "Community 65"
 Cohesion: 0.18
 Nodes (18): extractLinks(), getLatestLink(), HTML_ENTITIES, isMailpitAvailable(), mailpit(), MAILPIT_URL, MailpitMessage, MailpitSummary (+10 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.11
-Nodes (26): LiveStatus, LiveAnnouncer(), LiveBar(), LiveBarConnected(), LiveBarProps, Action, EventListener, LiveContext (+18 more)
-
-### Community 67 - "Community 67"
-Cohesion: 0.13
-Nodes (23): StatoIscrizione, board(), chiudiDemoScadute(), copy(), creaDemoTappa(), DemoEsito, DemoTappaGestione, getDemoTappaGestione() (+15 more)
+Cohesion: 0.10
+Nodes (31): ClassificaContent(), columns, metadata, demoGroups, DemoStanding, findGroup(), generateMetadata(), GironeContent() (+23 more)
 
 ### Community 68 - "Community 68"
-Cohesion: 0.11
-Nodes (23): ATTUALE, POSIZIONE, vista(), CATEGORIA_TABELLONE, FASE_DA_STATO, FASE_PARTITA, faseTabellone(), flussoDi() (+15 more)
+Cohesion: 0.12
+Nodes (11): AvvisoGironi, Caricamento, Default, ErroriCampi, PermessoNegato, Salvataggio, SchermataProps, SessioneScaduta (+3 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.14
-Nodes (14): LoginForm(), LoginFormProps, SignInAction, SignOutFormAction, params, FORM_ERRORS, LoginFormView(), LoginFormViewProps (+6 more)
+Cohesion: 0.18
+Nodes (11): LoginForm(), LoginFormProps, SignInAction, SignOutFormAction, FORM_ERRORS, LoginFormView(), LoginFormViewProps, LoginNotice (+3 more)
 
 ### Community 70 - "Community 70"
-Cohesion: 0.11
-Nodes (22): stati, StatoTappaBadge(), Variant, StatoTappaBadge(), StatoTappa, Tappa, DemoStage, metadata (+14 more)
+Cohesion: 0.10
+Nodes (26): Tappa, DemoAdminBoard, DemoAdminStage, DemoGroup, DemoGroupMatch, demoLiveMatches, DemoMatch, DemoRegistration (+18 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.17
-Nodes (13): FieldContext, FieldContextValue, FieldControlOwnProps, FieldHint(), FieldMessagesProps, FieldProps, FieldsetProps, FieldStatus() (+5 more)
+Cohesion: 0.06
+Nodes (53): CambioStatoProps, navigationTarget(), UnsavedChangesDialogProps, AlertDialog(), AlertDialogAction(), AlertDialogBody(), AlertDialogCancel(), AlertDialogContent() (+45 more)
 
 ### Community 73 - "Community 73"
 Cohesion: 0.20
-Nodes (9): AdminTappeSection(), filtroLabel(), StatoFilter(), contaPerStato(), filtraPerStato(), FILTRI_STATO, FiltroStato, TappeTable() (+1 more)
+Nodes (6): metadata, ResetLinkInvalid(), profiloSessionExpiredHref(), ProfiloSessioneScaduta(), metadata, buttonVariants
 
 ### Community 74 - "Community 74"
-Cohesion: 0.18
-Nodes (9): geistMono, geistSans, metadata, figtree, fontVariables, mono, outfit, preview (+1 more)
+Cohesion: 0.14
+Nodes (16): CATEGORIE, Consenso, FASI_TABELLONE, Iscrizione, RUOLI, Ruolo, STATI_PARTITA, StatoPartita (+8 more)
 
 ### Community 75 - "Community 75"
 Cohesion: 0.40
@@ -434,173 +423,145 @@ Cohesion: 0.40
 Nodes (3): ErrorBody, postJson(), PostOutcome
 
 ### Community 79 - "Community 79"
-Cohesion: 0.29
-Nodes (6): initialSignOutState, SignOutState, SignOutAction, SignOutButton(), TopbarHeight(), Topbar()
+Cohesion: 0.23
+Nodes (12): LiveBus, formatSseEvent(), formatSsePing(), formatSseResync(), parseSeq(), createLiveStream(), SSE_HEADERS, GET() (+4 more)
 
 ### Community 80 - "Community 80"
 Cohesion: 0.24
 Nodes (4): PrivacyIndex(), sections, tops, useActiveSection()
 
 ### Community 81 - "Community 81"
-Cohesion: 0.24
-Nodes (14): clearDrafts(), draftable(), DraftValues, FormControl, isDraft(), listDrafts(), readDraft(), removeDraft() (+6 more)
+Cohesion: 0.25
+Nodes (13): clearDrafts(), draftable(), DraftValues, flushDrafts(), FormControl, isDraft(), listDrafts(), readDraft() (+5 more)
 
 ### Community 82 - "Community 82"
-Cohesion: 0.33
-Nodes (5): Default, Interattivo, Orario, RiduzioneMovimento, Story
+Cohesion: 0.25
+Nodes (9): partiteDaInserireLabel(), LiveStatus, announcementFor(), statusAnnouncement(), match, meta, formatLiveTime(), Time() (+1 more)
 
 ### Community 83 - "Community 83"
 Cohesion: 0.14
 Nodes (13): AccessoSospeso, CredenzialiErrate, Default, FieldErrors, Loading, NonDisponibile, PermissionDenied, retryAt (+5 more)
 
 ### Community 84 - "Community 84"
-Cohesion: 0.19
-Nodes (12): EmailVerifyStatus, OUTCOMES, REGISTRATION_STEPS, ResendError, ResendResponse, EmailPreview(), EmailVerifyScreen(), EmailVerifyScreenProps (+4 more)
+Cohesion: 0.16
+Nodes (14): EmailVerifyOutcome, EmailVerifyStatus, OUTCOMES, REGISTRATION_STEPS, ResendError, ResendResponse, EmailPreview(), EmailVerifyScreen() (+6 more)
 
 ### Community 85 - "Community 85"
 Cohesion: 0.17
-Nodes (11): BordoCampo, Caricamento, ConDescrizione, Default, Disabilitato, Errore, Focus, Gruppo (+3 more)
+Nodes (18): EmailVerifyState(), isConfirmed(), metadata, resolveState(), readOutcome(), formatCountdown(), formatExpiry(), formatValidity() (+10 more)
 
 ### Community 86 - "Community 86"
-Cohesion: 0.29
-Nodes (6): AppFooter(), privacyHref(), safeReturnPath(), ReturnLink(), ReturnLinkFromParams(), ReturnLinkProps
+Cohesion: 0.21
+Nodes (11): loginHref(), signupHref(), signupReturnPath(), withReturn(), AppFooter(), privacyHref(), safeReturnPath(), ReturnLink() (+3 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.19
-Nodes (14): pendingCookie(), EmailVerifyOutcome, clearPendingVerification(), decodePending(), encodePending(), MAX_AGE_SECONDS, PendingVerification, readPendingVerification() (+6 more)
+Cohesion: 0.22
+Nodes (6): Avviso(), NuovaTappaFormProps, router, initialNuovaTappaFormState, NuovaTappaAction, NuovaTappaFormState
 
 ### Community 88 - "Community 88"
-Cohesion: 0.29
-Nodes (3): gotrue, { jar }, T0
+Cohesion: 0.22
+Nodes (5): gotrue, { jar }, pendingCookie(), T0, encodePending()
 
 ### Community 90 - "Community 90"
-Cohesion: 0.11
-Nodes (10): backoffDelay(), createDeduper(), createLiveConnection(), EventSourceLike, LiveConnectionOptions, FakeEventSource, FakeNetwork, open() (+2 more)
+Cohesion: 0.12
+Nodes (14): backoffDelay(), createDeduper(), createLiveConnection(), EventSourceLike, LiveConnectionOptions, FakeNetwork, setup(), Action (+6 more)
 
 ### Community 92 - "Community 92"
-Cohesion: 0.13
-Nodes (12): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+4 more)
+Cohesion: 0.22
+Nodes (5): FixtureForm(), nav, signOut, DraftForm(), useFormDraft()
 
 ### Community 93 - "Community 93"
-Cohesion: 0.18
-Nodes (9): StoryIndex, VIEWPORTS, gotoStory(), storyScope(), waitForAnimations(), LIVE_BAR_STORIES, gotoClosed(), STORIES (+1 more)
+Cohesion: 0.16
+Nodes (10): openWarning(), StoryIndex, VIEWPORTS, gotoStory(), storyScope(), waitForAnimations(), LIVE_BAR_STORIES, gotoClosed() (+2 more)
 
 ### Community 94 - "Community 94"
-Cohesion: 0.17
-Nodes (10): RadioCard(), RadioCardGroup(), BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus (+2 more)
+Cohesion: 0.09
+Nodes (25): FieldContext, FieldContextValue, FieldControlOwnProps, FieldError(), FieldHint(), FieldMessagesProps, FieldProps, FieldsetProps (+17 more)
 
 ### Community 95 - "Community 95"
-Cohesion: 0.15
-Nodes (12): CaptionNascosta, columns, Desktop1440, longRows, Mobile390, rows, Standing, Story (+4 more)
+Cohesion: 0.28
+Nodes (4): confermaDaTastiera(), expectPassoAttuale(), expectStatoATesto(), flusso()
 
 ### Community 96 - "Community 96"
-Cohesion: 0.22
-Nodes (8): DraftList(), SessionExpiredView(), SessionExpiredViewProps, ConBozze, Default, Story, Text200, Draft
+Cohesion: 0.18
+Nodes (17): NuovaTappaSessioneScaduta(), LoginFormFromParams(), SessionExpiredFromParams(), COPY, sessionExpiredVariant(), SessionExpiredView(), SessionExpiredViewProps, Draft (+9 more)
+
+### Community 97 - "Community 97"
+Cohesion: 0.20
+Nodes (9): Default, Loading, LongText, PermissionDenied, ReinvioBloccato, SessionExpired, SessionExpiredSenzaEmail, Story (+1 more)
 
 ### Community 98 - "Community 98"
-Cohesion: 0.20
-Nodes (12): demoGroups, findGroup(), generateMetadata(), GironeContent(), GironePage(), LiveLoading(), LiveProvider(), LiveContent() (+4 more)
+Cohesion: 0.27
+Nodes (8): DraftList(), register(), TappaAnnullata(), formatServerTime(), getProcessTimeZone(), now(), partsFormatter, ServerTimeParts
 
 ### Community 99 - "Community 99"
-Cohesion: 0.24
-Nodes (4): PlayerNav(), navigation, signOut, installMatchMedia()
+Cohesion: 0.28
+Nodes (5): params, initialSignInState, SignInField, SignInState, SignInStatus
 
 ### Community 101 - "Community 101"
 Cohesion: 0.36
 Nodes (4): consent(), field(), fill(), password()
 
 ### Community 103 - "Community 103"
-Cohesion: 0.09
-Nodes (20): ClassificaContent(), columns, metadata, DemoAdminBoard, DemoAdminStage, demoAdminStages, DemoGroup, DemoGroupMatch (+12 more)
+Cohesion: 0.43
+Nodes (4): AdminClientGuard(), replace, checkAdminInBrowser(), ClientRoleCheck
 
 ### Community 105 - "Community 105"
-Cohesion: 0.26
-Nodes (8): profiloSessionExpiredHref(), haModifiche(), ProfiloForm(), ProfiloLoading(), ProfiloSessioneScaduta(), navigationTarget(), UnsavedChangesDialog(), UnsavedChangesGuard()
+Cohesion: 0.40
+Nodes (4): Admin, Default, Story, Testo200
 
 ### Community 106 - "Community 106"
-Cohesion: 0.20
-Nodes (6): metadata, ResetLinkInvalid(), metadata, Button(), ButtonProps, buttonVariants
+Cohesion: 0.40
+Nodes (4): Caricamento, Default, Story, Testo200
 
 ### Community 107 - "Community 107"
-Cohesion: 0.30
-Nodes (9): LiveBus, formatSseEvent(), formatSsePing(), formatSseResync(), parseSeq(), createLiveStream(), SSE_HEADERS, GET() (+1 more)
+Cohesion: 0.38
+Nodes (5): apri(), form(), mocks, salva(), supabase
 
 ### Community 108 - "Community 108"
-Cohesion: 0.27
-Nodes (7): Category, CategoryLabel(), CategoryLabelProps, labels, Default, Femminile, Story
-
-### Community 109 - "Community 109"
-Cohesion: 0.22
-Nodes (6): { getCurrentUser }, Handler, HTTP_METHODS, modules, routes, CurrentUser
+Cohesion: 0.53
+Nodes (5): isDesktop(), liveBar(), rows(), tappeSection(), waitForLive()
 
 ### Community 110 - "Community 110"
-Cohesion: 0.40
-Nodes (3): mocks, supabase, valida
+Cohesion: 0.26
+Nodes (7): metadata, isAdminPath(), signIn(), signOut(), rateLimitedLoginMessage(), checkAuthAttempt(), clientIp()
 
 ### Community 111 - "Community 111"
 Cohesion: 0.25
 Nodes (7): 1. Migrazioni, 2. Auth (Dashboard → Authentication), 3. Variabili d'ambiente, 4. Primo admin, 5. Coda email (Edge Function `send-emails`), 6. Verifica, Collegare il progetto Supabase di produzione
 
 ### Community 112 - "Community 112"
-Cohesion: 0.20
-Nodes (9): Default, Loading, LongText, PermissionDenied, ReinvioBloccato, SessionExpired, SessionExpiredSenzaEmail, Story (+1 more)
+Cohesion: 0.40
+Nodes (3): mocks, supabase, valida
 
 ### Community 113 - "Community 113"
-Cohesion: 0.36
-Nodes (4): AnteprimaForbidden(), Guasto(), AnteprimaErrore(), isErrorPreviewEnabled()
-
-### Community 114 - "Community 114"
-Cohesion: 0.43
-Nodes (4): AdminClientGuard(), replace, checkAdminInBrowser(), ClientRoleCheck
+Cohesion: 0.24
+Nodes (9): haModifiche(), ProfiloForm(), profilo, router, ProfiloView(), emailInAttesaMessage(), ProfiloFormState, UnsavedChangesDialog() (+1 more)
 
 ### Community 115 - "Community 115"
-Cohesion: 0.27
-Nodes (8): partiteDaInserireLabel(), announcementFor(), statusAnnouncement(), match, meta, formatLiveTime(), Time(), LiveMatch
-
-### Community 116 - "Community 116"
-Cohesion: 0.20
-Nodes (12): clearSignupDraft(), EMPTY_DRAFT, readSignupDraft(), saveSignupDraft(), SignupDraft, storage(), text(), consent() (+4 more)
+Cohesion: 0.16
+Nodes (10): geistMono, geistSans, metadata, Providers(), figtree, fontVariables, mono, outfit (+2 more)
 
 ### Community 117 - "Community 117"
-Cohesion: 0.53
-Nodes (5): isDesktop(), liveBar(), rows(), tappeSection(), waitForLive()
-
-### Community 118 - "Community 118"
-Cohesion: 0.40
-Nodes (4): Admin, Default, Story, Testo200
-
-### Community 119 - "Community 119"
-Cohesion: 0.22
-Nodes (8): Phase, PhaseBadge(), PhaseBadgeProps, phases, Default, Fasi, RiduzioneMovimento, Story
-
-### Community 120 - "Community 120"
-Cohesion: 0.28
-Nodes (4): confermaDaTastiera(), expectPassoAttuale(), expectStatoATesto(), flusso()
-
-### Community 123 - "Community 123"
-Cohesion: 0.43
-Nodes (5): register(), formatServerTime(), getProcessTimeZone(), partsFormatter, ServerTimeParts
-
-### Community 124 - "Community 124"
-Cohesion: 0.70
-Nodes (3): creaDemoTappaRoute(), isDemoSeedEnabled(), POST()
+Cohesion: 0.16
+Nodes (7): FlipDigits(), FlipDigitsProps, Default, Interattivo, Orario, RiduzioneMovimento, Story
 
 ## Knowledge Gaps
-- **692 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+687 more)
+- **715 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+710 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Button()` connect `Community 106` to `Community 64`, `Community 33`, `Community 2`, `Community 36`, `Community 69`, `Community 10`, `Community 12`, `Community 45`, `Community 82`, `Community 84`, `Community 55`, `Community 25`?**
+- **Why does `PageContainer()` connect `Community 28` to `Community 64`, `Community 32`, `Community 34`, `Community 66`, `Community 68`, `Community 6`, `Community 70`, `Community 9`, `Community 42`, `Community 45`, `Community 109`, `Community 18`, `Community 21`, `Community 55`?**
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
+- **Why does `readSupabaseEnv()` connect `Community 55` to `Community 33`, `Community 70`, `Community 41`, `Community 74`, `Community 110`, `Community 50`, `Community 85`, `Community 58`, `Community 59`?**
   _High betweenness centrality (0.032) - this node is a cross-community bridge._
-- **Why does `PageContainer()` connect `Community 61` to `Community 32`, `Community 98`, `Community 35`, `Community 36`, `Community 67`, `Community 6`, `Community 103`, `Community 40`, `Community 41`, `Community 70`, `Community 45`, `Community 18`, `Community 92`, `Community 31`?**
-  _High betweenness centrality (0.028) - this node is a cross-community bridge._
-- **Why does `expectNoA11yViolations()` connect `Community 17` to `Community 65`, `Community 100`, `Community 101`, `Community 102`, `Community 104`, `Community 117`, `Community 120`, `Community 91`, `Community 93`?**
-  _High betweenness centrality (0.024) - this node is a cross-community bridge._
+- **Why does `expectNoA11yViolations()` connect `Community 17` to `Community 65`, `Community 100`, `Community 101`, `Community 102`, `Community 104`, `Community 108`, `Community 91`, `Community 93`, `Community 95`?**
+  _High betweenness centrality (0.032) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
-  _692 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _715 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

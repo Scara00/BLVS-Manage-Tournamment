@@ -207,4 +207,19 @@ describe("SessionExpired", () => {
       screen.getByText(/Nessuna bozza su questo dispositivo/),
     ).toBeInTheDocument();
   });
+
+  it("tornando all'area admin mostra la sessione admin chiusa (w-admin-sessione)", () => {
+    params.current = new URLSearchParams({ da: "/admin/tappe" });
+    render(<SessionExpired />);
+    expect(
+      screen.getByRole("heading", {
+        level: 1,
+        name: "Per sicurezza abbiamo chiuso la sessione di amministrazione",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Sessione admin chiusa")).toBeInTheDocument();
+    expect(
+      screen.getByText(/iscrizioni approvate o rifiutate/),
+    ).toBeInTheDocument();
+  });
 });
