@@ -20,5 +20,6 @@ export function demoLiveSnapshot(updatedAt: string): LiveSnapshot {
     })),
     groups: demoGroups,
     overall: demoStandings,
+    pendingScores: [],
   };
 }

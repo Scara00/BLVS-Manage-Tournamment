@@ -5,6 +5,7 @@ import type {
   LiveEvent,
   LiveMatch,
   OverallStandingRow,
+  PendingScores,
 } from "./types";
 
 /*
@@ -25,4 +26,9 @@ export function publishOverallStandings(
   rows: readonly OverallStandingRow[],
 ): LiveEvent {
   return getLiveBus().publish({ type: "overall-standings", rows });
+}
+
+/** New count of results to enter for a stage (admin dashboard banner). */
+export function publishPendingScores(stage: PendingScores): LiveEvent {
+  return getLiveBus().publish({ type: "pending-scores", stage });
 }

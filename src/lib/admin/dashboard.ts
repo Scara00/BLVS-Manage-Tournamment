@@ -1,13 +1,11 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { forbidden } from "next/navigation";
-import { getCurrentUser } from "@/lib/auth/session";
+import { requireAdmin } from "@/lib/auth/require-admin";
 import {
   demoRegistrations,
   demoStages,
   demoStandings,
 } from "@/lib/demo/tournament";
-import { readSupabaseEnv } from "@/lib/supabase/env";
 import {
   toIscrizioneInAttesa,
   type AdminDashboard,
@@ -83,9 +81,7 @@ async function readFromDb(supabase: SupabaseClient): Promise<AdminDashboard> {
  * the login). Without Supabase env (CI, e2e) it returns the demo figures.
  */
 export async function readAdminDashboard(): Promise<AdminDashboard> {
-  if (!readSupabaseEnv()) return demoDashboard();
-
-  const user = await getCurrentUser();
-  if (user?.ruolo !== "admin") forbidden();
+  const user = await requireAdmin();
+  if (!user) return demoDashboard();
   return readFromDb(user.supabase);
 }
