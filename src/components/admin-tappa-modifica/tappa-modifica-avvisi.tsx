@@ -85,7 +85,7 @@ export function TappaNonModificabile({
         href={backHref}
         className={buttonVariants({ variant: "secondary" })}
       >
-        Torna alle tappe
+        Torna alla tappa
       </Link>
     </Pannello>
   );

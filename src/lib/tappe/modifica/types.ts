@@ -1,5 +1,10 @@
 import type { Categoria, StatoTappa } from "@/lib/db/types";
 
+/** w-admin-tappa (BLVS-20), where the edit form leads back to. */
+export function tappaPath(id: string): string {
+  return `/admin/tappe/${encodeURIComponent(id)}`;
+}
+
 /** w-admin-tappa-modifica. */
 export function tappaModificaPath(id: string): string {
   return `/admin/tappe/${encodeURIComponent(id)}/modifica`;

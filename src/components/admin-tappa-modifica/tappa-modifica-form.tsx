@@ -66,6 +66,15 @@ function valoriForm(form: HTMLFormElement): Record<CampoTappaModifica, string> {
   ) as Record<CampoTappaModifica, string>;
 }
 
+function senza(
+  errori: TappaModificaFieldErrors,
+  campo: CampoTappaModifica,
+): TappaModificaFieldErrors {
+  const altri = { ...errori };
+  delete altri[campo];
+  return altri;
+}
+
 function postiDi(valori: Record<CampoTappaModifica, string>) {
   return { M: valori.postiM, F: valori.postiF };
 }
@@ -154,7 +163,6 @@ export function TappaModificaForm({
   // A restored draft writes the inputs directly: read them again.
   useEffect(() => {
     if (restoredAt && formRef.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing with the DOM after a draft restore
       setValori(valoriForm(formRef.current));
     }
   }, [restoredAt]);
@@ -171,16 +179,16 @@ export function TappaModificaForm({
   function cambia(campo: CampoTappaModifica) {
     aggiorna();
     if (errori[campo]) {
-      setErrori(({ [campo]: _rimosso, ...altri }) => altri);
+      setErrori((attuali) => senza(attuali, campo));
     }
   }
 
-  /** Commits a board's maximum: the floor check runs right away. */
+  /** Checks a board's maximum against its floor. */
   function controllaPosti(categoria: Categoria, raw: string) {
     const campo = CAMPO_POSTI_MODIFICA[categoria];
     const errore = errorePosti(raw, salvata.tabelloni[categoria].iscritti);
-    setErrori(({ [campo]: _vecchio, ...altri }) =>
-      errore ? { ...altri, [campo]: errore } : altri,
+    setErrori((attuali) =>
+      errore ? { ...attuali, [campo]: errore } : senza(attuali, campo),
     );
   }
 
@@ -466,7 +474,7 @@ export function TappaModificaForm({
               href={backHref}
               className={buttonVariants({ variant: "secondary" })}
             >
-              {modificato ? "Annulla" : "Torna alle tappe"}
+              {modificato ? "Annulla" : "Torna alla tappa"}
             </Link>
           </div>
         </div>
@@ -481,9 +489,15 @@ type PostiFieldProps = {
   iscritti: number;
   error?: string;
   onInput: () => void;
-  /** Blur or Enter: the value is checked against the floor. */
+  /** A pause in typing or Enter: the value is checked against the floor. */
   onCommit: (raw: string) => void;
 };
+
+/**
+ * How long typing must pause before the floor check runs. Not on blur: the
+ * error would push «Salva modifiche» down between mousedown and click.
+ */
+export const POSTI_CHECK_DELAY_MS = 600;
 
 /**
  * A board's maximum, with the current registrations beside it. The error
@@ -500,6 +514,14 @@ function PostiField({
   onCommit,
 }: PostiFieldProps) {
   const minimo = Math.max(POSTI_MIN, iscritti);
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  function commit(raw: string) {
+    clearTimeout(timer.current);
+    onCommit(raw);
+  }
+
   return (
     <Field
       label={`Massimo iscritti · tabellone ${TABELLONE[categoria]}`}
@@ -526,10 +548,14 @@ function PostiField({
         step={1}
         defaultValue={defaultValue}
         className="max-w-40 font-mono"
-        onInput={onInput}
-        onBlur={(event) => onCommit(event.currentTarget.value)}
+        onInput={(event) => {
+          onInput();
+          const raw = event.currentTarget.value;
+          clearTimeout(timer.current);
+          timer.current = setTimeout(() => onCommit(raw), POSTI_CHECK_DELAY_MS);
+        }}
         onKeyDown={(event) => {
-          if (event.key === "Enter") onCommit(event.currentTarget.value);
+          if (event.key === "Enter") commit(event.currentTarget.value);
         }}
       />
       <p role="status" data-slot="posti-annuncio" className="sr-only">

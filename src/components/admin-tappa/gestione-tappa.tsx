@@ -1,8 +1,13 @@
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PencilIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Tape } from "@/components/scoreboard";
+import { buttonVariants } from "@/components/ui/button";
 import type { GestioneTappaView } from "@/lib/tappe/gestione-format";
+import {
+  STATI_NON_MODIFICABILI,
+  tappaModificaPath,
+} from "@/lib/tappe/modifica/types";
 import type {
   CambioStatoAction,
   CambioStatoState,
@@ -91,6 +96,18 @@ export function GestioneTappa({
             </dd>
           </div>
         </dl>
+        {STATI_NON_MODIFICABILI.includes(tappa.stato) ? null : (
+          <Link
+            href={tappaModificaPath(tappa.id)}
+            className={buttonVariants({
+              variant: "secondary",
+              className: "self-start",
+            })}
+          >
+            <PencilIcon aria-hidden className="size-4" />
+            Modifica dati
+          </Link>
+        )}
       </section>
 
       <div className="flex flex-col gap-stack">

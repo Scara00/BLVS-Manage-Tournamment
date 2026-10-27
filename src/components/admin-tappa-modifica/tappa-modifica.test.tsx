@@ -73,9 +73,11 @@ describe("TappaModificaForm", () => {
     renderForm();
     await user.clear(postiM());
     await user.type(postiM(), "10");
-    await user.tab();
 
-    expect(postiM()).toHaveAttribute("aria-invalid", "true");
+    // Checked once typing pauses, without a submit or a blur.
+    await waitFor(() =>
+      expect(postiM()).toHaveAttribute("aria-invalid", "true"),
+    );
     expect(postiM()).toHaveAccessibleDescription(
       /^Errore: Il massimo non può scendere sotto 12/,
     );
