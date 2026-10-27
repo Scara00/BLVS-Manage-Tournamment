@@ -8,6 +8,8 @@ import {
 import { BodyReader, isUuid } from "@/lib/api/validation";
 import { withAdmin } from "@/lib/auth/guards";
 import type { Punteggio, SetPunteggio } from "@/lib/db/types";
+import { setsLabel } from "@/lib/tappe/live-admin/format";
+import { pubblicaPartita } from "@/lib/tappe/live-admin/pubblica";
 
 type Context = RouteContext<"/api/admin/partite/[id]/punteggio">;
 
@@ -56,7 +58,15 @@ export const PUT = withAdmin<Context>(
       .select(columns)
       .maybeSingle<Punteggio>();
     if (error) return dbErrorResponse(error);
-    if (data) return Response.json({ punteggio: data });
+    if (data) {
+      // Other admins' w-admin-live and the dashboard banner (BLVS-31/17).
+      await pubblicaPartita(
+        supabase,
+        id,
+        `punteggio ${setsLabel(data.sets) ?? "azzerato"}`,
+      );
+      return Response.json({ punteggio: data });
+    }
 
     const current = await supabase
       .from("punteggi")

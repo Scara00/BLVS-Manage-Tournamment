@@ -1,3 +1,6 @@
+import type { Categoria } from "@/lib/db/types";
+import type { PartitaLive } from "@/lib/tappe/live-admin/types";
+
 /**
  * Shapes carried by the live channel (scores, group standings, overall
  * standings). Shared by the server bus, the SSE route and the client.
@@ -59,6 +62,24 @@ export type PhaseStarted = {
   matches: number;
 };
 
+/**
+ * Every match of one board after an admin changed one (BLVS-31): the
+ * other admins' w-admin-live redraws from it.
+ */
+export type BoardMatches = {
+  /** `<stage id>:<category>`, one per board. */
+  id: string;
+  stageId: string;
+  category: Categoria;
+  /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
+  label: string;
+  /** What changed, e.g. «Girone A · turno 2: partita conclusa». */
+  change: string | null;
+  /** ISO time the matches were read after the write. */
+  updatedAt: string;
+  matches: readonly PartitaLive[];
+};
+
 export type LiveSnapshot = {
   /** Sequence number of the last event folded into this snapshot. */
   seq: number;
@@ -71,6 +92,8 @@ export type LiveSnapshot = {
   pendingScores: readonly PendingScores[];
   /** Boards whose phase started; absent in snapshots from before BLVS-29. */
   phases?: readonly PhaseStarted[];
+  /** Boards an admin changed; absent in snapshots from before BLVS-31. */
+  boards?: readonly BoardMatches[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -81,7 +104,8 @@ export type LiveEventPayload =
   | { type: "group-standings"; group: GroupStandings }
   | { type: "overall-standings"; rows: readonly OverallStandingRow[] }
   | { type: "pending-scores"; stage: PendingScores }
-  | { type: "phase-started"; phase: PhaseStarted };
+  | { type: "phase-started"; phase: PhaseStarted }
+  | { type: "board-matches"; board: BoardMatches };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -96,6 +120,7 @@ export const LIVE_EVENT_TYPES = [
   "overall-standings",
   "pending-scores",
   "phase-started",
+  "board-matches",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -124,5 +149,7 @@ export function applyLiveEvent(
       };
     case "phase-started":
       return { ...base, phases: upsert(snapshot.phases ?? [], event.phase) };
+    case "board-matches":
+      return { ...base, boards: upsert(snapshot.boards ?? [], event.board) };
   }
 }
