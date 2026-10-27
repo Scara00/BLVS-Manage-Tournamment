@@ -2,10 +2,16 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { GironiEditor, GironiEditorLoading } from "@/components/admin-gironi";
+import {
+  GironiEditor,
+  GironiEditorLoading,
+  RigeneraGironi,
+} from "@/components/admin-gironi";
 import { PageContainer } from "@/components/layout/page-container";
 import { modificaGironi } from "@/lib/gironi/editor/actions";
 import { readEditorGironi } from "@/lib/gironi/editor/read";
+import { rigeneraGironi } from "@/lib/gironi/rigenera/actions";
+import { readRigenerazione } from "@/lib/gironi/rigenera/read";
 
 export const metadata: Metadata = { title: "Gironi · Amministrazione" };
 
@@ -25,13 +31,20 @@ async function EditorContent({
   categoria: string;
 }) {
   const editor = await readEditorGironi(id, categoria);
+  const rigenerazione = await readRigenerazione(editor);
   return (
     <>
       <GironiEditor
-        // A new board (or a reload after a conflict) starts fresh.
-        key={`${editor.tappa.id}:${editor.categoria}`}
+        // A new board, or new groups after a regeneration (the version
+        // grows), starts fresh.
+        key={`${editor.tappa.id}:${editor.categoria}:${editor.composizione.versione}`}
         editor={editor}
         modifica={modificaGironi}
+      />
+      <RigeneraGironi
+        key={`${editor.tappa.id}:${editor.categoria}`}
+        rigenerazione={rigenerazione}
+        rigenera={rigeneraGironi}
       />
       <Link
         href={`/admin/tappe/${encodeURIComponent(editor.tappa.id)}`}
