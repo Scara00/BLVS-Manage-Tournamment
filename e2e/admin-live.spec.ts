@@ -156,12 +156,19 @@ test("azioni da almeno 48 px e fuoco mai sotto la topbar", async ({
     expect(box.width).toBeGreaterThanOrEqual(48);
   }
 
-  // Walk the page by keyboard: every stop stays clear of the sticky bar.
-  await page.getByTestId("avanzamento").click();
-  for (let i = 0; i < 12; i++) {
-    await page.keyboard.press("Tab");
+  // Walk the content by keyboard: every stop stays clear of the sticky bar.
+  await page.getByRole("link", { name: "Tabellone maschile" }).focus();
+  let fermate = 0;
+  while (
+    await page.evaluate(() =>
+      Boolean(document.activeElement?.closest("[data-testid=admin-live]")),
+    )
+  ) {
     await expectFocusClearOfTopbar(page);
+    await page.keyboard.press("Tab");
+    fermate++;
   }
+  expect(fermate).toBeGreaterThan(6);
 });
 
 test("tabellone non avviato: rimanda all'avvio", async ({ page, request }) => {
