@@ -2,6 +2,7 @@ import { ArrowLeftIcon, PencilIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AvvioFaseLinks } from "@/components/admin-avvio-fase/avvio-fase-links";
+import { PunteggiLink } from "@/components/admin-punteggio/punteggi-link";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
 import { iscrittiPath } from "@/lib/iscrizioni/admin/paths";
@@ -155,6 +156,8 @@ export function GestioneTappa({
         stato={tappa.stato}
         tabelloni={tappa.tabelloni}
       />
+
+      <PunteggiLink tappaId={tappa.id} stato={tappa.stato} />
 
       <Link
         href={ADMIN_TAPPE_PATH}

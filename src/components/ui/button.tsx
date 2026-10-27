@@ -26,6 +26,8 @@ const buttonVariants = cva(
         campo: "min-h-12 min-w-12 px-space-5 text-lg",
         icon: "size-11",
         "icon-campo": "size-12 [&_svg:not([class*='size-'])]:size-6",
+        /** 56px steppers (−/+) for score entry, used one-handed. */
+        "icon-campo-lg": "size-14 [&_svg:not([class*='size-'])]:size-7",
       },
     },
     compoundVariants: [
