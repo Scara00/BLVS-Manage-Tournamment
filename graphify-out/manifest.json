@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
-    "mtime": 1793121269.7105122,
-    "ast_hash": "a2775d8a658d0774b4e9103e6aefe0e0",
+    "mtime": 1793121334.377521,
+    "ast_hash": "37aec056e8e77eabf7ea645f20586565",
     "semantic_hash": ""
   },
   "src/lib/supabase/client.ts": {
@@ -645,8 +645,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/toast.tsx": {
-    "mtime": 1793121269.7123682,
-    "ast_hash": "605c50335c232c6beb4f4a0365980652",
+    "mtime": 1793121334.3776488,
+    "ast_hash": "b25a2b58d9383bb20d87ca1ee1fb7db3",
     "semantic_hash": ""
   },
   "src/design-system/text-200.tsx": {
@@ -2060,8 +2060,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-tappa/gestione-tappa.tsx": {
-    "mtime": 1793121296.7555661,
-    "ast_hash": "36518bba62abb401753abe425b8147ff",
+    "mtime": 1793121334.3773966,
+    "ast_hash": "1003955d199629620c3b438372ffd88b",
     "semantic_hash": ""
   },
   "src/components/admin-tappa/index.ts": {
@@ -3787,6 +3787,156 @@
   "supabase/migrations/20261027375000_registro_tappa.sql": {
     "mtime": 1793121296.7567856,
     "ast_hash": "a09aa90dfc3da19dac67c41277cd19d8",
+    "semantic_hash": ""
+  },
+  "e2e/admin-punteggio.spec.ts": {
+    "mtime": 1793121334.3681772,
+    "ast_hash": "802f19f638ff0f647ae083e83347bedc",
+    "semantic_hash": ""
+  },
+  "src/app/admin/(protetta)/tappe/[id]/punteggi/[partitaId]/page.tsx": {
+    "mtime": 1793121334.3762474,
+    "ast_hash": "aaa64ef2b3fcbe40aad20aaf79b7b82c",
+    "semantic_hash": ""
+  },
+  "src/app/admin/(protetta)/tappe/[id]/punteggi/page.tsx": {
+    "mtime": 1793121334.376309,
+    "ast_hash": "c796fa96d7ad5c33afb8ce26f1887c80",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/inserimento-punteggio/route.ts": {
+    "mtime": 1793121334.3764024,
+    "ast_hash": "abd6432bc11e3c2579a4f11cc0fcc93e",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/elenco-punteggi.stories.tsx": {
+    "mtime": 1793121334.3765275,
+    "ast_hash": "473ac35f52d5f4f1173278f98b500e4b",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/elenco-punteggi.tsx": {
+    "mtime": 1793121334.3766131,
+    "ast_hash": "8e56f50b39ee6daa9f271de915c4b2f9",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/index.ts": {
+    "mtime": 1793121334.3766685,
+    "ast_hash": "672e111c67e75d01178ee0c70881e0e2",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/inserimento-punteggio.stories.tsx": {
+    "mtime": 1793121334.3767388,
+    "ast_hash": "f3e146f2b56579d2936059a2e576b229",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/inserimento-punteggio.test.tsx": {
+    "mtime": 1793121334.3768182,
+    "ast_hash": "de7f6b8c715197cfeb3097b2e0e5bf0c",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/inserimento-punteggio.tsx": {
+    "mtime": 1793121334.376944,
+    "ast_hash": "6d35f6212b680f9ca7afe8163f04138e",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/punteggi-link.tsx": {
+    "mtime": 1793121334.3770015,
+    "ast_hash": "a3fe5e2f2a5e4999eb3ba3d63f0316c1",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/riepilogo-punteggio.tsx": {
+    "mtime": 1793121334.3770928,
+    "ast_hash": "f662ef41a6feddb435473926ac31d627",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/riga-squadra.tsx": {
+    "mtime": 1793121334.3771544,
+    "ast_hash": "b0970e89a41d9abdade1c8d309322987",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/stories-data.ts": {
+    "mtime": 1793121334.3772154,
+    "ast_hash": "cf6a9cbdcdaa49ba3b1ccf06206280e9",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/punteggi-route.ts": {
+    "mtime": 1793121334.3777208,
+    "ast_hash": "d7f7fbdb7fa1821c49845ef6e38c3126",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/punteggi.test.ts": {
+    "mtime": 1793121334.3777761,
+    "ast_hash": "b017439b9df1d5292fdc46531ff93820",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/punteggi.ts": {
+    "mtime": 1793121334.3778665,
+    "ast_hash": "15509fa8c77964edaed4718a95a18467",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/actions.test.ts": {
+    "mtime": 1793121334.3779647,
+    "ast_hash": "db1edcee56a6af1eeccaf21fe1b46cd9",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/actions.ts": {
+    "mtime": 1793121334.3780491,
+    "ast_hash": "fde56a05e4f8e60ad1c818d6f6e86460",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/dati.ts": {
+    "mtime": 1793121334.378113,
+    "ast_hash": "b5238fb6eec332f3883e7fcf185e9ef2",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/format.ts": {
+    "mtime": 1793121334.3781743,
+    "ast_hash": "ad2d38dc87e75a2840ae535c247e1c8e",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/paths.ts": {
+    "mtime": 1793121334.3782225,
+    "ast_hash": "d7f3c066f0d9b8cc49f4aacc7e49ca06",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/punteggi.db.test.ts": {
+    "mtime": 1793121334.378304,
+    "ast_hash": "33303f3839a7822c78d2cd4e969a65c4",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/read.ts": {
+    "mtime": 1793121334.378378,
+    "ast_hash": "ce084411aaccb267d5a26c8a36952433",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/regola.ts": {
+    "mtime": 1793121334.3784459,
+    "ast_hash": "97f3311bf66672f290d1d6a31d2d8f96",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/state.ts": {
+    "mtime": 1793121334.378507,
+    "ast_hash": "61d741901f116a960f24bf4a9dffc27e",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/types.ts": {
+    "mtime": 1793121334.378566,
+    "ast_hash": "ff729e60df231c670fce5a74d8a87f3b",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/validazione.test.ts": {
+    "mtime": 1793121334.3786235,
+    "ast_hash": "d6c4dd924b1ad3ab02e554b6b5142afe",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/validazione.ts": {
+    "mtime": 1793121334.3787234,
+    "ast_hash": "03d235ddaebea630d24fcb6296d3c3a2",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027381000_inserimento_punteggio.sql": {
+    "mtime": 1793121334.3788195,
+    "ast_hash": "278bd3e0062ab92739d7a084427d4c2c",
     "semantic_hash": ""
   }
 }

@@ -64,10 +64,11 @@ function ToastItem({ toast }: { toast: ToastPrimitive.Root.ToastObject }) {
           className="text-sm"
         />
       </ToastPrimitive.Content>
+      {/* Action and close are 48px targets (BLVS-32: «Annulla» courtside). */}
       {toast.actionProps && (
         <ToastPrimitive.Action
           data-slot="toast-action"
-          className="inline-flex h-8 shrink-0 items-center rounded-none border border-primary-foreground px-space-3 text-sm font-medium transition-colors outline-none hover:bg-primary-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground motion-reduce:transition-none"
+          className="inline-flex min-h-12 min-w-12 shrink-0 items-center justify-center rounded-none border-2 border-primary-foreground px-space-4 text-base font-semibold transition-colors outline-none hover:bg-primary-foreground hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground motion-reduce:transition-none"
         />
       )}
       <ToastPrimitive.Close
@@ -76,7 +77,7 @@ function ToastItem({ toast }: { toast: ToastPrimitive.Root.ToastObject }) {
         // Base UI hides it from AT while a stacked viewport is collapsed; our
         // list is never collapsed, and a focusable aria-hidden button fails axe.
         aria-hidden={false}
-        className="inline-flex size-8 shrink-0 items-center justify-center rounded-none outline-none hover:bg-primary-foreground hover:text-primary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-foreground [&_svg]:size-4"
+        className="inline-flex size-12 shrink-0 items-center justify-center rounded-none outline-none hover:bg-primary-foreground hover:text-primary focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary-foreground [&_svg]:size-4"
       >
         <XIcon aria-hidden />
       </ToastPrimitive.Close>
