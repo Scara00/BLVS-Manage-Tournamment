@@ -1,4 +1,5 @@
 import type { SetPunteggio } from "@/lib/db/types";
+import type { PunteggioUfficiale } from "./conflitto/rileva";
 import type { Lato } from "./validazione";
 
 export type MotivoErrore =
@@ -28,6 +29,17 @@ export type PunteggioState =
       status: "fieldErrors";
       campi: Partial<Record<Lato, string>>;
       punteggio: string | null;
+      message: string;
+      at: number;
+    }
+  /**
+   * BLVS-34: another admin saved first. Nothing was written: the dialog
+   * shows the official score and the admin's own, and asks which to keep.
+   */
+  | {
+      status: "conflict";
+      salvato: PunteggioUfficiale;
+      mio: SetPunteggio;
       message: string;
       at: number;
     }
@@ -67,6 +79,8 @@ export const PUNTEGGIO_MESSAGES = {
   fieldErrors: "Il punteggio non è valido: correggi i campi indicati.",
   conflict:
     "Il punteggio di questa partita è cambiato nel frattempo: ricarica la pagina per vedere quello attuale.",
+  conflitto: "Un altro admin ha salvato questa partita prima di te.",
+  tenuto: "Hai tenuto il punteggio salvato",
   nonGiocabile:
     "Questa partita non accetta punteggi: la tappa non è in corso o la partita è annullata.",
   annullamentoScaduto:

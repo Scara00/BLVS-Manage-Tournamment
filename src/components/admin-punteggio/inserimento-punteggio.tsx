@@ -33,8 +33,10 @@ import {
   type PunteggioState,
   type SalvaPunteggioAction,
 } from "@/lib/punteggi/state";
+import type { SetPunteggio } from "@/lib/db/types";
 import type { SchedaPunteggio } from "@/lib/punteggi/types";
 import { validaPunteggio, type Lato } from "@/lib/punteggi/validazione";
+import { ConflittoPunteggio } from "./conflitto-punteggio";
 import { RiepilogoPunteggio } from "./riepilogo-punteggio";
 import { RigaSquadra } from "./riga-squadra";
 
@@ -138,6 +140,7 @@ export function InserimentoPunteggio({
     setValori((v) => ({ ...v, [lato]: value }));
     setVerifica(false);
     setEsitoAnnulla(null);
+    setEsitoTieni(null);
   };
 
   const safeSalva = useCallback<SalvaPunteggioAction>(
@@ -158,9 +161,23 @@ export function InserimentoPunteggio({
   );
   const [state, formAction, pending] = useActionState(safeSalva, initialState);
 
-  // The version this screen knows: the page's, or a newer one just saved.
-  const [ultimaVersione, setUltimaVersione] = useState(partita.versione);
-  const versione = Math.max(partita.versione, ultimaVersione);
+  // The version the admin's values are based on: the page's, then the one
+  // of their own save, undo or «Tieni il salvato». It never follows a
+  // refreshed page by itself, so another admin's save always ends in the
+  // conflict dialog instead of being overwritten silently (BLVS-34).
+  const [versione, setUltimaVersione] = useState(partita.versione);
+
+  // BLVS-34: the last conflict (kept while the dialog fades out) and the
+  // official sets the admin chose to keep, until the page catches up.
+  const [conflitto, setConflitto] = useState<Extract<
+    PunteggioState,
+    { status: "conflict" }
+  > | null>(null);
+  const [conflittoAperto, setConflittoAperto] = useState(false);
+  const [setsTenuti, setSetsTenuti] = useState<SetPunteggio[] | null>(null);
+  const [esitoTieni, setEsitoTieni] = useState<string | null>(null);
+  /** A choice was made in the dialog: focus then goes to the outcome. */
+  const sceltaFatta = useRef(false);
 
   const [visto, setVisto] = useState(state);
   if (state !== visto) {
@@ -180,7 +197,16 @@ export function InserimentoPunteggio({
       setPasso("inserimento");
       setAnnuncio("");
       setEsitoAnnulla(null);
+      setConflittoAperto(false);
+      setSetsTenuti(null);
+      setEsitoTieni(null);
     }
+    if (state.status === "conflict") {
+      setConflitto(state);
+      setConflittoAperto(true);
+      setAnnuncio("");
+    }
+    if (state.status === "error") setConflittoAperto(false);
   }
 
   const doAnnulla = useCallback(
@@ -287,14 +313,56 @@ export function InserimentoPunteggio({
     if (!online || pending) return;
     const data = new FormData(event.currentTarget);
     valoriPrima.current = valoriDa(scheda);
+    sceltaFatta.current = false;
+    startTransition(() => formAction(data));
+  };
+
+  /** «Tieni il salvato»: the form takes the official score and version. */
+  const tieniSalvato = () => {
+    if (!conflitto) return;
+    const { salvato } = conflitto;
+    const set = setPartita(salvato.sets);
+    sceltaFatta.current = true;
+    clear();
+    setUltimaVersione(salvato.versione);
+    setSetsTenuti(salvato.sets);
+    setValori(set ? { a: String(set.a), b: String(set.b) } : { a: "", b: "" });
+    setPasso("inserimento");
+    setEsitoAnnulla(null);
+    setEsitoTieni(
+      `${PUNTEGGIO_MESSAGES.tenuto}: ${set ? descriviRisultato(partita, set) : "nessun punteggio"}.`,
+    );
+  };
+
+  /** «Sì, sovrascrivi»: saves again, only over the version shown. */
+  const sovrascrivi = (versioneVista: number) => {
+    if (!conflitto || !online || pending) return;
+    sceltaFatta.current = true;
+    const data = new FormData();
+    data.set("tappaId", tappa.id);
+    data.set("partitaId", partita.id);
+    data.set("versione", String(versioneVista));
+    data.set("puntiA", String(conflitto.mio.a));
+    data.set("puntiB", String(conflitto.mio.b));
+    data.set("sovrascrivi", "1");
+    const ufficiale = setPartita(conflitto.salvato.sets);
+    valoriPrima.current = ufficiale
+      ? { a: String(ufficiale.a), b: String(ufficiale.b) }
+      : { a: "", b: "" };
     startTransition(() => formAction(data));
   };
 
   const salvato = state.status === "success" ? state : null;
   const errore = state.status === "error" ? state : null;
   const giocabile = tappa.stato === "in_corso" && partita.stato !== "annullata";
-  const correzione = partita.stato === "conclusa" && partita.sets.length > 0;
-  const attuale = setPartita(partita.sets);
+  // The score the admin knows to be saved: the page's, or the one kept in
+  // the conflict dialog while the page still shows the older one.
+  const nota =
+    setsTenuti && versione > partita.versione
+      ? { ...partita, sets: setsTenuti, stato: "conclusa" as const }
+      : partita;
+  const correzione = nota.stato === "conclusa" && nota.sets.length > 0;
+  const attuale = setPartita(nota.sets);
 
   return (
     <div
@@ -342,7 +410,7 @@ export function InserimentoPunteggio({
         {annuncio}
       </div>
 
-      {esitoAnnulla || salvato ? (
+      {esitoAnnulla || salvato || esitoTieni ? (
         <p
           ref={esitoRef}
           tabIndex={-1}
@@ -355,11 +423,13 @@ export function InserimentoPunteggio({
             <CheckIcon aria-hidden className="mt-1 size-5 shrink-0" />
           )}
           <span>
-            {esitoAnnulla
-              ? esitoAnnulla.message
-              : salvato
-                ? `${salvato.message}: ${descriviRisultato(partita, salvato.punteggio)}.`
-                : null}
+            {esitoTieni
+              ? esitoTieni
+              : esitoAnnulla
+                ? esitoAnnulla.message
+                : salvato
+                  ? `${salvato.message}: ${descriviRisultato(partita, salvato.punteggio)}.`
+                  : null}
           </span>
         </p>
       ) : null}
@@ -453,7 +523,7 @@ export function InserimentoPunteggio({
 
       {passo === "riepilogo" && giocabile ? (
         <RiepilogoPunteggio
-          partita={partita}
+          partita={nota}
           valori={controllo.punti}
           vincitore={controllo.vincitore}
           correzione={correzione}
@@ -469,6 +539,26 @@ export function InserimentoPunteggio({
               focusOn(document.getElementById(`${ids}-punti-a`)),
             );
           }}
+        />
+      ) : null}
+
+      {conflitto ? (
+        <ConflittoPunteggio
+          open={conflittoAperto}
+          onOpenChange={setConflittoAperto}
+          salvato={conflitto.salvato}
+          mio={[conflitto.mio]}
+          coppie={nomi}
+          pending={pending}
+          onTieniSalvato={tieniSalvato}
+          onSovrascrivi={sovrascrivi}
+          // After a choice focus goes to its outcome; after Esc back to
+          // «Conferma e salva», with the admin's values still there.
+          finalFocus={() =>
+            sceltaFatta.current
+              ? (esitoRef.current ?? erroreRef.current ?? true)
+              : true
+          }
         />
       ) : null}
 
