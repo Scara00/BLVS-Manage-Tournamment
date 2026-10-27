@@ -73,6 +73,33 @@ describe("FlipDigits", () => {
     expect(container.querySelector('[class*="animate-"]')).toBeNull();
   });
 
+  it("non ripete un flip interrotto dalla riduzione del movimento", () => {
+    media = mockMatchMedia(false);
+    const { container, rerender } = render(<FlipDigits value={3} />);
+    rerender(<FlipDigits value={4} />);
+    expect(container.querySelector(".animate-flip-bottom")).not.toBeNull();
+
+    act(() => media?.setReduce(true));
+    expect(hidden(container).textContent).toBe("4");
+    act(() => media?.setReduce(false));
+    expect(container.querySelector('[class*="animate-"]')).toBeNull();
+    expect(hidden(container).textContent).toBe("4");
+  });
+
+  it("con cambi rapidi riparte dall'ultima cifra mostrata", () => {
+    media = mockMatchMedia(false);
+    const { container, rerender } = render(<FlipDigits value={3} />);
+    rerender(<FlipDigits value={4} />);
+    rerender(<FlipDigits value={5} />);
+    expect(container.querySelector(".animate-flip-top")).toHaveTextContent("4");
+    const bottom = container.querySelector(
+      ".animate-flip-bottom",
+    ) as HTMLElement;
+    expect(bottom).toHaveTextContent("5");
+    fireEvent(bottom, new Event("webkitAnimationEnd", { bubbles: true }));
+    expect(hidden(container).textContent).toBe("5");
+  });
+
   it("espone un solo testo accessibile, non cifra per cifra", () => {
     const { container } = render(<FlipDigits value={21} />);
     expect(accessibleTexts(container)).toEqual(["21"]);

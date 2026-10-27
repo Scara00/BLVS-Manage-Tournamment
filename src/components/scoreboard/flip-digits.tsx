@@ -126,6 +126,10 @@ function FlipCell({
     setShown(char);
     setPrevious(reducedMotion ? null : shown);
     setFlips((n) => n + 1);
+  } else if (reducedMotion && previous !== null) {
+    // Reduced motion switched on mid-flip: drop the stale digit, or it
+    // would replay when motion is allowed again.
+    setPrevious(null);
   }
   const flipping = previous !== null && !reducedMotion;
 
