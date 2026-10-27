@@ -214,7 +214,7 @@ async function pubblica(
       : getDemoPunteggi(tappaId);
     const partita = elenco?.partite.find((p) => p.id === partitaId);
     if (!elenco || !partita) return;
-    publishScore(toLiveMatch(partita));
+    publishScore(toLiveMatch(partita, tappaId));
 
     const classifica = supabase
       ? await leggiClassificaGirone(supabase, partita.gironeId)
@@ -228,6 +228,7 @@ async function pubblica(
           { id: partita.gironeId, nome: partita.gironeNome },
           classifica,
           nomiGiocatori(delGirone),
+          { stageId: tappaId, category: partita.categoria },
         ),
       );
     }

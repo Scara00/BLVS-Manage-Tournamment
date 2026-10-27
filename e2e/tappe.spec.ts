@@ -18,8 +18,8 @@ test("elenco delle tappe: niente bozze, annullata a testo, striscia live", async
   await expect(strip).toBeVisible();
   await expect(strip).toContainText("Fase Gironi");
   await expect(
-    strip.getByRole("link", { name: "Segui la diretta" }),
-  ).toHaveAttribute("href", "/live");
+    strip.getByRole("link", { name: "Segui il live" }),
+  ).toHaveAttribute("href", "/tappe/jesolo/live");
 
   await expect(page.getByText(/Lignano/)).toHaveCount(0);
 

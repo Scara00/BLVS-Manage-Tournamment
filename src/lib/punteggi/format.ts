@@ -68,10 +68,31 @@ export function descriviPartita(partita: PartitaPunteggio): string {
   return partita.campo ? `${base} · campo ${partita.campo}` : base;
 }
 
-/** The live channel's shape: sets as `[home, away]` tuples. */
-export function toLiveMatch(partita: PartitaPunteggio): LiveMatch {
+function livePlayers(giocatori: readonly GiocatorePartita[]) {
+  return giocatori.map((g) => ({
+    id: g.iscrizioneId,
+    name: `${g.nome} ${g.cognome}`.trim(),
+  }));
+}
+
+/**
+ * The live channel's shape: sets as `[home, away]` tuples. With `tappaId`
+ * it also carries what the player live screen (BLVS-36) needs.
+ */
+export function toLiveMatch(
+  partita: PartitaPunteggio,
+  tappaId?: string,
+): LiveMatch {
   const { a, b } = coppie(partita);
   return {
+    ...(tappaId ? { stageId: tappaId } : {}),
+    category: partita.categoria,
+    round: partita.turno,
+    state: partita.stato,
+    players: {
+      home: livePlayers(partita.squadre.a),
+      away: livePlayers(partita.squadre.b),
+    },
     id: partita.id,
     court: partita.campo ? `Campo ${partita.campo}` : `Turno ${partita.turno}`,
     groupId: partita.gironeId,
@@ -90,12 +111,15 @@ export function toGroupStandings(
   girone: { id: string; nome: string },
   classifica: ClassificaGirone,
   nomi: ReadonlyMap<string, string>,
+  board?: { stageId: string; category: "M" | "F" },
 ): GroupStandings {
   return {
     id: girone.id,
     label: girone.nome,
+    ...board,
     rows: classifica.righe.map((r) => ({
       position: r.posizione,
+      playerId: r.iscrizioneId,
       pair: nomi.get(r.iscrizioneId) ?? r.iscrizioneId,
       played: r.giocate,
       won: r.vinte,

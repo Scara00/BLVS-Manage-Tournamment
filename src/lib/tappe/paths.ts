@@ -9,3 +9,13 @@ export function tappaHref(id: string): string {
 export function iscrizioneHref(id: string): string {
   return `${tappaHref(id)}/iscrizione`;
 }
+
+/** The player live screen of a stage (w-live, BLVS-36). */
+export function liveTappaHref(id: string): string {
+  return `${tappaHref(id)}/live`;
+}
+
+/** The live resync of one stage (snapshot of its matches and groups). */
+export function liveTappaSnapshotUrl(id: string): string {
+  return `/api/live/snapshot?tappa=${encodeURIComponent(id)}`;
+}
