@@ -14,6 +14,17 @@ const PAGES = [
     title: "Dashboard amministrazione · BLVS",
     h1: "Dashboard",
   },
+  {
+    path: "/admin/iscrizioni",
+    title: "Iscrizioni · Amministrazione · BLVS",
+    h1: "Iscrizioni",
+  },
+  {
+    // Read only: e2e never changes the seeded demo stages.
+    path: "/admin/tappe/rimini/iscritti",
+    title: "Iscritti · Amministrazione · BLVS",
+    h1: "Iscritti",
+  },
 ] as const;
 
 const WIDTHS = [1440, 1280, 1024, 768, 600, 390];

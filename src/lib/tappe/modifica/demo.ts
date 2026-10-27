@@ -7,7 +7,7 @@ import type { TabelloneModifica, TappaModifica } from "./types";
 /**
  * A demo stage (no Supabase env) for the edit form, from the same
  * in-memory store as the management page (BLVS-20), so both show the same
- * data. The demo boards have no maximum: they get the default one.
+ * data. Demo boards without a maximum get the default one.
  */
 export function demoTappaModifica(id: string): TappaModifica | null {
   const demo = getDemoTappaGestione(id);
@@ -20,7 +20,7 @@ export function demoTappaModifica(id: string): TappaModifica | null {
   for (const t of demo.tabelloni) {
     const iscritti = t.confermate + t.inAttesa;
     tabelloni[t.categoria] = {
-      posti: Math.max(POSTI_PREDEFINITI, iscritti),
+      posti: Math.max(demo.posti ?? POSTI_PREDEFINITI, iscritti),
       iscritti,
     };
   }

@@ -1,9 +1,10 @@
-import { ArrowLeftIcon, PencilIcon } from "lucide-react";
+import { ArrowLeftIcon, PencilIcon, UsersIcon } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AvvioFaseLinks } from "@/components/admin-avvio-fase/avvio-fase-links";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
+import { iscrittiPath } from "@/lib/iscrizioni/admin/paths";
 import type { GestioneTappaView } from "@/lib/tappe/gestione-format";
 import {
   STATI_NON_MODIFICABILI,
@@ -97,18 +98,30 @@ export function GestioneTappa({
             </dd>
           </div>
         </dl>
-        {STATI_NON_MODIFICABILI.includes(tappa.stato) ? null : (
+        <div className="flex flex-wrap gap-space-3">
+          {STATI_NON_MODIFICABILI.includes(tappa.stato) ? null : (
+            <Link
+              href={tappaModificaPath(tappa.id)}
+              className={buttonVariants({
+                variant: "secondary",
+                className: "max-w-full",
+              })}
+            >
+              <PencilIcon aria-hidden className="size-4" />
+              Modifica dati
+            </Link>
+          )}
           <Link
-            href={tappaModificaPath(tappa.id)}
+            href={iscrittiPath(tappa.id)}
             className={buttonVariants({
               variant: "secondary",
-              className: "self-start",
+              className: "max-w-full",
             })}
           >
-            <PencilIcon aria-hidden className="size-4" />
-            Modifica dati
+            <UsersIcon aria-hidden className="size-4" />
+            Gestisci iscritti
           </Link>
-        )}
+        </div>
       </section>
 
       <div className="flex flex-col gap-stack">

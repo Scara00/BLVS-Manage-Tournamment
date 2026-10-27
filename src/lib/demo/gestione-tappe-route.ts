@@ -23,8 +23,14 @@ export async function creaDemoTappaRoute(request: Request): Promise<Response> {
       : null;
   const nome =
     typeof body.nome === "string" ? body.nome.slice(0, 200) : undefined;
+  const posti =
+    Number.isInteger(body.posti) &&
+    (body.posti as number) >= 5 &&
+    (body.posti as number) <= 256
+      ? (body.posti as number)
+      : undefined;
   return Response.json(
-    { id: creaDemoTappa({ stato, chiudonoIl, nome }) },
+    { id: creaDemoTappa({ stato, chiudonoIl, nome, posti }) },
     { status: 201 },
   );
 }
