@@ -1,6 +1,7 @@
 import type {
   Categoria,
   FaseGioco,
+  FaseGirone,
   FasePartita,
   SetPunteggio,
   StatoPartita,
@@ -19,6 +20,8 @@ export type PartitaLive = {
   fase: FasePartita;
   gironeId: string | null;
   gironeNome: string | null;
+  /** `gironi.fase` (BLVS-39): initial, gold, silver or a final group. */
+  gironeFase?: FaseGirone;
   /** `gironi.posizione`; 0 for a match without a group. */
   gironePosizione: number;
   turno: number;

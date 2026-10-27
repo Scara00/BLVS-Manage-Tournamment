@@ -760,8 +760,8 @@
     "semantic_hash": ""
   },
   "src/lib/db/types.ts": {
-    "mtime": 1793129848.7021112,
-    "ast_hash": "eb9efd95459a021eb15478922d77c12f",
+    "mtime": 1793130154.3073256,
+    "ast_hash": "667cb92d24698cd3e4c9bed04857bb2e",
     "semantic_hash": ""
   },
   "src/lib/supabase/admin.ts": {
@@ -1130,8 +1130,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/announce.ts": {
-    "mtime": 1793129880.683884,
-    "ast_hash": "26886482fc8ae955c48a46a185984b1d",
+    "mtime": 1793130154.3108358,
+    "ast_hash": "174b3c797a59bbb6ed9bb95fcf68fd8f",
     "semantic_hash": ""
   },
   "src/lib/live/bus.test.ts": {
@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/types.ts": {
-    "mtime": 1793129880.6844108,
-    "ast_hash": "0e992291b049630f43f157b885ce2cd5",
+    "mtime": 1793130187.3109915,
+    "ast_hash": "4e9d6ecf8535114df311d07168b83a08",
     "semantic_hash": ""
   },
   "e2e/mailpit.ts": {
@@ -2930,8 +2930,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/avvio/[categoria]/page.tsx": {
-    "mtime": 1793129848.6662416,
-    "ast_hash": "870b40dd71fc3ab8b6c627df6286a303",
+    "mtime": 1793130154.3013487,
+    "ast_hash": "d5939723c80d6d1abf6218741e878565",
     "semantic_hash": ""
   },
   "src/app/api/admin/tappe/[id]/gironi/route.test.ts": {
@@ -2970,8 +2970,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/avvio-fase.tsx": {
-    "mtime": 1793129848.6746767,
-    "ast_hash": "e01675dbf2dea7b14756e7077f780651",
+    "mtime": 1793130154.3036811,
+    "ast_hash": "8064d6f300344396d71b70aa4e9a4c82",
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/controlli-avvio.tsx": {
@@ -3005,8 +3005,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/avvio-fase.ts": {
-    "mtime": 1793129848.7023525,
-    "ast_hash": "6e412592e75dfdc68bb1de223a8f95c4",
+    "mtime": 1793130154.3077152,
+    "ast_hash": "638b0098f13d42e98b069944afad72e7",
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/classifica.test.ts": {
@@ -3090,8 +3090,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/actions.ts": {
-    "mtime": 1793129848.715237,
-    "ast_hash": "d45481d11e60396c6e1c6f69c73ef463",
+    "mtime": 1793130154.3114984,
+    "ast_hash": "b766146076c2bad4ff149740699837ba",
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/avvio-fase.db.test.ts": {
@@ -3110,8 +3110,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/format.ts": {
-    "mtime": 1793129848.715434,
-    "ast_hash": "ccd70a6fcb59387be5eff9aa8e94a603",
+    "mtime": 1793130154.3116112,
+    "ast_hash": "e09dfc1b9d8cc96b35276b19ce78b789",
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/paths.ts": {
@@ -3130,13 +3130,13 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/regole.ts": {
-    "mtime": 1793129848.7156968,
-    "ast_hash": "9d6a02cce9e4c30d64d431439bb18a56",
+    "mtime": 1793130154.3117297,
+    "ast_hash": "51c8647be23fdff2e6ba94648a906195",
     "semantic_hash": ""
   },
   "src/lib/tappe/avvio/state.ts": {
-    "mtime": 1793129848.715744,
-    "ast_hash": "b6cbb442a70b6c3d2e0b960b9278bad2",
+    "mtime": 1793130154.3118365,
+    "ast_hash": "1d6575a3f09744c143062032ba3c4edc",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027346000_genera_gironi.sql": {
@@ -3170,8 +3170,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/gironi/[categoria]/page.tsx": {
-    "mtime": 1793130115.382408,
-    "ast_hash": "cf1c2fa039a9ecff659436c8bc491174",
+    "mtime": 1793130187.3108315,
+    "ast_hash": "2f8c15e14b6c82034d61382d6f72583e",
     "semantic_hash": ""
   },
   "src/app/admin/anteprima/punteggio/fixture-form.tsx": {
@@ -3205,8 +3205,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-gironi/girone-card.tsx": {
-    "mtime": 1793130115.3858645,
-    "ast_hash": "1986323117c03d383fd77745dd7165cc",
+    "mtime": 1793130154.3066988,
+    "ast_hash": "8be14c0ccd41e31321804d1570724278",
     "semantic_hash": ""
   },
   "src/components/admin-gironi/gironi-editor-loading.tsx": {
@@ -3225,8 +3225,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-gironi/gironi-editor.tsx": {
-    "mtime": 1793130115.3869298,
-    "ast_hash": "7d1ed4bb63539a65da249db6900ef0c6",
+    "mtime": 1793130154.3068514,
+    "ast_hash": "88af2db73fc87a10e9086d91cef0c63c",
     "semantic_hash": ""
   },
   "src/components/admin-gironi/index.ts": {
@@ -3340,13 +3340,13 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/actions.ts": {
-    "mtime": 1793129848.705487,
-    "ast_hash": "8f7db086a4205fc2b952f88c6adcab34",
+    "mtime": 1793130154.3083494,
+    "ast_hash": "2e937497d91b83984ce489d4bd092a20",
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/annunci.ts": {
-    "mtime": 1793129848.7055337,
-    "ast_hash": "4863f336c479e13a006fc40a45b6decd",
+    "mtime": 1793130154.308443,
+    "ast_hash": "0879c8c566911b4e2d1581fda6f11344",
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/controlli.ts": {
@@ -3375,13 +3375,13 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/format.ts": {
-    "mtime": 1793129848.7059069,
-    "ast_hash": "20ba1f39351789e2a103a828df3a3195",
+    "mtime": 1793130154.3085284,
+    "ast_hash": "331dc393264f321d9aed606c5370fd69",
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/operazioni.ts": {
-    "mtime": 1793129848.705988,
-    "ast_hash": "5420725c15ea3760e8205ebc4a705119",
+    "mtime": 1793130154.3086565,
+    "ast_hash": "95602207c150c94e1d74b1cb2fd3f74f",
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/read.ts": {
@@ -3395,13 +3395,13 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/types.ts": {
-    "mtime": 1793129848.7061393,
-    "ast_hash": "4f753635003f6a19c89692b8719d8b5a",
+    "mtime": 1793130154.3087394,
+    "ast_hash": "16ff2c30a2bbcabcd28928b4e7dcf72c",
     "semantic_hash": ""
   },
   "src/lib/gironi/editor/validation.ts": {
-    "mtime": 1793129848.7061915,
-    "ast_hash": "3c3e9a25b66e1045835281946b21937b",
+    "mtime": 1793130154.308837,
+    "ast_hash": "f860685d470cd14cdfc6c526611801a5",
     "semantic_hash": ""
   },
   "src/lib/gironi/rigenera/actions.test.ts": {
@@ -3550,8 +3550,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-live/admin-live.tsx": {
-    "mtime": 1793130115.3870823,
-    "ast_hash": "1062f45a645bafc785986ee1d86fcad1",
+    "mtime": 1793130154.3070154,
+    "ast_hash": "42bf79f52c071929477be8500f8935b3",
     "semantic_hash": ""
   },
   "src/components/admin-live/avanzamento-fase.tsx": {
@@ -3585,8 +3585,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/admin-live.ts": {
-    "mtime": 1793129848.7022295,
-    "ast_hash": "e0359700537d744114f99392e62aa32e",
+    "mtime": 1793130154.3074572,
+    "ast_hash": "d52f4f3c799e143f9d53621251f252ef",
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/actions.test.ts": {
@@ -3600,8 +3600,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/dati.ts": {
-    "mtime": 1793129848.716976,
-    "ast_hash": "4e0678e63f7044eea8f57d74b06c1c3c",
+    "mtime": 1793130154.3119526,
+    "ast_hash": "3d436d9650a47370490f46483f9fc514",
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/format.test.ts": {
@@ -3610,8 +3610,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/format.ts": {
-    "mtime": 1793129848.7171338,
-    "ast_hash": "fe04b836e6452921589543483372977b",
+    "mtime": 1793130154.3120933,
+    "ast_hash": "560e55de7d7c0bc66fca91b974045412",
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/paths.ts": {
@@ -3645,8 +3645,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/types.ts": {
-    "mtime": 1793129848.717466,
-    "ast_hash": "643f7211cb5e39938c16689a936cb5e7",
+    "mtime": 1793130154.312219,
+    "ast_hash": "10fc62983be921014894d93b27c9282a",
     "semantic_hash": ""
   },
   "e2e/admin-registro.spec.ts": {
@@ -3865,8 +3865,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/punteggi.ts": {
-    "mtime": 1793130067.5813758,
-    "ast_hash": "bc9a0aa450a2c37c80af00eb8d0bff2f",
+    "mtime": 1793130154.308144,
+    "ast_hash": "1c6c32ad573b209d6b0035e084587ae9",
     "semantic_hash": ""
   },
   "src/lib/punteggi/actions.test.ts": {
@@ -4000,13 +4000,13 @@
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.tsx": {
-    "mtime": 1793129880.6828222,
-    "ast_hash": "b5b3f23cfee1d308bd57b32a660f36dd",
+    "mtime": 1793130154.3071704,
+    "ast_hash": "7d13d9ccd079faaf3a4261cfeade19d0",
     "semantic_hash": ""
   },
   "src/lib/live/tappa-read.ts": {
-    "mtime": 1793129848.7098093,
-    "ast_hash": "0593a4053efbc5fa66a2bc1538be48e9",
+    "mtime": 1793130154.3109875,
+    "ast_hash": "335f99c18c34063be41ffb1d4b42df98",
     "semantic_hash": ""
   },
   "src/lib/live/tappa.test.ts": {
@@ -4015,8 +4015,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/tappa.ts": {
-    "mtime": 1793129880.6842518,
-    "ast_hash": "efdd810dac6ee01dbe24e3deaa45fb48",
+    "mtime": 1793130154.3111484,
+    "ast_hash": "9f81c16bd2d3ea262594998227e2fb9c",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027350100_editor_gironi.sql": {
@@ -4277,6 +4277,106 @@
   "src/lib/gironi/parita/types.ts": {
     "mtime": 1793130115.3914373,
     "ast_hash": "8984f81037671c498fefda3422aa18ee",
+    "semantic_hash": ""
+  },
+  "e2e/admin-gironi-gold-silver.spec.ts": {
+    "mtime": 1793130154.2922027,
+    "ast_hash": "a1f3af6d00f8f1b9b1b45c98a6bd9994",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/fasi/route.ts": {
+    "mtime": 1793130154.3015738,
+    "ast_hash": "3bf22cef156a74c88f1c550d31e6c276",
+    "semantic_hash": ""
+  },
+  "src/components/admin-fasi/index.ts": {
+    "mtime": 1793130154.3038657,
+    "ast_hash": "b61aca58f026db1cac77dd9de80f8511",
+    "semantic_hash": ""
+  },
+  "src/components/admin-fasi/prossima-fase.stories.tsx": {
+    "mtime": 1793130154.3048537,
+    "ast_hash": "3a342a31bf0c34757c10d3ec347bb540",
+    "semantic_hash": ""
+  },
+  "src/components/admin-fasi/prossima-fase.test.tsx": {
+    "mtime": 1793130154.306065,
+    "ast_hash": "6c5b01c88612f4515b517e08959bc405",
+    "semantic_hash": ""
+  },
+  "src/components/admin-fasi/prossima-fase.tsx": {
+    "mtime": 1793130154.3063076,
+    "ast_hash": "2645f5d29c2d775470ade1898452fa22",
+    "semantic_hash": ""
+  },
+  "src/components/admin-fasi/stories-data.ts": {
+    "mtime": 1793130154.306507,
+    "ast_hash": "18278268df2650e361841b34024fa20b",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/fasi-route.ts": {
+    "mtime": 1793130154.3079784,
+    "ast_hash": "2b4bf8e20bbc1fb7499f2a9820b3dedc",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/spareggi.ts": {
+    "mtime": 1793130154.30821,
+    "ast_hash": "164f7111b2ac24925211148f8190851f",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/actions.ts": {
+    "mtime": 1793130154.309069,
+    "ast_hash": "e461aae70e8ce8b35f5216f8fd0b36dc",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/fase.ts": {
+    "mtime": 1793130154.3092785,
+    "ast_hash": "c1e5c8ef61c0ff5a2959b1256543e422",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/fasi.db.test.ts": {
+    "mtime": 1793130154.3094633,
+    "ast_hash": "32d7f03d8b80e03fffffd1134e9550db",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/qualificazione.test.ts": {
+    "mtime": 1793130154.3096855,
+    "ast_hash": "7702088099c4b16cec5820885a2cf785",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/qualificazione.ts": {
+    "mtime": 1793130154.309888,
+    "ast_hash": "e8c8d004d244e5b846e6547b4d8d5a81",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/read.ts": {
+    "mtime": 1793130154.3099945,
+    "ast_hash": "bb0cc7e623ed94b167b6e83ce8adf69e",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/regole.ts": {
+    "mtime": 1793130154.3100572,
+    "ast_hash": "3386a7ed8e25d126a48d28d05b9e08b2",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/types.ts": {
+    "mtime": 1793130154.3102129,
+    "ast_hash": "d461c6e97207d28ccef182fd9a6a685d",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/vista.test.ts": {
+    "mtime": 1793130154.310376,
+    "ast_hash": "4ef2e2657e57ae60a986b9caf28672f8",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/fasi/vista.ts": {
+    "mtime": 1793130154.3105798,
+    "ast_hash": "7b439dc96b72801bd2363bc31bc67519",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027410000_gironi_gold_silver_finali.sql": {
+    "mtime": 1793130154.3123567,
+    "ast_hash": "876afeaa53bd43900ce6af1289f76f10",
     "semantic_hash": ""
   }
 }

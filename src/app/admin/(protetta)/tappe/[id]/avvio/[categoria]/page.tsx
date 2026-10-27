@@ -3,7 +3,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { AvvioFase } from "@/components/admin-avvio-fase";
 import { GestioneTappaLoading } from "@/components/admin-tappa";
+import { ProssimaFase } from "@/components/admin-fasi";
 import { PageContainer } from "@/components/layout/page-container";
+import { proponiProssimaFase } from "@/lib/gironi/fasi/actions";
+import { readProssimaFase } from "@/lib/gironi/fasi/read";
 import { avviaFase } from "@/lib/tappe/avvio/actions";
 import { parseCategoriaSegmento } from "@/lib/tappe/avvio/paths";
 import { readAvvioFase } from "@/lib/tappe/avvio/read";
@@ -27,8 +30,22 @@ async function AvvioContent({
 }) {
   const categoria = parseCategoriaSegmento(segmento);
   if (!categoria) notFound();
-  const view = await readAvvioFase(id, categoria);
-  return <AvvioFase view={view} action={avviaFase} />;
+  const [view, finali] = await Promise.all([
+    readAvvioFase(id, categoria),
+    readProssimaFase(id, categoria, "finali"),
+  ]);
+  return (
+    <div className="flex flex-col gap-stack-lg">
+      {finali ? (
+        <ProssimaFase
+          key={`${id}:${categoria}`}
+          view={finali}
+          action={proponiProssimaFase}
+        />
+      ) : null}
+      <AvvioFase view={view} action={avviaFase} />
+    </div>
+  );
 }
 
 export default function AvvioFasePage({
@@ -38,7 +55,7 @@ export default function AvvioFasePage({
     <PageContainer
       title="Avvio fase"
       eyebrow="Amministrazione · Tappe"
-      description="Controlla i gironi e crea le partite dei gironi iniziali, un tabellone alla volta."
+      description="Controlla i gironi e crea le partite della fase: gironi iniziali, poi gironi gold e silver e finali, un tabellone alla volta."
     >
       <Suspense
         fallback={<GestioneTappaLoading testo="Caricamento dei gironi…" />}

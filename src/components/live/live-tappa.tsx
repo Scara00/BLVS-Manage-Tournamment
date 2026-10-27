@@ -96,7 +96,7 @@ export function LiveTappa({
       <div className="flex flex-col gap-stack-lg" data-testid="live-tappa">
         <LiveBarConnected />
         <LiveAnnouncer
-          types={["score", "group-standings"]}
+          types={["score", "group-standings", "phase-started"]}
           filter={accept}
           format={format}
           limita={{

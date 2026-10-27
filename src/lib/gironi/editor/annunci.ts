@@ -2,6 +2,7 @@ import { controllaGironi } from "./controlli";
 import {
   nomeDestinazione,
   posizioneGiocatore,
+  faseNuovoGirone,
   prossimoNomeGirone,
   trovaGiocatore,
 } from "./operazioni";
@@ -40,7 +41,7 @@ export function descriviOperazione(
       return `Scambiati ${a?.nome} e ${b?.nome}: ${a?.nome} ora è ${verso(prima, db)}, ${b?.nome} ${verso(prima, da)}.`;
     }
     case "aggiungi":
-      return `${prossimoNomeGirone(prima.gironi)} aggiunto.`;
+      return `${prossimoNomeGirone(prima.gironi, operazione.fase ?? faseNuovoGirone(prima))} aggiunto.`;
     case "elimina": {
       const girone = prima.gironi.find((g) => g.id === operazione.gironeId);
       const n = girone?.giocatori.length ?? 0;

@@ -1,4 +1,10 @@
-import type { Categoria, FaseGioco, StatoTappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  FaseGioco,
+  FaseGirone,
+  StatoTappa,
+} from "@/lib/db/types";
+import { FASE_GIOCO_LABEL, faseDopo } from "@/lib/gironi/fasi/fase";
 
 /**
  * Rules for starting the group phase of one board. Mirror of
@@ -55,6 +61,8 @@ export type GiocatoreAvvio = {
 export type GironeAvvio = {
   id: string;
   nome: string;
+  /** `gironi.fase` (BLVS-39); absent = an initial group. */
+  fase?: FaseGirone;
   giocatori: GiocatoreAvvio[];
 };
 
@@ -70,10 +78,33 @@ export type TabelloneAvvio = {
   categoria: Categoria;
   tabelloneId: string;
   faseGioco: FaseGioco | null;
+  /**
+   * The phase this screen starts (BLVS-39): the initial groups, or the
+   * gold/silver groups once they are proposed. Absent = the initial groups.
+   */
+  faseDaAvviare?: FaseGioco;
+  /** The groups of `faseDaAvviare`. */
   gironi: GironeAvvio[];
-  /** Confirmed players of the board who are in no group. */
+  /** Players who belong in those groups but are in none of them. */
   nonAssegnati: IscrittoFuori[];
 };
+
+/** The phase the start screen of `tabellone` works on. */
+export function faseDaAvviare(
+  tabellone: Pick<TabelloneAvvio, "faseDaAvviare">,
+): FaseGioco {
+  return tabellone.faseDaAvviare ?? "gironi_iniziali";
+}
+
+/** Whether that phase has already started. */
+export function faseAvviata(
+  tabellone: Pick<TabelloneAvvio, "faseGioco" | "faseDaAvviare">,
+): boolean {
+  return (
+    tabellone.faseGioco !== null &&
+    !faseDopo(faseDaAvviare(tabellone), tabellone.faseGioco)
+  );
+}
 
 function nomeCompleto(g: { nome: string; cognome: string }): string {
   return `${g.cognome} ${g.nome}`.trim();
@@ -271,12 +302,18 @@ export function assegnaLettere<
 
 /** Why the start cannot even be offered, or `null` when it can. */
 export function avvioNonDisponibile(
-  tabellone: Pick<TabelloneAvvio, "tappa" | "faseGioco">,
+  tabellone: Pick<TabelloneAvvio, "tappa" | "faseGioco" | "faseDaAvviare">,
 ): string | null {
-  if (tabellone.faseGioco !== null) {
-    return "La fase «gironi iniziali» di questo tabellone è già avviata.";
+  if (faseAvviata(tabellone)) {
+    const fase = FASE_GIOCO_LABEL[tabellone.faseGioco!].toLowerCase();
+    return `La fase «${fase}» di questo tabellone è già avviata.`;
   }
   const { stato } = tabellone.tappa;
+  if (faseDaAvviare(tabellone) !== "gironi_iniziali") {
+    return stato === "in_corso"
+      ? null
+      : "Questa fase si avvia solo a tappa in corso.";
+  }
   if (stato !== "iscrizioni_chiuse" && stato !== "in_corso") {
     return "La fase si avvia solo dopo la chiusura delle iscrizioni.";
   }

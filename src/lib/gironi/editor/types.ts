@@ -1,4 +1,5 @@
-import type { Categoria, FaseTabellone } from "@/lib/db/types";
+import type { Categoria, FaseGirone, FaseTabellone } from "@/lib/db/types";
+import type { LivelloGironi } from "@/lib/gironi/fasi/fase";
 
 /** One player of a board, by registration (a registration is one player). */
 export type GiocatoreGirone = {
@@ -12,10 +13,12 @@ export type GironeEditor = {
   nome: string;
   posizione: number;
   /**
-   * Gold/Silver of the group. Today it is the board's `tabelloni.fase`
-   * (one phase per board); if BLVS-26 adds a phase per group, read it here.
+   * Gold/Silver marker of the group: from its own phase (`gironi.fase`,
+   * BLVS-39), else the board's `tabelloni.fase` for the initial groups.
    */
   fase: FaseTabellone | null;
+  /** `gironi.fase`; absent = an initial group. */
+  faseGirone?: FaseGirone;
   giocatori: GiocatoreGirone[];
 };
 
@@ -27,6 +30,11 @@ export type ComposizioneGironi = {
   versione: number;
   /** A group match has started: the groups can no longer change. */
   bloccata: boolean;
+  /**
+   * Which groups the editor shows (`livello_modificabile()`): the initial
+   * ones, then the gold/silver proposal, then the finals. Absent = initial.
+   */
+  livello?: LivelloGironi;
   gironi: GironeEditor[];
   /** Confirmed players of the board who are in no group. */
   nonAssegnati: GiocatoreGirone[];
@@ -39,7 +47,7 @@ export type Destinazione = string;
 export type OperazioneGironi =
   | { tipo: "sposta"; iscrizioneId: string; verso: Destinazione }
   | { tipo: "scambia"; a: string; b: string }
-  | { tipo: "aggiungi" }
+  | { tipo: "aggiungi"; fase?: FaseGirone }
   | { tipo: "elimina"; gironeId: string };
 
 /** The editor of one board of one stage (w-admin-gironi). */

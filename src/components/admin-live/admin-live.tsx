@@ -33,6 +33,7 @@ import {
   avanzamentoFase,
   descriviPartita,
   faseCorrente,
+  partiteFaseGioco,
   FASE_GIOCO_LABEL,
   FASE_PARTITA_LABEL,
   isDaInserire,
@@ -223,7 +224,12 @@ export function AdminLive({
   }
 
   const fase = faseCorrente(partite);
-  const avanzamento = avanzamentoFase(partite, fase, adesso);
+  // Progress of the current game phase only (BLVS-39).
+  const avanzamento = avanzamentoFase(
+    partiteFaseGioco(partite, view.faseGioco),
+    fase,
+    adesso,
+  );
   const inCorso = partiteInCorso(partite);
   const fasi = raggruppaPartite(partite);
   const disabled = !online;
@@ -301,7 +307,7 @@ export function AdminLive({
       <AvanzamentoFase
         avanzamento={avanzamento}
         faseLabel={
-          fase === "gironi" && view.faseGioco
+          view.faseGioco && (fase === "gironi" || fase === "finale")
             ? FASE_GIOCO_LABEL[view.faseGioco]
             : fase
               ? FASE_PARTITA_LABEL[fase]

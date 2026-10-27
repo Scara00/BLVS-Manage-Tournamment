@@ -283,16 +283,47 @@ export function GironiEditor({
           ) : null}
           {modificabile ? (
             <div className="flex flex-wrap items-center gap-space-3">
-              <Button
-                ref={aggiungiRef}
-                className="max-w-full"
-                onClick={() =>
-                  esegui({ tipo: "aggiungi" }, { tipo: "ultimo-girone" })
-                }
-              >
-                <PlusIcon aria-hidden />
-                Aggiungi girone
-              </Button>
+              {composizione.livello === "gold_silver" ? (
+                <>
+                  <Button
+                    ref={aggiungiRef}
+                    className="max-w-full"
+                    onClick={() =>
+                      esegui(
+                        { tipo: "aggiungi", fase: "gold" },
+                        { tipo: "ultimo-girone" },
+                      )
+                    }
+                  >
+                    <PlusIcon aria-hidden />
+                    Aggiungi girone gold
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    className="max-w-full"
+                    onClick={() =>
+                      esegui(
+                        { tipo: "aggiungi", fase: "silver" },
+                        { tipo: "ultimo-girone" },
+                      )
+                    }
+                  >
+                    <PlusIcon aria-hidden />
+                    Aggiungi girone silver
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  ref={aggiungiRef}
+                  className="max-w-full"
+                  onClick={() =>
+                    esegui({ tipo: "aggiungi" }, { tipo: "ultimo-girone" })
+                  }
+                >
+                  <PlusIcon aria-hidden />
+                  Aggiungi girone
+                </Button>
+              )}
               <span className="text-sm text-muted-foreground" aria-hidden>
                 {pending ? "Salvataggio…" : null}
               </span>
