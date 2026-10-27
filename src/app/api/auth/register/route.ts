@@ -6,6 +6,7 @@ import {
   readJsonObject,
 } from "@/lib/api/responses";
 import { BodyReader } from "@/lib/api/validation";
+import { rememberPendingVerification } from "@/lib/auth/email-verification/pending";
 import { MIN_PASSWORD_LENGTH, REGISTERED_MESSAGE } from "@/lib/auth/messages";
 import { limitAuthAttempt } from "@/lib/auth/rate-limit";
 import { CATEGORIE, VERSIONE_INFORMATIVA_PRIVACY } from "@/lib/db/types";
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     return jsonError(503, "Autenticazione non configurata.");
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: values.email!,
     password: values.password!,
     options: {
@@ -70,6 +71,10 @@ export async function POST(request: NextRequest) {
       return jsonError(500, "Registrazione non riuscita. Riprova più tardi.");
     }
   }
+
+  // BLVS-15: no session until the email is confirmed; the «Conferma email»
+  // page reads the address and send time from this cookie.
+  if (!data?.session) await rememberPendingVerification(values.email!);
 
   return Response.json({ messaggio: REGISTERED_MESSAGE }, { status: 202 });
 }
