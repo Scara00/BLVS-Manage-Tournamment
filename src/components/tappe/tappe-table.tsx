@@ -13,6 +13,7 @@ import {
   type TappaGiocatore,
 } from "@/lib/tappe/format";
 import { TAPPE_PATH, tappaHref } from "@/lib/tappe/paths";
+import { cn } from "@/lib/utils";
 import { StatoTappaBadge } from "./stato-tappa-badge";
 
 /** A dash for sighted users, words for screen readers. */
@@ -79,7 +80,24 @@ function IscrizioneCell({ tappa }: { tappa: TappaGiocatore }) {
 
 function columns(connesso: boolean): ResponsiveTableColumn<TappaGiocatore>[] {
   return [
-    { key: "name", header: "Tappa", rowHeader: true, width: "18%" },
+    {
+      key: "name",
+      header: "Tappa",
+      rowHeader: true,
+      width: "18%",
+      render: (t) => (
+        <span className="flex flex-col items-start gap-space-1 [overflow-wrap:anywhere]">
+          {t.name}
+          <Link
+            href={tappaHref(t.id)}
+            aria-label={`Vedi la tappa ${t.name}`}
+            className={cn(textLink, "text-sm")}
+          >
+            Vedi la tappa
+          </Link>
+        </span>
+      ),
+    },
     {
       key: "date",
       header: "Data",

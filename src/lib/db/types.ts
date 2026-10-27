@@ -67,6 +67,13 @@ export type Tappa = {
   chiusura_automatica: boolean;
   /** Grows by 1 on every update (trigger `tappe_versione`). */
   versione: number;
+  /** Meeting point shown to registered players (BLVS-24). */
+  ritrovo: string | null;
+  ritrovo_alle: string | null;
+  /** Free-text programme set by the admin. */
+  programma: string | null;
+  /** Players may cancel until then; null = the registration deadline. */
+  annullabile_fino_al: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -87,6 +94,8 @@ export type Iscrizione = {
   tabellone_id: string;
   utente_id: string;
   stato: StatoIscrizione;
+  /** Seat number on the board, assigned by the database. */
+  posto: number | null;
   created_at: string;
   updated_at: string;
 };
