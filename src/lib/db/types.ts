@@ -65,6 +65,8 @@ export type Tappa = {
   iscrizioni_chiuse_il: string | null;
   /** True when `chiudi_iscrizioni_scadute()` closed them at the deadline. */
   chiusura_automatica: boolean;
+  /** Grows by 1 on every update (trigger `tappe_versione`). */
+  versione: number;
   created_at: string;
   updated_at: string;
 };
@@ -73,7 +75,7 @@ export type Tabellone = {
   id: string;
   tappa_id: string;
   categoria: Categoria;
-  /** Seats on this board (one category of the stage). */
+  /** Seats on this board (one category of the stage); maximum registrations, never below the active ones. */
   posti: number;
   /** Gold/Silver phase, set by the admin; null until then. */
   fase: FaseTabellone | null;
