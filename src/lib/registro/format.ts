@@ -27,6 +27,7 @@ const TIPO_VOCE: Record<TipoEventoRegistro, { label: string; badge: boolean }> =
     rigenerazione_gironi: { label: "Rigenerazione dei gironi", badge: false },
     cambio_categoria: { label: "Cambio di categoria", badge: false },
     chiusura_tabellone: { label: "Chiusura del tabellone", badge: false },
+    punteggio_parziale: { label: "Parziale", badge: false },
   };
 
 export function tipoVoce(tipo: TipoEventoRegistro): TipoVoceView {
@@ -105,6 +106,14 @@ function categoriaTesto(valore: ValoreRegistro | undefined): string {
     : valore;
 }
 
+/** A partial (BLVS-37): `{parziale: {a, b}}` → «14-11», none → «—». */
+function parzialeTesto(valore: ValoreRegistro | null | undefined): string {
+  const parziale = oggetto(oggetto(valore)?.parziale);
+  const a = numero(parziale?.a);
+  const b = numero(parziale?.b);
+  return a === null || b === null ? VUOTO : `${a}-${b}`;
+}
+
 function ordineTesto(valore: ValoreRegistro | null | undefined): string {
   const ordine = oggetto(valore)?.ordine;
   if (!Array.isArray(ordine) || ordine.length === 0) return VUOTO;
@@ -173,6 +182,8 @@ export function riepilogoValori(
         prima: testoLibero(prima),
         dopo: dopo === null ? "Assente" : testoLibero(dopo),
       };
+    case "punteggio_parziale":
+      return { prima: parzialeTesto(prima), dopo: parzialeTesto(dopo) };
     case "chiusura_tabellone":
       return {
         prima: prima === null ? "Aperto" : testoLibero(prima),

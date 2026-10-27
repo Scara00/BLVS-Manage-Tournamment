@@ -1025,8 +1025,8 @@
     "semantic_hash": ""
   },
   "e2e/storybook-live.spec.ts": {
-    "mtime": 1793129848.650846,
-    "ast_hash": "e8e322a0d3f322879437051f3b52305f",
+    "mtime": 1793129880.6720667,
+    "ast_hash": "8375ca605d85a7e2972f3fbca1392336",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/gironi/[id]/page.tsx": {
@@ -1065,13 +1065,13 @@
     "semantic_hash": ""
   },
   "src/components/live/live-announcer.test.tsx": {
-    "mtime": 1793129848.6892018,
-    "ast_hash": "d91f46d8d1012cdfae66a0d63278d7cf",
+    "mtime": 1793129880.6822226,
+    "ast_hash": "377b5c9287c9f603c279647e3c08e5fd",
     "semantic_hash": ""
   },
   "src/components/live/live-announcer.tsx": {
-    "mtime": 1793129848.689263,
-    "ast_hash": "47074f708c983e57db1f3ea80e32e5ee",
+    "mtime": 1793129880.6823828,
+    "ast_hash": "0759a3f0e5120a8b7d078b640fa2ed87",
     "semantic_hash": ""
   },
   "src/components/live/live-bar.stories.tsx": {
@@ -1130,8 +1130,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/announce.ts": {
-    "mtime": 1793129848.7089593,
-    "ast_hash": "c05c83869d3858590b57b1ad13fcf884",
+    "mtime": 1793129880.683884,
+    "ast_hash": "26886482fc8ae955c48a46a185984b1d",
     "semantic_hash": ""
   },
   "src/lib/live/bus.test.ts": {
@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/types.ts": {
-    "mtime": 1793129848.7100883,
-    "ast_hash": "c0297db727743c6bf775bd72bb5fa783",
+    "mtime": 1793129880.6844108,
+    "ast_hash": "0e992291b049630f43f157b885ce2cd5",
     "semantic_hash": ""
   },
   "e2e/mailpit.ts": {
@@ -1230,8 +1230,8 @@
     "semantic_hash": ""
   },
   "src/lib/audit/eventi.ts": {
-    "mtime": 1793129848.7000613,
-    "ast_hash": "e3f60419e489c3dafc1f7a99fbf42f83",
+    "mtime": 1793129880.6832678,
+    "ast_hash": "8c3cc121f53c5090b0e7de239446814e",
     "semantic_hash": ""
   },
   "src/lib/audit/index.ts": {
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "src/lib/audit/registro.test.ts": {
-    "mtime": 1793129848.7002149,
-    "ast_hash": "0a7eea9ff522b375e7fecc148f26bae6",
+    "mtime": 1793129880.6834168,
+    "ast_hash": "5b5153b75d14c18764aa0f88458ad5e6",
     "semantic_hash": ""
   },
   "src/lib/audit/registro.ts": {
@@ -1335,8 +1335,8 @@
     "semantic_hash": ""
   },
   "supabase/tests/database/registro_eventi.test.sql": {
-    "mtime": 1793129848.722976,
-    "ast_hash": "fe3778d4a005dacf274f0c1ca75ff035",
+    "mtime": 1793129880.68579,
+    "ast_hash": "4fdf39a94d1df669fb9bfb76eba31268",
     "semantic_hash": ""
   },
   "supabase/templates/conferma-email.html": {
@@ -3725,8 +3725,8 @@
     "semantic_hash": ""
   },
   "src/lib/registro/format.ts": {
-    "mtime": 1793129848.7129676,
-    "ast_hash": "563dafef49a8127add13b520a4148c12",
+    "mtime": 1793129880.6854455,
+    "ast_hash": "279ed4bdbdbbf02affe67db471f80511",
     "semantic_hash": ""
   },
   "src/lib/registro/index.ts": {
@@ -3790,8 +3790,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/punteggi/[partitaId]/page.tsx": {
-    "mtime": 1793129848.6669352,
-    "ast_hash": "aaa64ef2b3fcbe40aad20aaf79b7b82c",
+    "mtime": 1793129880.6805885,
+    "ast_hash": "5937e9afe827cc9ed96112d1840ffe21",
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/punteggi/page.tsx": {
@@ -3800,8 +3800,8 @@
     "semantic_hash": ""
   },
   "src/app/api/demo/inserimento-punteggio/route.ts": {
-    "mtime": 1793129848.6718173,
-    "ast_hash": "abd6432bc11e3c2579a4f11cc0fcc93e",
+    "mtime": 1793129880.6807196,
+    "ast_hash": "d7739d85d9ceb34da21f63af612637f7",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/elenco-punteggi.stories.tsx": {
@@ -3810,18 +3810,18 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/elenco-punteggi.tsx": {
-    "mtime": 1793129848.6788719,
-    "ast_hash": "8e56f50b39ee6daa9f271de915c4b2f9",
+    "mtime": 1793129880.6810338,
+    "ast_hash": "0a8e3a17ae3c133f6aef741761c68a0a",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/index.ts": {
-    "mtime": 1793129848.6789415,
-    "ast_hash": "a003e86633c4d7fff00888f53ef4d3bc",
+    "mtime": 1793129880.6811514,
+    "ast_hash": "37ee8eadd9b52afa52440b957ecc7ec8",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.stories.tsx": {
-    "mtime": 1793129848.6790316,
-    "ast_hash": "f3e146f2b56579d2936059a2e576b229",
+    "mtime": 1793129880.6812983,
+    "ast_hash": "ad56af13147176bbd237367d2fb502fe",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.test.tsx": {
@@ -3830,8 +3830,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.tsx": {
-    "mtime": 1793129849.1000235,
-    "ast_hash": "b2a56d1ef6971106aa6e5378f2d53cd7",
+    "mtime": 1793130064.8848512,
+    "ast_hash": "78727cb63e8b9e54f279690cbb286fc3",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/punteggi-link.tsx": {
@@ -3845,18 +3845,18 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/riga-squadra.tsx": {
-    "mtime": 1793129848.6795032,
-    "ast_hash": "b0970e89a41d9abdade1c8d309322987",
+    "mtime": 1793129880.68189,
+    "ast_hash": "07e7c346ba02ea5055495639a6a2067c",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/stories-data.ts": {
-    "mtime": 1793129849.1002855,
-    "ast_hash": "8ba9444382cb31a7a3ff26d00d33d4b6",
+    "mtime": 1793130064.8850052,
+    "ast_hash": "52d6154964851cb309c999c0d346e489",
     "semantic_hash": ""
   },
   "src/lib/demo/punteggi-route.ts": {
-    "mtime": 1793129849.100384,
-    "ast_hash": "4ac9c09fd5368d8f627f4391e3969896",
+    "mtime": 1793130064.8851192,
+    "ast_hash": "358c0f4585a60b8f8eed7d3bd0ad1f36",
     "semantic_hash": ""
   },
   "src/lib/demo/punteggi.test.ts": {
@@ -3865,8 +3865,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/punteggi.ts": {
-    "mtime": 1793129849.1005626,
-    "ast_hash": "5a097623579addf752d18491b6e18e89",
+    "mtime": 1793130067.5813758,
+    "ast_hash": "bc9a0aa450a2c37c80af00eb8d0bff2f",
     "semantic_hash": ""
   },
   "src/lib/punteggi/actions.test.ts": {
@@ -3875,18 +3875,18 @@
     "semantic_hash": ""
   },
   "src/lib/punteggi/actions.ts": {
-    "mtime": 1793129849.100787,
-    "ast_hash": "b74a48ab3091c365ba2d63996101c60b",
+    "mtime": 1793129880.6845822,
+    "ast_hash": "8cf24c15787eb28cef16505aaab51ad4",
     "semantic_hash": ""
   },
   "src/lib/punteggi/dati.ts": {
-    "mtime": 1793129848.712188,
-    "ast_hash": "b5238fb6eec332f3883e7fcf185e9ef2",
+    "mtime": 1793129880.684697,
+    "ast_hash": "99cb3f6bbfe3a4b0a8fe021e1050d8c0",
     "semantic_hash": ""
   },
   "src/lib/punteggi/format.ts": {
-    "mtime": 1793129848.7122679,
-    "ast_hash": "f4a563bf8854c8a45c2ccfe167f42856",
+    "mtime": 1793129880.684843,
+    "ast_hash": "5079a844b24755925f04cd27dc2ef5d7",
     "semantic_hash": ""
   },
   "src/lib/punteggi/paths.ts": {
@@ -3915,8 +3915,8 @@
     "semantic_hash": ""
   },
   "src/lib/punteggi/types.ts": {
-    "mtime": 1793129849.1014922,
-    "ast_hash": "7251b8bbe76da8336798e072a8f8e4c5",
+    "mtime": 1793129880.685309,
+    "ast_hash": "289ae278484f7099e03894cc49cdd518",
     "semantic_hash": ""
   },
   "src/lib/punteggi/validazione.test.ts": {
@@ -3950,8 +3950,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/conflitto-punteggio.tsx": {
-    "mtime": 1793129848.6786783,
-    "ast_hash": "597459c39e6b34f6dca91478465b43bf",
+    "mtime": 1793129880.680867,
+    "ast_hash": "86821fe275a7787fc2e0ea4710d68b54",
     "semantic_hash": ""
   },
   "src/lib/punteggi/conflitto/conflitto.db.test.ts": {
@@ -3990,18 +3990,18 @@
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.stories.tsx": {
-    "mtime": 1793129848.689784,
-    "ast_hash": "33a2ecdff6c4414a3a0b2deb37f8fb43",
+    "mtime": 1793129880.682529,
+    "ast_hash": "71a5c97e94e7be1866121487977e1255",
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.test.tsx": {
-    "mtime": 1793129848.689879,
-    "ast_hash": "0c6434567c69852d7fc0daa2abffb4e6",
+    "mtime": 1793129880.6826978,
+    "ast_hash": "82c27e87290b16d81029532b32e81837",
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.tsx": {
-    "mtime": 1793129848.6899686,
-    "ast_hash": "8c91fd5b72c487440259a3357fc649e5",
+    "mtime": 1793129880.6828222,
+    "ast_hash": "b5b3f23cfee1d308bd57b32a660f36dd",
     "semantic_hash": ""
   },
   "src/lib/live/tappa-read.ts": {
@@ -4015,13 +4015,83 @@
     "semantic_hash": ""
   },
   "src/lib/live/tappa.ts": {
-    "mtime": 1793129848.7099662,
-    "ast_hash": "098ee0118b6f2a77ec71a83a59a83946",
+    "mtime": 1793129880.6842518,
+    "ast_hash": "efdd810dac6ee01dbe24e3deaa45fb48",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027350100_editor_gironi.sql": {
     "mtime": 1793129848.7215068,
     "ast_hash": "3e449ec2daf20d4d095fdb41c58b76c0",
+    "semantic_hash": ""
+  },
+  "e2e/live-parziale.spec.ts": {
+    "mtime": 1793129880.6719432,
+    "ast_hash": "faca2ba7b6eb2993d06c4fef3d3cc534",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/parziale-form.stories.tsx": {
+    "mtime": 1793129880.6815646,
+    "ast_hash": "c39f334fe02777b355a48df35064c679",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/parziale-form.test.tsx": {
+    "mtime": 1793129880.6816485,
+    "ast_hash": "1453e1c402c5eaf7bf16f977f8dc16fa",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/parziale-form.tsx": {
+    "mtime": 1793129880.6817505,
+    "ast_hash": "9dc9d6e73572a5f1db0a7c422f22a399",
+    "semantic_hash": ""
+  },
+  "src/components/live/punteggio-parziale.stories.tsx": {
+    "mtime": 1793129880.6829317,
+    "ast_hash": "18f6c8c393ff5ced6c4af9c49076d136",
+    "semantic_hash": ""
+  },
+  "src/components/live/punteggio-parziale.test.tsx": {
+    "mtime": 1793129880.6830277,
+    "ast_hash": "209294aa5a3bec554729ac710662de08",
+    "semantic_hash": ""
+  },
+  "src/components/live/punteggio-parziale.tsx": {
+    "mtime": 1793129880.6831403,
+    "ast_hash": "71484cf73b23e1648001ca3a8f3b4d75",
+    "semantic_hash": ""
+  },
+  "src/lib/live/limita-annunci.test.ts": {
+    "mtime": 1793129880.683994,
+    "ast_hash": "cd863064f990a122780f1f748d6ec7bf",
+    "semantic_hash": ""
+  },
+  "src/lib/live/limita-annunci.ts": {
+    "mtime": 1793129880.6840906,
+    "ast_hash": "285bcc5a70e51832f0c8d44c41d833e5",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/parziale.db.test.ts": {
+    "mtime": 1793129880.6849482,
+    "ast_hash": "97965b2be8e83b19ca784bd83f24d51a",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/parziale.test.ts": {
+    "mtime": 1793129880.685075,
+    "ast_hash": "c0315d65f2bb80ec2c1d4ca2c5478c63",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/parziale.ts": {
+    "mtime": 1793129880.6851993,
+    "ast_hash": "9b62ffac1af2a1a3e5621167bccc8491",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027400000_punteggio_parziale_evento.sql": {
+    "mtime": 1793129880.6855361,
+    "ast_hash": "da83eb9cc011f94b323939039d254313",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027400100_punteggio_parziale.sql": {
+    "mtime": 1793129880.6856556,
+    "ast_hash": "ece7e4d85d7354023bba0e0c9734a15c",
     "semantic_hash": ""
   },
   "e2e/admin-punteggio-correzione.spec.ts": {
@@ -4084,11 +4154,6 @@
     "ast_hash": "d2323a902afccc1d7b04cea44093e47f",
     "semantic_hash": ""
   },
-  "supabase/migrations/20261027400000_correzione_punteggio.sql": {
-    "mtime": 1793129849.1015768,
-    "ast_hash": "e28396037f00998ef7c65b6c7875df30",
-    "semantic_hash": ""
-  },
   "src/lib/tappe/classifica/classifica.test.ts": {
     "mtime": 1793129848.8448503,
     "ast_hash": "1bebd5d897b77e6c917012fbfe3a6139",
@@ -4127,6 +4192,11 @@
   "src/lib/tappe/classifica/read.ts": {
     "mtime": 1793129848.8453193,
     "ast_hash": "b1ab4858c6dfb248db3a317ae3728f1f",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027400000_correzione_punteggio.sql": {
+    "mtime": 1793129849.1015768,
+    "ast_hash": "e28396037f00998ef7c65b6c7875df30",
     "semantic_hash": ""
   }
 }

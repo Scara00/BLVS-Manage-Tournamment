@@ -13,10 +13,18 @@ export type LivePlayer = { id: string; name: string };
 
 /** Match state, as `partite.stato`. */
 export type LiveMatchState =
-  | "programmata"
-  | "in_corso"
-  | "conclusa"
-  | "annullata";
+  "programmata" | "in_corso" | "conclusa" | "annullata";
+
+/**
+ * The running score of a match in progress (BLVS-37): shown live, never
+ * in `sets` and never in any standing.
+ */
+export type LivePartial = {
+  home: number;
+  away: number;
+  /** ISO time the admin sent it. */
+  updatedAt: string;
+};
 
 export type LiveMatch = {
   id: string;
@@ -39,6 +47,8 @@ export type LiveMatch = {
   state?: LiveMatchState;
   /** Full names of both teams, home first. */
   players?: { home: readonly LivePlayer[]; away: readonly LivePlayer[] };
+  /** BLVS-37: the partial while `state` is `in_corso`; null = none. */
+  partial?: LivePartial | null;
 };
 
 export type GroupStandingRow = {

@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { describe, expect, it, vi } from "vitest";
@@ -110,6 +110,16 @@ describe("tipi di evento", () => {
         sql,
       )?.[1];
     const valori = [...(body ?? "").matchAll(/'([^']+)'/g)].map((m) => m[1]);
+    // Values added later (e.g. BLVS-37) go at the end, in migration order.
+    const dir = path.dirname(MIGRATION);
+    for (const file of readdirSync(dir)
+      .filter((f) => f.endsWith(".sql"))
+      .sort()) {
+      const altre = readFileSync(path.join(dir, file), "utf8").matchAll(
+        /alter type public\.tipo_evento_registro add value (?:if not exists )?'([^']+)'/g,
+      );
+      for (const m of altre) valori.push(m[1]);
+    }
     expect(valori).toEqual([...TIPI_EVENTO_REGISTRO]);
   });
 

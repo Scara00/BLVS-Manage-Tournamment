@@ -11,6 +11,8 @@ import {
   annullaFinto,
   daInserire,
   giaSalvata,
+  inCorso as partitaInCorso,
+  inviaParzialeFinto,
   nomiLunghi,
   nonGiocabile,
   salvaFinto,
@@ -28,6 +30,8 @@ type SchermataProps = {
   offline?: boolean;
   inCorso?: boolean;
   initialState?: PunteggioState;
+  /** BLVS-37: offers the partial (match in progress). */
+  parziale?: boolean;
 };
 
 /** w-admin-punteggio / w-admin-punteggio-riepilogo inside the admin shell. */
@@ -40,6 +44,7 @@ function Schermata({
   offline,
   inCorso,
   initialState,
+  parziale,
 }: SchermataProps) {
   return (
     <ToastProvider>
@@ -62,6 +67,7 @@ function Schermata({
                 verificaIniziale={verifica}
                 offline={offline}
                 initialState={initialState}
+                inviaParziale={parziale ? inviaParzialeFinto : undefined}
               />
             )}
           </PageContainer>
@@ -198,4 +204,9 @@ export const Testo200Riepilogo: Story = {
     passo: "riepilogo",
   },
   parameters: { text200: true },
+};
+
+/** BLVS-37: a match in progress also offers the partial, sent live. */
+export const PartitaInCorso: Story = {
+  args: { scheda: partitaInCorso, parziale: true },
 };

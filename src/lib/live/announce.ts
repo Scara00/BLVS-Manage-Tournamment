@@ -10,6 +10,10 @@ import type { LiveEvent } from "./types";
 export function announcementFor(event: LiveEvent): string {
   switch (event.type) {
     case "score": {
+      const { partial } = event.match;
+      if ((event.match.state ?? "in_corso") === "in_corso" && partial) {
+        return `${event.match.groupLabel}: parziale ${partial.home}-${partial.away}`;
+      }
       const last = event.match.sets.at(-1);
       const result = last ? ` ${last[0]}-${last[1]}` : "";
       return `${event.match.groupLabel}: nuovo risultato${result}`;

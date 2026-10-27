@@ -52,6 +52,19 @@ function RigaPartita({
         </span>
       </div>
       <div className="flex flex-wrap items-center gap-space-3">
+        {partita.stato === "in_corso" && partita.parziale ? (
+          <span
+            data-testid="parziale-elenco"
+            className="inline-flex items-center gap-space-2"
+          >
+            <span className="bg-live-bg px-space-2 py-space-1 text-xs font-semibold tracking-wide text-live-fg uppercase">
+              Parziale
+            </span>
+            <span className="font-mono text-xl font-bold tabular-nums">
+              {partita.parziale.a}–{partita.parziale.b}
+            </span>
+          </span>
+        ) : null}
         {partita.stato === "annullata" ? (
           <Badge>Annullata</Badge>
         ) : set && !manca ? (

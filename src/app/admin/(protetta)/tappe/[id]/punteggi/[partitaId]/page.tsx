@@ -3,7 +3,11 @@ import { Suspense } from "react";
 import { InserimentoPunteggio } from "@/components/admin-punteggio";
 import { GestioneTappaLoading } from "@/components/admin-tappa";
 import { PageContainer } from "@/components/layout/page-container";
-import { annullaPunteggio, salvaPunteggio } from "@/lib/punteggi/actions";
+import {
+  annullaPunteggio,
+  salvaParziale,
+  salvaPunteggio,
+} from "@/lib/punteggi/actions";
 import { readSchedaPunteggio } from "@/lib/punteggi/read";
 
 export const metadata: Metadata = {
@@ -32,6 +36,7 @@ async function SchedaContent({
       scheda={scheda}
       salva={salvaPunteggio}
       annulla={annullaPunteggio}
+      inviaParziale={salvaParziale}
     />
   );
 }

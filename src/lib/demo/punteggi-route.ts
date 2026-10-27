@@ -1,11 +1,27 @@
 import "server-only";
 import { notFound, readJsonObject } from "@/lib/api/responses";
 import { isDemoSeedEnabled } from "./gestione-tappe-route";
-import { creaDemoCorrezione, creaDemoPunteggi } from "./punteggi";
+import {
+  creaDemoCorrezione,
+  creaDemoPartitaInCorso,
+  creaDemoPunteggi,
+} from "./punteggi";
 
-/** Creates a stage in progress with group matches to score; answers `{ id }`. */
-export async function creaDemoPunteggiRoute(): Promise<Response> {
+/**
+ * Creates a stage in progress with group matches to score; answers
+ * `{ id }`. With `{ inCorso: true }` its first match is already started
+ * (BLVS-37) and the answer is `{ id, partitaId }`.
+ */
+export async function creaDemoPunteggiRoute(
+  request?: Request,
+): Promise<Response> {
   if (!isDemoSeedEnabled()) return notFound();
+  const body = (await request?.json().catch(() => null)) as {
+    inCorso?: unknown;
+  } | null;
+  if (body?.inCorso === true) {
+    return Response.json(creaDemoPartitaInCorso(), { status: 201 });
+  }
   return Response.json({ id: creaDemoPunteggi() }, { status: 201 });
 }
 

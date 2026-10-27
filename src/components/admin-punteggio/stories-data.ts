@@ -1,4 +1,5 @@
 import type { ImpattoFase } from "@/lib/punteggi/correzione/types";
+import type { SalvaParzialeAction } from "@/lib/punteggi/parziale";
 import type {
   AnnullaPunteggioAction,
   SalvaPunteggioAction,
@@ -79,11 +80,25 @@ export const nonGiocabile: SchedaPunteggio = {
   partita: daInserire.partita,
 };
 
+/** BLVS-37: a match in progress with a partial already sent. */
+export const inCorso: SchedaPunteggio = {
+  tappa,
+  partita: partita(2, [RINALDI, CONTI], [MORETTI, GALLO], {
+    stato: "in_corso",
+    parziale: {
+      a: 14,
+      b: 11,
+      versione: 3,
+      aggiornatoIl: "2027-06-12T08:42:00.000Z",
+    },
+  }),
+};
+
 export const elenco: ElencoPunteggi = {
   tappa,
   partite: [
     giaSalvata.partita,
-    partita(2, [RINALDI, CONTI], [MORETTI, GALLO]),
+    inCorso.partita,
     partita(3, [RINALDI, GALLO], [MORETTI, CONTI]),
     {
       ...partita(
@@ -216,3 +231,38 @@ export const salvaConImpatto: SalvaPunteggioAction = async (prev, formData) => {
 export const salvaSenzaRete: SalvaPunteggioAction = async () => {
   throw new TypeError("Failed to fetch");
 };
+
+export const inviaParzialeFinto: SalvaParzialeAction = async (
+  prev,
+  formData,
+) => ({
+  status: "success",
+  versione: Number(formData.get("versione")) + 1,
+  punti: {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  },
+  message: "Parziale inviato ai giocatori",
+  at: prev.status === "idle" ? 1 : prev.at + 1,
+});
+
+/** Another admin sent 15-11 meanwhile: the conflict dialog (BLVS-34). */
+export const inviaParzialeConflitto: SalvaParzialeAction = async (
+  prev,
+  formData,
+) => ({
+  status: "conflict",
+  salvato: {
+    versione: 4,
+    sets: [{ a: 15, b: 11 }],
+    autore: "Giulia Neri",
+    salvatoIl: "2027-06-12T08:43:00.000Z",
+  },
+  mio: {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  },
+  message:
+    "Un altro admin ha inviato un parziale di questa partita prima di te.",
+  at: prev.status === "idle" ? 1 : prev.at + 1,
+});

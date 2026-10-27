@@ -44,6 +44,8 @@ const LIVE_TAPPA_STORIES = [
   "live-live-della-tappa--offline",
   "live-live-della-tappa--long-text",
   "live-live-della-tappa--empty",
+  "live-live-della-tappa--parziale-in-corso",
+  "live-live-della-tappa--parziale-offline",
 ];
 
 test("live della tappa: punteggi, posizioni e Live con contrasto AAA (7:1)", async ({
