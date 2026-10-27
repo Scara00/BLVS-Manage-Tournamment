@@ -4,8 +4,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { Categoria, FaseGioco } from "@/lib/db/types";
 import { avviaFaseDemo, getDemoAvvioFase } from "@/lib/demo/avvio-fase";
+import { annuncioFase } from "@/lib/gironi/fasi/fase";
 import { publishPhaseStarted } from "@/lib/live/publish";
 import { pubblicaTabellone } from "@/lib/tappe/live-admin/pubblica";
 import { readSupabaseEnv } from "@/lib/supabase/env";
@@ -48,7 +49,7 @@ async function sessioneAdmin(): Promise<Sessione> {
 type MotivoErrore = Extract<AvvioFaseState, { status: "error" }>["reason"];
 
 type Esito =
-  | { ok: true; partite: number; tappaNome: string }
+  | { ok: true; partite: number; tappaNome: string; fase: FaseGioco }
   | { ok: false; reason: MotivoErrore; message: string }
   | { ok: false; errori: ProblemaAvvio[] };
 
@@ -61,7 +62,12 @@ function avviaDemo(tappaId: string, categoria: Categoria): Esito {
   const esito = avviaFaseDemo(tappaId, categoria);
   switch (esito.status) {
     case "ok":
-      return { ok: true, partite: esito.partite, tappaNome: nome };
+      return {
+        ok: true,
+        partite: esito.partite,
+        tappaNome: nome,
+        fase: esito.fase,
+      };
     case "bloccato":
       return { ok: false, errori: esito.errori };
     case "giaAvviata":
@@ -96,10 +102,19 @@ async function avviaDb(
     p_tabellone: tabellone.id,
   });
   if (error) return esitoErrore(error);
+  // The same RPC starts the initial or the gold/silver groups.
+  const { data: avviato } = await supabase
+    .from("tabelloni")
+    .select("fase_gioco")
+    .eq("id", tabellone.id)
+    .maybeSingle();
   return {
     ok: true,
     partite: (data as unknown[]).length,
     tappaNome: row.nome,
+    fase:
+      (avviato as { fase_gioco: FaseGioco | null } | null)?.fase_gioco ??
+      "gironi_iniziali",
   };
 }
 
@@ -118,6 +133,8 @@ function esitoErrore(error: PgError): Esito {
       return errore("conflict", AVVIO_MESSAGES.nonAvviabile);
     case "partite_iniziate":
       return errore("conflict", AVVIO_MESSAGES.partiteIniziate);
+    case "gironi_non_conclusi":
+      return errore("conflict", AVVIO_MESSAGES.gironiNonConclusi);
   }
   if (error.code === "P0002") {
     return errore("conflict", AVVIO_MESSAGES.nonAvviabile);
@@ -127,8 +144,9 @@ function esitoErrore(error: PgError): Esito {
 }
 
 /**
- * Starts the «gironi iniziali» phase of one board: creates its matches,
- * moves the stage to «in corso» and tells the live pages.
+ * Starts the next group phase of one board, «gironi iniziali» or «gironi
+ * gold e silver» (BLVS-39): creates its matches, moves the stage to «in
+ * corso» and tells the live pages.
  */
 export async function avviaFase(
   _prev: AvvioFaseState,
@@ -191,20 +209,20 @@ export async function avviaFase(
     stageId: tappaId,
     label: `${esito.tappaNome}, ${CATEGORIA_NOME[categoria]}`,
     category: categoria,
-    phase: "gironi_iniziali",
+    phase: esito.fase,
     matches: esito.partite,
   });
   await pubblicaTabellone(
     { supabase: sessione.supabase },
     tappaId,
     categoria,
-    `iniziati i gironi, ${esito.partite === 1 ? "1 partita" : `${esito.partite} partite`} da giocare`,
+    annuncioFase(esito.fase, esito.partite),
   );
   refresh();
   return {
     status: "success",
     partite: esito.partite,
-    message: messaggioSuccesso(categoria, esito.partite),
+    message: messaggioSuccesso(categoria, esito.partite, esito.fase),
     at,
   };
 }

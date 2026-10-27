@@ -5,6 +5,11 @@ import {
   type SetPunteggio,
   type StatoPartita,
 } from "@/lib/db/types";
+import {
+  FASE_GIOCO_DEL_LIVELLO,
+  FASE_GIOCO_LABEL,
+  livelloGirone,
+} from "@/lib/gironi/fasi/fase";
 import type { GiocatorePartita, PartitaLive } from "./types";
 
 /** The state of a match, always as text (never colour only). */
@@ -21,9 +26,25 @@ export const FASE_PARTITA_LABEL: Record<FasePartita, string> = {
   finale: "Finale",
 };
 
-export const FASE_GIOCO_LABEL: Record<FaseGioco, string> = {
-  gironi_iniziali: "Gironi iniziali",
-};
+export { FASE_GIOCO_LABEL };
+
+/**
+ * The matches of the board's current game phase (BLVS-39): the initial
+ * and the gold/silver groups are both `fase = 'gironi'`, so their progress
+ * is told apart by the group's phase. Matches without one count as
+ * initial.
+ */
+export function partiteFaseGioco(
+  partite: readonly PartitaLive[],
+  faseGioco: FaseGioco | null,
+): PartitaLive[] {
+  if (faseGioco === null) return [...partite];
+  return partite.filter(
+    (p) =>
+      FASE_GIOCO_DEL_LIVELLO[livelloGirone(p.gironeFase ?? "iniziale")] ===
+      faseGioco,
+  );
+}
 
 /**
  * A match whose result the admin still has to enter. Same rule as

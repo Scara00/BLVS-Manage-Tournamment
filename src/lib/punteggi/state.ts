@@ -1,5 +1,6 @@
 import type { SetPunteggio } from "@/lib/db/types";
 import type { PunteggioUfficiale } from "./conflitto/rileva";
+import type { ImpattoFase, SceltaImpatto } from "./correzione/types";
 import type { Lato } from "./validazione";
 
 export type MotivoErrore =
@@ -21,6 +22,10 @@ export type PunteggioState =
       punteggio: SetPunteggio;
       /** «inserimento» or «correzione», as written in the registro. */
       tipo: "inserimento" | "correzione";
+      /** BLVS-41: the choice made for the next phase, when it existed. */
+      scelta?: SceltaImpatto | null;
+      /** Next-phase scores deleted by «Rigenera». */
+      punteggiPersi?: number;
       message: string;
       at: number;
     }
@@ -40,6 +45,24 @@ export type PunteggioState =
       status: "conflict";
       salvato: PunteggioUfficiale;
       mio: SetPunteggio;
+      message: string;
+      at: number;
+    }
+  /**
+   * BLVS-41: the board's next phase is already generated. Nothing was
+   * written: the impact dialog asks «Mantieni» or «Rigenera», then the
+   * admin's values are sent again with the choice.
+   */
+  | {
+      status: "impatto";
+      impatto: ImpattoFase;
+      mio: SetPunteggio;
+      /** The version the admin's values are based on. */
+      versione: number;
+      /** «Rigenera» refused without the tick: shown next to the box. */
+      erroreConferma: string | null;
+      /** Set when the next phase changed while the dialog was open. */
+      avviso: string | null;
       message: string;
       at: number;
     }
@@ -80,6 +103,8 @@ export const PUNTEGGIO_MESSAGES = {
   conflict:
     "Il punteggio di questa partita è cambiato nel frattempo: ricarica la pagina per vedere quello attuale.",
   conflitto: "Un altro admin ha salvato questa partita prima di te.",
+  impatto:
+    "La fase successiva è già generata: scegli se mantenerla o rigenerarla.",
   tenuto: "Hai tenuto il punteggio salvato",
   nonGiocabile:
     "Questa partita non accetta punteggi: la tappa non è in corso o la partita è annullata.",

@@ -100,6 +100,15 @@ export function toLiveMatch(
     home: a,
     away: b,
     sets: partita.sets.map((s) => [s.a, s.b] as const),
+    // BLVS-37: only for a match in progress; never part of `sets`.
+    partial:
+      partita.stato === "in_corso" && partita.parziale
+        ? {
+            home: partita.parziale.a,
+            away: partita.parziale.b,
+            updatedAt: partita.parziale.aggiornatoIl,
+          }
+        : null,
   };
 }
 

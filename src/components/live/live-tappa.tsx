@@ -14,6 +14,11 @@ import type {
   LiveStatus,
 } from "@/lib/live/client/live-connection";
 import {
+  chiaveParziale,
+  chiaveRisultato,
+  INTERVALLO_ANNUNCI_PARZIALE_MS,
+} from "@/lib/live/limita-annunci";
+import {
   annuncioPartita,
   eventoDellaTappa,
   mioLato,
@@ -35,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { LiveAnnouncer } from "./live-announcer";
 import { LiveBarConnected } from "./live-bar";
 import { LiveProvider, useLive } from "./live-provider";
+import { PunteggioParziale } from "./punteggio-parziale";
 import { liveRowAttributes, useLiveRowMotion } from "./use-live-row-motion";
 
 export type LiveTappaProps = {
@@ -48,6 +54,11 @@ export type LiveTappaProps = {
   initialStatus?: LiveStatus;
   /** Overrides the transport (tests). */
   connection?: Partial<LiveConnectionOptions>;
+  /**
+   * BLVS-37: at most one spoken partial per match in this window
+   * (default 30 s); the official result is never held back.
+   */
+  intervalloAnnunciParzialeMs?: number;
 };
 
 /**
@@ -64,6 +75,7 @@ export function LiveTappa({
   connect = true,
   initialStatus,
   connection,
+  intervalloAnnunciParzialeMs = INTERVALLO_ANNUNCI_PARZIALE_MS,
 }: LiveTappaProps) {
   const accept = useCallback(
     (event: LiveEvent) => eventoDellaTappa(event, tappaId),
@@ -84,9 +96,14 @@ export function LiveTappa({
       <div className="flex flex-col gap-stack-lg" data-testid="live-tappa">
         <LiveBarConnected />
         <LiveAnnouncer
-          types={["score", "group-standings"]}
+          types={["score", "group-standings", "phase-started"]}
           filter={accept}
           format={format}
+          limita={{
+            chiave: chiaveParziale,
+            libera: chiaveRisultato,
+            intervalloMs: intervalloAnnunciParzialeMs,
+          }}
         />
         <LiveTappaBody me={me} fasi={fasi} />
       </div>
@@ -217,6 +234,15 @@ function setsLabel(match: LiveMatch) {
     .join(", ");
 }
 
+function teamName(
+  players: readonly LivePlayer[] | undefined,
+  fallback: string,
+) {
+  return players && players.length > 0
+    ? players.map((p) => p.name).join(" e ")
+    : fallback;
+}
+
 function Team({
   players,
   fallback,
@@ -251,8 +277,10 @@ function MatchCard({
   fase: FasiTabelloni[keyof FasiTabelloni];
   mine: boolean;
 }) {
+  const { status, freshAt } = useLive();
   const state = match.state ?? "in_corso";
   const lato = mioLato(match, me);
+  const partial = state === "in_corso" ? match.partial : null;
   return (
     <li
       {...liveRowAttributes(match.id, match)}
@@ -287,7 +315,17 @@ function MatchCard({
           <span className="font-normal">contro</span>{" "}
           <Team players={match.players?.away} fallback={match.away} me={me} />
         </h3>
+        {partial ? (
+          <PunteggioParziale
+            partial={partial}
+            home={teamName(match.players?.home, match.home)}
+            away={teamName(match.players?.away, match.away)}
+            offline={status === "offline" || status === "reconnecting"}
+            freshAt={freshAt}
+          />
+        ) : null}
         <p
+          hidden={!!partial && match.sets.length === 0}
           className="flex flex-wrap gap-x-space-4 font-mono text-2xl font-semibold tabular-nums"
           data-slot="live-punteggio"
         >

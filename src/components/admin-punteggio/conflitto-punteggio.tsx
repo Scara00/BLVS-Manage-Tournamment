@@ -31,6 +31,31 @@ import {
 
 type Passo = "scelta" | "conferma";
 
+/** Wording of the dialog; BLVS-37 reuses it for the partial. */
+export type TestiConflitto = {
+  titolo: string;
+  titoloConferma: string;
+  /** The intro of the choice step, from the saved value. */
+  intro: (salvato: PunteggioUfficiale) => string;
+  /** The confirmation text, from the two values already formatted. */
+  conferma: (salvato: string, mio: string) => string;
+  etichettaSalvato: string;
+  badgeSalvato: string;
+  tieni: string;
+};
+
+const TESTI_PUNTEGGIO: TestiConflitto = {
+  titolo: "Il punteggio è cambiato",
+  titoloConferma: "Sovrascrivere il punteggio ufficiale?",
+  intro: (salvato) =>
+    `${introConflitto(salvato)} Il tuo punteggio non è stato salvato: scegli quale tenere.`,
+  conferma: (salvato, mio) =>
+    `Il punteggio salvato ${salvato} viene sostituito dal tuo ${mio}. Il valore precedente resta nel registro.`,
+  etichettaSalvato: "Salvato",
+  badgeSalvato: "Ufficiale",
+  tieni: "Tieni il salvato",
+};
+
 type ConflittoPunteggioProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -49,6 +74,8 @@ type ConflittoPunteggioProps = {
   finalFocus?: React.ComponentProps<typeof AlertDialogContent>["finalFocus"];
   /** Storybook: start at the overwrite confirmation. */
   defaultPasso?: Passo;
+  /** Overrides the wording (the partial, BLVS-37). */
+  testi?: Partial<TestiConflitto>;
 };
 
 function Cifra({ cifra }: { cifra: CifraConfronto }) {
@@ -72,6 +99,7 @@ function RigaPunteggio({
   id,
   etichetta,
   ufficiale,
+  badge,
   sets,
   lato,
   confronto,
@@ -79,6 +107,7 @@ function RigaPunteggio({
   id: string;
   etichetta: string;
   ufficiale?: boolean;
+  badge?: string;
   sets: SetConflitto[];
   lato: "salvato" | "mio";
   confronto: SetConfronto[];
@@ -103,7 +132,7 @@ function RigaPunteggio({
         className="flex flex-wrap items-center gap-space-2 font-heading font-semibold [overflow-wrap:anywhere]"
       >
         {etichetta}
-        {ufficiale ? <Badge variant="tape">Ufficiale</Badge> : null}
+        {ufficiale ? <Badge variant="tape">{badge}</Badge> : null}
       </h3>
       <p className="font-mono text-xl font-semibold whitespace-nowrap text-primary tabular-nums">
         <span className="sr-only">{leggiSets(sets)}</span>
@@ -140,7 +169,9 @@ export function ConflittoPunteggio({
   pending = false,
   finalFocus,
   defaultPasso = "scelta",
+  testi: testiParziali,
 }: ConflittoPunteggioProps) {
+  const testi = { ...TESTI_PUNTEGGIO, ...testiParziali };
   const salvatoId = useId();
   const mioId = useId();
   const [passo, setPasso] = useState<Passo>(defaultPasso);
@@ -188,14 +219,12 @@ export function ConflittoPunteggio({
       >
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {passo === "scelta"
-              ? "Il punteggio è cambiato"
-              : "Sovrascrivere il punteggio ufficiale?"}
+            {passo === "scelta" ? testi.titolo : testi.titoloConferma}
           </AlertDialogTitle>
           <AlertDialogDescription className="[overflow-wrap:anywhere]">
             {passo === "scelta"
-              ? `${introConflitto(salvato)} Il tuo punteggio non è stato salvato: scegli quale tenere.`
-              : `Il punteggio salvato ${formatSets(salvato.sets)} viene sostituito dal tuo ${formatSets(mio)}. Il valore precedente resta nel registro.`}
+              ? testi.intro(salvato)
+              : testi.conferma(formatSets(salvato.sets), formatSets(mio))}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogBody className="flex flex-col gap-stack-sm">
@@ -207,8 +236,9 @@ export function ConflittoPunteggio({
           <div className="flex flex-col gap-space-3">
             <RigaPunteggio
               id={salvatoId}
-              etichetta="Salvato"
+              etichetta={testi.etichettaSalvato}
               ufficiale
+              badge={testi.badgeSalvato}
               sets={salvato.sets}
               lato="salvato"
               confronto={confronto}
@@ -259,7 +289,7 @@ export function ConflittoPunteggio({
                 className="max-w-full"
                 onClick={onTieniSalvato}
               >
-                Tieni il salvato
+                {testi.tieni}
               </AlertDialogCancel>
             </>
           ) : (

@@ -1,3 +1,5 @@
+import type { FaseGirone } from "@/lib/db/types";
+import { coloreGirone, prossimoNomeGirone } from "@/lib/gironi/fasi/fase";
 import {
   NON_ASSEGNATI,
   type ComposizioneGironi,
@@ -51,18 +53,14 @@ export function nomeDestinazione(
 }
 
 /**
- * The first free «Girone A…Z» name, then «Girone 27», «Girone 28»… Same
- * rule as `aggiungi_girone()` in the DB.
+ * The first free «Girone A…Z» name, then «Girone 27», «Girone 28»… (or
+ * «Gold A…», «Silver A…»). Same rule as `prossimo_nome_girone()` in the DB.
  */
-export function prossimoNomeGirone(gironi: readonly { nome: string }[]) {
-  const usati = new Set(gironi.map((g) => g.nome));
-  for (let i = 0; i < 26; i += 1) {
-    const nome = `Girone ${String.fromCharCode(65 + i)}`;
-    if (!usati.has(nome)) return nome;
-  }
-  for (let n = 27; ; n += 1) {
-    if (!usati.has(`Girone ${n}`)) return `Girone ${n}`;
-  }
+export { prossimoNomeGirone };
+
+/** The phase of a group added without one: the first of the level. */
+export function faseNuovoGirone(composizione: ComposizioneGironi): FaseGirone {
+  return composizione.livello === "gold_silver" ? "gold" : "iniziale";
 }
 
 function senza(lista: GiocatoreGirone[], iscrizioneId: string) {
@@ -175,11 +173,13 @@ export function applicaOperazione(
     case "aggiungi": {
       const posizione =
         Math.max(0, ...composizione.gironi.map((g) => g.posizione)) + 1;
+      const faseGirone = operazione.fase ?? faseNuovoGirone(composizione);
       const girone: GironeEditor = {
         id: nuovoId(),
-        nome: prossimoNomeGirone(composizione.gironi),
+        nome: prossimoNomeGirone(composizione.gironi, faseGirone),
         posizione,
-        fase: composizione.fase,
+        fase: coloreGirone(faseGirone) ?? composizione.fase,
+        faseGirone,
         giocatori: [],
       };
       return {

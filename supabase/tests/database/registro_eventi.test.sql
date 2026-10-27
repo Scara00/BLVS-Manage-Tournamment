@@ -15,7 +15,7 @@ select enum_has_labels(
   array[
     'inserimento_punteggio', 'correzione_punteggio', 'annullamento_punteggio',
     'ritiro', 'assenza', 'parita_risolta', 'rigenerazione_gironi',
-    'cambio_categoria', 'chiusura_tabellone'
+    'cambio_categoria', 'chiusura_tabellone', 'punteggio_parziale'
   ],
   'tutti i tipi di evento richiesti'
 );

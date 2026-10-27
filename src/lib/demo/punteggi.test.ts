@@ -36,6 +36,8 @@ describe("salvataggio e annullamento", () => {
       status: "ok",
       versione: 2,
       tipo: "inserimento",
+      scelta: null,
+      punteggiPersi: 0,
     });
     expect(partita()).toMatchObject({
       stato: "conclusa",
@@ -46,6 +48,8 @@ describe("salvataggio e annullamento", () => {
       status: "ok",
       versione: 3,
       tipo: "correzione",
+      scelta: null,
+      punteggiPersi: 0,
     });
   });
 

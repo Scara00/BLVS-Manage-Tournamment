@@ -1,3 +1,5 @@
+import type { ImpattoFase } from "@/lib/punteggi/correzione/types";
+import type { SalvaParzialeAction } from "@/lib/punteggi/parziale";
 import type {
   AnnullaPunteggioAction,
   SalvaPunteggioAction,
@@ -78,11 +80,25 @@ export const nonGiocabile: SchedaPunteggio = {
   partita: daInserire.partita,
 };
 
+/** BLVS-37: a match in progress with a partial already sent. */
+export const inCorso: SchedaPunteggio = {
+  tappa,
+  partita: partita(2, [RINALDI, CONTI], [MORETTI, GALLO], {
+    stato: "in_corso",
+    parziale: {
+      a: 14,
+      b: 11,
+      versione: 3,
+      aggiornatoIl: "2027-06-12T08:42:00.000Z",
+    },
+  }),
+};
+
 export const elenco: ElencoPunteggi = {
   tappa,
   partite: [
     giaSalvata.partita,
-    partita(2, [RINALDI, CONTI], [MORETTI, GALLO]),
+    inCorso.partita,
     partita(3, [RINALDI, GALLO], [MORETTI, CONTI]),
     {
       ...partita(
@@ -119,4 +135,134 @@ export const salvaInCorso: SalvaPunteggioAction = () => new Promise(() => {});
 export const annullaFinto: AnnullaPunteggioAction = async () => ({
   status: "success",
   message: "Salvataggio annullato: il punteggio è tornato com'era.",
+});
+
+/** BLVS-41: a finished group, to correct its first match. */
+const gironeConcluso: PartitaPunteggio[] = [
+  { ...giaSalvata.partita, sets: [{ a: 21, b: 18 }] },
+  partita(2, [RINALDI, CONTI], [MORETTI, GALLO], {
+    stato: "conclusa",
+    sets: [{ a: 21, b: 15 }],
+    versione: 2,
+  }),
+  partita(3, [RINALDI, GALLO], [MORETTI, CONTI], {
+    stato: "conclusa",
+    sets: [{ a: 17, b: 21 }],
+    versione: 2,
+  }),
+];
+
+export const correzione: SchedaPunteggio = {
+  tappa,
+  partita: gironeConcluso[0],
+  girone: gironeConcluso,
+};
+
+/** w-admin-impatto-fase: two finals, one already scored. */
+export const impattoFase: ImpattoFase = {
+  punteggiPersi: 1,
+  partite: [
+    {
+      id: "jesolo-M-finale-1",
+      fase: "finale",
+      turno: 1,
+      stato: "conclusa",
+      sets: [{ a: 21, b: 19 }],
+      squadre: {
+        a: ["Luca Rinaldi", "Paolo Conti"],
+        b: ["Marco Moretti", "Andrea Gallo"],
+      },
+    },
+    {
+      id: "jesolo-M-finale-2",
+      fase: "finale",
+      turno: 2,
+      stato: "programmata",
+      sets: [],
+      squadre: {
+        a: ["Sara Ricci", "Elena Costa"],
+        b: ["Marta Greco", "Laura Fontana"],
+      },
+    },
+  ],
+};
+
+/**
+ * Like `correggi_punteggio`: with no choice it answers «impatto»;
+ * «Rigenera» needs the tick; then the correction is saved.
+ */
+export const salvaConImpatto: SalvaPunteggioAction = async (prev, formData) => {
+  const at = prev.status === "idle" ? 1 : prev.at + 1;
+  const mio = {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  };
+  const scelta = formData.get("scelta");
+  const versione = Number(formData.get("versione"));
+  if (!scelta || (scelta === "rigenera" && formData.get("conferma") !== "on")) {
+    return {
+      status: "impatto",
+      impatto: impattoFase,
+      mio,
+      versione,
+      erroreConferma: scelta
+        ? "Spunta la casella per confermare che perdi 1 punteggio."
+        : null,
+      avviso: null,
+      message:
+        "La fase successiva è già generata: scegli se mantenerla o rigenerarla.",
+      at,
+    };
+  }
+  return {
+    status: "success",
+    partitaId: String(formData.get("partitaId")),
+    versione: versione + 1,
+    punteggio: mio,
+    tipo: "correzione",
+    scelta: scelta === "rigenera" ? "rigenera" : "mantieni",
+    punteggiPersi: scelta === "rigenera" ? 1 : 0,
+    message: "Punteggio corretto",
+    at,
+  };
+};
+
+/** The request never reaches the server (network state). */
+export const salvaSenzaRete: SalvaPunteggioAction = async () => {
+  throw new TypeError("Failed to fetch");
+};
+
+export const inviaParzialeFinto: SalvaParzialeAction = async (
+  prev,
+  formData,
+) => ({
+  status: "success",
+  versione: Number(formData.get("versione")) + 1,
+  punti: {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  },
+  message: "Parziale inviato ai giocatori",
+  at: prev.status === "idle" ? 1 : prev.at + 1,
+});
+
+/** Another admin sent 15-11 meanwhile: the conflict dialog (BLVS-34). */
+export const inviaParzialeConflitto: SalvaParzialeAction = async (
+  prev,
+  formData,
+) => ({
+  status: "conflict",
+  salvato: {
+    versione: 4,
+    sets: [{ a: 15, b: 11 }],
+    autore: "Giulia Neri",
+    salvatoIl: "2027-06-12T08:43:00.000Z",
+  },
+  mio: {
+    a: Number(formData.get("puntiA")),
+    b: Number(formData.get("puntiB")),
+  },
+  message:
+    "Un altro admin ha inviato un parziale di questa partita prima di te.",
+  at: prev.status === "idle" ? 1 : prev.at + 1,
 });

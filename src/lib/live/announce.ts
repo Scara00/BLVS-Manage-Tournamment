@@ -1,4 +1,5 @@
 import { partiteDaInserireLabel } from "@/lib/admin/tappe";
+import { annuncioFase } from "@/lib/gironi/fasi/fase";
 import type { LiveStatus } from "./client/live-connection";
 import { formatLiveTime } from "./format";
 import type { LiveEvent } from "./types";
@@ -10,6 +11,10 @@ import type { LiveEvent } from "./types";
 export function announcementFor(event: LiveEvent): string {
   switch (event.type) {
     case "score": {
+      const { partial } = event.match;
+      if ((event.match.state ?? "in_corso") === "in_corso" && partial) {
+        return `${event.match.groupLabel}: parziale ${partial.home}-${partial.away}`;
+      }
       const last = event.match.sets.at(-1);
       const result = last ? ` ${last[0]}-${last[1]}` : "";
       return `${event.match.groupLabel}: nuovo risultato${result}`;
@@ -21,9 +26,8 @@ export function announcementFor(event: LiveEvent): string {
     case "pending-scores":
       return `${event.stage.label}: ${partiteDaInserireLabel(event.stage.count)}`;
     case "phase-started": {
-      const { label, matches } = event.phase;
-      const partite = matches === 1 ? "1 partita" : `${matches} partite`;
-      return `${label}: iniziati i gironi, ${partite} da giocare`;
+      const { label, matches, phase } = event.phase;
+      return `${label}: ${annuncioFase(phase, matches)}`;
     }
     case "board-matches":
       return `${event.board.label}: ${event.board.change ?? "partite aggiornate"}`;

@@ -1,6 +1,11 @@
 "use client";
 
-import { AlertCircleIcon, ArrowLeftIcon, WifiOffIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ArrowLeftIcon,
+  PencilLineIcon,
+  WifiOffIcon,
+} from "lucide-react";
 import Link from "next/link";
 import {
   startTransition,
@@ -9,6 +14,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 import { useLive } from "@/components/live";
 import { Tape } from "@/components/scoreboard";
@@ -16,6 +22,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useOnline } from "@/hooks/use-online";
 import { CATEGORIE } from "@/lib/db/types";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
+import { punteggioPath } from "@/lib/punteggi/paths";
 import {
   avvioFasePath,
   CATEGORIA_NOME,
@@ -24,7 +31,9 @@ import {
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import {
   avanzamentoFase,
+  descriviPartita,
   faseCorrente,
+  partiteFaseGioco,
   FASE_GIOCO_LABEL,
   FASE_PARTITA_LABEL,
   isDaInserire,
@@ -57,6 +66,11 @@ type AdminLiveProps = {
   /** Storybook/axe: force offline, starting outcome. */
   offline?: boolean;
   initialState?: AzionePartitaState;
+  /**
+   * Extra content per group id, under the group's name (BLVS-38: the
+   * «Parità da risolvere» signal and its dialog).
+   */
+  extraGironi?: Readonly<Record<string, ReactNode>>;
 };
 
 const OFFLINE_ID = "admin-live-offline";
@@ -146,6 +160,7 @@ export function AdminLive({
   punteggio,
   offline: forceOffline,
   initialState = initialAzionePartitaState,
+  extraGironi,
 }: AdminLiveProps) {
   const online = useOnline(
     forceOffline === undefined ? undefined : !forceOffline,
@@ -209,7 +224,12 @@ export function AdminLive({
   }
 
   const fase = faseCorrente(partite);
-  const avanzamento = avanzamentoFase(partite, fase, adesso);
+  // Progress of the current game phase only (BLVS-39).
+  const avanzamento = avanzamentoFase(
+    partiteFaseGioco(partite, view.faseGioco),
+    fase,
+    adesso,
+  );
   const inCorso = partiteInCorso(partite);
   const fasi = raggruppaPartite(partite);
   const disabled = !online;
@@ -236,17 +256,33 @@ export function AdminLive({
           inAttesa: pending ? inAttesa : null,
           disabled,
           describedBy: disabled ? OFFLINE_ID : undefined,
-          punteggio: (
-            <PunteggioDialog
-              partita={partita}
-              tappaId={view.tappa.id}
-              categoria={view.categoria}
-              action={punteggio}
-              disabled={disabled}
-              describedBy={disabled ? OFFLINE_ID : undefined}
-              onEsito={onEsitoDialog}
-            />
-          ),
+          // BLVS-41: a saved group score is corrected on w-admin-correzione
+          // (one set to 21, «Cosa cambia», impact on the next phase).
+          punteggio:
+            partita.stato === "conclusa" && partita.fase === "gironi" ? (
+              <Link
+                href={punteggioPath(view.tappa.id, partita.id)}
+                aria-label={`Correggi punteggio: ${descriviPartita(partita)}`}
+                className={buttonVariants({
+                  variant: "secondary",
+                  size: "campo",
+                  className: "max-w-full",
+                })}
+              >
+                <PencilLineIcon aria-hidden />
+                Correggi punteggio
+              </Link>
+            ) : (
+              <PunteggioDialog
+                partita={partita}
+                tappaId={view.tappa.id}
+                categoria={view.categoria}
+                action={punteggio}
+                disabled={disabled}
+                describedBy={disabled ? OFFLINE_ID : undefined}
+                onEsito={onEsitoDialog}
+              />
+            ),
         }}
       />
     );
@@ -271,7 +307,7 @@ export function AdminLive({
       <AvanzamentoFase
         avanzamento={avanzamento}
         faseLabel={
-          fase === "gironi" && view.faseGioco
+          view.faseGioco && (fase === "gironi" || fase === "finale")
             ? FASE_GIOCO_LABEL[view.faseGioco]
             : fase
               ? FASE_PARTITA_LABEL[fase]
@@ -369,6 +405,7 @@ export function AdminLive({
                       <Tape size={4} className="max-w-16" />
                     </div>
                   ) : null}
+                  {g.id ? extraGironi?.[g.id] : null}
                   <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-stack">
                     {g.partite.map((p) => (
                       <li key={p.id}>{voce(p)}</li>

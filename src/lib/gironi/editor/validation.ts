@@ -20,7 +20,10 @@ function operazione(v: unknown): OperazioneGironi | null {
         ? { tipo: "scambia", a: o.a, b: o.b }
         : null;
     case "aggiungi":
-      return { tipo: "aggiungi" };
+      if (o.fase === undefined) return { tipo: "aggiungi" };
+      return o.fase === "iniziale" || o.fase === "gold" || o.fase === "silver"
+        ? { tipo: "aggiungi", fase: o.fase }
+        : null;
     case "elimina":
       return testo(o.gironeId) && o.gironeId !== NON_ASSEGNATI
         ? { tipo: "elimina", gironeId: o.gironeId }

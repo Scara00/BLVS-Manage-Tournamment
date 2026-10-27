@@ -39,9 +39,30 @@ export type StatoPartita = (typeof STATI_PARTITA)[number];
 export const FASI_TABELLONE = ["gold", "silver"] as const;
 export type FaseTabellone = (typeof FASI_TABELLONE)[number];
 
-/** Game phase of a board, started by the admin (BLVS-29). */
-export const FASI_GIOCO = ["gironi_iniziali"] as const;
+/**
+ * Game phase of a board, in order: started by the admin (BLVS-29), then
+ * the gold/silver groups and the finals (BLVS-39). Mirror of the CHECK
+ * `tabelloni_fase_gioco`.
+ */
+export const FASI_GIOCO = [
+  "gironi_iniziali",
+  "gironi_gold_silver",
+  "finali",
+] as const;
 export type FaseGioco = (typeof FASI_GIOCO)[number];
+
+/**
+ * Phase of one group (`gironi.fase`, BLVS-39): the initial groups, the
+ * gold and silver groups, and the two final groups.
+ */
+export const FASI_GIRONE = [
+  "iniziale",
+  "gold",
+  "silver",
+  "finale_gold",
+  "finale_silver",
+] as const;
+export type FaseGirone = (typeof FASI_GIRONE)[number];
 
 export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
 export type FasePartita = (typeof FASI_PARTITA)[number];

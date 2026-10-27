@@ -8,16 +8,26 @@ import {
   type ClassificaGirone,
 } from "@/lib/gironi/classifica";
 import type { PunteggioUfficiale } from "@/lib/punteggi/conflitto/rileva";
+import type {
+  ImpattoFase,
+  PartitaFaseSuccessiva,
+  SceltaImpatto,
+} from "@/lib/punteggi/correzione/types";
 import { FINESTRA_ANNULLAMENTO_SECONDI } from "@/lib/punteggi/regola";
-import type { ElencoPunteggi, PartitaPunteggio } from "@/lib/punteggi/types";
+import type {
+  ElencoPunteggi,
+  ParzialePartita,
+  PartitaPunteggio,
+} from "@/lib/punteggi/types";
 import { codiceErrore, type CodiceErrore } from "@/lib/punteggi/validazione";
 import { partiteGirone } from "@/lib/tappe/avvio/regole";
 import {
   avviaFaseDemo,
   creaDemoAvvioFase,
-  getDemoAvvioFase,
+  getDemoGironiGiocati,
 } from "./avvio-fase";
 import { getDemoTappaGestione } from "./gestione-tappe";
+import { getDemoDecisioni } from "./spareggi";
 
 /**
  * Scores of the demo group matches when Supabase is not configured (CI,
@@ -37,6 +47,10 @@ type Salvataggio = { prima: StatoDemo; versione: number; at: number };
 type Store = {
   punteggi: Map<string, StatoDemo>;
   ultimi: Map<string, Salvataggio | "annullato">;
+  /** BLVS-41: next-phase matches per board (`<tappa>:<M|F>`). */
+  successive: Map<string, PartitaFaseSuccessiva[]>;
+  /** BLVS-37: the partial of a match in progress, like `punteggi_parziali`. */
+  parziali: Map<string, ParzialePartita>;
 };
 
 const STORE_KEY = Symbol.for("blvs.demo.punteggi");
@@ -51,12 +65,23 @@ function seed(): Store {
       ],
     ]),
     ultimi: new Map(),
+    successive: new Map(),
+    parziali: new Map(),
   };
 }
 
 function store(): Store {
   const g = globalThis as unknown as Record<symbol, Store | undefined>;
-  return (g[STORE_KEY] ??= seed());
+  const s = (g[STORE_KEY] ??= seed());
+  // A store created by an older server instance (hot reload) lacks them.
+  s.successive ??= new Map();
+  s.parziali ??= new Map();
+  return s;
+}
+
+function parzialeDi(id: string, stato: StatoPartita): ParzialePartita | null {
+  const p = stato === "in_corso" ? store().parziali.get(id) : undefined;
+  return p ? { ...p } : null;
 }
 
 function statoDi(id: string): StatoDemo {
@@ -76,9 +101,7 @@ export function getDemoPunteggi(tappaId: string): ElencoPunteggi | null {
   if (!tappa) return null;
   const partite: PartitaPunteggio[] = [];
   for (const categoria of CATEGORIE) {
-    const board = getDemoAvvioFase(tappaId, categoria);
-    if (!board || board.faseGioco === null) continue;
-    for (const girone of board.gironi) {
+    for (const girone of getDemoGironiGiocati(tappaId, categoria)) {
       for (const p of partiteGirone(girone)) {
         const id = `${girone.id}-t${p.turno}`;
         const giocatore = (g: (typeof p.squadraA)[number]) => ({
@@ -86,6 +109,7 @@ export function getDemoPunteggi(tappaId: string): ElencoPunteggi | null {
           nome: g.nome,
           cognome: g.cognome,
         });
+        const stato = statoDi(id);
         partite.push({
           id,
           categoria,
@@ -93,7 +117,8 @@ export function getDemoPunteggi(tappaId: string): ElencoPunteggi | null {
           gironeNome: girone.nome,
           turno: p.turno,
           campo: null,
-          ...statoDi(id),
+          ...stato,
+          parziale: parzialeDi(id, stato.stato),
           squadre: {
             a: p.squadraA.map(giocatore),
             b: p.squadraB.map(giocatore),
@@ -109,21 +134,92 @@ export function getDemoPunteggi(tappaId: string): ElencoPunteggi | null {
 }
 
 export type DemoSalvaEsito =
-  | { status: "ok"; versione: number; tipo: "inserimento" | "correzione" }
+  | {
+      status: "ok";
+      versione: number;
+      tipo: "inserimento" | "correzione";
+      scelta: SceltaImpatto | null;
+      punteggiPersi: number;
+    }
   | { status: "nonValido"; codice: CodiceErrore }
+  | {
+      status: "impatto" | "confermaRichiesta" | "impattoCambiato";
+      impatto: ImpattoFase;
+    }
   | { status: "versioneSuperata" | "nonGiocabile" | "nonTrovata" };
 
-/** Same rules and effects as `salva_punteggio`. */
+export type DemoOpzioniImpatto = {
+  scelta?: SceltaImpatto | null;
+  conferma?: boolean;
+  attesi?: number | null;
+};
+
+function chiaveBoard(tappaId: string, categoria: string) {
+  return `${tappaId}:${categoria}`;
+}
+
+function impattoDi(partite: readonly PartitaFaseSuccessiva[]): ImpattoFase {
+  return {
+    partite: partite.map((p) => ({
+      ...p,
+      sets: p.sets.map((x) => ({ ...x })),
+    })),
+    punteggiPersi: partite.filter((p) => p.sets.length > 0).length,
+  };
+}
+
+/**
+ * The next phase a correction of `partitaId` would affect, like
+ * `fase_successiva_correzione`; null when the board has none.
+ */
+export function faseSuccessivaDemo(
+  tappaId: string,
+  partitaId: string,
+): ImpattoFase | null {
+  const partita = getDemoPunteggi(tappaId)?.partite.find(
+    (p) => p.id === partitaId,
+  );
+  if (!partita) return null;
+  const partite = store().successive.get(
+    chiaveBoard(tappaId, partita.categoria),
+  );
+  return partite && partite.length > 0 ? impattoDi(partite) : null;
+}
+
+/** e2e/Storybook: sets the next phase of a demo board. */
+export function impostaFaseSuccessivaDemo(
+  tappaId: string,
+  categoria: string,
+  partite: PartitaFaseSuccessiva[],
+) {
+  store().successive.set(chiaveBoard(tappaId, categoria), partite);
+}
+
+/**
+ * Same rules and effects as `correggi_punteggio`, which wraps
+ * `salva_punteggio`: with a next phase the save waits for a choice.
+ */
 export function salvaPunteggioDemo(
   tappaId: string,
   partitaId: string,
   versione: number,
   punti: SetPunteggio,
   at: number,
+  { scelta = null, conferma = false, attesi = null }: DemoOpzioniImpatto = {},
 ): DemoSalvaEsito {
   const elenco = getDemoPunteggi(tappaId);
   const partita = elenco?.partite.find((p) => p.id === partitaId);
   if (!elenco || !partita) return { status: "nonTrovata" };
+  const impatto = faseSuccessivaDemo(tappaId, partitaId);
+  if (impatto) {
+    if (!scelta) return { status: "impatto", impatto };
+    if (attesi !== impatto.punteggiPersi) {
+      return { status: "impattoCambiato", impatto };
+    }
+    if (scelta === "rigenera" && impatto.punteggiPersi > 0 && !conferma) {
+      return { status: "confermaRichiesta", impatto };
+    }
+  }
   if (elenco.tappa.stato !== "in_corso" || partita.stato === "annullata") {
     return { status: "nonGiocabile" };
   }
@@ -140,10 +236,19 @@ export function salvaPunteggioDemo(
   };
   store().punteggi.set(partitaId, dopo);
   store().ultimi.set(partitaId, { prima, versione: dopo.versione, at });
+  // «Rigenera»: the next phase goes; BLVS-39's generator is not in the
+  // demo yet, so it stays empty until it is generated again.
+  if (impatto && scelta === "rigenera") {
+    store().successive.delete(chiaveBoard(tappaId, partita.categoria));
+  }
+  // Like the `partite_cancella_parziale` trigger: the match left in_corso.
+  store().parziali.delete(partitaId);
   return {
     status: "ok",
     versione: dopo.versione,
     tipo: correzione ? "correzione" : "inserimento",
+    scelta: impatto ? scelta : null,
+    punteggiPersi: impatto && scelta === "rigenera" ? impatto.punteggiPersi : 0,
   };
 }
 
@@ -233,7 +338,72 @@ export function classificaDemo(
       },
       sets: p.sets,
     })),
+    { decisioni: getDemoDecisioni(gironeId) },
   );
+}
+
+export type DemoParzialeEsito =
+  | { status: "ok"; versione: number; aggiornatoIl: string }
+  | { status: "versioneSuperata" | "nonInCorso" | "nonValido" | "nonTrovata" };
+
+/** Same rules and effects as `salva_parziale` (BLVS-37). */
+export function salvaParzialeDemo(
+  tappaId: string,
+  partitaId: string,
+  versione: number,
+  punti: SetPunteggio,
+  at: number,
+): DemoParzialeEsito {
+  const elenco = getDemoPunteggi(tappaId);
+  const partita = elenco?.partite.find((p) => p.id === partitaId);
+  if (!elenco || !partita) return { status: "nonTrovata" };
+  if (elenco.tappa.stato !== "in_corso" || partita.stato !== "in_corso") {
+    return { status: "nonInCorso" };
+  }
+  const valido = (n: number) => Number.isInteger(n) && n >= 0 && n <= 99;
+  if (!valido(punti.a) || !valido(punti.b)) return { status: "nonValido" };
+  if ((partita.parziale?.versione ?? 0) !== versione) {
+    return { status: "versioneSuperata" };
+  }
+  const aggiornatoIl = new Date(at).toISOString();
+  store().parziali.set(partitaId, {
+    a: punti.a,
+    b: punti.b,
+    versione: versione + 1,
+    aggiornatoIl,
+  });
+  return { status: "ok", versione: versione + 1, aggiornatoIl };
+}
+
+/** The current partial of a demo match, like `parziale_attuale`. */
+export function parzialeAttualeDemo(
+  tappaId: string,
+  partitaId: string,
+): ParzialePartita | null | undefined {
+  const partita = getDemoPunteggi(tappaId)?.partite.find(
+    (p) => p.id === partitaId,
+  );
+  return partita ? (partita.parziale ?? null) : undefined;
+}
+
+/** BLVS-31's «Inizia» on a demo match: it goes `in_corso`. */
+export function iniziaPartitaDemo(partitaId: string) {
+  const prima = statoDi(partitaId);
+  if (prima.stato !== "programmata") return;
+  store().punteggi.set(partitaId, { ...prima, stato: "in_corso" });
+}
+
+/**
+ * Sets the score of a demo match directly, concluded (BLVS-39 e2e
+ * fixtures). The real path is `salvaPunteggioDemo`.
+ */
+export function impostaPunteggioDemo(partitaId: string, set: SetPunteggio) {
+  const prima = statoDi(partitaId);
+  store().punteggi.set(partitaId, {
+    sets: [{ ...set }],
+    stato: "conclusa",
+    versione: prima.versione + 1,
+  });
 }
 
 /**
@@ -244,4 +414,57 @@ export function creaDemoPunteggi(): string {
   const id = creaDemoAvvioFase("pronta");
   avviaFaseDemo(id, "M");
   return id;
+}
+
+/**
+ * BLVS-41's e2e stage: the men's board with every group match concluded
+ * and a next phase of two finals, `punteggi` of them (0–2) already scored.
+ * Only reachable through `POST /api/demo/correzione-punteggio`.
+ */
+export function creaDemoCorrezione(punteggi = 1): string {
+  const id = creaDemoPunteggi();
+  const elenco = getDemoPunteggi(id);
+  if (!elenco) return id;
+  const risultati: SetPunteggio[] = [
+    { a: 21, b: 18 },
+    { a: 21, b: 15 },
+    { a: 17, b: 21 },
+  ];
+  for (const p of elenco.partite) {
+    const set = risultati[(p.turno - 1) % risultati.length];
+    store().punteggi.set(p.id, {
+      sets: [{ ...set }],
+      stato: "conclusa",
+      versione: 2,
+    });
+  }
+  const nome = (g: { nome: string; cognome: string }) =>
+    `${g.nome} ${g.cognome}`.trim();
+  const finali = elenco.partite
+    .filter((p) => p.categoria === "M" && p.turno === 1)
+    .slice(0, 2)
+    .map((p, i): PartitaFaseSuccessiva => ({
+      id: `${id}-M-finale-${i + 1}`,
+      fase: "finale",
+      turno: i + 1,
+      stato: i < punteggi ? "conclusa" : "programmata",
+      sets: i < punteggi ? [{ a: 21, b: 19 }] : [],
+      squadre: {
+        a: p.squadre.a.map(nome),
+        b: p.squadre.b.map(nome),
+      },
+    }));
+  impostaFaseSuccessivaDemo(id, "M", finali);
+  return id;
+}
+
+/**
+ * The same stage with its first match (men's Girone A, round 1, with the
+ * demo player) already started, so it accepts a partial (BLVS-37).
+ */
+export function creaDemoPartitaInCorso(): { id: string; partitaId: string } {
+  const id = creaDemoPunteggi();
+  const partitaId = getDemoPunteggi(id)!.partite[0].id;
+  iniziaPartitaDemo(partitaId);
+  return { id, partitaId };
 }

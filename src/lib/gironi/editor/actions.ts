@@ -54,7 +54,10 @@ function chiamaRpc(
         p_b: op.b,
       });
     case "aggiungi":
-      return supabase.rpc("aggiungi_girone", base);
+      return supabase.rpc(
+        "aggiungi_girone",
+        op.fase ? { ...base, p_fase: op.fase } : base,
+      );
     case "elimina":
       return supabase.rpc("elimina_girone", { ...base, p_girone: op.gironeId });
   }

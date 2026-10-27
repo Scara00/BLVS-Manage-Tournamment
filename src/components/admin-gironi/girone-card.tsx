@@ -171,7 +171,13 @@ function EliminaGirone({
         variant="secondary"
         className="max-w-full"
         onClick={() => setOpen(true)}
-        aria-label={`Elimina ${girone.nome}`}
+        // The visible «Elimina girone» stays in the name (gold/silver groups
+        // are called «Gold A», «Silver A»: BLVS-39).
+        aria-label={
+          girone.nome.startsWith("Girone")
+            ? `Elimina ${girone.nome}`
+            : `Elimina girone ${girone.nome}`
+        }
       >
         <Trash2Icon aria-hidden />
         Elimina girone
@@ -218,6 +224,7 @@ function Riquadro({
   avviso,
   children,
   piede,
+  extra,
   testId,
   scuro,
 }: {
@@ -228,6 +235,8 @@ function Riquadro({
   avviso?: string | null;
   children: ReactNode;
   piede?: ReactNode;
+  /** Below the players, above the footer (e.g. a tie to decide). */
+  extra?: ReactNode;
   testId: string;
   scuro: boolean;
 }) {
@@ -274,6 +283,9 @@ function Riquadro({
         </p>
       ) : null}
       {children}
+      {extra ? (
+        <div className="border-t-2 border-primary p-space-3">{extra}</div>
+      ) : null}
       {piede ? (
         <div className="border-t border-neutral-200 p-space-2">{piede}</div>
       ) : null}
@@ -299,10 +311,12 @@ export function GironeCard({
   girone,
   drag,
   onElimina,
+  extra,
 }: {
   girone: GironeEditor;
   drag: DragHandlers;
   onElimina: () => void;
+  extra?: ReactNode;
 }) {
   const { dimensione } = REGOLA_GIRONI;
   const n = girone.giocatori.length;
@@ -324,6 +338,7 @@ export function GironeCard({
         </>
       }
       avviso={statoMisura(n, dimensione)}
+      extra={extra}
       piede={
         drag.modificabile ? (
           <EliminaGirone girone={girone} onElimina={onElimina} />
