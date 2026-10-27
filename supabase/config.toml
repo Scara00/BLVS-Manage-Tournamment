@@ -177,7 +177,8 @@ enable_manual_linking = false
 minimum_password_length = 10
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
-password_requirements = ""
+# BLVS-14: same rules as src/lib/auth/password-policy.ts (set them on the hosted project too).
+password_requirements = "letters_digits"
 
 # Configure passkey sign-ins.
 # [auth.passkey]
@@ -222,10 +223,12 @@ enable_confirmations = false
 # If enabled, users will need to reauthenticate or have logged in recently to change their password.
 secure_password_change = false
 # Controls the minimum amount of time that must pass before sending another signup confirmation or password reset email.
-max_frequency = "1s"
+# BLVS-14: 60s, like the «Invia di nuovo» countdown (RESEND_COOLDOWN_SECONDS). Set it on the hosted project too.
+max_frequency = "60s"
 # Number of characters used in the email OTP.
 otp_length = 6
 # Number of seconds before the email OTP expires (defaults to 1 hour).
+# BLVS-14: the reset link is valid 60 minutes (RESET_LINK_VALIDITY_MINUTES).
 otp_expiry = 3600
 
 # Use a production-ready SMTP server
