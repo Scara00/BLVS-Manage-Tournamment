@@ -148,7 +148,7 @@ export function GestioneTappa({
         ) : null}
       </Sezione>
 
-      <TabelloniRiepilogo tabelloni={tappa.tabelloni} />
+      <TabelloniRiepilogo tappaId={tappa.id} tabelloni={tappa.tabelloni} />
 
       <AvvioFaseLinks
         tappaId={tappa.id}

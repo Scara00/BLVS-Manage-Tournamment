@@ -101,6 +101,8 @@ export type Tabellone = {
   /** Started game phase (BLVS-29, `avvia_fase`); null until it starts. */
   fase_gioco: FaseGioco | null;
   fase_avviata_il: string | null;
+  /** Version of its groups: +1 on every change saved by the editor (BLVS-28). */
+  versione_gironi: number;
 };
 
 export type Iscrizione = {
