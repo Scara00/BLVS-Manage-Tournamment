@@ -54,7 +54,7 @@ function ModificaSquadra({
           </label>
         </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="secondary" />}>
             Annulla
           </DialogClose>
           <DialogAction>Salva</DialogAction>

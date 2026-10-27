@@ -55,28 +55,72 @@ export const demoStandings: readonly DemoStanding[] = [
   },
 ];
 
-export type DemoMatch = {
+export type DemoGroupMatch = {
   id: string;
   court: string;
+  groupId: string;
   home: string;
   away: string;
-  score: string;
+  sets: readonly (readonly [number, number])[];
 };
 
-export const demoLiveMatches: readonly DemoMatch[] = [
+export type DemoGroup = {
+  id: string;
+  label: string;
+  rows: readonly {
+    position: number;
+    pair: string;
+    played: number;
+    won: number;
+    points: number;
+  }[];
+};
+
+/** Pool-phase groups of the stage in progress (Tappa 1 · Jesolo). */
+export const demoGroups: readonly DemoGroup[] = [
+  {
+    id: "a",
+    label: "Girone A",
+    rows: [
+      { position: 1, pair: "Rossi / Bianchi", played: 2, won: 2, points: 6 },
+      { position: 2, pair: "Marino / Greco", played: 2, won: 1, points: 3 },
+      { position: 3, pair: "Ferrari / Costa", played: 2, won: 0, points: 0 },
+    ],
+  },
+  {
+    id: "b",
+    label: "Girone B",
+    rows: [
+      { position: 1, pair: "Esposito / Romano", played: 2, won: 2, points: 6 },
+      { position: 2, pair: "Colombo / Ricci", played: 2, won: 1, points: 3 },
+      { position: 3, pair: "Fontana / Moretti", played: 2, won: 0, points: 0 },
+    ],
+  },
+];
+
+/** Matches being played right now, with their sets so far. */
+export const demoLiveMatches: readonly DemoGroupMatch[] = [
   {
     id: "m1",
     court: "Campo 1",
+    groupId: "a",
     home: "Rossi / Bianchi",
     away: "Marino / Greco",
-    score: "21–18 · 12–9",
+    sets: [
+      [21, 18],
+      [12, 9],
+    ],
   },
   {
     id: "m2",
     court: "Campo 2",
+    groupId: "b",
     home: "Esposito / Romano",
     away: "Colombo / Ricci",
-    score: "17–21 · 4–2",
+    sets: [
+      [17, 21],
+      [4, 2],
+    ],
   },
 ];
 

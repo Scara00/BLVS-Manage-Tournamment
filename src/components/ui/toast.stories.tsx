@@ -37,7 +37,7 @@ function Demo({ persistent = true }: { persistent?: boolean }) {
     <div className="flex flex-wrap gap-space-2">
       <Button onClick={() => elimina()}>Elimina squadra</Button>
       <Button
-        variant="outline"
+        variant="secondary"
         onClick={() =>
           toast.add({
             title: "Risultato salvato",

@@ -30,12 +30,13 @@ export default defineConfig({
   projects: [
     {
       name: "mobile-390",
-      testIgnore: /storybook/,
+      // e2e/supabase needs `supabase start`: playwright.supabase.config.ts.
+      testIgnore: [/storybook/, /supabase\//],
       use: mobile390,
     },
     {
       name: "desktop-1440",
-      testIgnore: /storybook/,
+      testIgnore: [/storybook/, /supabase\//],
       use: desktop1440,
     },
     {
@@ -52,7 +53,14 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
       // HTTPS is enforced only on staging/production; e2e runs on http://localhost.
-      env: { TZ: "Europe/Rome", ENFORCE_HTTPS: "false" },
+      // ERROR_PREVIEWS: the /anteprima/* routes that trigger 403 and 503.
+      // LIVE_DEMO_PUBLISH opens POST /api/live/publish so e2e can "save" a result.
+      env: {
+        TZ: "Europe/Rome",
+        ENFORCE_HTTPS: "false",
+        ERROR_PREVIEWS: "true",
+        LIVE_DEMO_PUBLISH: "true",
+      },
     },
     {
       // CI downloads the storybook-static artifact and sets STORYBOOK_PREBUILT.

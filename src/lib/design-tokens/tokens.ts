@@ -350,4 +350,22 @@ export const contrastPairs: readonly ContrastPair[] = [
     bg: color.background,
     kind: "graphic",
   },
+  {
+    name: "Riga live aggiornata: testo su tape tenue",
+    fg: color.foreground,
+    bg: color.tapeSoft,
+    kind: "text",
+  },
+  {
+    name: "Riga live aggiornata: testo secondario su tape tenue",
+    fg: color.mutedForeground,
+    bg: color.tapeSoft,
+    kind: "text",
+  },
+  {
+    name: "LiveBar: dati non aggiornati",
+    fg: color.warning.fg,
+    bg: color.warning.bg,
+    kind: "score",
+  },
 ];

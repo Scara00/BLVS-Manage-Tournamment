@@ -23,3 +23,11 @@ export function getSupabaseEnv(): SupabaseEnv {
 
   return env;
 }
+
+/**
+ * Server-only secret key (`sb_secret_…`), used for the few operations no
+ * user may perform, such as the auth rate-limit counter. `null` when unset.
+ */
+export function readSupabaseSecretKey(): string | null {
+  return process.env.SUPABASE_SECRET_KEY || null;
+}

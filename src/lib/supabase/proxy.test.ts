@@ -84,4 +84,46 @@ describe("updateSession", () => {
     await updateSession(new NextRequest("http://localhost/"));
     expect(error).toHaveBeenCalledOnce();
   });
+
+  it("senza sessione risponde 403 alle API admin, ma lascia passare le altre", async () => {
+    createServerClient.mockReturnValue({ auth: { getClaims } });
+    getClaims.mockResolvedValue({ data: null, error: null });
+    const updateSession = await loadUpdateSession();
+
+    const admin = await updateSession(
+      new NextRequest("https://localhost/api/admin/tappe"),
+    );
+    expect(admin.status).toBe(403);
+    expect(await admin.json()).toEqual({ error: "Accesso negato." });
+
+    const page = await updateSession(
+      new NextRequest("https://localhost/admin"),
+    );
+    expect(page.headers.get("x-middleware-next")).toBe("1");
+  });
+
+  it("con una sessione valida lascia la verifica del ruolo al Route Handler", async () => {
+    createServerClient.mockReturnValue({ auth: { getClaims } });
+    getClaims.mockResolvedValue({
+      data: { claims: { sub: "u1" } },
+      error: null,
+    });
+    const updateSession = await loadUpdateSession();
+
+    const res = await updateSession(
+      new NextRequest("https://localhost/api/admin/tappe"),
+    );
+    expect(res.headers.get("x-middleware-next")).toBe("1");
+  });
+
+  it("senza env Supabase le API admin rispondono 403", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const updateSession = await loadUpdateSession();
+
+    const res = await updateSession(
+      new NextRequest("http://localhost/api/admin/utenti"),
+    );
+    expect(res.status).toBe(403);
+  });
 });

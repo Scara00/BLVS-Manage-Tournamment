@@ -28,6 +28,10 @@ test("ogni story rispetta WCAG 2.2 AA a 390 e 1440 px", async ({
   const stories = Object.values(index.entries).filter(
     (e) => e.type === "story",
   );
+  // One axe run per story and viewport: the budget grows with the catalogue
+  // and is never smaller than either per-run estimate.
+  const runs = stories.length * VIEWPORTS.length;
+  test.setTimeout(Math.max(30_000 + runs * 1_000, runs * 3_000));
 
   for (const story of stories) {
     for (const viewport of VIEWPORTS) {

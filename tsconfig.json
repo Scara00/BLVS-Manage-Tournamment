@@ -30,5 +30,10 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    // Deno entry points (npm: specifiers, Deno globals); the pure logic in
+    // supabase/functions/_shared is still type-checked here.
+    "supabase/functions/send-emails"
+  ]
 }
