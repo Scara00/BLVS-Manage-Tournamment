@@ -67,18 +67,47 @@ describe("schema: utenti", () => {
     expect(rows).toEqual([{ ruolo: "giocatore" }]);
   });
 
-  it("registra il consenso privacy dato alla registrazione", async () => {
+  it("registra il consenso privacy con versione e data dell'informativa", async () => {
     const id = await createAuthUser(db, {
       email: "consenso@example.it",
-      meta: { consenso_privacy: "2026-10" },
+      meta: { consenso_privacy: "1.0", consenso_privacy_data: "2026-10-27" },
     });
     const { rows } = await db.query(
-      "select tipo, versione_informativa, concesso from consensi where utente_id = $1",
+      "select tipo, versione_informativa, data_informativa::text as data, concesso, created_at is not null as quando from consensi where utente_id = $1",
       [id],
     );
     expect(rows).toEqual([
-      { tipo: "privacy", versione_informativa: "2026-10", concesso: true },
+      {
+        tipo: "privacy",
+        versione_informativa: "1.0",
+        data: "2026-10-27",
+        concesso: true,
+        quando: true,
+      },
     ]);
+  });
+
+  it("una data dell'informativa non valida non blocca la registrazione", async () => {
+    const id = await createAuthUser(db, {
+      email: "data-strana@example.it",
+      meta: { consenso_privacy: "1.0", consenso_privacy_data: "2026-13-45" },
+    });
+    const { rows } = await db.query(
+      "select versione_informativa, data_informativa from consensi where utente_id = $1",
+      [id],
+    );
+    expect(rows).toEqual([
+      { versione_informativa: "1.0", data_informativa: null },
+    ]);
+  });
+
+  it("senza consenso nei metadati non scrive alcun consenso", async () => {
+    const id = await createAuthUser(db, { email: "nessuno@example.it" });
+    const { rows } = await db.query(
+      "select 1 from consensi where utente_id = $1",
+      [id],
+    );
+    expect(rows).toHaveLength(0);
   });
 
   it("un giocatore non può promuoversi admin", async () => {

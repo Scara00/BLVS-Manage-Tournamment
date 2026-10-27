@@ -95,5 +95,15 @@ export type VoceRegistro = {
   created_at: string;
 };
 
-/** Version of the privacy notice a new player accepts at registration. */
-export const VERSIONE_INFORMATIVA_PRIVACY = "2026-10";
+export type Consenso = {
+  id: number;
+  utente_id: string;
+  tipo: "privacy" | "regolamento" | "immagini" | "marketing";
+  /** `PRIVACY_POLICY_VERSION.number` accepted. */
+  versione_informativa: string;
+  /** `PRIVACY_POLICY_VERSION.date` (YYYY-MM-DD); null on rows before BLVS-12. */
+  data_informativa: string | null;
+  concesso: boolean;
+  /** When the consent was given. */
+  created_at: string;
+};

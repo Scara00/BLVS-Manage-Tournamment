@@ -5,10 +5,14 @@ import {
   malformedBody,
   readJsonObject,
 } from "@/lib/api/responses";
-import { BodyReader } from "@/lib/api/validation";
-import { MIN_PASSWORD_LENGTH, REGISTERED_MESSAGE } from "@/lib/auth/messages";
+import {
+  CONFIRM_EMAIL_MESSAGE,
+  EMAIL_TAKEN_MESSAGE,
+  REGISTERED_MESSAGE,
+} from "@/lib/auth/messages";
 import { limitAuthAttempt } from "@/lib/auth/rate-limit";
-import { CATEGORIE, VERSIONE_INFORMATIVA_PRIVACY } from "@/lib/db/types";
+import { readSignup } from "@/lib/auth/signup";
+import { PRIVACY_POLICY_VERSION } from "@/lib/legal/privacy-policy";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,7 +20,13 @@ import { createClient } from "@/lib/supabase/server";
  * POST /api/auth/register — public sign-up of a player:
  * `{ email, password, nome, cognome, categoria, consensoPrivacy: true }`.
  * The account is always a player (the DB trigger ignores any role); the
- * accepted privacy notice version is recorded in `consensi`.
+ * accepted privacy notice version and its date are recorded in `consensi`.
+ * The password goes only to Supabase Auth (bcrypt) and is never logged.
+ *
+ * 201 `{ messaggio, connesso }`: `connesso` is true when Supabase returned
+ * a session (cookies set), false when the email must be confirmed first.
+ * 409 `fields.email` when the email is taken (BLVS-12 shows it next to the
+ * field with a link «Accedi»; the rate limit caps enumeration).
  */
 export async function POST(request: NextRequest) {
   const body = await readJsonObject(request);
@@ -26,34 +36,24 @@ export async function POST(request: NextRequest) {
   if (limited) return limited;
   if (!body) return malformedBody();
 
-  const reader = new BodyReader(body);
-  const values = {
-    email: reader.email(),
-    password: reader.password("password", { min: MIN_PASSWORD_LENGTH }),
-    nome: reader.text("nome", { max: 100 }),
-    cognome: reader.text("cognome", { max: 100 }),
-    categoria: reader.oneOf("categoria", CATEGORIE),
-    consenso: reader.literal(
-      "consensoPrivacy",
-      true,
-      "Per registrarti devi accettare l'informativa privacy.",
-    ),
-  };
-  if (!reader.ok) return invalid(reader.errors);
+  const signup = readSignup(body);
+  if (!signup.ok) return invalid(signup.errors);
+  const { values } = signup;
 
   if (!readSupabaseEnv())
     return jsonError(503, "Autenticazione non configurata.");
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
-    email: values.email!,
-    password: values.password!,
+  const { data, error } = await supabase.auth.signUp({
+    email: values.email,
+    password: values.password,
     options: {
       data: {
         nome: values.nome,
         cognome: values.cognome,
         categoria: values.categoria,
-        consenso_privacy: VERSIONE_INFORMATIVA_PRIVACY,
+        consenso_privacy: PRIVACY_POLICY_VERSION.number,
+        consenso_privacy_data: PRIVACY_POLICY_VERSION.date,
       },
     },
   });
@@ -64,12 +64,28 @@ export async function POST(request: NextRequest) {
         password: "Password troppo debole: allungala o rendila meno comune.",
       });
     }
-    // An existing email gets the same answer as a new one (no enumeration).
-    if (error.code !== "user_already_exists" && error.code !== "email_exists") {
-      console.error("[auth] registrazione non riuscita", error);
-      return jsonError(500, "Registrazione non riuscita. Riprova più tardi.");
-    }
+    if (error.code === "user_already_exists" || error.code === "email_exists")
+      return emailTaken();
+    console.error("[auth] registrazione non riuscita", error);
+    return jsonError(500, "Registrazione non riuscita. Riprova più tardi.");
   }
 
-  return Response.json({ messaggio: REGISTERED_MESSAGE }, { status: 202 });
+  // With email confirmation on, Supabase answers an existing email with a
+  // fake user that has no identities instead of an error.
+  if (data.user && data.user.identities?.length === 0) return emailTaken();
+
+  const connesso = data.session != null;
+  return Response.json(
+    {
+      messaggio: connesso ? REGISTERED_MESSAGE : CONFIRM_EMAIL_MESSAGE,
+      connesso,
+    },
+    { status: 201 },
+  );
+}
+
+function emailTaken(): Response {
+  return jsonError(409, EMAIL_TAKEN_MESSAGE, {
+    fields: { email: EMAIL_TAKEN_MESSAGE },
+  });
 }
