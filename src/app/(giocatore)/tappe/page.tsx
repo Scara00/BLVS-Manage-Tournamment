@@ -15,6 +15,7 @@ const statusStyle: Record<StatoTappa, string> = {
   in_corso: "bg-live-bg text-live-fg",
   conclusa: "bg-reg-closed-bg text-reg-closed-fg",
   annullata: "bg-reg-cancelled-bg text-reg-cancelled-fg",
+  archiviata: "bg-tape text-primary",
 };
 
 async function TappeList() {

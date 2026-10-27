@@ -15,6 +15,8 @@ export type AdminCategoria = {
   iscritti: number;
   posti: number;
   fase: FaseTabellone | null;
+  /** Results closed for good (BLVS-43 `tabelloni.concluso_il`). */
+  concluso: boolean;
 };
 
 /** A stage row of the admin dashboard table (drafts included). */
@@ -23,6 +25,8 @@ export type AdminTappa = {
   nome: string;
   periodo: string;
   stato: StatoTappa;
+  /** Why it was cancelled; null unless cancelled (or archived after it). */
+  motivoAnnullamento: string | null;
   /** M first, then F. */
   categorie: AdminCategoria[];
   /** Matches being played, or past their time with no score yet. */
@@ -38,10 +42,12 @@ export type AdminTappaRpcRow = {
   data_inizio: string;
   data_fine: string;
   stato: StatoTappa;
+  motivo_annullamento: string | null;
   categorie: {
     categoria: Categoria;
     posti: number;
     fase: FaseTabellone | null;
+    concluso?: boolean;
     iscritti: number;
   }[];
   partite_da_inserire: number;
@@ -147,6 +153,7 @@ function categorie(row: AdminTappaRpcRow): AdminCategoria[] {
       iscritti: Number(found?.iscritti ?? 0),
       posti: Number(found?.posti ?? 0),
       fase: found?.fase ?? null,
+      concluso: found?.concluso === true,
     };
   });
 }
@@ -157,6 +164,7 @@ export function toAdminTappa(row: AdminTappaRpcRow, oggi: string): AdminTappa {
     nome: row.nome,
     periodo: formatPeriodoTappa(row.data_inizio, row.data_fine),
     stato: row.stato,
+    motivoAnnullamento: row.motivo_annullamento ?? null,
     categorie: categorie(row),
     partiteDaInserire: Number(row.partite_da_inserire),
     giornoDiGara: isGiornoDiGara(row, oggi),
@@ -181,12 +189,62 @@ export function demoAdminTappa(stage: DemoAdminStage): AdminTappa {
     nome: stage.name,
     periodo: stage.date,
     stato: stage.status,
+    motivoAnnullamento: stage.reason ?? null,
     categorie: [
-      { categoria: "M", iscritti: m.registered, posti: m.seats, fase: m.phase },
-      { categoria: "F", iscritti: f.registered, posti: f.seats, fase: f.phase },
+      {
+        categoria: "M",
+        iscritti: m.registered,
+        posti: m.seats,
+        fase: m.phase,
+        concluso: m.concluded === true,
+      },
+      {
+        categoria: "F",
+        iscritti: f.registered,
+        posti: f.seats,
+        fase: f.phase,
+        concluso: f.concluded === true,
+      },
     ],
     partiteDaInserire: stage.pendingScores,
     // Demo dates are labels: the stage in progress is racing «today».
     giornoDiGara: stage.status === "in_corso",
   };
+}
+
+// ---------------------------------------------------------------------------
+// BLVS-22 · Annullamento e archiviazione
+// ---------------------------------------------------------------------------
+
+/** States a stage can be cancelled from (trigger `tappe_annulla_archivia`). */
+export const STATI_ANNULLABILI: readonly StatoTappa[] = [
+  "bozza",
+  "iscrizioni_aperte",
+  "iscrizioni_chiuse",
+  "in_corso",
+];
+
+export function isAnnullabile(tappa: Pick<AdminTappa, "stato">): boolean {
+  return STATI_ANNULLABILI.includes(tappa.stato);
+}
+
+/** Both boards concluded: the results are final. */
+export function tabelloniConclusi(tappa: Pick<AdminTappa, "categorie">) {
+  return tappa.categorie.length > 0 && tappa.categorie.every((c) => c.concluso);
+}
+
+/**
+ * Whether «Archivia» is enabled. Mirrors the trigger, which is the real
+ * guard: a cancelled stage, or one whose two boards are both concluded.
+ */
+export function isArchiviabile(
+  tappa: Pick<AdminTappa, "stato" | "categorie">,
+): boolean {
+  if (tappa.stato === "archiviata") return false;
+  return tappa.stato === "annullata" || tabelloniConclusi(tappa);
+}
+
+/** Players the cancellation notice goes to: pending or confirmed, M + F. */
+export function iscrittiDaAvvisare(tappa: Pick<AdminTappa, "categorie">) {
+  return tappa.categorie.reduce((sum, c) => sum + Math.max(0, c.iscritti), 0);
 }

@@ -8,9 +8,10 @@ const tappa = (over: Partial<AdminTappa>): AdminTappa => ({
   nome: "Tappa",
   periodo: "14–15 giugno",
   stato: "iscrizioni_aperte",
+  motivoAnnullamento: null,
   categorie: [
-    { categoria: "M", iscritti: 12, posti: 16, fase: "gold" },
-    { categoria: "F", iscritti: 16, posti: 16, fase: null },
+    { categoria: "M", iscritti: 12, posti: 16, fase: "gold", concluso: false },
+    { categoria: "F", iscritti: 16, posti: 16, fase: null, concluso: false },
   ],
   partiteDaInserire: 0,
   giornoDiGara: false,

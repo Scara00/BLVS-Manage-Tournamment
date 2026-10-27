@@ -117,6 +117,7 @@ const FASE_DA_STATO: Record<StatoTappa, string> = {
   in_corso: "In attesa delle partite",
   conclusa: "Concluso",
   annullata: "Annullato",
+  archiviata: "Archiviato",
 };
 
 /** Phase of a board: its most advanced match phase, else from the stage. */

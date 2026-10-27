@@ -19,6 +19,7 @@ import { readAdminDashboard } from "@/lib/admin/dashboard";
 import type { IscrizioneInAttesa } from "@/lib/admin/dashboard-format";
 import { parseFiltroStato, partiteDaInserireOggi } from "@/lib/admin/tappe";
 import { readAdminTappe } from "@/lib/admin/tappe-read";
+import { annullaTappa, archiviaTappa } from "@/lib/tappe/annullamento/actions";
 import { readLiveSync } from "@/lib/live/read";
 
 export const metadata: Metadata = { title: "Dashboard amministrazione" };
@@ -91,6 +92,7 @@ async function TappeContent({
       tappe={tappe}
       filtro={parseFiltroStato(params.stato)}
       basePath="/admin"
+      azioni={{ annulla: annullaTappa, archivia: archiviaTappa }}
     />
   );
 }

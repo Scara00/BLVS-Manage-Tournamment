@@ -4,6 +4,7 @@ import { AdminTappeLoading, AdminTappeSection } from "@/components/admin";
 import { PageContainer } from "@/components/layout/page-container";
 import { parseFiltroStato } from "@/lib/admin/tappe";
 import { readAdminTappe } from "@/lib/admin/tappe-read";
+import { annullaTappa, archiviaTappa } from "@/lib/tappe/annullamento/actions";
 
 export const metadata: Metadata = { title: "Tappe · Amministrazione" };
 
@@ -18,6 +19,7 @@ async function TappeContent({
       tappe={tappe}
       filtro={parseFiltroStato(params.stato)}
       basePath="/admin/tappe"
+      azioni={{ annulla: annullaTappa, archivia: archiviaTappa }}
     />
   );
 }

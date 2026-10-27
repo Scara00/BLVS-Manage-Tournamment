@@ -14,6 +14,8 @@ import { getCurrentUser } from "@/lib/auth/session";
 import {
   ALREADY_REGISTERED_MESSAGE,
   NO_CATEGORY_MESSAGE,
+  STAGE_ARCHIVED_MESSAGE,
+  STAGE_CANCELLED_MESSAGE,
 } from "@/lib/iscrizioni/messages";
 import type { Categoria } from "@/lib/db/types";
 
@@ -68,6 +70,11 @@ export async function POST(request: NextRequest) {
   if (error) {
     if (error.code === "23505")
       return jsonError(409, ALREADY_REGISTERED_MESSAGE);
+    // BLVS-22: the database refuses cancelled and archived stages.
+    if (error.hint === "tappa_annullata")
+      return jsonError(409, STAGE_CANCELLED_MESSAGE);
+    if (error.hint === "tappa_archiviata")
+      return jsonError(409, STAGE_ARCHIVED_MESSAGE);
     if (error.code === "42501" && error.message?.startsWith("Conferma"))
       return jsonError(403, EMAIL_NOT_CONFIRMED_MESSAGE);
     return dbErrorResponse(error);

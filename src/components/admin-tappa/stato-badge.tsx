@@ -9,6 +9,7 @@ const VARIANT = {
   in_corso: "info",
   conclusa: "neutral",
   annullata: "reg-cancelled",
+  archiviata: "tape",
 } as const satisfies Record<StatoTappa, string>;
 
 /** State of a stage: `color.reg.*` surface, always with its text. */

@@ -10,7 +10,11 @@ const TAPPA = "6f1c2c1e-1b2a-4c3d-8e9f-0a1b2c3d4e5f";
 const db = vi.hoisted(() => ({
   confermata: false as boolean,
   categoria: "M" as string | null,
-  insertError: null as null | { code: string; message: string },
+  insertError: null as null | {
+    code: string;
+    message: string;
+    hint?: string;
+  },
   inserts: [] as unknown[],
 }));
 
@@ -106,6 +110,20 @@ describe("POST /api/iscrizioni", () => {
     db.confermata = true;
     db.insertError = { code: "23505", message: "duplicate" };
     expect((await post({ tappaId: TAPPA })).status).toBe(409);
+  });
+
+  it.each([
+    ["tappa_annullata", "La tappa è annullata: non accetta nuove iscrizioni."],
+    [
+      "tappa_archiviata",
+      "La tappa è archiviata: non accetta nuove iscrizioni.",
+    ],
+  ])("una tappa con hint %s risponde 409", async (hint, message) => {
+    db.confermata = true;
+    db.insertError = { code: "23514", message: "bloccata", hint };
+    const res = await post({ tappaId: TAPPA });
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({ error: message });
   });
 
   it("senza sessione risponde 403", async () => {

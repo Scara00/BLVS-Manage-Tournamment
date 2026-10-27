@@ -6,11 +6,28 @@ import { PhaseBadge } from "@/components/scoreboard";
 import {
   contaPosti,
   descriviPosti,
+  isAnnullabile,
+  isArchiviabile,
+  iscrittiDaAvvisare,
   type AdminCategoria,
   type AdminTappa,
 } from "@/lib/admin/tappe";
+import type {
+  AnnullaTappaAction,
+  ArchiviaTappaAction,
+} from "@/lib/tappe/annullamento/state";
 import { cn } from "@/lib/utils";
+import { AnnullaTappa } from "./annulla-tappa";
+import { ArchiviaTappa } from "./archivia-tappa";
 import { StatoTappaBadge } from "./stato-tappa-badge";
+
+/** Server actions of BLVS-22, passed down by the page (fakes in stories). */
+export type AzioniTappe = {
+  annulla: AnnullaTappaAction;
+  archivia: ArchiviaTappaAction;
+  /** Where «Accedi di nuovo» returns to after an expired session. */
+  returnPath?: string;
+};
 
 const categoriaLabel = { M: "Maschile", F: "Femminile" } as const;
 
@@ -52,27 +69,97 @@ function CategoriaCell({ categoria }: { categoria: AdminCategoria }) {
 function categoriaColumn(
   index: 0 | 1,
   key: "M" | "F",
+  width: string,
 ): ResponsiveTableColumn<AdminTappa> {
   return {
     key,
     header: categoriaLabel[key],
-    width: "20%",
+    width,
     render: (row) => <CategoriaCell categoria={row.categorie[index]} />,
   };
 }
 
-const columns: ResponsiveTableColumn<AdminTappa>[] = [
-  { key: "nome", header: "Tappa", rowHeader: true, width: "26%" },
-  { key: "periodo", header: "Data", width: "16%" },
-  {
-    key: "stato",
-    header: "Iscrizioni",
-    width: "18%",
-    render: (row) => <StatoTappaBadge stato={row.stato} />,
-  },
-  categoriaColumn(0, "M"),
-  categoriaColumn(1, "F"),
-];
+function StatoCell({ tappa }: { tappa: AdminTappa }) {
+  return (
+    <div className="flex min-w-0 flex-col items-start gap-space-1 [overflow-wrap:anywhere]">
+      <StatoTappaBadge stato={tappa.stato} />
+      {tappa.motivoAnnullamento ? (
+        <p className="text-sm">
+          <span className="font-semibold">Motivo:</span>{" "}
+          {tappa.motivoAnnullamento}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Cancel and archive (BLVS-22). An archived stage only shows its state. */
+function AzioniCell({
+  tappa,
+  azioni,
+}: {
+  tappa: AdminTappa;
+  azioni: AzioniTappe;
+}) {
+  return (
+    <div
+      data-slot="azioni-tappa"
+      className="flex min-w-0 flex-col items-start gap-space-2 [overflow-wrap:anywhere]"
+    >
+      <AnnullaTappa
+        tappaId={tappa.id}
+        nome={tappa.nome}
+        iscritti={iscrittiDaAvvisare(tappa)}
+        annullabile={isAnnullabile(tappa)}
+        action={azioni.annulla}
+        returnPath={azioni.returnPath}
+      />
+      <ArchiviaTappa
+        tappaId={tappa.id}
+        nome={tappa.nome}
+        archiviabile={isArchiviabile(tappa)}
+        archiviata={tappa.stato === "archiviata"}
+        action={azioni.archivia}
+      />
+      {tappa.stato === "archiviata" ? (
+        <p className="text-sm text-muted-foreground">
+          Consultabile, non modificabile.
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+function tableColumns(
+  azioni: AzioniTappe | undefined,
+): ResponsiveTableColumn<AdminTappa>[] {
+  const base: ResponsiveTableColumn<AdminTappa>[] = [
+    {
+      key: "nome",
+      header: "Tappa",
+      rowHeader: true,
+      width: azioni ? "20%" : "26%",
+    },
+    { key: "periodo", header: "Data", width: azioni ? "13%" : "16%" },
+    {
+      key: "stato",
+      header: "Iscrizioni",
+      width: azioni ? "17%" : "18%",
+      render: (row) => <StatoCell tappa={row} />,
+    },
+    categoriaColumn(0, "M", azioni ? "16%" : "20%"),
+    categoriaColumn(1, "F", azioni ? "16%" : "20%"),
+  ];
+  if (!azioni) return base;
+  return [
+    ...base,
+    {
+      key: "azioni",
+      header: "Azioni",
+      render: (row) => <AzioniCell tappa={row} azioni={azioni} />,
+    },
+  ];
+}
 
 /**
  * Admin calendar: name, dates, registration status, then per category the
@@ -82,15 +169,18 @@ export function TappeTable({
   tappe,
   caption = "Tappe del circuito",
   emptyMessage = "Nessuna tappa in calendario. Le tappe create, anche in bozza, compariranno qui.",
+  azioni,
 }: {
   tappe: readonly AdminTappa[];
   caption?: string;
   emptyMessage?: string;
+  /** Adds the «Azioni» column (cancel, archive). */
+  azioni?: AzioniTappe;
 }) {
   return (
     <ResponsiveTable
       caption={caption}
-      columns={columns}
+      columns={tableColumns(azioni)}
       rows={tappe}
       getRowKey={(row) => row.id}
       emptyMessage={emptyMessage}

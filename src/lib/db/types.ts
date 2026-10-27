@@ -16,6 +16,7 @@ export const STATI_TAPPA = [
   "in_corso",
   "conclusa",
   "annullata",
+  "archiviata",
 ] as const;
 export type StatoTappa = (typeof STATI_TAPPA)[number];
 
@@ -62,6 +63,11 @@ export type Tappa = {
   iscrizioni_chiuse_il: string | null;
   /** True when `chiudi_iscrizioni_scadute()` closed them at the deadline. */
   chiusura_automatica: boolean;
+  /** Why the stage was cancelled; set only when cancelling it (BLVS-22). */
+  motivo_annullamento: string | null;
+  /** When it was cancelled / archived; written by the DB trigger only. */
+  annullata_il: string | null;
+  archiviata_il: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -74,6 +80,8 @@ export type Tabellone = {
   posti: number;
   /** Gold/Silver phase, set by the admin; null until then. */
   fase: FaseTabellone | null;
+  /** When the board was concluded (BLVS-43); null while still open. */
+  concluso_il: string | null;
 };
 
 export type Iscrizione = {

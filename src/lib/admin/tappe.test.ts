@@ -5,11 +5,16 @@ import {
   contaPosti,
   descriviPosti,
   filtraPerStato,
+  isAnnullabile,
+  isArchiviabile,
   isGiornoDiGara,
+  iscrittiDaAvvisare,
   parseFiltroStato,
   partiteDaInserireLabel,
   partiteDaInserireOggi,
+  STATI_ANNULLABILI,
   toAdminTappa,
+  type AdminTappa,
   type AdminTappaRpcRow,
 } from "./tappe";
 
@@ -62,6 +67,7 @@ describe("filtro per stato", () => {
       in_corso: 1,
       conclusa: 1,
       annullata: 0,
+      archiviata: 0,
     });
   });
 });
@@ -143,6 +149,7 @@ describe("giorno di gara e partite da inserire", () => {
     nome: "Tappa 1 · Jesolo",
     ...base,
     stato: "in_corso",
+    motivo_annullamento: null,
     categorie: [
       { categoria: "F", posti: 16, fase: "silver", iscritti: 12 },
       { categoria: "M", posti: 16, fase: "gold", iscritti: 16 },
@@ -163,6 +170,7 @@ describe("giorno di gara e partite da inserire", () => {
       categoria: "M",
       posti: 16,
       fase: "gold",
+      concluso: false,
       iscritti: 16,
     });
   });
@@ -176,6 +184,7 @@ describe("giorno di gara e partite da inserire", () => {
       categoria: "F",
       posti: 0,
       fase: null,
+      concluso: false,
       iscritti: 0,
     });
   });
@@ -186,5 +195,87 @@ describe("giorno di gara e partite da inserire", () => {
     expect(partiteDaInserireOggi([oggi, altra])).toEqual([
       { id: "t1", label: "Tappa 1 · Jesolo", count: 3 },
     ]);
+  });
+});
+
+describe("annullamento e archiviazione (BLVS-22)", () => {
+  const tappa = (
+    stato: AdminTappa["stato"],
+    concluso: [boolean, boolean] = [false, false],
+  ): AdminTappa => ({
+    id: "t",
+    nome: "Tappa",
+    periodo: "14–15 giugno",
+    stato,
+    motivoAnnullamento: null,
+    categorie: [
+      {
+        categoria: "M",
+        iscritti: 9,
+        posti: 16,
+        fase: null,
+        concluso: concluso[0],
+      },
+      {
+        categoria: "F",
+        iscritti: 4,
+        posti: 16,
+        fase: null,
+        concluso: concluso[1],
+      },
+    ],
+    partiteDaInserire: 0,
+    giornoDiGara: false,
+  });
+
+  it("si annulla prima della conclusione, non dopo", () => {
+    for (const stato of STATI_ANNULLABILI) {
+      expect(isAnnullabile(tappa(stato))).toBe(true);
+    }
+    expect(isAnnullabile(tappa("conclusa"))).toBe(false);
+    expect(isAnnullabile(tappa("annullata"))).toBe(false);
+    expect(isAnnullabile(tappa("archiviata"))).toBe(false);
+  });
+
+  it("«Archivia» si abilita solo con entrambi i tabelloni conclusi", () => {
+    expect(isArchiviabile(tappa("conclusa"))).toBe(false);
+    expect(isArchiviabile(tappa("conclusa", [true, false]))).toBe(false);
+    expect(isArchiviabile(tappa("conclusa", [true, true]))).toBe(true);
+  });
+
+  it("una tappa annullata si archivia subito, una archiviata non più", () => {
+    expect(isArchiviabile(tappa("annullata"))).toBe(true);
+    expect(isArchiviabile(tappa("archiviata", [true, true]))).toBe(false);
+  });
+
+  it("conta gli iscritti da avvisare in entrambe le categorie", () => {
+    expect(iscrittiDaAvvisare(tappa("iscrizioni_aperte"))).toBe(13);
+  });
+
+  it("legge il motivo e i tabelloni conclusi dalla RPC", () => {
+    const row: AdminTappaRpcRow = {
+      id: "t1",
+      nome: "Tappa 1 · Jesolo",
+      data_inizio: "2027-06-14",
+      data_fine: "2027-06-15",
+      stato: "in_corso",
+      motivo_annullamento: null,
+      categorie: [
+        { categoria: "M", posti: 16, fase: null, iscritti: 3 },
+        { categoria: "F", posti: 16, fase: null, iscritti: 2 },
+      ],
+      partite_da_inserire: 0,
+    };
+    const converted = toAdminTappa(
+      {
+        ...row,
+        stato: "annullata",
+        motivo_annullamento: "Maltempo",
+        categorie: row.categorie.map((c) => ({ ...c, concluso: true })),
+      },
+      "2027-06-14",
+    );
+    expect(converted.motivoAnnullamento).toBe("Maltempo");
+    expect(converted.categorie.every((c) => c.concluso)).toBe(true);
   });
 });

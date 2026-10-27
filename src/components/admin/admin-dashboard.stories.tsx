@@ -22,8 +22,15 @@ import { demoLiveSnapshot } from "@/lib/live/seed";
 import { AdminTappeLoading } from "./admin-tappe-loading";
 import { AdminTappeSection } from "./admin-tappe-section";
 import { PendingScoresBanner } from "./pending-scores-banner";
+import type { AzioniTappe } from "./tappe-table";
 
 const signOut = async () => ({ error: null });
+
+/** BLVS-22 actions: never settle, nothing to save in Storybook. */
+const azioniFinte: AzioniTappe = {
+  annulla: () => new Promise(() => {}),
+  archivia: () => new Promise(() => {}),
+};
 
 const initial = {
   snapshot: demoLiveSnapshot("2026-06-14T08:05:00.000Z"),
@@ -120,6 +127,7 @@ function Schermata({
                 tappe={visibili}
                 filtro={filtro}
                 basePath="/admin"
+                azioni={azioniFinte}
               />
             </>
           )}
