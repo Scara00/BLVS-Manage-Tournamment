@@ -21,6 +21,16 @@ export const SUPABASE_AUTH_TEMPLATES = [
       }),
   },
   {
+    key: "email_change",
+    file: "conferma-nuova-email.html",
+    render: () =>
+      renderEmail("conferma-nuova-email", {
+        confirmationUrl: "{{ .ConfirmationURL }}",
+        currentEmail: "{{ .Email }}",
+        newEmail: "{{ .NewEmail }}",
+      }),
+  },
+  {
     key: "recovery",
     file: "reimposta-password.html",
     render: () =>

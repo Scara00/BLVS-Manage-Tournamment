@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, UserIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
@@ -73,6 +73,34 @@ export function PlayerNav({
           })}
         </ul>
       </nav>
+
+      {/* Account links (e.g. «Profilo») sit next to «Esci» from md. */}
+      {secondary.some((item) => item.desktop) ? (
+        <ul className="hidden md:ml-auto md:flex md:gap-x-space-2">
+          {secondary
+            .filter((item) => item.desktop)
+            .map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={
+                    isNavItemActive(item, pathname) ? "page" : undefined
+                  }
+                  className={cn(
+                    "inline-flex min-h-11 items-center border-b-4 border-transparent px-space-3 font-heading font-medium break-words",
+                    "not-aria-[current=page]:hover:border-neutral-400",
+                    "aria-[current=page]:border-tape aria-[current=page]:font-bold",
+                    focusOnDark,
+                  )}
+                >
+                  {/* Icon only between md and lg: the bar does not wrap. */}
+                  <UserIcon aria-hidden className="size-5 shrink-0 lg:hidden" />
+                  <span className="sr-only lg:not-sr-only">{item.label}</span>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      ) : null}
 
       <div
         {...panelProps}

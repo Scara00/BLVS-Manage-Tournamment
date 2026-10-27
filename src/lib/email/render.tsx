@@ -6,6 +6,11 @@ import {
   type ConfermaEmailProps,
 } from "./templates/conferma-email";
 import {
+  ConfermaNuovaEmail,
+  confermaNuovaEmailSubject,
+  type ConfermaNuovaEmailProps,
+} from "./templates/conferma-nuova-email";
+import {
   ReimpostaPassword,
   reimpostaPasswordSubject,
   type ReimpostaPasswordProps,
@@ -19,6 +24,7 @@ import {
 /** Props of each email template, by template name. */
 export type EmailTemplateProps = {
   "conferma-email": ConfermaEmailProps;
+  "conferma-nuova-email": ConfermaNuovaEmailProps;
   "reimposta-password": ReimpostaPasswordProps;
   "tappa-annullata": TappaAnnullataProps;
 };
@@ -36,6 +42,10 @@ export const emailTemplates: {
   "conferma-email": {
     subject: () => confermaEmailSubject,
     element: (props) => <ConfermaEmail {...props} />,
+  },
+  "conferma-nuova-email": {
+    subject: () => confermaNuovaEmailSubject,
+    element: (props) => <ConfermaNuovaEmail {...props} />,
   },
   "reimposta-password": {
     subject: () => reimpostaPasswordSubject,
