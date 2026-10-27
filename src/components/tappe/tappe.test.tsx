@@ -58,7 +58,21 @@ describe("TappeTable", () => {
     expect(within(pescara).getAllByText(/Annullata/i).length).toBeGreaterThan(
       0,
     );
-    expect(within(pescara).queryByRole("link")).toBeNull();
+    expect(
+      within(pescara).queryByRole("link", { name: /Iscriviti/ }),
+    ).toBeNull();
+  });
+
+  it("ogni tappa ha «Vedi la tappa», che porta al dettaglio (BLVS-24)", () => {
+    render(<TappeTable tappe={tappe} connesso />);
+    expect(
+      within(row(/Pescara/)).getByRole("link", {
+        name: "Vedi la tappa Tappa 4 · Pescara",
+      }),
+    ).toHaveAttribute("href", "/tappe/pescara");
+    expect(
+      within(table()).getAllByRole("link", { name: /^Vedi la tappa/ }),
+    ).toHaveLength(4);
   });
 
   it("senza sessione invita ad accedere invece dei posti", () => {

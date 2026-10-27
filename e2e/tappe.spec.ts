@@ -28,7 +28,9 @@ test("elenco delle tappe: niente bozze, annullata a testo, striscia live", async
   );
   await expect(annullata).toHaveCount(1);
   await expect(annullata).toContainText("Annullata");
-  await expect(annullata.getByRole("link")).toHaveCount(0);
+  await expect(annullata.getByRole("link", { name: /Iscriviti/ })).toHaveCount(
+    0,
+  );
 
   await expect(
     page.getByRole("link", { name: "Iscriviti a Tappa 2 · Rimini" }),

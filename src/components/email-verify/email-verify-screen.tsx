@@ -27,6 +27,11 @@ export type EmailVerifyScreenProps = {
   expiresAt?: string;
   /** Seconds left before «Reinvia» unlocks. */
   waitSeconds?: number;
+  /**
+   * Internal page the player came from (e.g. a stage, BLVS-24): once
+   * confirmed, «Torna alla tappa» leads back there.
+   */
+  returnTo?: string;
   className?: string;
 };
 
@@ -41,6 +46,7 @@ export function EmailVerifyScreen({
   email,
   expiresAt,
   waitSeconds = 0,
+  returnTo,
   className,
 }: EmailVerifyScreenProps) {
   const [expiry, setExpiry] = useState(expiresAt);
@@ -96,11 +102,13 @@ export function EmailVerifyScreen({
           Ora puoi iscriverti alle tappe del circuito.
         </p>
         <ActionLink
-          href={AFTER_CONFIRMATION_PATH}
+          href={returnTo ?? AFTER_CONFIRMATION_PATH}
           variant="primary"
           className="self-start"
         >
-          Continua: scegli la prima tappa
+          {returnTo?.startsWith(`${AFTER_CONFIRMATION_PATH}/`)
+            ? "Torna alla tappa"
+            : "Continua: scegli la prima tappa"}
         </ActionLink>
       </Frame>
     );

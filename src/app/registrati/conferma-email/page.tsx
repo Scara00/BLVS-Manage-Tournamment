@@ -11,6 +11,7 @@ import {
   resendWaitSeconds,
 } from "@/lib/auth/email-verification/format";
 import { readPendingVerification } from "@/lib/auth/email-verification/pending";
+import { readReturnAfterConfirmation } from "@/lib/auth/email-verification/return-path";
 import { getCurrentUser } from "@/lib/auth/session";
 import { now } from "@/lib/time/server-time";
 
@@ -39,7 +40,13 @@ async function EmailVerifyState({
     searchParams,
     readPendingVerification(),
   ]);
-  return <EmailVerifyScreen {...await resolveState(params.esito, pending)} />;
+  const returnTo = (await readReturnAfterConfirmation(params.da)) ?? undefined;
+  return (
+    <EmailVerifyScreen
+      {...await resolveState(params.esito, pending)}
+      returnTo={returnTo}
+    />
+  );
 }
 
 async function resolveState(
@@ -63,6 +70,9 @@ async function resolveState(
   if (user && (await isConfirmed(user.supabase))) {
     return { status: "success", email: user.email };
   }
+  // Signed in but not confirmed (e.g. sent here by «Prendi il posto»):
+  // the address is known even without the pending cookie.
+  if (!pending && user) return { status: "waiting", email: user.email };
   if (!pending) return { status: "permissionDenied" };
   return {
     status: "waiting",

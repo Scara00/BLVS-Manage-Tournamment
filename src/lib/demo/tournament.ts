@@ -155,7 +155,9 @@ export const demoRegistrations: readonly DemoRegistration[] = [
 /**
  * The player stage list (w-tappe) in the shape of `public.tappe` and RPC
  * `posti_tappe()`. It includes a draft (never shown to players) and a
- * cancelled stage, so the demo exercises every rule of the list.
+ * cancelled stage, so the demo exercises every rule of the list. The 2027
+ * season keeps Rimini's deadline in the future, so the stage detail
+ * (BLVS-24) can take a seat in the demo.
  */
 export const demoTappeGiocatore = {
   /** The demo player's category. */
@@ -165,44 +167,44 @@ export const demoTappeGiocatore = {
       id: "jesolo",
       nome: "Tappa 1 · Jesolo",
       luogo: "Jesolo Lido, Piazza Mazzini",
-      data_inizio: "2026-06-14",
-      data_fine: "2026-06-15",
+      data_inizio: "2027-06-14",
+      data_fine: "2027-06-15",
       stato: "in_corso" as const,
-      iscrizioni_chiudono_il: "2026-06-07T21:59:00Z",
+      iscrizioni_chiudono_il: "2027-06-07T21:59:00Z",
     },
     {
       id: "rimini",
       nome: "Tappa 2 · Rimini",
       luogo: "Rimini, Bagno 26",
-      data_inizio: "2026-06-28",
-      data_fine: "2026-06-29",
+      data_inizio: "2027-06-28",
+      data_fine: "2027-06-29",
       stato: "iscrizioni_aperte" as const,
-      iscrizioni_chiudono_il: "2026-06-21T21:59:00Z",
+      iscrizioni_chiudono_il: "2027-06-21T21:59:00Z",
     },
     {
       id: "cagliari",
       nome: "Tappa 3 · Cagliari",
       luogo: "Cagliari, Poetto",
-      data_inizio: "2026-07-12",
-      data_fine: "2026-07-13",
+      data_inizio: "2027-07-12",
+      data_fine: "2027-07-13",
       stato: "iscrizioni_chiuse" as const,
-      iscrizioni_chiudono_il: "2026-07-05T21:59:00Z",
+      iscrizioni_chiudono_il: "2027-07-05T21:59:00Z",
     },
     {
       id: "pescara",
       nome: "Tappa 4 · Pescara",
       luogo: "Pescara, Lungomare Matteotti",
-      data_inizio: "2026-07-26",
-      data_fine: "2026-07-27",
+      data_inizio: "2027-07-26",
+      data_fine: "2027-07-27",
       stato: "annullata" as const,
-      iscrizioni_chiudono_il: "2026-07-19T21:59:00Z",
+      iscrizioni_chiudono_il: "2027-07-19T21:59:00Z",
     },
     {
       id: "lignano",
       nome: "Tappa 5 · Lignano (bozza)",
       luogo: "Lignano Sabbiadoro",
-      data_inizio: "2026-08-09",
-      data_fine: "2026-08-10",
+      data_inizio: "2027-08-09",
+      data_fine: "2027-08-10",
       stato: "bozza" as const,
       iscrizioni_chiudono_il: null,
     },

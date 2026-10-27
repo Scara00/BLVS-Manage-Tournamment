@@ -73,6 +73,20 @@ insert into public.tappe (
    'Cagliari, Poetto', '2027-07-10', '2027-07-11', 'iscrizioni_chiuse',
    '2027-05-20 09:00+02', '2027-07-03 23:59+02');
 
+-- Ritrovo, programma e scadenza per annullare (BLVS-24).
+update public.tappe set
+  ritrovo = 'Bagno 26, ingresso dal lungomare',
+  ritrovo_alle = '2027-06-26 08:30+02',
+  annullabile_fino_al = '2027-06-21 23:59+02',
+  programma = E'Sabato 26: accrediti 8:30, gironi dalle 9:30.\nDomenica 27: eliminazione dalle 9:00, finali alle 16:00.'
+where id = '00000000-0000-4000-8000-000000001002';
+
+update public.tappe set
+  ritrovo = 'Piazza Mazzini, gazebo BLVS',
+  ritrovo_alle = '2027-06-12 08:30+02',
+  programma = E'Sabato 12: gironi dalle 9:30.\nDomenica 13: eliminazione e finali.'
+where id = '00000000-0000-4000-8000-000000001001';
+
 -- ---------------------------------------------------------------------------
 -- Iscrizioni
 -- ---------------------------------------------------------------------------
