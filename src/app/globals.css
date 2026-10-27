@@ -208,15 +208,31 @@
   --sidebar-ring: var(--blvs-ring);
 }
 
+/*
+ * App shell: height of the sticky topbar (sticky from md only), kept clear
+ * by scroll-padding when focus or an anchor scrolls the page. TopbarHeight
+ * overwrites it with the measured height; these are the no-JS fallbacks.
+ */
+:root {
+  --app-topbar-h: 0rem;
+}
+@media (min-width: 48rem) {
+  :root {
+    --app-topbar-h: 4rem;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   html {
     font-size: 16px;
+    scroll-padding-top: calc(var(--app-topbar-h) + var(--spacing-space-4));
     @apply font-sans;
   }
   body {
+    overflow-wrap: break-word;
     @apply bg-background text-foreground;
   }
   /* Scores and times: the mono token always uses tabular figures. */

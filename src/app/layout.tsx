@@ -4,7 +4,7 @@ import { fontVariables } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "BLVS – Manage Tournament",
+  title: { default: "BLVS – Manage Tournament", template: "%s · BLVS" },
   description:
     "Gestisci tornei, squadre, calendari e risultati in un unico posto.",
 };

@@ -225,6 +225,42 @@ export const contrastPairs: readonly ContrastPair[] = [
     kind: "graphic",
   },
   {
+    name: "Anello di focus su nero",
+    fg: color.primaryForeground,
+    bg: color.primary,
+    kind: "graphic",
+  },
+  {
+    name: "Tape su nero (voce attiva)",
+    fg: color.tape,
+    bg: color.primary,
+    kind: "graphic",
+  },
+  {
+    name: "Nero su tape (voce attiva)",
+    fg: color.primary,
+    bg: color.tape,
+    kind: "text",
+  },
+  {
+    name: "Testo su neutro 50 (barra menu)",
+    fg: color.foreground,
+    bg: neutral[50],
+    kind: "text",
+  },
+  {
+    name: "Bordo input su neutro 50",
+    fg: color.input,
+    bg: neutral[50],
+    kind: "graphic",
+  },
+  {
+    name: "Bianco su neutro 800 (hover sidebar)",
+    fg: color.primaryForeground,
+    bg: neutral[800],
+    kind: "text",
+  },
+  {
     name: "Live su sfondo (badge)",
     fg: color.live.bg,
     bg: color.background,
