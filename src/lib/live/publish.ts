@@ -6,6 +6,7 @@ import type {
   LiveMatch,
   OverallStandingRow,
   PendingScores,
+  PhaseStarted,
 } from "./types";
 
 /*
@@ -31,4 +32,9 @@ export function publishOverallStandings(
 /** New count of results to enter for a stage (admin dashboard banner). */
 export function publishPendingScores(stage: PendingScores): LiveEvent {
   return getLiveBus().publish({ type: "pending-scores", stage });
+}
+
+/** A board's phase started and its matches were created (BLVS-29). */
+export function publishPhaseStarted(phase: PhaseStarted): LiveEvent {
+  return getLiveBus().publish({ type: "phase-started", phase });
 }

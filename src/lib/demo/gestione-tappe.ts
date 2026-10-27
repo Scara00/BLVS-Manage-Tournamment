@@ -73,7 +73,7 @@ function seed(): Store {
         iscrizioni_chiuse_il: "2027-07-03T22:00:00Z",
         chiusura_automatica: true,
       },
-      tabelloni: [board("M", 14, 0), board("F", 10, 0)],
+      tabelloni: [board("M", 14, 0), board("F", 8, 0)],
     },
     {
       row: {
@@ -181,6 +181,28 @@ export function aggiornaScadenzaDemo(id: string, chiudonoIl: Date): DemoEsito {
 }
 
 /**
+ * The group phase of one board started (BLVS-29): like `avvia_fase`, the
+ * board gets its group matches and a stage `iscrizioni_chiuse` moves to
+ * `in_corso`.
+ */
+export function segnaFaseAvviataDemo(
+  id: string,
+  categoria: "M" | "F",
+  partite: number,
+): DemoEsito {
+  const tappa = store().get(id);
+  if (!tappa) return "nonTrovata";
+  const tabellone = tappa.tabelloni.find((t) => t.categoria === categoria);
+  if (!tabellone) return "nonTrovata";
+  tabellone.fasiPartite = [
+    ...tabellone.fasiPartite.filter((f) => f !== "gironi"),
+    ...Array.from({ length: partite }, () => "gironi"),
+  ];
+  if (tappa.row.stato === "iscrizioni_chiuse") tappa.row.stato = "in_corso";
+  return "ok";
+}
+
+/**
  * Adds a stage for one e2e test, so parallel projects never share it.
  * Only reachable through the demo-only route `POST /api/demo/tappe`.
  */
@@ -194,6 +216,25 @@ export function creaDemoTappa({
   nome?: string;
 }): string {
   const id = `e2e-${crypto.randomUUID()}`;
+  aggiungiDemoTappa(id, { stato, chiudonoIl, nome });
+  return id;
+}
+
+/** Adds a demo stage with a given id (e2e fixtures). */
+export function aggiungiDemoTappa(
+  id: string,
+  {
+    stato = "bozza",
+    chiudonoIl,
+    nome,
+    confermate = { M: 4, F: 3 },
+  }: {
+    stato?: StatoTappa;
+    chiudonoIl: string | null;
+    nome?: string;
+    confermate?: { M: number; F: number };
+  },
+): void {
   store().set(id, {
     row: {
       id,
@@ -207,7 +248,6 @@ export function creaDemoTappa({
       iscrizioni_chiuse_il: null,
       chiusura_automatica: false,
     },
-    tabelloni: [board("M", 4, 1), board("F", 3, 0)],
+    tabelloni: [board("M", confermate.M, 1), board("F", confermate.F, 0)],
   });
-  return id;
 }

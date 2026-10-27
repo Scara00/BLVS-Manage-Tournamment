@@ -39,6 +39,10 @@ export type StatoPartita = (typeof STATI_PARTITA)[number];
 export const FASI_TABELLONE = ["gold", "silver"] as const;
 export type FaseTabellone = (typeof FASI_TABELLONE)[number];
 
+/** Game phase of a board, started by the admin (BLVS-29). */
+export const FASI_GIOCO = ["gironi_iniziali"] as const;
+export type FaseGioco = (typeof FASI_GIOCO)[number];
+
 export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
 export type FasePartita = (typeof FASI_PARTITA)[number];
 
@@ -94,6 +98,9 @@ export type Tabellone = {
   fase: FaseTabellone | null;
   /** When the board was concluded (BLVS-43); null while still open. */
   concluso_il: string | null;
+  /** Started game phase (BLVS-29, `avvia_fase`); null until it starts. */
+  fase_gioco: FaseGioco | null;
+  fase_avviata_il: string | null;
 };
 
 export type Iscrizione = {

@@ -46,6 +46,19 @@ export type PendingScores = {
   count: number;
 };
 
+/** A board started a game phase (BLVS-29): its matches now exist. */
+export type PhaseStarted = {
+  /** `<stage id>:<category>`, one per board. */
+  id: string;
+  stageId: string;
+  /** Spoken in announcements, e.g. «Tappa 3 · Cagliari, maschile». */
+  label: string;
+  category: "M" | "F";
+  phase: "gironi_iniziali";
+  /** Matches created, all still to play. */
+  matches: number;
+};
+
 export type LiveSnapshot = {
   /** Sequence number of the last event folded into this snapshot. */
   seq: number;
@@ -56,6 +69,8 @@ export type LiveSnapshot = {
   overall: readonly OverallStandingRow[];
   /** Per stage, only for the stages that published a count. */
   pendingScores: readonly PendingScores[];
+  /** Boards whose phase started; absent in snapshots from before BLVS-29. */
+  phases?: readonly PhaseStarted[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -65,7 +80,8 @@ export type LiveEventPayload =
   | { type: "score"; match: LiveMatch }
   | { type: "group-standings"; group: GroupStandings }
   | { type: "overall-standings"; rows: readonly OverallStandingRow[] }
-  | { type: "pending-scores"; stage: PendingScores };
+  | { type: "pending-scores"; stage: PendingScores }
+  | { type: "phase-started"; phase: PhaseStarted };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -79,6 +95,7 @@ export const LIVE_EVENT_TYPES = [
   "group-standings",
   "overall-standings",
   "pending-scores",
+  "phase-started",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -105,5 +122,7 @@ export function applyLiveEvent(
         ...base,
         pendingScores: upsert(snapshot.pendingScores ?? [], event.stage),
       };
+    case "phase-started":
+      return { ...base, phases: upsert(snapshot.phases ?? [], event.phase) };
   }
 }
