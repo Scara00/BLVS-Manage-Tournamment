@@ -4,6 +4,7 @@ import { ForbiddenContent } from "@/components/error-page";
 import { AppShell } from "@/components/layout/app-shell";
 import { MinimalShell } from "@/components/layout/minimal-shell";
 import { PageContainer } from "@/components/layout/page-container";
+import { Toaster, ToastProvider } from "@/components/ui/toast";
 import {
   LiveAnnouncer,
   LiveBarConnected,
@@ -141,6 +142,15 @@ const meta = {
   title: "Amministrazione/Dashboard",
   component: Schermata,
   args: { stato: "pronto", filtro: "tutte" },
+  // The stage actions (BLVS-22) toast their outcome; no root layout here.
+  decorators: [
+    (Story) => (
+      <ToastProvider>
+        <Story />
+        <Toaster />
+      </ToastProvider>
+    ),
+  ],
   argTypes: {
     stato: {
       control: "inline-radio",

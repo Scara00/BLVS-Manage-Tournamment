@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 456 files · ~133,275 words
+- 456 files · ~133,307 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2106 nodes · 4659 edges · 127 communities (108 shown, 19 thin omitted)
+- 2106 nodes · 4662 edges · 126 communities (107 shown, 19 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 18 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c58135bb`
+- Built from commit: `8534c9db`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -99,7 +99,6 @@
 - [[_COMMUNITY_Community 84|Community 84]]
 - [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 86|Community 86]]
-- [[_COMMUNITY_Community 87|Community 87]]
 - [[_COMMUNITY_Community 88|Community 88]]
 - [[_COMMUNITY_Community 89|Community 89]]
 - [[_COMMUNITY_Community 90|Community 90]]
@@ -158,15 +157,15 @@
   src/app/admin/(protetta)/page.tsx → src/lib/admin/dashboard.ts
 - `TappeContent()` --calls--> `readTappeAdmin()`  [INFERRED]
   src/app/admin/(protetta)/tappe/page.tsx → src/lib/tappe/gestione.ts
-- `pendingCookie()` --calls--> `encodePending()`  [INFERRED]
-  src/app/api/auth/conferma-email/conferma-email-routes.test.ts → src/lib/auth/email-verification/pending.ts
 - `POST()` --calls--> `creaDemoTappaRoute()`  [INFERRED]
   src/app/api/demo/tappe/route.ts → src/lib/demo/gestione-tappe-route.ts
+- `reducer()` --calls--> `applyLiveEvent()`  [EXTRACTED]
+  src/components/live/live-provider.tsx → src/lib/live/types.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (127 total, 19 thin omitted)
+## Communities (126 total, 19 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
@@ -453,20 +452,16 @@ Cohesion: 0.17
 Nodes (13): EmailVerifyOutcome, EmailVerifyStatus, OUTCOMES, REGISTRATION_STEPS, ResendError, ResendResponse, EmailPreview(), EmailVerifyScreen() (+5 more)
 
 ### Community 85 - "Community 85"
-Cohesion: 0.26
-Nodes (10): EmailVerifyState(), isConfirmed(), metadata, resolveState(), readOutcome(), formatCountdown(), formatExpiry(), formatValidity() (+2 more)
+Cohesion: 0.17
+Nodes (18): EmailVerifyState(), isConfirmed(), metadata, resolveState(), readOutcome(), formatCountdown(), formatExpiry(), formatValidity() (+10 more)
 
 ### Community 86 - "Community 86"
 Cohesion: 0.21
 Nodes (11): loginHref(), signupHref(), signupReturnPath(), withReturn(), AppFooter(), privacyHref(), safeReturnPath(), ReturnLink() (+3 more)
 
-### Community 87 - "Community 87"
-Cohesion: 0.30
-Nodes (10): decodePending(), encodePending(), MAX_AGE_SECONDS, PendingVerification, readPendingVerification(), rememberPendingVerification(), POST(), retryAfterSeconds() (+2 more)
-
 ### Community 88 - "Community 88"
-Cohesion: 0.25
-Nodes (4): gotrue, { jar }, pendingCookie(), T0
+Cohesion: 0.22
+Nodes (5): gotrue, { jar }, pendingCookie(), T0, encodePending()
 
 ### Community 90 - "Community 90"
 Cohesion: 0.10
@@ -489,8 +484,8 @@ Cohesion: 0.29
 Nodes (9): requiresSession(), forbiddenAdminApi(), isAdminApi(), isNavigation(), redirectKeepingCookies(), createServerClient, getClaims, loadUpdateSession() (+1 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.29
-Nodes (8): DraftList(), register(), formatStartsAt(), TappaAnnullata(), formatServerTime(), getProcessTimeZone(), partsFormatter, ServerTimeParts
+Cohesion: 0.25
+Nodes (9): DraftList(), register(), formatStartsAt(), TappaAnnullata(), formatServerTime(), getProcessTimeZone(), now(), partsFormatter (+1 more)
 
 ### Community 97 - "Community 97"
 Cohesion: 0.20
@@ -596,7 +591,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.033) - this node is a cross-community bridge._
 - **Why does `expectNoA11yViolations()` connect `Community 17` to `Community 65`, `Community 100`, `Community 101`, `Community 102`, `Community 104`, `Community 107`, `Community 119`, `Community 120`, `Community 91`, `Community 93`?**
   _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Why does `now()` connect `Community 87` to `Community 96`, `Community 66`, `Community 98`, `Community 68`, `Community 69`, `Community 106`, `Community 12`, `Community 79`, `Community 81`, `Community 82`, `Community 84`, `Community 85`, `Community 58`, `Community 59`, `Community 28`, `Community 29`?**
+- **Why does `now()` connect `Community 96` to `Community 66`, `Community 98`, `Community 68`, `Community 69`, `Community 106`, `Community 12`, `Community 79`, `Community 81`, `Community 82`, `Community 84`, `Community 85`, `Community 58`, `Community 59`, `Community 28`, `Community 29`?**
   _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
   _700 weakly-connected nodes found - possible documentation gaps or missing edges._
