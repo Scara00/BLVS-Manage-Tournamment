@@ -151,3 +151,118 @@ export const demoRegistrations: readonly DemoRegistration[] = [
     received: "10 giugno",
   },
 ];
+
+/**
+ * The player stage list (w-tappe) in the shape of `public.tappe` and RPC
+ * `posti_tappe()`. It includes a draft (never shown to players) and a
+ * cancelled stage, so the demo exercises every rule of the list.
+ */
+export const demoTappeGiocatore = {
+  /** The demo player's category. */
+  categoria: "M" as const,
+  tappe: [
+    {
+      id: "jesolo",
+      nome: "Tappa 1 · Jesolo",
+      luogo: "Jesolo Lido, Piazza Mazzini",
+      data_inizio: "2026-06-14",
+      data_fine: "2026-06-15",
+      stato: "in_corso" as const,
+      iscrizioni_chiudono_il: "2026-06-07T21:59:00Z",
+    },
+    {
+      id: "rimini",
+      nome: "Tappa 2 · Rimini",
+      luogo: "Rimini, Bagno 26",
+      data_inizio: "2026-06-28",
+      data_fine: "2026-06-29",
+      stato: "iscrizioni_aperte" as const,
+      iscrizioni_chiudono_il: "2026-06-21T21:59:00Z",
+    },
+    {
+      id: "cagliari",
+      nome: "Tappa 3 · Cagliari",
+      luogo: "Cagliari, Poetto",
+      data_inizio: "2026-07-12",
+      data_fine: "2026-07-13",
+      stato: "iscrizioni_chiuse" as const,
+      iscrizioni_chiudono_il: "2026-07-05T21:59:00Z",
+    },
+    {
+      id: "pescara",
+      nome: "Tappa 4 · Pescara",
+      luogo: "Pescara, Lungomare Matteotti",
+      data_inizio: "2026-07-26",
+      data_fine: "2026-07-27",
+      stato: "annullata" as const,
+      iscrizioni_chiudono_il: "2026-07-19T21:59:00Z",
+    },
+    {
+      id: "lignano",
+      nome: "Tappa 5 · Lignano (bozza)",
+      luogo: "Lignano Sabbiadoro",
+      data_inizio: "2026-08-09",
+      data_fine: "2026-08-10",
+      stato: "bozza" as const,
+      iscrizioni_chiudono_il: null,
+    },
+  ],
+  posti: [
+    {
+      tappa_id: "jesolo",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 16,
+      fase: "gironi" as const,
+    },
+    {
+      tappa_id: "jesolo",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 12,
+      fase: "gironi" as const,
+    },
+    {
+      tappa_id: "rimini",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 11,
+      fase: null,
+    },
+    {
+      tappa_id: "rimini",
+      categoria: "F" as const,
+      posti: 12,
+      occupati: 12,
+      fase: null,
+    },
+    {
+      tappa_id: "cagliari",
+      categoria: "M" as const,
+      posti: 32,
+      occupati: 24,
+      fase: null,
+    },
+    {
+      tappa_id: "cagliari",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 9,
+      fase: null,
+    },
+    {
+      tappa_id: "pescara",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 3,
+      fase: null,
+    },
+    {
+      tappa_id: "pescara",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 2,
+      fase: null,
+    },
+  ],
+};

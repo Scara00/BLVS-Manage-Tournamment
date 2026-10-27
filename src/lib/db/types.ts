@@ -35,6 +35,9 @@ export const STATI_PARTITA = [
 ] as const;
 export type StatoPartita = (typeof STATI_PARTITA)[number];
 
+export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
+export type FasePartita = (typeof FASI_PARTITA)[number];
+
 export type Utente = {
   id: string;
   email: string;
@@ -63,6 +66,8 @@ export type Tabellone = {
   id: string;
   tappa_id: string;
   categoria: Categoria;
+  /** Seats on this board (one category of the stage). */
+  posti: number;
 };
 
 export type Iscrizione = {
