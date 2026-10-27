@@ -100,7 +100,9 @@ jobs:
         run: supabase test db
       - name: Variabili di Supabase locale per i test
         run: supabase status -o env | sed -E 's/^([A-Z_]+)="(.*)"$/\1=\2/' >> "$GITHUB_ENV"
-      - name: E2E email su Mailpit (Supabase Auth ed Edge Function)
+      # BLVS-14: the password reset flow drives the app in Chromium.
+      - run: npx playwright install --with-deps chromium
+      - name: E2E su Supabase locale (email su Mailpit, reimpostazione password)
         run: npx playwright test --config playwright.supabase.config.ts
         env:
           MAILPIT_URL: http://127.0.0.1:54324

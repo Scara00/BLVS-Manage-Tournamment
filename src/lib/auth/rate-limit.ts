@@ -25,6 +25,12 @@ export const AUTH_RATE_LIMITS = {
     { scope: "ip", max: 5, windowSeconds: 60 * 60 },
     { scope: "email", max: 3, windowSeconds: 60 * 60 },
   ],
+  // Password reset (BLVS-14): a 429 is the same for known and unknown emails.
+  "reset-request": [
+    { scope: "ip", max: 10, windowSeconds: 60 * 60 },
+    { scope: "email", max: 5, windowSeconds: 60 * 60 },
+  ],
+  "reset-confirm": [{ scope: "ip", max: 20, windowSeconds: 15 * 60 }],
 } as const satisfies Record<string, readonly Rule[]>;
 
 export type AuthAction = keyof typeof AUTH_RATE_LIMITS;

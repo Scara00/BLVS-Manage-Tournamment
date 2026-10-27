@@ -19,7 +19,7 @@ function readTemplateConfig(key: string) {
 
 describe.each(SUPABASE_AUTH_TEMPLATES)(
   "modello Supabase Auth $key",
-  ({ key, file, render }) => {
+  ({ key, file, href, render }) => {
     it(`supabase/templates/${file} è allineato al componente React Email`, async () => {
       const { html } = await render();
       const target = path.join(SUPABASE_DIR, "templates", file);
@@ -29,7 +29,7 @@ describe.each(SUPABASE_AUTH_TEMPLATES)(
       }
       expect(readFileSync(target, "utf8")).toBe(html);
       expect(html).toMatch(/<html[^>]*\slang="it"/);
-      expect(html).toContain('href="{{ .ConfirmationURL }}"');
+      expect(html).toContain(`href="${href}"`);
     });
 
     it("config.toml lo usa con l'oggetto in italiano", async () => {
