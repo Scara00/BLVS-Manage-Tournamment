@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
   readSupabaseEnv: vi.fn(),
   refresh: vi.fn(),
   publishPhaseStarted: vi.fn(),
+  pubblicaTabellone: vi.fn(),
   rpc: vi.fn(),
 }));
 
@@ -19,6 +20,9 @@ vi.mock("@/lib/supabase/env", () => ({
 }));
 vi.mock("@/lib/live/publish", () => ({
   publishPhaseStarted: mocks.publishPhaseStarted,
+}));
+vi.mock("@/lib/tappe/live-admin/pubblica", () => ({
+  pubblicaTabellone: mocks.pubblicaTabellone,
 }));
 
 const { avviaFase } = await import("./actions");

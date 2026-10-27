@@ -5,6 +5,11 @@ import { useReducedMotion } from "@/components/scoreboard";
 
 export const ROW_KEY_ATTR = "data-live-key";
 export const ROW_SIGNATURE_ATTR = "data-live-signature";
+/**
+ * `outline` on dark rows (the player's own match): a tape outline flashes
+ * instead of the background, which would put light text on tape-soft.
+ */
+export const ROW_HIGHLIGHT_ATTR = "data-live-highlight";
 
 const HIGHLIGHT_MS = 1_200;
 const MOVE_MS = 300;
@@ -39,9 +44,9 @@ export function useLiveRowMotion(
     const rows = root.querySelectorAll<HTMLElement>(`[${ROW_KEY_ATTR}]`);
     const next = new Map<string, { top: number; sig: string }>();
     const origin = root.getBoundingClientRect().top;
-    const highlight = getComputedStyle(document.documentElement)
-      .getPropertyValue("--blvs-tape-soft")
-      .trim();
+    const styles = getComputedStyle(document.documentElement);
+    const highlight = styles.getPropertyValue("--blvs-tape-soft").trim();
+    const tape = styles.getPropertyValue("--blvs-tape").trim() || highlight;
 
     rows.forEach((el) => {
       const rect = el.getBoundingClientRect();
@@ -62,8 +67,17 @@ export function useLiveRowMotion(
         );
       }
       if (before.sig !== sig && highlight) {
+        const outline = el.getAttribute(ROW_HIGHLIGHT_ATTR) === "outline";
         el.animate(
-          [{ backgroundColor: highlight }, { backgroundColor: "transparent" }],
+          outline
+            ? [
+                { outline: `4px solid ${tape}`, outlineOffset: "2px" },
+                { outline: "4px solid transparent", outlineOffset: "2px" },
+              ]
+            : [
+                { backgroundColor: highlight },
+                { backgroundColor: "transparent" },
+              ],
           { duration: HIGHLIGHT_MS, easing: "ease-in" },
         );
       }

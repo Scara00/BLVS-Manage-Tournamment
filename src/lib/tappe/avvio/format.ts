@@ -56,3 +56,12 @@ export function contaLabel(
 ): string {
   return `${n} ${n === 1 ? singolare : plurale}`;
 }
+
+/**
+ * The start button: «Avvia le 6 partite», «Avvia la partita», generic when
+ * no group can make matches yet.
+ */
+export function avviaLabel(partite: number): string {
+  if (partite === 0) return "Avvia i gironi iniziali";
+  return partite === 1 ? "Avvia la partita" : `Avvia le ${partite} partite`;
+}

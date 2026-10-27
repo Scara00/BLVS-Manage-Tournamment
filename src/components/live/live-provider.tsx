@@ -77,9 +77,15 @@ export function LiveProvider({
   connect = true,
   initialStatus = "connecting",
   connection,
+  accept,
   children,
 }: {
   initial: LiveSync;
+  /**
+   * Which events this page folds in (e.g. one stage's). Others are dropped,
+   * so they neither change the data nor the «Ultimo aggiornamento» time.
+   */
+  accept?: (event: LiveEvent) => boolean;
   connect?: boolean;
   /** Status shown before the connection reports one (stories). */
   initialStatus?: LiveStatus;
@@ -94,6 +100,11 @@ export function LiveProvider({
   const listeners = useRef(new Set<EventListener>());
   const options = useRef(connection);
   const initialSeq = useRef(initial.snapshot.seq);
+  const acceptRef = useRef(accept);
+
+  useEffect(() => {
+    acceptRef.current = accept;
+  });
 
   useEffect(() => {
     if (!connect) return;
@@ -104,6 +115,7 @@ export function LiveProvider({
       onSync: (sync) => dispatch({ type: "sync", sync }),
       onPing: (at) => dispatch({ type: "ping", at }),
       onEvent: (event) => {
+        if (acceptRef.current && !acceptRef.current(event)) return;
         dispatch({ type: "event", event });
         for (const listener of listeners.current) listener(event);
       },

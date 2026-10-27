@@ -55,7 +55,7 @@ test("avvio confermato: partite create, tappa in corso", async ({
   const id = await creaTappa(request, "pronta");
   await apriAvvio(page, id);
 
-  await page.getByRole("button", { name: "Avvia i gironi iniziali" }).click();
+  await page.getByRole("button", { name: "Avvia le 6 partite" }).click();
   const dialog = page.getByRole("alertdialog", {
     name: "Avviare i gironi iniziali del tabellone maschile?",
   });
@@ -64,15 +64,23 @@ test("avvio confermato: partite create, tappa in corso", async ({
   await expectNoA11yViolations(page);
   await dialog.getByRole("button", { name: "Avvia" }).click();
 
-  await expect(page.getByTestId("fase-avviata")).toBeFocused();
+  // The matches exist: the admin follows them on w-admin-live (BLVS-31).
+  await expect(page).toHaveURL(new RegExp(`/admin/tappe/${id}/live/m$`));
+  await expect(page.getByTestId("avanzamento")).toHaveText(
+    "0 di 6 partite concluse",
+  );
+
+  // Back on the start screen: started, with the way to the live screen.
+  await apriAvvio(page, id);
+  await expect(page.getByTestId("fase-avviata")).toBeVisible();
   await expect(page.getByLabel("Riepilogo")).toContainText("Partite create6");
   await expect(
-    page.getByRole("button", { name: "Avvia i gironi iniziali" }),
+    page.getByRole("button", { name: "Avvia le 6 partite" }),
   ).toHaveCount(0);
+  await expect(
+    page.getByRole("link", { name: "Vai alla gestione live" }),
+  ).toHaveAttribute("href", `/admin/tappe/${id}/live/m`);
   await expect(page).toHaveTitle(/Avvio fase/);
-  // The toast fades in: axe would read its colours mid-animation.
-  await expect(page.getByText(/6 partite create/)).toBeVisible();
-  await waitForAnimations(page);
   await expectNoA11yViolations(page);
 
   // The stage moved to «in corso».
@@ -91,7 +99,7 @@ test("avvio rifiutato: errori annunciati con il link al girone", async ({
   await expect(controlli.getByText("1 da correggere")).toHaveCount(2);
   await expectNoA11yViolations(page);
 
-  await page.getByRole("button", { name: "Avvia i gironi iniziali" }).click();
+  await page.getByRole("button", { name: "Avvia le 3 partite" }).click();
   const annuncio = page.getByTestId("avvio-annuncio");
   await expect(annuncio).toHaveAttribute("role", "alert");
   await expect(annuncio).toContainText(

@@ -127,6 +127,19 @@ export type Punteggio = {
   updated_at: string;
 };
 
+/**
+ * One score saved from the device queue (BLVS-33): the key generated on the
+ * device, so a repeated send never saves twice.
+ */
+export type PunteggioInvio = {
+  chiave: string;
+  partita_id: string;
+  /** Score version after the save made with this key. */
+  versione: number;
+  autore_id: string | null;
+  created_at: string;
+};
+
 /** Admin's order for a perfect tie in a group (BLVS-27). */
 export type SpareggioGirone = {
   id: string;

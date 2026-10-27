@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Tape } from "@/components/scoreboard";
 import { FASE_LABEL, type TappaGiocatore } from "@/lib/tappe/format";
+import { liveTappaHref } from "@/lib/tappe/paths";
 
 /**
  * Shown at the top of the list while a stage is being played: which one,
@@ -28,10 +29,10 @@ export function TappeLiveStrip({ tappa }: { tappa: TappaGiocatore }) {
           {tappa.fase ? ` · Fase ${FASE_LABEL[tappa.fase]}` : null}
         </h2>
         <Link
-          href="/live"
+          href={liveTappaHref(tappa.id)}
           className="inline-flex min-h-10 max-w-full items-center bg-tape px-space-4 font-heading font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
         >
-          Segui la diretta
+          Segui il live
         </Link>
       </div>
     </section>

@@ -25,6 +25,8 @@ export function announcementFor(event: LiveEvent): string {
       const partite = matches === 1 ? "1 partita" : `${matches} partite`;
       return `${label}: iniziati i gironi, ${partite} da giocare`;
     }
+    case "board-matches":
+      return `${event.board.label}: ${event.board.change ?? "partite aggiornate"}`;
   }
 }
 
