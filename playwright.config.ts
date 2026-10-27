@@ -52,7 +52,12 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
       // HTTPS is enforced only on staging/production; e2e runs on http://localhost.
-      env: { TZ: "Europe/Rome", ENFORCE_HTTPS: "false" },
+      // LIVE_DEMO_PUBLISH opens POST /api/live/publish so e2e can "save" a result.
+      env: {
+        TZ: "Europe/Rome",
+        ENFORCE_HTTPS: "false",
+        LIVE_DEMO_PUBLISH: "true",
+      },
     },
     {
       // CI downloads the storybook-static artifact and sets STORYBOOK_PREBUILT.

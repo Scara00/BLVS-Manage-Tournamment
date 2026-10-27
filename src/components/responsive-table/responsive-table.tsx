@@ -46,6 +46,7 @@ export function ResponsiveTable<Row>({
   cardBadgeKey,
   cardTitleKey,
   emptyMessage = "Nessun dato da mostrare.",
+  rowAttributes,
   className,
 }: {
   /** Names the table and, on mobile, the list. */
@@ -60,6 +61,8 @@ export function ResponsiveTable<Row>({
   cardTitleKey?: string;
   /** Shown instead of the table and the cards when `rows` is empty. */
   emptyMessage?: string;
+  /** Extra `data-*` attributes for each row (table row and card alike). */
+  rowAttributes?: (row: Row) => Record<`data-${string}`, string>;
   className?: string;
 }) {
   const captionId = useId();
@@ -124,7 +127,11 @@ export function ResponsiveTable<Row>({
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={getRowKey(row)} className="border-b border-border">
+            <tr
+              key={getRowKey(row)}
+              {...rowAttributes?.(row)}
+              className="border-b border-border"
+            >
               {columns.map((column) => {
                 const Cell = column.rowHeader ? "th" : "td";
                 return (
@@ -167,6 +174,7 @@ export function ResponsiveTable<Row>({
           {rows.map((row) => (
             <li
               key={getRowKey(row)}
+              {...rowAttributes?.(row)}
               className="flex flex-wrap items-start gap-x-space-3 gap-y-space-2 border border-border bg-card p-inset"
             >
               {badge ? (

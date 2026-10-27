@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import {
-  ResponsiveTable,
-  type ResponsiveTableColumn,
-} from "@/components/responsive-table/responsive-table";
-import { demoStandings, type DemoStanding } from "@/lib/demo/tournament";
+  LiveAnnouncer,
+  LiveBarConnected,
+  LiveLoading,
+  LiveOverallStandings,
+  LiveProvider,
+} from "@/components/live";
+import { readLiveSync } from "@/lib/live/read";
 
 export const metadata: Metadata = { title: "Classifica" };
 
-const columns: ResponsiveTableColumn<DemoStanding>[] = [
-  {
-    key: "position",
-    header: "Posizione",
-    numeric: true,
-    align: "start",
-    width: "18%",
-  },
-  { key: "pair", header: "Coppia", rowHeader: true },
-  { key: "stages", header: "Tappe giocate", numeric: true, width: "20%" },
-  { key: "points", header: "Punti", numeric: true, width: "16%" },
-];
+async function ClassificaContent() {
+  const initial = await readLiveSync();
+  return (
+    <LiveProvider initial={initial}>
+      <div className="flex flex-col gap-stack">
+        <LiveBarConnected />
+        <LiveAnnouncer types={["overall-standings"]} />
+        <LiveOverallStandings />
+      </div>
+    </LiveProvider>
+  );
+}
 
 export default function ClassificaPage() {
   return (
@@ -28,14 +32,9 @@ export default function ClassificaPage() {
       eyebrow="Circuito 2026"
       description="La classifica generale del circuito, aggiornata dopo ogni tappa."
     >
-      <ResponsiveTable
-        caption="Classifica generale maschile"
-        columns={columns}
-        rows={demoStandings}
-        getRowKey={(row) => row.pair}
-        cardBadgeKey="position"
-        emptyMessage="Nessuna coppia in classifica."
-      />
+      <Suspense fallback={<LiveLoading what="della classifica" />}>
+        <ClassificaContent />
+      </Suspense>
     </PageContainer>
   );
 }

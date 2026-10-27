@@ -28,6 +28,8 @@ test("ogni story rispetta WCAG 2.2 AA a 390 e 1440 px", async ({
   const stories = Object.values(index.entries).filter(
     (e) => e.type === "story",
   );
+  // One axe run per story and viewport: scale with the story count.
+  test.setTimeout(stories.length * VIEWPORTS.length * 1_000 + 30_000);
 
   for (const story of stories) {
     for (const viewport of VIEWPORTS) {
