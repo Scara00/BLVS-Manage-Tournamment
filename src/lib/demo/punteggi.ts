@@ -7,6 +7,7 @@ import {
   classificaGirone,
   type ClassificaGirone,
 } from "@/lib/gironi/classifica";
+import type { PunteggioUfficiale } from "@/lib/punteggi/conflitto/rileva";
 import { FINESTRA_ANNULLAMENTO_SECONDI } from "@/lib/punteggi/regola";
 import type { ElencoPunteggi, PartitaPunteggio } from "@/lib/punteggi/types";
 import { codiceErrore, type CodiceErrore } from "@/lib/punteggi/validazione";
@@ -143,6 +144,30 @@ export function salvaPunteggioDemo(
     status: "ok",
     versione: dopo.versione,
     tipo: correzione ? "correzione" : "inserimento",
+  };
+}
+
+/**
+ * The official score of a demo match, like `punteggio_attuale` (BLVS-34).
+ * The demo has no authors: `autore` is null; the time is the last save's.
+ */
+export function punteggioUfficialeDemo(
+  tappaId: string,
+  partitaId: string,
+): PunteggioUfficiale | null {
+  const partita = getDemoPunteggi(tappaId)?.partite.find(
+    (p) => p.id === partitaId,
+  );
+  if (!partita) return null;
+  const ultimo = store().ultimi.get(partitaId);
+  return {
+    versione: partita.versione,
+    sets: partita.sets,
+    autore: null,
+    salvatoIl:
+      ultimo && ultimo !== "annullato"
+        ? new Date(ultimo.at).toISOString()
+        : null,
   };
 }
 

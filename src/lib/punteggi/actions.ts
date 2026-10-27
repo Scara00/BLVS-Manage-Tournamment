@@ -8,6 +8,7 @@ import {
   annullaPunteggioDemo,
   classificaDemo,
   getDemoPunteggi,
+  punteggioUfficialeDemo,
   salvaPunteggioDemo,
 } from "@/lib/demo/punteggi";
 import { leggiClassificaGirone } from "@/lib/gironi/classifica";
@@ -18,6 +19,7 @@ import {
 } from "@/lib/live/publish";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
+import type { PunteggioUfficiale } from "./conflitto/rileva";
 import { leggiPunteggi } from "./dati";
 import {
   contaDaInserire,
@@ -102,14 +104,24 @@ async function salvaDb(
   versione: number,
   a: number,
   b: number,
+  sovrascrivi: boolean,
 ): Promise<Esito> {
   if (!isUuid(partitaId)) return errore("nonGiocabile");
-  const { data, error } = await supabase.rpc("salva_punteggio", {
-    p_partita: partitaId,
-    p_versione: versione,
-    p_a: a,
-    p_b: b,
-  });
+  // «Sovrascrivi» (BLVS-34): `versione` is the one shown in the conflict
+  // dialog; the RPC refuses it again if another save landed since.
+  const { data, error } = sovrascrivi
+    ? await supabase.rpc("sovrascrivi_punteggio", {
+        p_partita: partitaId,
+        p_versione_vista: versione,
+        p_a: a,
+        p_b: b,
+      })
+    : await supabase.rpc("salva_punteggio", {
+        p_partita: partitaId,
+        p_versione: versione,
+        p_a: a,
+        p_b: b,
+      });
   if (error) {
     if (error.hint && CODICI.includes(error.hint)) {
       return { ok: false, codice: error.hint as CodiceErrore };
@@ -144,6 +156,45 @@ function salvaDemo(
       return errore("conflict");
     default:
       return errore("nonGiocabile");
+  }
+}
+
+type UfficialeRow = {
+  versione: number;
+  sets: PunteggioUfficiale["sets"] | null;
+  autore: string | null;
+  aggiornato_il: string | null;
+};
+
+/**
+ * The official score after a refused save (BLVS-34), for the conflict
+ * dialog. Null when it cannot be read: the screen then asks to reload.
+ */
+async function leggiUfficiale(
+  supabase: SupabaseClient | null,
+  tappaId: string,
+  partitaId: string,
+): Promise<PunteggioUfficiale | null> {
+  try {
+    if (!supabase) return punteggioUfficialeDemo(tappaId, partitaId);
+    const { data, error } = await supabase.rpc("punteggio_attuale", {
+      p_partita: partitaId,
+    });
+    if (error) throw error;
+    const row = (data as UfficialeRow[])[0];
+    if (!row) return null;
+    return {
+      versione: row.versione,
+      sets: row.sets ?? [],
+      autore: row.autore,
+      salvatoIl: row.aggiornato_il,
+    };
+  } catch (error) {
+    console.error(
+      "[punteggi] lettura del punteggio ufficiale non riuscita",
+      error,
+    );
+    return null;
   }
 }
 
@@ -214,6 +265,7 @@ export async function salvaPunteggio(
   const tappaId = String(formData.get("tappaId") ?? "");
   const partitaId = String(formData.get("partitaId") ?? "");
   const versione = Number(formData.get("versione"));
+  const sovrascrivi = formData.get("sovrascrivi") === "1";
   const verifica = validaPunteggio({
     a: String(formData.get("puntiA") ?? ""),
     b: String(formData.get("puntiB") ?? ""),
@@ -241,7 +293,7 @@ export async function salvaPunteggio(
   let esito: Esito;
   try {
     esito = sessione.supabase
-      ? await salvaDb(sessione.supabase, partitaId, versione, a, b)
+      ? await salvaDb(sessione.supabase, partitaId, versione, a, b, sovrascrivi)
       : salvaDemo(tappaId, partitaId, versione, a, b, at);
   } catch (error) {
     console.error("[punteggi] salvataggio non riuscito", error);
@@ -249,6 +301,23 @@ export async function salvaPunteggio(
   }
 
   if (!esito.ok) {
+    if ("reason" in esito && esito.reason === "conflict") {
+      // Never overwritten silently: the admin chooses in the dialog.
+      const salvato = await leggiUfficiale(
+        sessione.supabase,
+        tappaId,
+        partitaId,
+      );
+      if (salvato) {
+        return {
+          status: "conflict",
+          salvato,
+          mio: { a, b },
+          message: PUNTEGGIO_MESSAGES.conflitto,
+          at,
+        };
+      }
+    }
     if ("codice" in esito) {
       return {
         status: "fieldErrors",

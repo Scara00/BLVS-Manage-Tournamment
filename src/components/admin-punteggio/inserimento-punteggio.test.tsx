@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 import { Toaster, ToastProvider } from "@/components/ui/toast";
@@ -204,5 +204,133 @@ describe("InserimentoPunteggio (w-admin-punteggio)", () => {
     expect(
       screen.getByRole("link", { name: "Ricarica il punteggio" }),
     ).toBeInTheDocument();
+  });
+});
+
+describe("conflitto tra admin (BLVS-34)", () => {
+  const salvato = {
+    versione: 3,
+    sets: [{ a: 21, b: 18 }],
+    autore: "Giulia Neri",
+    salvatoIl: "2026-06-12T12:05:00Z",
+  };
+
+  /** Refuses the plain save; accepts only an overwrite of version 3. */
+  function salvaConConflitto() {
+    return vi.fn<SalvaPunteggioAction>(async (prev, formData) => {
+      const at = prev.status === "idle" ? 1 : prev.at + 1;
+      const a = Number(formData.get("puntiA"));
+      const b = Number(formData.get("puntiB"));
+      if (
+        formData.get("sovrascrivi") === "1" &&
+        formData.get("versione") === "3"
+      ) {
+        return {
+          status: "success",
+          partitaId: String(formData.get("partitaId")),
+          versione: 4,
+          punteggio: { a, b },
+          tipo: "correzione",
+          message: "Punteggio corretto",
+          at,
+        };
+      }
+      return {
+        status: "conflict",
+        salvato,
+        mio: { a, b },
+        message: "Un altro admin ha salvato questa partita prima di te.",
+        at,
+      };
+    });
+  }
+
+  async function salvaDalRiepilogo(user: ReturnType<typeof userEvent.setup>) {
+    await user.click(screen.getByRole("button", { name: "Vai al riepilogo" }));
+    await user.click(screen.getByRole("button", { name: "Conferma e salva" }));
+    return screen.findByRole("alertdialog", {
+      name: "Il punteggio è cambiato",
+    });
+  }
+
+  it("nessuna sovrascrittura silenziosa: mostra salvato e tuo, poi «Tieni il salvato»", async () => {
+    const user = userEvent.setup();
+    const salva = salvaConConflitto();
+    renderScheda({ salva, initialValori: { a: "21", b: "19" } });
+
+    const dialog = await salvaDalRiepilogo(user);
+    expect(salva).toHaveBeenCalledTimes(1);
+    expect(salva.mock.calls[0][1].get("sovrascrivi")).toBeNull();
+    expect(
+      within(dialog).getByRole("group", { name: /Salvato/ }),
+    ).toHaveTextContent("set 1: 21 a 18");
+    expect(
+      within(dialog).getByRole("group", { name: "Il tuo" }),
+    ).toHaveTextContent("set 1: 21 a 19");
+
+    await user.click(
+      within(dialog).getByRole("button", { name: "Tieni il salvato" }),
+    );
+    expect(salva).toHaveBeenCalledTimes(1);
+    expect(campoA()).toHaveValue("21");
+    expect(campoB()).toHaveValue("18");
+    expect(screen.getByTestId("esito-punteggio")).toHaveTextContent(
+      "Hai tenuto il punteggio salvato",
+    );
+    expect(screen.getByTestId("punteggio-attuale")).toHaveTextContent("21–18");
+
+    // The next save is based on the kept version.
+    await user.clear(campoB());
+    await user.type(campoB(), "17");
+    await salvaDalRiepilogo(user);
+    expect(salva.mock.calls[1][1].get("versione")).toBe("3");
+  });
+
+  it("«Sovrascrivi» chiede conferma e salva sulla versione mostrata", async () => {
+    const user = userEvent.setup();
+    const salva = salvaConConflitto();
+    renderScheda({ salva, initialValori: { a: "21", b: "19" } });
+
+    const dialog = await salvaDalRiepilogo(user);
+    await user.click(
+      within(dialog).getByRole("button", { name: "Sovrascrivi" }),
+    );
+    expect(salva).toHaveBeenCalledTimes(1);
+    await user.click(screen.getByRole("button", { name: "Sì, sovrascrivi" }));
+    await waitFor(() => expect(salva).toHaveBeenCalledTimes(2));
+    const data = salva.mock.calls[1][1];
+    expect(data.get("sovrascrivi")).toBe("1");
+    expect(data.get("versione")).toBe("3");
+    expect(data.get("puntiB")).toBe("19");
+    expect(await screen.findByTestId("esito-punteggio")).toHaveTextContent(
+      "Punteggio corretto",
+    );
+  });
+
+  it("una pagina aggiornata non fa avanzare la versione letta", async () => {
+    const user = userEvent.setup();
+    const salva = vi.fn(salvaFinto);
+    const { rerender } = renderScheda({
+      salva,
+      initialValori: { a: "21", b: "19" },
+    });
+    // Another admin saved: the refreshed page brings version 5.
+    rerender(
+      <ToastProvider>
+        <InserimentoPunteggio
+          scheda={{
+            ...daInserire,
+            partita: { ...daInserire.partita, versione: 5 },
+          }}
+          salva={salva}
+          annulla={annullaFinto}
+        />
+        <Toaster />
+      </ToastProvider>,
+    );
+    await user.click(screen.getByRole("button", { name: "Vai al riepilogo" }));
+    await user.click(screen.getByRole("button", { name: "Conferma e salva" }));
+    await waitFor(() => expect(salva).toHaveBeenCalledTimes(1));
+    expect(salva.mock.calls[0][1].get("versione")).toBe("1");
   });
 });

@@ -3820,8 +3820,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/index.ts": {
-    "mtime": 1793121334.3766685,
-    "ast_hash": "672e111c67e75d01178ee0c70881e0e2",
+    "mtime": 1793121364.6765099,
+    "ast_hash": "a003e86633c4d7fff00888f53ef4d3bc",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.stories.tsx": {
@@ -3830,13 +3830,13 @@
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.test.tsx": {
-    "mtime": 1793121334.3768182,
-    "ast_hash": "de7f6b8c715197cfeb3097b2e0e5bf0c",
+    "mtime": 1793121364.6766262,
+    "ast_hash": "1d3f26f6a6d4ff0b46cba906f8ce27dc",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/inserimento-punteggio.tsx": {
-    "mtime": 1793121334.376944,
-    "ast_hash": "6d35f6212b680f9ca7afe8163f04138e",
+    "mtime": 1793121364.6767452,
+    "ast_hash": "e200b53bfcea1b027ddf505f57b57b1d",
     "semantic_hash": ""
   },
   "src/components/admin-punteggio/punteggi-link.tsx": {
@@ -3870,18 +3870,18 @@
     "semantic_hash": ""
   },
   "src/lib/demo/punteggi.ts": {
-    "mtime": 1793121334.3778665,
-    "ast_hash": "15509fa8c77964edaed4718a95a18467",
+    "mtime": 1793121364.6768794,
+    "ast_hash": "15d0b2ba59029eb91902489a43904a50",
     "semantic_hash": ""
   },
   "src/lib/punteggi/actions.test.ts": {
-    "mtime": 1793121334.3779647,
-    "ast_hash": "db1edcee56a6af1eeccaf21fe1b46cd9",
+    "mtime": 1793121364.6769845,
+    "ast_hash": "7bdcfd31af4c599ac1594d8f88e81445",
     "semantic_hash": ""
   },
   "src/lib/punteggi/actions.ts": {
-    "mtime": 1793121334.3780491,
-    "ast_hash": "fde56a05e4f8e60ad1c818d6f6e86460",
+    "mtime": 1793121364.677079,
+    "ast_hash": "7c4ec22cf395953119c723eb97372a4e",
     "semantic_hash": ""
   },
   "src/lib/punteggi/dati.ts": {
@@ -3915,8 +3915,8 @@
     "semantic_hash": ""
   },
   "src/lib/punteggi/state.ts": {
-    "mtime": 1793121334.378507,
-    "ast_hash": "61d741901f116a960f24bf4a9dffc27e",
+    "mtime": 1793121364.677507,
+    "ast_hash": "c1509997f9ecdd30889b5f3636f51155",
     "semantic_hash": ""
   },
   "src/lib/punteggi/types.ts": {
@@ -3937,6 +3937,51 @@
   "supabase/migrations/20261027381000_inserimento_punteggio.sql": {
     "mtime": 1793121334.3788195,
     "ast_hash": "278bd3e0062ab92739d7a084427d4c2c",
+    "semantic_hash": ""
+  },
+  "e2e/admin-punteggio-conflitto.spec.ts": {
+    "mtime": 1793121364.6679592,
+    "ast_hash": "58df1ec4160025e267aeca6bf2269a33",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/conflitto-punteggio.stories.tsx": {
+    "mtime": 1793121364.6761942,
+    "ast_hash": "4f7b6d39a1bee41b146137f9b940379f",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/conflitto-punteggio.test.tsx": {
+    "mtime": 1793121364.6762826,
+    "ast_hash": "871d20b93216d9711859d649eb36a276",
+    "semantic_hash": ""
+  },
+  "src/components/admin-punteggio/conflitto-punteggio.tsx": {
+    "mtime": 1793121364.6764,
+    "ast_hash": "597459c39e6b34f6dca91478465b43bf",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/conflitto/conflitto.db.test.ts": {
+    "mtime": 1793121364.6772032,
+    "ast_hash": "a617f68958254831ba6f14c806d5d1c8",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/conflitto/errori.ts": {
+    "mtime": 1793121364.6772702,
+    "ast_hash": "789ed83ba6ffcfab8934ace6bfc3f1c3",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/conflitto/rileva.test.ts": {
+    "mtime": 1793121364.6773434,
+    "ast_hash": "9ecfd831a4aeef3fe86c055033d51342",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/conflitto/rileva.ts": {
+    "mtime": 1793121364.6774259,
+    "ast_hash": "d8ed9a85451e90481b45741829fe2bed",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027390000_conflitto_punteggio.sql": {
+    "mtime": 1793121364.6775727,
+    "ast_hash": "bb57d0669795c29e9da55886cef8bb22",
     "semantic_hash": ""
   }
 }

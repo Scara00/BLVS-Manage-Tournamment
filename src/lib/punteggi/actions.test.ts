@@ -103,11 +103,46 @@ describe("senza Supabase (demo)", () => {
     expect(demo.getDemoPunteggi(tappa)!.partite[0].versione).toBe(1);
   });
 
-  it("una versione superata è un conflitto", async () => {
+  it("una versione superata è un conflitto con il valore ufficiale (BLVS-34)", async () => {
     await salva("21", "17");
+    vi.clearAllMocks();
     expect(await salva("21", "15")).toMatchObject({
-      status: "error",
-      reason: "conflict",
+      status: "conflict",
+      salvato: { versione: 2, sets: [{ a: 21, b: 17 }], autore: null },
+      mio: { a: 21, b: 15 },
+      message: PUNTEGGIO_MESSAGES.conflitto,
+    });
+    // Nothing was written or published.
+    expect(demo.getDemoPunteggi(tappa)!.partite[0].sets).toEqual([
+      { a: 21, b: 17 },
+    ]);
+    expect(mocks.publishScore).not.toHaveBeenCalled();
+  });
+
+  it("«Sovrascrivi» passa solo sulla versione mostrata nel dialog", async () => {
+    await salva("21", "17");
+    const sovrascrivi = (versione: string) =>
+      salvaPunteggio(
+        initialPunteggioState,
+        form({
+          tappaId: tappa,
+          partitaId,
+          versione,
+          puntiA: "21",
+          puntiB: "15",
+          sovrascrivi: "1",
+        }),
+      );
+    // Another save landed after the dialog showed version 2.
+    await salva("21", "19", "2");
+    expect(await sovrascrivi("2")).toMatchObject({
+      status: "conflict",
+      salvato: { versione: 3, sets: [{ a: 21, b: 19 }] },
+    });
+    expect(await sovrascrivi("3")).toMatchObject({
+      status: "success",
+      versione: 4,
+      tipo: "correzione",
     });
   });
 
@@ -181,6 +216,67 @@ describe("con il database", () => {
     expect(mocks.rpc).toHaveBeenCalledWith("salva_punteggio", {
       p_partita: PARTITA,
       p_versione: 4,
+      p_a: 23,
+      p_b: 21,
+    });
+  });
+
+  it("conflitto: legge il punteggio ufficiale per il dialog", async () => {
+    mocks.rpc.mockImplementation(async (nome: string) =>
+      nome === "salva_punteggio"
+        ? {
+            data: null,
+            error: { code: "40001", hint: "versione_superata", detail: "5" },
+          }
+        : {
+            data: [
+              {
+                versione: 5,
+                sets: [{ a: 23, b: 25 }],
+                autore: "Giulia Neri",
+                aggiornato_il: "2026-06-12T12:05:00Z",
+              },
+            ],
+            error: null,
+          },
+    );
+    expect(await salva()).toMatchObject({
+      status: "conflict",
+      salvato: {
+        versione: 5,
+        sets: [{ a: 23, b: 25 }],
+        autore: "Giulia Neri",
+        salvatoIl: "2026-06-12T12:05:00Z",
+      },
+      mio: { a: 23, b: 21 },
+    });
+    expect(mocks.rpc).toHaveBeenCalledWith("punteggio_attuale", {
+      p_partita: PARTITA,
+    });
+    expect(mocks.publishScore).not.toHaveBeenCalled();
+    expect(mocks.refresh).not.toHaveBeenCalled();
+  });
+
+  it("«Sovrascrivi» chiama sovrascrivi_punteggio con la versione vista", async () => {
+    mocks.rpc.mockResolvedValue({
+      data: [{ versione: 6, tipo: "correzione_punteggio" }],
+      error: null,
+    });
+    const state = await salvaPunteggio(
+      initialPunteggioState,
+      form({
+        tappaId: "t",
+        partitaId: PARTITA,
+        versione: "5",
+        puntiA: "23",
+        puntiB: "21",
+        sovrascrivi: "1",
+      }),
+    );
+    expect(state).toMatchObject({ status: "success", versione: 6 });
+    expect(mocks.rpc).toHaveBeenCalledWith("sovrascrivi_punteggio", {
+      p_partita: PARTITA,
+      p_versione_vista: 5,
       p_a: 23,
       p_b: 21,
     });
