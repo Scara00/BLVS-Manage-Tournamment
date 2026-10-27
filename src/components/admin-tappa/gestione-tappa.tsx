@@ -1,10 +1,16 @@
-import { ArrowLeftIcon, PencilIcon, UsersIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  HistoryIcon,
+  PencilIcon,
+  UsersIcon,
+} from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AvvioFaseLinks } from "@/components/admin-avvio-fase/avvio-fase-links";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
 import { iscrittiPath } from "@/lib/iscrizioni/admin/paths";
+import { registroPath } from "@/lib/registro/paths";
 import type { GestioneTappaView } from "@/lib/tappe/gestione-format";
 import {
   STATI_NON_MODIFICABILI,
@@ -120,6 +126,16 @@ export function GestioneTappa({
           >
             <UsersIcon aria-hidden className="size-4" />
             Gestisci iscritti
+          </Link>
+          <Link
+            href={registroPath(tappa.id)}
+            className={buttonVariants({
+              variant: "secondary",
+              className: "max-w-full",
+            })}
+          >
+            <HistoryIcon aria-hidden className="size-4" />
+            Registro dei punteggi
           </Link>
         </div>
       </section>

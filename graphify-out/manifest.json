@@ -2060,8 +2060,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-tappa/gestione-tappa.tsx": {
-    "mtime": 1793121269.6964922,
-    "ast_hash": "9c5525dab60f0ecc3d1be65a447b6a84",
+    "mtime": 1793121296.7555661,
+    "ast_hash": "36518bba62abb401753abe425b8147ff",
     "semantic_hash": ""
   },
   "src/components/admin-tappa/index.ts": {
@@ -3652,6 +3652,141 @@
   "src/lib/tappe/live-admin/types.ts": {
     "mtime": 1793121270.1230738,
     "ast_hash": "643f7211cb5e39938c16689a936cb5e7",
+    "semantic_hash": ""
+  },
+  "e2e/admin-registro.spec.ts": {
+    "mtime": 1793121296.747496,
+    "ast_hash": "a247de34d62abb477408fdab6744373d",
+    "semantic_hash": ""
+  },
+  "src/app/admin/(protetta)/tappe/[id]/registro/page.tsx": {
+    "mtime": 1793121296.7548664,
+    "ast_hash": "5fcb0b33501b380b1fb81129a640feac",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/index.ts": {
+    "mtime": 1793121296.754988,
+    "ast_hash": "da002315266c528265879a6c26b35589",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-filtri.tsx": {
+    "mtime": 1793121296.7550442,
+    "ast_hash": "2e5ae26902f302443448c4256887a063",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-giorno.tsx": {
+    "mtime": 1793121296.7550979,
+    "ast_hash": "b345ccf3c56aed31b52a20b5df081fe5",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-stati.tsx": {
+    "mtime": 1793121296.7551506,
+    "ast_hash": "e7087f0e3d798789bd8dfee7ed571433",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-tappa.stories.tsx": {
+    "mtime": 1793121296.7552118,
+    "ast_hash": "4615a40955a8fb81a1b0f1c804f22435",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-tappa.test.tsx": {
+    "mtime": 1793121296.7552893,
+    "ast_hash": "b04f08543c4b7c26563c1cbd47de8742",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/registro-tappa.tsx": {
+    "mtime": 1793121296.7553632,
+    "ast_hash": "e8a786c782521f5fbc4f8ece2c4af051",
+    "semantic_hash": ""
+  },
+  "src/components/admin-registro/stories-data.ts": {
+    "mtime": 1793121296.755439,
+    "ast_hash": "920d6e542f6af0705f28b4c9741a7b9f",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/registro.ts": {
+    "mtime": 1793121296.755654,
+    "ast_hash": "dbc13ac954767cc193e811d15e66540b",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/actions.ts": {
+    "mtime": 1793121296.7557552,
+    "ast_hash": "47c987fa1f4fe914bd935f0eb66099f3",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/filtri.test.ts": {
+    "mtime": 1793121296.7558117,
+    "ast_hash": "c7e57ca87f34df48bb182026d59b63a4",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/filtri.ts": {
+    "mtime": 1793121296.7558699,
+    "ast_hash": "e29c8a1da5ec765a7d2c8c6459d9e5f4",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/format.test.ts": {
+    "mtime": 1793121296.7559302,
+    "ast_hash": "96462cf28ccc09dc7b4ef3cf8578c5b9",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/format.ts": {
+    "mtime": 1793121296.756017,
+    "ast_hash": "563dafef49a8127add13b520a4148c12",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/index.ts": {
+    "mtime": 1793121296.7560744,
+    "ast_hash": "f82280718d4aa768f63f5c2c621750db",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/messages.ts": {
+    "mtime": 1793121296.756138,
+    "ast_hash": "e5977dc338e4e2609ffa368d03919704",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/paths.ts": {
+    "mtime": 1793121296.7561986,
+    "ast_hash": "aa164271d570a392881c0dfec9306bdd",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/precedenti.test.ts": {
+    "mtime": 1793121296.7562711,
+    "ast_hash": "7761367606d01c626743fced017afcb0",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/precedenti.ts": {
+    "mtime": 1793121296.7563357,
+    "ast_hash": "a82acd15e5875be92fa5bd64df76e765",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/raggruppa.test.ts": {
+    "mtime": 1793121296.756397,
+    "ast_hash": "dfbf0c7ee2151f6265ade3200fe77244",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/raggruppa.ts": {
+    "mtime": 1793121296.756468,
+    "ast_hash": "54ed643c26017d204735f037098cd445",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/read.ts": {
+    "mtime": 1793121296.7565463,
+    "ast_hash": "cbe976253a5e29e71ede3b37407cd3c4",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/registro-tappa.db.test.ts": {
+    "mtime": 1793121296.7566314,
+    "ast_hash": "328dc5419b970154ba2ad4dac67c57e4",
+    "semantic_hash": ""
+  },
+  "src/lib/registro/types.ts": {
+    "mtime": 1793121296.7566948,
+    "ast_hash": "c40c39e01072bfc8d8a4df87ac97898b",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027375000_registro_tappa.sql": {
+    "mtime": 1793121296.7567856,
+    "ast_hash": "a09aa90dfc3da19dac67c41277cd19d8",
     "semantic_hash": ""
   }
 }
