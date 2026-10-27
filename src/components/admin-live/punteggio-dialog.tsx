@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertCircleIcon, PencilLineIcon } from "lucide-react";
+import { Tape } from "@/components/scoreboard";
 import {
   startTransition,
   useActionState,
@@ -26,6 +27,7 @@ import {
 import { Field, FieldError, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { Categoria } from "@/lib/db/types";
+import { descriviCambio, riepilogoCambi } from "@/lib/tappe/chiusura/format";
 import { CATEGORIA_SEGMENTO } from "@/lib/tappe/avvio/paths";
 import { descriviPartita, squadraLabel } from "@/lib/tappe/live-admin/format";
 import { campoSet, SET_MASSIMI } from "@/lib/tappe/live-admin/punteggio";
@@ -50,6 +52,8 @@ type PunteggioDialogProps = {
   onEsito: (state: AzionePartitaState) => void;
   /** Storybook/axe: open at once. */
   defaultOpen?: boolean;
+  /** Storybook/axe: the action's first answer. */
+  initialState?: AzionePartitaState;
 };
 
 /**
@@ -66,6 +70,7 @@ export function PunteggioDialog({
   describedBy,
   onEsito,
   defaultOpen = false,
+  initialState = initialAzionePartitaState,
 }: PunteggioDialogProps) {
   const [open, setOpen] = useState(defaultOpen);
   // The dialog keeps the match it was opened for while it fades out, even
@@ -90,15 +95,22 @@ export function PunteggioDialog({
     },
     [action],
   );
-  const [state, formAction, pending] = useActionState(
-    safeAction,
-    initialAzionePartitaState,
+  const [state, formAction, pending] = useActionState(safeAction, initialState);
+  // BLVS-43: the board is concluded and the server listed what changes.
+  const [inConferma, setInConferma] = useState(
+    initialState.status === "confermaConcluso",
   );
+  const confermaRef = useRef<HTMLHeadingElement>(null);
 
   const [visto, setVisto] = useState(state);
   if (state !== visto) {
     setVisto(state);
-    if (state.status !== "idle" && state.status !== "fieldErrors") {
+    setInConferma(state.status === "confermaConcluso");
+    if (
+      state.status !== "idle" &&
+      state.status !== "fieldErrors" &&
+      state.status !== "confermaConcluso"
+    ) {
       setOpen(false);
     }
   }
@@ -109,8 +121,16 @@ export function PunteggioDialog({
       if (formRef.current) focusFirstInvalid(formRef.current);
       return;
     }
+    if (state.status === "confermaConcluso") {
+      confermaRef.current?.focus({ preventScroll: true });
+      confermaRef.current?.scrollIntoView?.({ block: "nearest" });
+      return;
+    }
     onEsito(state);
   }, [state, onEsito]);
+
+  const conferma =
+    inConferma && state.status === "confermaConcluso" ? state : null;
 
   const conclusa = partita.stato === "conclusa";
   const verbo = conclusa ? "Correggi punteggio" : "Inserisci punteggio";
@@ -134,7 +154,10 @@ export function PunteggioDialog({
       open={open}
       onOpenChange={(next) => {
         if (pending) return;
-        if (next) setNelDialog(partita);
+        if (next) {
+          setNelDialog(partita);
+          setInConferma(false);
+        }
         setOpen(next);
       }}
     >
@@ -170,6 +193,12 @@ export function PunteggioDialog({
           />
           <input type="hidden" name="partitaId" value={nelDialog.id} />
           <input type="hidden" name="versione" value={nelDialog.versione} />
+          {conferma ? (
+            <>
+              <input type="hidden" name="conferma" value="1" />
+              <input type="hidden" name="firma" value={conferma.firma} />
+            </>
+          ) : null}
           <DialogHeader>
             <DialogTitle>
               {nelDialog.stato === "conclusa" ? "Correggi" : "Inserisci"} il
@@ -181,6 +210,66 @@ export function PunteggioDialog({
             </DialogDescription>
           </DialogHeader>
           <DialogBody className="flex flex-col gap-stack">
+            {conferma ? (
+              <section
+                aria-labelledby={`${nelDialog.id}-conferma`}
+                data-testid="conferma-concluso"
+                className="flex flex-col gap-space-3 border-2 border-primary p-space-3"
+              >
+                <h3
+                  id={`${nelDialog.id}-conferma`}
+                  ref={confermaRef}
+                  tabIndex={-1}
+                  className="font-heading text-lg font-semibold focus-ring"
+                >
+                  Tabellone concluso: confermi la correzione?
+                </h3>
+                <Tape size={4} className="max-w-16" />
+                {conferma.avviso ? (
+                  <p
+                    role="alert"
+                    className="flex items-start gap-space-2 font-semibold text-error-fg"
+                  >
+                    <AlertCircleIcon
+                      aria-hidden
+                      className="mt-1 size-4 shrink-0"
+                    />
+                    {conferma.avviso}
+                  </p>
+                ) : null}
+                <p>
+                  I punti di questo tabellone sono definitivi. Con la correzione
+                  restano definitivi, ricalcolati così.{" "}
+                  <strong>{riepilogoCambi(conferma.cambi)}</strong>
+                </p>
+                {conferma.cambi.length > 0 ? (
+                  <ul
+                    aria-label="Punti che cambiano"
+                    data-testid="punti-che-cambiano"
+                    className="flex flex-col border-2 border-primary"
+                  >
+                    {conferma.cambi.map((c) => (
+                      <li
+                        key={c.iscrizioneId}
+                        className="border-b border-border p-space-3 font-mono [overflow-wrap:anywhere] last:border-b-0"
+                      >
+                        {descriviCambio(c)}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="campo"
+                  className="max-w-full self-start"
+                  disabled={pending}
+                  onClick={() => setInConferma(false)}
+                >
+                  Modifica i valori
+                </Button>
+              </section>
+            ) : null}
             {errori.sets ? (
               <p
                 role="alert"
@@ -216,6 +305,7 @@ export function PunteggioDialog({
                         autoComplete="off"
                         maxLength={2}
                         defaultValue={set ? String(set.a) : ""}
+                        readOnly={conferma !== null}
                         className="font-mono"
                         {...invalido}
                       />
@@ -227,6 +317,7 @@ export function PunteggioDialog({
                         autoComplete="off"
                         maxLength={2}
                         defaultValue={set ? String(set.b) : ""}
+                        readOnly={conferma !== null}
                         className="font-mono"
                         {...invalido}
                       />
@@ -251,7 +342,7 @@ export function PunteggioDialog({
             >
               Annulla
             </DialogClose>
-            {nelDialog.stato === "in_corso" ? (
+            {nelDialog.stato === "in_corso" && !conferma ? (
               <DialogAction
                 type="submit"
                 name="concludi"
@@ -272,7 +363,7 @@ export function PunteggioDialog({
               loading={pending && !concludendo}
               loadingText="Salvataggio…"
             >
-              Salva
+              {conferma ? "Sì, correggi il punteggio" : "Salva"}
             </DialogAction>
           </DialogFooter>
         </form>

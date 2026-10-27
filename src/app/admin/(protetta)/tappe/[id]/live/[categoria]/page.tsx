@@ -13,6 +13,8 @@ import { risolviParita } from "@/lib/gironi/parita/actions";
 import { readParitaTabellone } from "@/lib/gironi/parita/read";
 import { readLiveSync } from "@/lib/live/read";
 import { parseCategoriaSegmento } from "@/lib/tappe/avvio/paths";
+import { concludiTabellone } from "@/lib/tappe/chiusura/actions";
+import { readClassificaTappa } from "@/lib/tappe/classifica/read";
 import {
   aggiornaPartita,
   salvaPunteggio,
@@ -39,7 +41,11 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
   ]);
   // After the admin check of readAdminLive. BLVS-38: a finished group with
   // a perfect tie shows it under its name.
-  const parita = await readParitaTabellone(view.tappa.id, categoria);
+  const [parita, classifica] = await Promise.all([
+    readParitaTabellone(view.tappa.id, categoria),
+    // BLVS-40/43: the stage points, provisional until the board is closed.
+    readClassificaTappa(view.tappa.id, categoria),
+  ]);
   const extraGironi = Object.fromEntries(
     parita
       .filter((g) => g.parita.length > 0)
@@ -58,7 +64,7 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
       <div className="flex flex-col gap-stack">
         <LiveBarConnected />
         <LiveAnnouncer
-          types={["board-matches"]}
+          types={["board-matches", "board-closed"]}
           groupId={chiaveTabellone(view.tappa.id, categoria)}
         />
         <AdminLive
@@ -66,6 +72,8 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
           azione={aggiornaPartita}
           punteggio={salvaPunteggio}
           extraGironi={extraGironi}
+          chiusura={concludiTabellone}
+          classifica={classifica}
         />
       </div>
     </LiveProvider>

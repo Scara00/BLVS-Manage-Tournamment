@@ -113,9 +113,39 @@ type OpzioniImpatto = {
 
 const MOTIVI_IMPATTO: Record<string, "richiesto" | "conferma" | "cambiato"> = {
   impatto_richiesto: "richiesto",
+  // BLVS-43: a concluded board asks again, with only «Mantieni».
+  tabellone_concluso: "richiesto",
+  conferma_tabellone_concluso: "richiesto",
   conferma_richiesta: "conferma",
   punteggi_cambiati: "cambiato",
 };
+
+/**
+ * BLVS-43: when the match's board was concluded, or null. Best effort: the
+ * server asks for the confirmation anyway.
+ */
+async function conclusoDellaPartita(
+  supabase: SupabaseClient,
+  partitaId: string,
+): Promise<string | null> {
+  try {
+    const { data, error } = await supabase
+      .from("partite")
+      .select("tabelloni (concluso_il)")
+      .eq("id", partitaId)
+      .maybeSingle();
+    if (error) throw error;
+    type Board = { concluso_il: string | null };
+    const tabellone = (data as { tabelloni: Board | Board[] | null } | null)
+      ?.tabelloni;
+    return (
+      (Array.isArray(tabellone) ? tabellone[0] : tabellone)?.concluso_il ?? null
+    );
+  } catch (error) {
+    console.error("[punteggi] lettura del tabellone non riuscita", error);
+    return null;
+  }
+}
 
 /** The next phase a correction would affect (`fase_successiva_correzione`). */
 async function leggiImpatto(
@@ -127,7 +157,9 @@ async function leggiImpatto(
       p_partita: partitaId,
     });
     if (error) throw error;
-    return toImpattoFase((data ?? []) as PartitaSuccessivaRow[]);
+    const impatto = toImpattoFase((data ?? []) as PartitaSuccessivaRow[]);
+    const conclusoIl = await conclusoDellaPartita(supabase, partitaId);
+    return conclusoIl ? { ...impatto, tabelloneConcluso: true } : impatto;
   } catch (error) {
     console.error(
       "[punteggi] lettura della fase successiva non riuscita",

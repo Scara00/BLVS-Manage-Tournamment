@@ -1,3 +1,5 @@
+import type { SetPunteggio } from "@/lib/db/types";
+import type { CambioPunti } from "@/lib/tappe/chiusura/punti";
 import type { ErroriPunteggio } from "./punteggio";
 
 /** What an admin can do to a match from w-admin-live. */
@@ -23,6 +25,22 @@ export type AzionePartitaState =
       reason: MotivoErrorePartita;
       message: string;
       at: number;
+    }
+  /**
+   * BLVS-43: a correction on a concluded board, nothing saved yet. The
+   * dialog lists the points that change and asks for an explicit
+   * confirmation, sent back with `firma` (points seen) and the sets.
+   */
+  | {
+      status: "confermaConcluso";
+      partitaId: string;
+      sets: SetPunteggio[];
+      cambi: CambioPunti[];
+      firma: string;
+      /** The points changed while the dialog was open. */
+      avviso: string | null;
+      message: string;
+      at: number;
     };
 
 export const initialAzionePartitaState: AzionePartitaState = {
@@ -42,6 +60,13 @@ export const LIVE_ADMIN_MESSAGES = {
   senzaVincitore: "Per concludere serve un punteggio con una squadra vincente.",
   tappaChiusa:
     "La tappa è archiviata o annullata: le partite non si modificano più.",
+  tabelloneConcluso:
+    "Il tabellone è concluso: la correzione va confermata dopo aver visto i punti che cambiano.",
+  confermaConcluso:
+    "Il tabellone è concluso: conferma la correzione dopo aver controllato i punti che cambiano.",
+  puntiCambiati:
+    "I punti sono cambiati nel frattempo: controlla di nuovo cosa cambia prima di confermare.",
+  correttoConcluso: "punteggio corretto su tabellone concluso",
   punteggioNonValido: "Il punteggio non è valido: correggi i set indicati.",
   sessionExpired: "La sessione è scaduta: accedi di nuovo per continuare.",
   permissionDenied: "Solo l'amministrazione può aggiornare le partite.",

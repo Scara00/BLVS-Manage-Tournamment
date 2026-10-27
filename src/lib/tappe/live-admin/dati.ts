@@ -99,7 +99,9 @@ export async function leggiTabelloneLive(
 ): Promise<TabelloneLive | null> {
   const { data: tappa, error: tappaError } = await supabase
     .from("tappe")
-    .select("id, nome, stato, tabelloni (id, categoria, fase_gioco)")
+    .select(
+      "id, nome, stato, tabelloni (id, categoria, fase_gioco, concluso_il)",
+    )
     .eq("id", tappaId)
     .maybeSingle();
   if (tappaError) throw new Error(`tappa: ${tappaError.message}`);
@@ -112,6 +114,7 @@ export async function leggiTabelloneLive(
       id: string;
       categoria: Categoria;
       fase_gioco: FaseGioco | null;
+      concluso_il: string | null;
     }[];
   };
   const board = row.tabelloni.find((t) => t.categoria === categoria);
@@ -126,7 +129,9 @@ export async function leggiTabelloneLive(
   return {
     tappa: { id: row.id, nome: row.nome, stato: row.stato },
     categoria,
+    tabelloneId: board.id,
     faseGioco: board.fase_gioco,
+    conclusoIl: board.concluso_il,
     partite: (data as unknown as PartitaDb[]).map(toPartita),
     lettoIl: adesso.toISOString(),
   };
@@ -160,7 +165,12 @@ export type EsitoModifica =
   | { ok: true; partita: PartitaLive }
   | {
       ok: false;
-      motivo: "conflict" | "nonTrovata" | "senzaVincitore" | "tappaChiusa";
+      motivo:
+        | "conflict"
+        | "nonTrovata"
+        | "senzaVincitore"
+        | "tappaChiusa"
+        | "tabelloneConcluso";
     };
 
 type PgError = { code?: string; hint?: string | null; message?: string };
@@ -168,6 +178,10 @@ type PgError = { code?: string; hint?: string | null; message?: string };
 function esitoErrore(error: PgError): EsitoModifica {
   if (error.hint === "tappa_archiviata" || error.hint === "tappa_annullata") {
     return { ok: false, motivo: "tappaChiusa" };
+  }
+  // BLVS-43: the guard on a concluded board's scores.
+  if (error.hint === "conferma_tabellone_concluso") {
+    return { ok: false, motivo: "tabelloneConcluso" };
   }
   throw new Error(error.message ?? "scrittura non riuscita");
 }

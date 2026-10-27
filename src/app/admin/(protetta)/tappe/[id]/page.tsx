@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { GestioneTappa, GestioneTappaLoading } from "@/components/admin-tappa";
 import { PageContainer } from "@/components/layout/page-container";
 import { aggiornaScadenzaTappa, cambiaStatoTappa } from "@/lib/tappe/actions";
+import { archiviaTappa } from "@/lib/tappe/annullamento/actions";
 import { readGestioneTappa } from "@/lib/tappe/gestione";
 
 export const metadata: Metadata = { title: "Gestione tappa · Amministrazione" };
@@ -23,6 +24,7 @@ async function GestioneContent({ id }: { id: string }) {
       tappa={tappa}
       cambiaStato={cambiaStatoTappa}
       aggiornaScadenza={aggiornaScadenzaTappa}
+      archivia={archiviaTappa}
     />
   );
 }

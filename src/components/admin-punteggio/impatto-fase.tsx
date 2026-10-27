@@ -117,6 +117,8 @@ export function ImpattoFase({
   const ids = useId();
   const formRef = useRef<HTMLFormElement>(null);
   const persi = impatto.punteggiPersi;
+  // BLVS-43: on a concluded board only «Mantieni», confirmed explicitly.
+  const concluso = impatto.tabelloneConcluso === true;
   const [spuntata, setSpuntata] = useState(false);
   const [erroreLocale, setErroreLocale] = useState<string | null>(null);
   /** Bumped on every refused «Rigenera», to move focus each time. */
@@ -145,7 +147,7 @@ export function ImpattoFase({
   }, [tentativi]);
 
   const rigenera = () => {
-    if (pending || !online) return;
+    if (pending || !online || concluso) return;
     if (persi > 0 && !spuntata) {
       setErroreLocale(erroreConferma(persi));
       setTentativi((n) => n + 1);
@@ -182,11 +184,14 @@ export function ImpattoFase({
         >
           <AlertDialogHeader>
             <AlertDialogTitle>
-              La fase successiva è già generata
+              {concluso
+                ? "Il tabellone è concluso"
+                : "La fase successiva è già generata"}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {riepilogoImpatto(impatto)} Scegli se mantenerla com&apos;è o
-              rigenerarla dalla classifica corretta.
+              {concluso
+                ? "I punti della tappa sono definitivi. La correzione mantiene le finali com'erano: confermala in modo esplicito."
+                : `${riepilogoImpatto(impatto)} Scegli se mantenerla com'è o rigenerarla dalla classifica corretta.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogBody className="flex flex-col gap-stack-sm">
@@ -225,41 +230,57 @@ export function ImpattoFase({
                 La fase successiva resta com&apos;è, con i suoi punteggi. Il
                 registro annota che è stata mantenuta dopo la correzione.
               </p>
-            </section>
-
-            <section
-              aria-labelledby={`${ids}-rigenera`}
-              data-testid="card-rigenera"
-              className="flex flex-col gap-space-2 border-2 border-error-fg p-space-3"
-            >
-              <h3 id={`${ids}-rigenera`} className="font-heading font-semibold">
-                Rigenera
-              </h3>
-              <p>
-                Le partite della fase successiva vengono eliminate e si generano
-                di nuovo dalla classifica corretta.
-              </p>
-              <p className="flex items-start gap-space-2 font-semibold text-error-fg">
-                <AlertCircleIcon aria-hidden className="mt-1 size-4 shrink-0" />
-                <span data-testid="punteggi-persi">{avvisoPerdita(persi)}</span>
-              </p>
-              {persi > 0 ? (
-                <Fieldset
-                  legend="Conferma"
-                  required
-                  error={erroreLocale ?? undefined}
-                >
-                  <Checkbox
-                    label={etichettaConferma(persi)}
-                    checked={spuntata}
-                    onCheckedChange={(checked) => {
-                      setSpuntata(checked);
-                      if (checked) setErroreLocale(null);
-                    }}
-                  />
-                </Fieldset>
+              {concluso ? (
+                <p className="font-semibold" data-testid="punti-che-cambiano">
+                  Punti che cambiano: nessuno. Le finali restano com&apos;erano,
+                  quindi i punti della tappa restano gli stessi.
+                </p>
               ) : null}
             </section>
+
+            {concluso ? null : (
+              <section
+                aria-labelledby={`${ids}-rigenera`}
+                data-testid="card-rigenera"
+                className="flex flex-col gap-space-2 border-2 border-error-fg p-space-3"
+              >
+                <h3
+                  id={`${ids}-rigenera`}
+                  className="font-heading font-semibold"
+                >
+                  Rigenera
+                </h3>
+                <p>
+                  Le partite della fase successiva vengono eliminate e si
+                  generano di nuovo dalla classifica corretta.
+                </p>
+                <p className="flex items-start gap-space-2 font-semibold text-error-fg">
+                  <AlertCircleIcon
+                    aria-hidden
+                    className="mt-1 size-4 shrink-0"
+                  />
+                  <span data-testid="punteggi-persi">
+                    {avvisoPerdita(persi)}
+                  </span>
+                </p>
+                {persi > 0 ? (
+                  <Fieldset
+                    legend="Conferma"
+                    required
+                    error={erroreLocale ?? undefined}
+                  >
+                    <Checkbox
+                      label={etichettaConferma(persi)}
+                      checked={spuntata}
+                      onCheckedChange={(checked) => {
+                        setSpuntata(checked);
+                        if (checked) setErroreLocale(null);
+                      }}
+                    />
+                  </Fieldset>
+                ) : null}
+              </section>
+            )}
 
             {!online ? (
               <p
@@ -284,21 +305,23 @@ export function ImpattoFase({
               aria-describedby={!online ? `${ids}-offline` : undefined}
               onClick={() => {
                 if (pending || !online) return;
-                onScegli("mantieni", false);
+                onScegli("mantieni", concluso);
               }}
             >
-              Mantieni
+              {concluso ? "Sì, correggi e mantieni" : "Mantieni"}
             </Button>
-            <Button
-              type="submit"
-              variant="destructive"
-              className="max-w-full"
-              loading={pending && inCorso === "rigenera"}
-              disabled={!online || (pending && inCorso !== "rigenera")}
-              aria-describedby={!online ? `${ids}-offline` : undefined}
-            >
-              Rigenera
-            </Button>
+            {concluso ? null : (
+              <Button
+                type="submit"
+                variant="destructive"
+                className="max-w-full"
+                loading={pending && inCorso === "rigenera"}
+                disabled={!online || (pending && inCorso !== "rigenera")}
+                aria-describedby={!online ? `${ids}-offline` : undefined}
+              >
+                Rigenera
+              </Button>
+            )}
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>

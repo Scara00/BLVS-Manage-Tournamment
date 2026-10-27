@@ -121,6 +121,34 @@ export type BoardMatches = {
   matches: readonly PartitaLive[];
 };
 
+/** A board's definitive points, as the live channel carries them. */
+export type BoardClosedPoints = {
+  /** Registration id (`iscrizioni.id`). */
+  playerId: string;
+  name: string;
+  /** Place in the category standing. */
+  position: number;
+  points: number | null;
+};
+
+/**
+ * An admin concluded a board (BLVS-43): its points are final and the
+ * overall standing updates.
+ */
+export type BoardClosed = {
+  /** `<stage id>:<category>`, one per board. */
+  id: string;
+  stageId: string;
+  category: Categoria;
+  /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
+  label: string;
+  /** ISO time the board was closed. */
+  closedAt: string;
+  /** Both boards are closed: the stage is concluded. */
+  stageConcluded: boolean;
+  points: readonly BoardClosedPoints[];
+};
+
 export type LiveSnapshot = {
   /** Sequence number of the last event folded into this snapshot. */
   seq: number;
@@ -135,6 +163,8 @@ export type LiveSnapshot = {
   phases?: readonly PhaseStarted[];
   /** Boards an admin changed; absent in snapshots from before BLVS-31. */
   boards?: readonly BoardMatches[];
+  /** Boards an admin concluded; absent in snapshots from before BLVS-43. */
+  closed?: readonly BoardClosed[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -146,7 +176,8 @@ export type LiveEventPayload =
   | { type: "overall-standings"; rows: readonly OverallStandingRow[] }
   | { type: "pending-scores"; stage: PendingScores }
   | { type: "phase-started"; phase: PhaseStarted }
-  | { type: "board-matches"; board: BoardMatches };
+  | { type: "board-matches"; board: BoardMatches }
+  | { type: "board-closed"; board: BoardClosed };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -162,6 +193,7 @@ export const LIVE_EVENT_TYPES = [
   "pending-scores",
   "phase-started",
   "board-matches",
+  "board-closed",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -192,5 +224,7 @@ export function applyLiveEvent(
       return { ...base, phases: upsert(snapshot.phases ?? [], event.phase) };
     case "board-matches":
       return { ...base, boards: upsert(snapshot.boards ?? [], event.board) };
+    case "board-closed":
+      return { ...base, closed: upsert(snapshot.closed ?? [], event.board) };
   }
 }

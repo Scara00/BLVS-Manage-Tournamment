@@ -3,12 +3,26 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
-import { cambiaStatoDemo, salvaPunteggioDemo } from "@/lib/demo/admin-live";
+import type { Categoria, SetPunteggio } from "@/lib/db/types";
+import {
+  cambiaStatoDemo,
+  finaliTappaDemo,
+  getDemoTabelloneLive,
+  salvaPunteggioDemo,
+} from "@/lib/demo/admin-live";
+import { firmaPunti, puntiCheCambiano } from "@/lib/tappe/chiusura/punti";
+import { conSetsCorretti } from "@/lib/tappe/chiusura/regole";
+import { classificaTappa } from "@/lib/tappe/classifica/classifica";
+import { leggiFinaliTappa } from "@/lib/tappe/classifica/dati";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
 import { parseCategoriaSegmento } from "@/lib/tappe/avvio/paths";
-import { cambiaStatoDb, salvaPunteggioDb, type EsitoModifica } from "./dati";
+import {
+  cambiaStatoDb,
+  leggiTabelloneLive,
+  salvaPunteggioDb,
+  type EsitoModifica,
+} from "./dati";
 import { descriviPartita, setsLabel } from "./format";
 import { pubblicaTabellone } from "./pubblica";
 import { leggiPunteggio } from "./punteggio";
@@ -158,25 +172,62 @@ export async function salvaPunteggio(
   }
   const concludi = formData.get("concludi") === "1";
 
+  // BLVS-43: on a concluded board a correction is confirmed explicitly,
+  // after the admin saw which points change.
+  let conclusa: Awaited<ReturnType<typeof correzioneConclusa>>;
+  try {
+    conclusa = await correzioneConclusa(
+      sessione,
+      campi,
+      versione,
+      letto.sets,
+      formData,
+      at,
+    );
+  } catch (error) {
+    console.error("[admin-live] correzione su tabellone concluso", error);
+    return errore("network", LIVE_ADMIN_MESSAGES.network, at);
+  }
+  if (conclusa && "status" in conclusa) return conclusa;
+
   let esito: EsitoModifica;
   try {
-    esito = sessione.supabase
-      ? await salvaPunteggioDb(
-          sessione.supabase,
-          sessione.utenteId ?? "",
-          campi.partitaId,
-          versione,
-          letto.sets,
-          concludi,
-        )
-      : salvaPunteggioDemo(
-          campi.tappaId,
-          campi.categoria,
-          campi.partitaId,
-          versione,
-          letto.sets,
-          concludi,
-        );
+    if (conclusa) {
+      esito = sessione.supabase
+        ? await correggiConclusoDb(
+            sessione.supabase,
+            conclusa.partita,
+            versione,
+            letto.sets,
+          )
+        : salvaPunteggioDemo(
+            campi.tappaId,
+            campi.categoria,
+            campi.partitaId,
+            versione,
+            letto.sets,
+            false,
+            true,
+          );
+    } else {
+      esito = sessione.supabase
+        ? await salvaPunteggioDb(
+            sessione.supabase,
+            sessione.utenteId ?? "",
+            campi.partitaId,
+            versione,
+            letto.sets,
+            concludi,
+          )
+        : salvaPunteggioDemo(
+            campi.tappaId,
+            campi.categoria,
+            campi.partitaId,
+            versione,
+            letto.sets,
+            concludi,
+          );
+    }
   } catch (error) {
     console.error("[admin-live] punteggio non salvato", error);
     return errore("network", LIVE_ADMIN_MESSAGES.network, at);
@@ -194,8 +245,96 @@ export async function salvaPunteggio(
   }
 
   const punteggio = setsLabel(esito.partita.sets) ?? "";
-  const cambio = `${descriviPartita(esito.partita)}: punteggio ${punteggio}${
-    concludi ? ", partita conclusa" : ""
-  }`;
+  const cambio = conclusa
+    ? `${descriviPartita(esito.partita)}: ${LIVE_ADMIN_MESSAGES.correttoConcluso} ${punteggio}`
+    : `${descriviPartita(esito.partita)}: punteggio ${punteggio}${
+        concludi ? ", partita conclusa" : ""
+      }`;
   return fine(sessione, campi, esito.partita, cambio, at);
+}
+
+/**
+ * BLVS-43. Null on an open board (the normal save). On a concluded one:
+ * without `conferma=1` (or when the points changed since `firma`) the
+ * state that asks for the confirmation, listing the points that change;
+ * with it, the match to correct.
+ */
+async function correzioneConclusa(
+  sessione: Extract<Sessione, { ok: true }>,
+  campi: Campi,
+  versione: number,
+  sets: SetPunteggio[],
+  formData: FormData,
+  at: number,
+): Promise<AzionePartitaState | { partita: PartitaLive } | null> {
+  const adesso = now();
+  const tabellone = sessione.supabase
+    ? await leggiTabelloneLive(
+        sessione.supabase,
+        campi.tappaId,
+        campi.categoria,
+        adesso,
+      )
+    : getDemoTabelloneLive(campi.tappaId, campi.categoria, adesso);
+  if (!tabellone || tabellone.conclusoIl === null) return null;
+  const partita = tabellone.partite.find((p) => p.id === campi.partitaId);
+  if (!partita) return errore("conflict", LIVE_ADMIN_MESSAGES.nonTrovata, at);
+  if (partita.versione !== versione) {
+    return errore("conflict", LIVE_ADMIN_MESSAGES.conflict, at);
+  }
+
+  const dati = sessione.supabase
+    ? await leggiFinaliTappa(sessione.supabase, campi.tappaId, campi.categoria)
+    : finaliTappaDemo(campi.tappaId, campi.categoria);
+  const finali = dati?.finali ?? [];
+  const prima = classificaTappa({ finali, concluso: true });
+  const dopo = classificaTappa({
+    finali: conSetsCorretti(finali, partita.id, sets),
+    concluso: true,
+  });
+  const firma = firmaPunti(prima);
+  const confermata = formData.get("conferma") === "1";
+  const vista = String(formData.get("firma") ?? "");
+  if (confermata && vista === firma) return { partita };
+  return {
+    status: "confermaConcluso",
+    partitaId: partita.id,
+    sets,
+    cambi: puntiCheCambiano(prima, dopo),
+    firma,
+    avviso: confermata ? LIVE_ADMIN_MESSAGES.puntiCambiati : null,
+    message: LIVE_ADMIN_MESSAGES.confermaConcluso,
+    at,
+  };
+}
+
+/** `correggi_tabellone_concluso`: the confirmed correction (BLVS-43). */
+async function correggiConclusoDb(
+  supabase: SupabaseClient,
+  partita: PartitaLive,
+  versione: number,
+  sets: SetPunteggio[],
+): Promise<EsitoModifica> {
+  const { data, error } = await supabase.rpc("correggi_tabellone_concluso", {
+    p_partita: partita.id,
+    p_versione: versione,
+    p_sets: sets,
+  });
+  if (error) {
+    switch (error.hint) {
+      case "senza_vincitore":
+        return { ok: false, motivo: "senzaVincitore" };
+      case "tappa_archiviata":
+        return { ok: false, motivo: "tappaChiusa" };
+      case "versione_superata":
+      case "partita_non_conclusa":
+      case "tabellone_non_concluso":
+        return { ok: false, motivo: "conflict" };
+    }
+    throw error;
+  }
+  return {
+    ok: true,
+    partita: { ...partita, sets, versione: Number(data) },
+  };
 }
