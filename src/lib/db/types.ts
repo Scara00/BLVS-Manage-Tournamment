@@ -38,6 +38,9 @@ export type StatoPartita = (typeof STATI_PARTITA)[number];
 export const FASI_TABELLONE = ["gold", "silver"] as const;
 export type FaseTabellone = (typeof FASI_TABELLONE)[number];
 
+export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
+export type FasePartita = (typeof FASI_PARTITA)[number];
+
 export type Utente = {
   id: string;
   email: string;

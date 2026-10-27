@@ -102,8 +102,9 @@ test("filtro senza risultati e pagina Tappe admin", async ({ page }) => {
 test("le bozze compaiono solo nell'area admin", async ({ page }) => {
   await page.goto("/tappe");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tappe");
-  await expect(page.getByText("Tappa 1 · Jesolo")).toBeVisible();
-  await expect(page.getByText("Tappa 4 · Pescara")).toHaveCount(0);
+  await expect(page.getByText("Tappa 1 · Jesolo").first()).toBeVisible();
+  // The player demo's draft is Lignano (demoTappeGiocatore).
+  await expect(page.getByText(/Lignano/)).toHaveCount(0);
   await expect(page.getByText(/^(In )?bozza$/i)).toHaveCount(0);
 });
 
