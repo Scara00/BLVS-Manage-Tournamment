@@ -118,6 +118,19 @@ export type Punteggio = {
   updated_at: string;
 };
 
+/** Admin's order for a perfect tie in a group (BLVS-27). */
+export type SpareggioGirone = {
+  id: string;
+  girone_id: string;
+  /** Fingerprint of the tie (`firmaParita`); the order applies only while it matches. */
+  firma: string;
+  /** Tied registration ids, best first. */
+  ordine: string[];
+  motivo: string;
+  deciso_da: string | null;
+  deciso_il: string;
+};
+
 export type VoceRegistro = {
   id: number;
   attore_id: string | null;
