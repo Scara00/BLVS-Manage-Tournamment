@@ -1,4 +1,5 @@
 import { expect, expectNoA11yViolations, test } from "./fixtures";
+import { gotoStory, storyScope } from "./storybook-helpers";
 
 type StoryIndex = {
   entries: Record<
@@ -32,10 +33,14 @@ test("ogni story rispetta WCAG 2.2 AA a 390 e 1440 px", async ({
     for (const viewport of VIEWPORTS) {
       await test.step(`${story.title} › ${story.name} @ ${viewport.name}px`, async () => {
         await page.setViewportSize(viewport);
-        await page.goto(`/iframe.html?id=${story.id}&viewMode=story`);
-        await page.locator("#storybook-root > *").first().waitFor();
-        // Scope to the story: the iframe shell is not part of the app.
-        await expectNoA11yViolations(page, (b) => b.include("#storybook-root"));
+        await gotoStory(page, story.id);
+        // Scope to the story and its overlay portals: the iframe shell is
+        // not part of the app.
+        await expectNoA11yViolations(page, await storyScope(page));
+        // No horizontal page scroll at either viewport.
+        expect(
+          await page.evaluate(() => document.documentElement.scrollWidth),
+        ).toBeLessThanOrEqual(viewport.width);
       });
     }
   }

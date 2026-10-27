@@ -173,6 +173,12 @@ export const contrastPairs: readonly ContrastPair[] = [
     bg: color.background,
     kind: "text",
   },
+  {
+    name: "Testo bianco su errore",
+    fg: color.primaryForeground,
+    bg: color.error.fg,
+    kind: "text",
+  },
   { name: "Avviso", fg: color.warning.fg, bg: color.warning.bg, kind: "text" },
   { name: "Informazione", fg: color.info.fg, bg: color.info.bg, kind: "text" },
   { name: "Live", fg: color.live.fg, bg: color.live.bg, kind: "score" },
@@ -216,6 +222,12 @@ export const contrastPairs: readonly ContrastPair[] = [
     name: "Anello di focus su tape",
     fg: color.ring,
     bg: color.tape,
+    kind: "graphic",
+  },
+  {
+    name: "Anello di focus su primario",
+    fg: color.primaryForeground,
+    bg: color.primary,
     kind: "graphic",
   },
   {
