@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { playerPrimaryNav } from "@/components/layout/nav-items";
+import { SIGNUP_PATH } from "@/lib/auth/paths";
 
 export default function Home() {
   return (
@@ -32,6 +33,15 @@ export default function Home() {
             </li>
           ))}
         </ul>
+        <p className="text-lg">
+          Nuovo giocatore?{" "}
+          <Link
+            href={SIGNUP_PATH}
+            className="inline-flex min-h-11 items-center bg-primary px-space-5 font-heading font-semibold text-primary-foreground underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            Registrati
+          </Link>
+        </p>
       </section>
     </div>
   );
