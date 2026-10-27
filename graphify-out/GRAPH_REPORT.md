@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 162 files · ~41,031 words
+- 188 files · ~50,089 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 808 nodes · 1337 edges · 55 communities (44 shown, 11 thin omitted)
+- 911 nodes · 1508 edges · 56 communities (45 shown, 11 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1c086c1f`
+- Built from commit: `5c35be7e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -71,15 +71,15 @@
 
 ## God Nodes (most connected - your core abstractions)
 1. `BodyReader` - 21 edges
-2. `readSupabaseEnv()` - 16 edges
-3. `compilerOptions` - 16 edges
-4. `scripts` - 15 edges
+2. `scripts` - 17 edges
+3. `readSupabaseEnv()` - 17 edges
+4. `compilerOptions` - 16 edges
 5. `jsonError()` - 14 edges
 6. `Button()` - 13 edges
 7. `invalid()` - 13 edges
 8. `dbErrorResponse()` - 11 edges
 9. `malformedBody()` - 11 edges
-10. `readJsonObject()` - 10 edges
+10. `BLVS-Manage-Tournamment` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `createClient()` --calls--> `createServerClient`  [INFERRED]
@@ -96,15 +96,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (55 total, 11 thin omitted)
+## Communities (56 total, 11 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+11 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.07
-Nodes (28): devDependencies, @axe-core/playwright, @electric-sql/pglite, eslint, eslint-config-next, eslint-config-prettier, eslint-plugin-storybook, http-server (+20 more)
+Cohesion: 0.04
+Nodes (48): dependencies, @base-ui/react, class-variance-authority, cn, lucide-react, next, react, react-dom (+40 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.17
@@ -115,16 +115,16 @@ Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.13
-Nodes (15): scripts, build, build-storybook, ci, dev, format, format:check, lint (+7 more)
+Cohesion: 0.12
+Nodes (17): scripts, build, build-storybook, ci, dev, email:auth-templates, format, format:check (+9 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.18
-Nodes (10): API, BLVS-Manage-Tournamment, CI, Database (Supabase), Deploy (Vercel), Requisiti, Script, Setup (+2 more)
+Cohesion: 0.14
+Nodes (13): API, BLVS-Manage-Tournamment, CI, Database (Supabase), Deploy (Vercel), Email, Registro ed email, Registro (`public.registro`) (+5 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.29
-Nodes (8): register(), formatServerTime(), getProcessTimeZone(), getServerTimeParts(), getUtcOffsetMinutes(), partsFormatter, ServerTimeParts, clock()
+Cohesion: 0.07
+Nodes (32): SUPABASE_DIR, accodaEmail(), EmailAccodata, ErroreCodaEmail, props, EmailTemplateName, EmailTemplateProps, emailTemplates (+24 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.33
@@ -244,15 +244,15 @@ Nodes (4): Default, Fasi, RiduzioneMovimento, Story
 
 ### Community 46 - "Community 46"
 Cohesion: 0.05
-Nodes (71): ApiErrorBody, dbErrorResponse(), FieldErrors, forbidden(), invalid(), jsonError(), malformedBody(), noContent() (+63 more)
+Nodes (70): ApiErrorBody, dbErrorResponse(), FieldErrors, forbidden(), invalid(), jsonError(), malformedBody(), noContent() (+62 more)
 
 ### Community 48 - "Community 48"
-Cohesion: 0.26
-Nodes (10): boardOf(), createMatch(), createStage(), register(), asRole(), createAuthUser(), createTestDatabase(), migrationFiles() (+2 more)
+Cohesion: 0.10
+Nodes (21): ETICHETTE_EVENTO_REGISTRO, TIPI_EVENTO_REGISTRO, TipoEventoRegistro, ErroreRegistro, formatOraRegistro(), NuovoEventoRegistro, registraEvento(), MIGRATION (+13 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.15
-Nodes (13): dependencies, @base-ui/react, class-variance-authority, cn, lucide-react, next, react, react-dom (+5 more)
+Nodes (13): describeError(), EmailMessage, EmailQueueLogger, EmailQueueResult, EmailQueueStore, EmailTransport, processEmailQueue(), QueuedEmail (+5 more)
 
 ### Community 50 - "Community 50"
 Cohesion: 0.42
@@ -263,11 +263,11 @@ Cohesion: 0.25
 Nodes (5): { getCurrentUser }, Handler, HTTP_METHODS, modules, routes
 
 ### Community 52 - "Community 52"
-Cohesion: 0.33
-Nodes (5): engines, node, name, private, version
+Cohesion: 0.18
+Nodes (14): extractLinks(), getLatestLink(), HTML_ENTITIES, isMailpitAvailable(), mailpit(), MAILPIT_URL, MailpitMessage, MailpitSummary (+6 more)
 
 ## Knowledge Gaps
-- **363 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+358 more)
+- **389 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+384 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -275,16 +275,16 @@ Nodes (5): engines, node, name, private, version
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `readSupabaseEnv()` connect `Community 46` to `Community 9`?**
-  _High betweenness centrality (0.084) - this node is a cross-community bridge._
+  _High betweenness centrality (0.096) - this node is a cross-community bridge._
 - **Why does `SignOutState` connect `Community 11` to `Community 46`?**
-  _High betweenness centrality (0.074) - this node is a cross-community bridge._
-- **Why does `FlipDigits()` connect `Community 35` to `Community 18`, `Community 43`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+  _High betweenness centrality (0.091) - this node is a cross-community bridge._
+- **Why does `createClient()` connect `Community 46` to `Community 9`?**
+  _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
-  _363 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _389 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04081632653061224 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
