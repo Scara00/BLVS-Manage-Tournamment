@@ -3,6 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { listDrafts, type Draft } from "@/lib/drafts/drafts";
+import { storeDelDispositivo } from "@/lib/punteggi/coda/store";
+import type { VoceCoda } from "@/lib/punteggi/coda/types";
 import {
   describeReturnPath,
   loginHref,
@@ -18,11 +20,28 @@ function SessionExpiredFromParams() {
   const params = useSearchParams();
   const returnPath = safeAfterLoginPath(params?.get(RETURN_PARAM));
   const [drafts, setDrafts] = useState<Draft[] | null>(null);
+  const [punteggi, setPunteggi] = useState<VoceCoda[] | null>(null);
+  const variant = sessionExpiredVariant(returnPath);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is an external store
     setDrafts(listDrafts());
   }, []);
+
+  useEffect(() => {
+    if (variant !== "admin") return;
+    let attivo = true;
+    // BLVS-33: the score queue lives in IndexedDB, it outlives the session.
+    storeDelDispositivo()
+      .leggi()
+      .catch(() => [])
+      .then((voci) => {
+        if (attivo) setPunteggi(voci);
+      });
+    return () => {
+      attivo = false;
+    };
+  }, [variant]);
 
   return (
     <SessionExpiredView
@@ -30,7 +49,8 @@ function SessionExpiredFromParams() {
       returnPath={returnPath}
       loginHref={loginHref(returnPath, { reason: "scaduta" })}
       drafts={drafts}
-      variant={sessionExpiredVariant(returnPath)}
+      variant={variant}
+      punteggi={punteggi}
     />
   );
 }

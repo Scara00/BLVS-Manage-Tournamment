@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { voceDiProva } from "@/components/coda-punteggi/stories-fixtures";
 import { MinimalShell } from "@/components/layout/minimal-shell";
 import { SessionExpiredView } from "./session-expired-view";
 
@@ -76,4 +77,21 @@ export const SessioneAdminChiusaSenzaBozze: Story = {
 export const SessioneAdminChiusaText200: Story = {
   args: { ...SessioneAdminChiusa.args },
   parameters: { text200: true },
+};
+
+/** BLVS-33: scores entered before the session closed wait on the device. */
+export const SessioneAdminChiusaConPunteggi: Story = {
+  args: {
+    variant: "admin",
+    drafts: [],
+    punteggi: [
+      voceDiProva(),
+      voceDiProva({
+        chiave: "c0000000-0000-4000-8000-000000000009",
+        etichetta: "Girone B · turno 3 · Gallo/Ferri – Conti/Russo",
+        sets: [{ a: 22, b: 20 }],
+        stato: "sessione_chiusa",
+      }),
+    ],
+  },
 };

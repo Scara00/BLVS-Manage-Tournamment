@@ -1,8 +1,10 @@
 import { ArrowRightIcon, CheckCircle2Icon, FileClockIcon } from "lucide-react";
 import Link from "next/link";
+import { PunteggiNonInviati } from "@/components/coda-punteggi/coda-punteggi-view";
 import { ActionLink } from "@/components/error-page/action-link";
 import { Tape } from "@/components/scoreboard";
 import type { Draft } from "@/lib/drafts/drafts";
+import type { VoceCoda } from "@/lib/punteggi/coda/types";
 import { formatServerTime } from "@/lib/time/server-time";
 
 export type SessionExpiredViewProps = {
@@ -19,6 +21,12 @@ export type SessionExpiredViewProps = {
    * timeout, with the admin's own «Cosa è salvato».
    */
   variant?: "player" | "admin";
+  /**
+   * `admin` only (BLVS-33): the device's score queue; `null` while it is
+   * being read. Scores not sent yet are listed as «Salvato qui, non
+   * ancora inviato».
+   */
+  punteggi?: VoceCoda[] | null;
 };
 
 const COPY = {
@@ -59,6 +67,7 @@ export function SessionExpiredView({
   loginHref,
   drafts,
   variant = "player",
+  punteggi = null,
 }: SessionExpiredViewProps) {
   const copy = COPY[variant];
   return (
@@ -113,6 +122,18 @@ export function SessionExpiredView({
         </h2>
         <DraftList drafts={drafts} />
       </section>
+
+      {variant === "admin" ? (
+        <section
+          aria-labelledby="scaduta-punteggi"
+          className="flex flex-col gap-space-3"
+        >
+          <h2 id="scaduta-punteggi" className={sectionTitle}>
+            Punteggi salvati qui, non ancora inviati
+          </h2>
+          <PunteggiNonInviati voci={punteggi} />
+        </section>
+      ) : null}
 
       <div className="flex flex-wrap gap-space-3">
         <ActionLink href={loginHref} variant="primary" className="max-w-full">
