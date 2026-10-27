@@ -114,6 +114,7 @@ Staging e produzione girano solo su HTTPS:
 
 - imposta `ENFORCE_HTTPS=true` nelle variabili d'ambiente di Vercel (Preview e Production). Il Proxy reindirizza ogni richiesta HTTP su HTTPS con un 308 e `next.config.ts` invia `Strict-Transport-Security: max-age=63072000; includeSubDomains; preload`. Vercel fa già il redirect a livello di edge, anche per gli asset statici esclusi dal matcher del Proxy;
 - l'orario del server è sempre `Europe/Rome`: lo fornisce `src/lib/time/server-time.ts`, indipendentemente dal fuso del processo (le funzioni Vercel girano in UTC). All'avvio `src/instrumentation.ts` registra l'ora e avvisa se il processo non è su `Europe/Rome`.
+- **chiusura automatica delle iscrizioni**: Vercel Cron chiama `GET /api/cron/chiudi-iscrizioni` (vedi `vercel.json`) con `Authorization: Bearer $CRON_SECRET`; la route esegue `public.chiudi_iscrizioni_scadute()` con `SUPABASE_SECRET_KEY`. Imposta `CRON_SECRET` (almeno 16 caratteri casuali) e `SUPABASE_SECRET_KEY` su Vercel. La pianificazione è giornaliera (`10 0 * * *` UTC) perché il piano Hobby non accetta cron più frequenti: con il piano Pro portala a `* * * * *`. Nel frattempo nessuno si iscrive dopo la scadenza (policy RLS) e le pagine admin chiudono le tappe scadute prima di leggerle.
 
 ## Struttura
 

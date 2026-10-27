@@ -55,6 +55,10 @@ export type Tappa = {
   stato: StatoTappa;
   iscrizioni_aprono_il: string | null;
   iscrizioni_chiudono_il: string | null;
+  /** When registrations closed (set by the DB on the change of state). */
+  iscrizioni_chiuse_il: string | null;
+  /** True when `chiudi_iscrizioni_scadute()` closed them at the deadline. */
+  chiusura_automatica: boolean;
   /** Grows by 1 on every update (trigger `tappe_versione`). */
   versione: number;
   created_at: string;

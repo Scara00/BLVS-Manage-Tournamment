@@ -55,11 +55,15 @@ export default defineConfig({
       // HTTPS is enforced only on staging/production; e2e runs on http://localhost.
       // ERROR_PREVIEWS: the /anteprima/* routes that trigger 403 and 503.
       // LIVE_DEMO_PUBLISH opens POST /api/live/publish so e2e can "save" a result.
+      // TAPPE_DEMO_SEED opens POST /api/demo/tappe (one fresh stage per test);
+      // CRON_SECRET lets e2e call the deadline job like Vercel Cron does.
       env: {
         TZ: "Europe/Rome",
         ENFORCE_HTTPS: "false",
         ERROR_PREVIEWS: "true",
         LIVE_DEMO_PUBLISH: "true",
+        TAPPE_DEMO_SEED: "true",
+        CRON_SECRET: "e2e-cron-secret",
       },
     },
     {
