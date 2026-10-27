@@ -292,3 +292,29 @@
     animation-delay: 0ms;
   }
 }
+
+/*
+ * Two-tone focus ring: a 2px background-coloured band hugging the control
+ * and a 2px `--ring` band outside it, so it stays visible on white, on
+ * black (primary buttons) and on tape yellow.
+ */
+@utility focus-ring {
+  outline-style: none;
+  &:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--background);
+  }
+}
+
+/*
+ * Same ring on a wrapper (e.g. a radio card) whose child holds focus. Only
+ * the outline: the wrapper's own box-shadow marks the selected state, and
+ * the 2px offset gap shows the page background as the light band.
+ */
+@utility focus-ring-within {
+  &:has(:focus-visible) {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

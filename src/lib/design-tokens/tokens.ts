@@ -284,4 +284,58 @@ export const contrastPairs: readonly ContrastPair[] = [
     bg: color.background,
     kind: "graphic",
   },
+  {
+    name: "Anello di focus chiaro su nero",
+    fg: color.background,
+    bg: color.primary,
+    kind: "graphic",
+  },
+  {
+    name: "Distruttivo: testo bianco su errore",
+    fg: color.primaryForeground,
+    bg: color.error.fg,
+    kind: "text",
+  },
+  {
+    name: "Distruttivo hover: testo bianco su rosso scuro",
+    fg: color.primaryForeground,
+    bg: color.live.bg,
+    kind: "text",
+  },
+  {
+    name: "Primario hover: testo su neutro 700",
+    fg: color.primaryForeground,
+    bg: neutral[700],
+    kind: "text",
+  },
+  {
+    name: "Secondario hover: nero su neutro 100",
+    fg: color.primary,
+    bg: neutral[100],
+    kind: "text",
+  },
+  {
+    name: "Badge neutro",
+    fg: neutral[800],
+    bg: neutral[100],
+    kind: "text",
+  },
+  {
+    name: "Bordo errore su sfondo",
+    fg: color.error.fg,
+    bg: color.background,
+    kind: "graphic",
+  },
+  {
+    name: "Successo su sfondo",
+    fg: color.success.fg,
+    bg: color.background,
+    kind: "text",
+  },
+  {
+    name: "Bordo selezionato su sfondo",
+    fg: color.primary,
+    bg: color.background,
+    kind: "graphic",
+  },
 ];
