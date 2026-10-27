@@ -36,7 +36,12 @@ import {
 import type { SetPunteggio } from "@/lib/db/types";
 import type { SchedaPunteggio } from "@/lib/punteggi/types";
 import { validaPunteggio, type Lato } from "@/lib/punteggi/validazione";
+import {
+  accettaParziale,
+  type SalvaParzialeAction,
+} from "@/lib/punteggi/parziale";
 import { ConflittoPunteggio } from "./conflitto-punteggio";
+import { ParzialeForm } from "./parziale-form";
 import { RiepilogoPunteggio } from "./riepilogo-punteggio";
 import { RigaSquadra } from "./riga-squadra";
 
@@ -51,6 +56,11 @@ type InserimentoPunteggioProps = {
   salva: SalvaPunteggioAction;
   /** The `annullaPunteggio` server action (a fake in Storybook). */
   annulla: AnnullaPunteggioAction;
+  /**
+   * BLVS-37: the `salvaParziale` server action. With it, a match in
+   * progress also offers the partial, sent live to the players.
+   */
+  inviaParziale?: SalvaParzialeAction;
   /** Storybook/tests: starting values, step, state, forced offline. */
   initialValori?: Record<Lato, string>;
   initialPasso?: Passo;
@@ -82,6 +92,7 @@ export function InserimentoPunteggio({
   scheda,
   salva,
   annulla,
+  inviaParziale,
   initialValori,
   initialPasso = "inserimento",
   initialState = initialPunteggioState,
@@ -400,6 +411,12 @@ export function InserimentoPunteggio({
           Tutte le partite della tappa
         </Link>
       </section>
+
+      {inviaParziale && accettaParziale(partita, tappa.stato) ? (
+        <div hidden={passo !== "inserimento"}>
+          <ParzialeForm scheda={scheda} invia={inviaParziale} />
+        </div>
+      ) : null}
 
       <div
         aria-live="polite"

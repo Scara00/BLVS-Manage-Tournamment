@@ -13,6 +13,7 @@ import type {
 import type {
   ElencoPunteggi,
   GiocatorePartita,
+  ParzialePartita,
   PartitaPunteggio,
 } from "./types";
 
@@ -58,6 +59,38 @@ export function toPartitaPunteggio(row: PartitaPunteggioRow): PartitaPunteggio {
   };
 }
 
+export type ParzialeRow = {
+  partita_id: string;
+  a: number;
+  b: number;
+  versione: number;
+  aggiornato_il: string;
+};
+
+/**
+ * Puts the partial (BLVS-37) on each match still `in_corso`; a leftover
+ * row of a match that left `in_corso` is never shown.
+ */
+export function conParziali(
+  partite: PartitaPunteggio[],
+  righe: readonly ParzialeRow[],
+): PartitaPunteggio[] {
+  const perPartita = new Map(righe.map((r) => [r.partita_id, r]));
+  return partite.map((p) => {
+    const r = perPartita.get(p.id);
+    const parziale: ParzialePartita | null =
+      r && p.stato === "in_corso"
+        ? {
+            a: r.a,
+            b: r.b,
+            versione: r.versione,
+            aggiornatoIl: r.aggiornato_il,
+          }
+        : null;
+    return { ...p, parziale };
+  });
+}
+
 /** The stage and its group matches (one when `partitaId` is given). */
 export async function leggiPunteggi(
   supabase: SupabaseClient,
@@ -79,8 +112,19 @@ export async function leggiPunteggi(
   if (partite.error) throw partite.error;
   if (!tappa.data) return null;
   const row = tappa.data as { id: string; nome: string; stato: StatoTappa };
+  const lette = (partite.data as PartitaPunteggioRow[]).map(toPartitaPunteggio);
+  const inCorso = lette.filter((p) => p.stato === "in_corso").map((p) => p.id);
+  let parziali: ParzialeRow[] = [];
+  if (inCorso.length > 0) {
+    const { data, error } = await supabase
+      .from("punteggi_parziali")
+      .select("partita_id, a, b, versione, aggiornato_il")
+      .in("partita_id", inCorso);
+    if (error) throw new Error(`parziali: ${error.message}`);
+    parziali = (data ?? []) as ParzialeRow[];
+  }
   return {
     tappa: { id: row.id, nome: row.nome, stato: row.stato },
-    partite: (partite.data as PartitaPunteggioRow[]).map(toPartitaPunteggio),
+    partite: conParziali(lette, parziali),
   };
 }

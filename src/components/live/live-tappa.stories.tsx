@@ -120,7 +120,29 @@ function sync(data: {
 }
 
 type Stato =
-  "loading" | "empty" | "offline" | "sessionExpired" | "success" | "longText";
+  | "loading"
+  | "empty"
+  | "offline"
+  | "sessionExpired"
+  | "success"
+  | "longText"
+  | "parziale"
+  | "parzialeOffline";
+
+/** BLVS-37: the player's match and another one in progress with a partial. */
+const partialMatches: LiveMatch[] = matches.map((m) =>
+  m.id === "a2" || m.id === "b1"
+    ? {
+        ...m,
+        sets: [],
+        partial: {
+          home: m.id === "a2" ? 14 : 9,
+          away: m.id === "a2" ? 11 : 12,
+          updatedAt: "2027-06-12T08:28:00.000Z",
+        },
+      }
+    : m,
+);
 
 /** w-live in every state, with no connection. */
 function LiveTappaScreen({ stato }: { stato: Stato }) {
@@ -132,7 +154,12 @@ function LiveTappaScreen({ stato }: { stato: Stato }) {
     stato === "empty"
       ? { matches: [], groups: [] }
       : {
-          matches: stato === "longText" ? longMatches : matches,
+          matches:
+            stato === "longText"
+              ? longMatches
+              : stato === "parziale" || stato === "parzialeOffline"
+                ? partialMatches
+                : matches,
           groups: [girone],
         };
   return (
@@ -142,7 +169,9 @@ function LiveTappaScreen({ stato }: { stato: Stato }) {
       me={ME}
       fasi={{ M: "gold", F: "silver" }}
       connect={false}
-      initialStatus={stato === "offline" ? "offline" : "live"}
+      initialStatus={
+        stato === "offline" || stato === "parzialeOffline" ? "offline" : "live"
+      }
     />
   );
 }
@@ -161,6 +190,8 @@ const meta = {
         "sessionExpired",
         "success",
         "longText",
+        "parziale",
+        "parzialeOffline",
       ],
     },
   },
@@ -176,3 +207,7 @@ export const Offline: Story = { args: { stato: "offline" } };
 export const SessionExpired: Story = { args: { stato: "sessionExpired" } };
 export const Success: Story = { args: { stato: "success" } };
 export const LongText: Story = { args: { stato: "longText" } };
+/** BLVS-37: the partial of matches in progress. */
+export const ParzialeInCorso: Story = { args: { stato: "parziale" } };
+/** BLVS-37: the partial while the connection is down. */
+export const ParzialeOffline: Story = { args: { stato: "parzialeOffline" } };

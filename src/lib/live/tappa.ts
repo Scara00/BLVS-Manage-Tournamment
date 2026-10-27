@@ -149,6 +149,14 @@ export function annuncioPartita(event: LiveEvent, me: LiveMe): string {
   if (event.type === "score") {
     const lato = mioLato(event.match, me);
     const last = event.match.sets.at(-1);
+    const { partial } = event.match;
+    if (lato && partial && (event.match.state ?? "in_corso") === "in_corso") {
+      const [mine, theirs] =
+        lato === "home"
+          ? [partial.home, partial.away]
+          : [partial.away, partial.home];
+      return `La tua partita, parziale: ${mine}-${theirs}`;
+    }
     if (lato) {
       if (!last) return "La tua partita: punteggio azzerato";
       const [mine, theirs] = lato === "home" ? last : [last[1], last[0]];

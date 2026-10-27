@@ -8,7 +8,9 @@ import {
   annullaPunteggioDemo,
   classificaDemo,
   getDemoPunteggi,
+  parzialeAttualeDemo,
   punteggioUfficialeDemo,
+  salvaParzialeDemo,
   salvaPunteggioDemo,
 } from "@/lib/demo/punteggi";
 import { leggiClassificaGirone } from "@/lib/gironi/classifica";
@@ -21,6 +23,13 @@ import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
 import type { PunteggioUfficiale } from "./conflitto/rileva";
 import { leggiPunteggi } from "./dati";
+import {
+  PARZIALE_MESSAGES,
+  parzialeComeUfficiale,
+  validaParziale,
+  type MotivoErroreParziale,
+  type ParzialeState,
+} from "./parziale";
 import {
   contaDaInserire,
   nomiGiocatori,
@@ -411,4 +420,251 @@ export async function annullaPunteggio(
   await pubblica(sessione.supabase, tappaId, partitaId);
   refresh();
   return { status: "success", message: PUNTEGGIO_MESSAGES.annullato };
+}
+
+// ---------------------------------------------------------------------------
+// BLVS-37 · Punteggio parziale
+// ---------------------------------------------------------------------------
+
+type EsitoParziale =
+  | { ok: true; versione: number }
+  | { ok: false; conflict: true }
+  | { ok: false; reason: MotivoErroreParziale | "fieldErrors" };
+
+async function parzialeDb(
+  supabase: SupabaseClient,
+  partitaId: string,
+  versione: number,
+  a: number,
+  b: number,
+  sovrascrivi: boolean,
+): Promise<EsitoParziale> {
+  if (!isUuid(partitaId)) return { ok: false, reason: "nonInCorso" };
+  const { data, error } = await supabase.rpc("salva_parziale", {
+    p_partita: partitaId,
+    p_versione: versione,
+    p_a: a,
+    p_b: b,
+    p_sovrascrivi: sovrascrivi,
+  });
+  if (error) {
+    if (error.code === "42501") {
+      return { ok: false, reason: "permissionDenied" };
+    }
+    switch (error.hint) {
+      case "parziale_superato":
+        return { ok: false, conflict: true };
+      case "valori_non_validi":
+        return { ok: false, reason: "fieldErrors" };
+      case "partita_non_in_corso":
+      case "tappa_archiviata":
+        return { ok: false, reason: "nonInCorso" };
+    }
+    if (error.code === "P0002") return { ok: false, reason: "nonInCorso" };
+    throw error;
+  }
+  const row = (data as { versione: number }[])[0];
+  return { ok: true, versione: row.versione };
+}
+
+type ParzialeAttualeRow = {
+  versione: number;
+  a: number;
+  b: number;
+  autore: string | null;
+  aggiornato_il: string;
+};
+
+/** The partial sent meanwhile by another admin, for the conflict dialog. */
+async function leggiParzialeAttuale(
+  supabase: SupabaseClient | null,
+  tappaId: string,
+  partitaId: string,
+) {
+  try {
+    if (!supabase) {
+      const demo = parzialeAttualeDemo(tappaId, partitaId);
+      if (demo === undefined) return null;
+      return parzialeComeUfficiale(
+        demo && {
+          versione: demo.versione,
+          a: demo.a,
+          b: demo.b,
+          autore: null,
+          aggiornatoIl: demo.aggiornatoIl,
+        },
+      );
+    }
+    const { data, error } = await supabase.rpc("parziale_attuale", {
+      p_partita: partitaId,
+    });
+    if (error) throw error;
+    const row = (data as ParzialeAttualeRow[])[0];
+    return parzialeComeUfficiale(
+      row
+        ? {
+            versione: row.versione,
+            a: row.a,
+            b: row.b,
+            autore: row.autore,
+            aggiornatoIl: row.aggiornato_il,
+          }
+        : null,
+    );
+  } catch (error) {
+    console.error("[punteggi] lettura del parziale non riuscita", error);
+    return null;
+  }
+}
+
+/**
+ * Only the match goes live: a partial changes no standing and no count of
+ * results to enter, so neither is published.
+ */
+async function pubblicaParziale(
+  supabase: SupabaseClient | null,
+  tappaId: string,
+  partitaId: string,
+) {
+  try {
+    const elenco = supabase
+      ? await leggiPunteggi(supabase, tappaId, partitaId)
+      : getDemoPunteggi(tappaId);
+    const partita = elenco?.partite.find((p) => p.id === partitaId);
+    if (partita) publishScore(toLiveMatch(partita, tappaId));
+  } catch (error) {
+    console.error("[punteggi] pubblicazione del parziale non riuscita", error);
+  }
+}
+
+/**
+ * Sends the partial of a match in progress (BLVS-37, R-38): the players
+ * see it on w-live within 5 s. It never touches the official score nor the
+ * standings. `versione` is the partial's version the admin's values are
+ * based on: a newer one from another admin ends in the conflict dialog;
+ * `sovrascrivi=1` re-sends over the version shown there.
+ */
+export async function salvaParziale(
+  _prev: ParzialeState,
+  formData: FormData,
+): Promise<ParzialeState> {
+  const at = now().getTime();
+  const sessione = await sessioneAdmin();
+  if (!sessione.ok) {
+    return {
+      status: "error",
+      reason: sessione.reason,
+      message: PARZIALE_MESSAGES[sessione.reason],
+      at,
+    };
+  }
+
+  const tappaId = String(formData.get("tappaId") ?? "");
+  const partitaId = String(formData.get("partitaId") ?? "");
+  const versione = Number(formData.get("versione"));
+  const sovrascrivi = formData.get("sovrascrivi") === "1";
+  if (!tappaId || !partitaId || !Number.isInteger(versione) || versione < 0) {
+    return {
+      status: "error",
+      reason: "nonInCorso",
+      message: PARZIALE_MESSAGES.nonInCorso,
+      at,
+    };
+  }
+  const verifica = validaParziale({
+    a: String(formData.get("puntiA") ?? ""),
+    b: String(formData.get("puntiB") ?? ""),
+  });
+  if (!verifica.valido) {
+    return {
+      status: "fieldErrors",
+      campi: verifica.campi,
+      message: PARZIALE_MESSAGES.fieldErrors,
+      at,
+    };
+  }
+  const a = verifica.punti.a as number;
+  const b = verifica.punti.b as number;
+
+  let esito: EsitoParziale;
+  try {
+    if (sessione.supabase) {
+      esito = await parzialeDb(
+        sessione.supabase,
+        partitaId,
+        versione,
+        a,
+        b,
+        sovrascrivi,
+      );
+    } else {
+      const demo = salvaParzialeDemo(
+        tappaId,
+        partitaId,
+        versione,
+        { a, b },
+        at,
+      );
+      esito =
+        demo.status === "ok"
+          ? { ok: true, versione: demo.versione }
+          : demo.status === "versioneSuperata"
+            ? { ok: false, conflict: true }
+            : demo.status === "nonValido"
+              ? { ok: false, reason: "fieldErrors" }
+              : { ok: false, reason: "nonInCorso" };
+    }
+  } catch (error) {
+    console.error("[punteggi] invio del parziale non riuscito", error);
+    esito = { ok: false, reason: "network" };
+  }
+
+  if (!esito.ok) {
+    if ("conflict" in esito) {
+      const salvato = await leggiParzialeAttuale(
+        sessione.supabase,
+        tappaId,
+        partitaId,
+      );
+      if (salvato) {
+        return {
+          status: "conflict",
+          salvato,
+          mio: { a, b },
+          message: PARZIALE_MESSAGES.conflitto,
+          at,
+        };
+      }
+      return {
+        status: "error",
+        reason: "network",
+        message: PARZIALE_MESSAGES.network,
+        at,
+      };
+    }
+    if (esito.reason === "fieldErrors") {
+      return {
+        status: "fieldErrors",
+        campi: {},
+        message: PARZIALE_MESSAGES.fieldErrors,
+        at,
+      };
+    }
+    return {
+      status: "error",
+      reason: esito.reason,
+      message: PARZIALE_MESSAGES[esito.reason],
+      at,
+    };
+  }
+
+  await pubblicaParziale(sessione.supabase, tappaId, partitaId);
+  refresh();
+  return {
+    status: "success",
+    versione: esito.versione,
+    punti: { a, b },
+    message: PARZIALE_MESSAGES.inviato,
+    at,
+  };
 }

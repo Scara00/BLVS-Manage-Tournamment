@@ -34,6 +34,8 @@ type RigaSquadraProps = {
   punteggioErroreId: string;
   esitoId: string;
   disabled?: boolean;
+  /** BLVS-37: the row of the partial, named so next to the score's. */
+  parziale?: boolean;
 };
 
 /** Next value of a stepper: an empty or invalid field counts as 0. */
@@ -59,8 +61,15 @@ export function RigaSquadra({
   punteggioErroreId,
   esitoId,
   disabled = false,
+  parziale = false,
 }: RigaSquadraProps) {
   const invalido = error != null || punteggioInvalido;
+  const togli = parziale
+    ? `Togli un punto al parziale di ${coppia}`
+    : etichettaTogli(coppia);
+  const aggiungi = parziale
+    ? `Aggiungi un punto al parziale di ${coppia}`
+    : etichettaAggiungi(coppia);
   return (
     <div
       data-slot="riga-squadra"
@@ -70,7 +79,11 @@ export function RigaSquadra({
       <Field
         id={id}
         size="campo"
-        label={<span className="font-heading text-xl">{coppia}</span>}
+        label={
+          <span className="font-heading text-xl">
+            {parziale ? `Parziale di ${coppia}` : coppia}
+          </span>
+        }
         hint={nomiCompleti(giocatori)}
         error={error}
         disabled={disabled}
@@ -80,7 +93,7 @@ export function RigaSquadra({
             type="button"
             variant="secondary"
             size="icon-campo-lg"
-            aria-label={etichettaTogli(coppia)}
+            aria-label={togli}
             disabled={disabled}
             onClick={() => onChange(passo(value, -1))}
           >
@@ -107,7 +120,7 @@ export function RigaSquadra({
             type="button"
             variant="secondary"
             size="icon-campo-lg"
-            aria-label={etichettaAggiungi(coppia)}
+            aria-label={aggiungi}
             disabled={disabled}
             onClick={() => onChange(passo(value, 1))}
           >

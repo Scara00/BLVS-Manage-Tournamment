@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { chiaveParziale, chiaveRisultato } from "@/lib/live/limita-annunci";
 import type { LiveEvent } from "@/lib/live/types";
 import { LiveAnnouncer } from "./live-announcer";
 import { LiveProvider } from "./live-provider";
@@ -143,5 +144,88 @@ describe("LiveAnnouncer", () => {
     expect(region()).toHaveTextContent(
       "Connessione ripristinata: dati aggiornati",
     );
+  });
+});
+
+describe("LiveAnnouncer limita (BLVS-37)", () => {
+  const parziale = (seq: number, home: number, away: number) =>
+    ({
+      seq,
+      savedAt: "2026-06-14T08:30:00.000Z",
+      type: "score",
+      match: {
+        ...baseSnapshot.matches[0],
+        sets: [],
+        state: "in_corso",
+        partial: { home, away, updatedAt: "2026-06-14T08:30:00.000Z" },
+      },
+    }) satisfies LiveEvent;
+  const risultato = (seq: number) =>
+    ({
+      seq,
+      savedAt: "2026-06-14T08:31:00.000Z",
+      type: "score",
+      match: {
+        ...baseSnapshot.matches[0],
+        state: "conclusa",
+        sets: [[21, 18]],
+        partial: null,
+      },
+    }) satisfies LiveEvent;
+
+  async function renderLimitato(intervalloMs?: number) {
+    await renderLive(
+      <LiveAnnouncer
+        intervalMs={10}
+        limita={{
+          chiave: chiaveParziale,
+          libera: chiaveRisultato,
+          intervalloMs,
+        }}
+      />,
+    );
+    const said: string[] = [];
+    new MutationObserver(() => {
+      if (region().textContent) said.push(region().textContent!);
+    }).observe(region(), { childList: true, subtree: true });
+    return said;
+  }
+
+  it("al massimo un parziale ogni 30 s per partita, poi il più recente", async () => {
+    const said = await renderLimitato();
+    act(() => TestEventSource.last!.send(parziale(1, 3, 2)));
+    expect(region()).toHaveTextContent("Girone A: parziale 3-2");
+    await act(() => vi.advanceTimersByTimeAsync(5_000));
+    act(() => TestEventSource.last!.send(parziale(2, 4, 2)));
+    act(() => TestEventSource.last!.send(parziale(3, 5, 2)));
+    await act(() => vi.advanceTimersByTimeAsync(20_000));
+    expect(said.filter((t) => t.includes("parziale"))).toEqual([
+      "Girone A: parziale 3-2",
+    ]);
+    await act(() => vi.advanceTimersByTimeAsync(5_000));
+    expect(said.at(-1)).toBe("Girone A: parziale 5-2");
+    expect(said).not.toContain("Girone A: parziale 4-2");
+  });
+
+  it("l'intervallo è configurabile", async () => {
+    const said = await renderLimitato(1_000);
+    act(() => TestEventSource.last!.send(parziale(1, 1, 0)));
+    await act(() => vi.advanceTimersByTimeAsync(1_000));
+    act(() => TestEventSource.last!.send(parziale(2, 2, 0)));
+    await act(() => vi.advanceTimersByTimeAsync(50));
+    expect(said).toEqual(["Girone A: parziale 1-0", "Girone A: parziale 2-0"]);
+  });
+
+  it("il risultato ufficiale non aspetta e scarta il parziale in attesa", async () => {
+    const said = await renderLimitato();
+    act(() => TestEventSource.last!.send(parziale(1, 19, 18)));
+    await act(() => vi.advanceTimersByTimeAsync(1_000));
+    act(() => TestEventSource.last!.send(parziale(2, 20, 18)));
+    act(() => TestEventSource.last!.send(risultato(3)));
+    await act(() => vi.advanceTimersByTimeAsync(60_000));
+    expect(said).toEqual([
+      "Girone A: parziale 19-18",
+      "Girone A: nuovo risultato 21-18",
+    ]);
   });
 });

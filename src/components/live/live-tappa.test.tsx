@@ -141,4 +141,49 @@ describe("LiveTappa", () => {
     expect(screen.getByTestId("live-mie-partite")).toHaveTextContent("19–21");
     expect(screen.getByTestId("live-mie-partite")).toHaveTextContent("Finita");
   });
+
+  it("il parziale arriva senza ricaricare, il focus resta fermo, una sola regione polite (BLVS-37)", async () => {
+    await renderLive();
+    const focus = document.createElement("button");
+    document.body.append(focus);
+    focus.focus();
+    const parziale = (seq: number, home: number, away: number) =>
+      score(seq, {
+        ...mia,
+        state: "in_corso",
+        partial: { home, away, updatedAt: "2027-06-12T08:31:00.000Z" },
+      });
+
+    await act(async () => {
+      TestEventSource.last!.send(parziale(1, 14, 11));
+      await vi.advanceTimersByTimeAsync(0);
+    });
+    const mie = screen.getByTestId("live-mie-partite");
+    expect(within(mie).getByTestId("punteggio-parziale")).toHaveTextContent(
+      "Parziale: Nome i1 e Nome i2 14, Nome i3 e Nome i4 11",
+    );
+    expect(mie).toHaveTextContent("Non entra in classifica");
+    const announcer = document.querySelector("[data-slot=live-announcer]");
+    expect(announcer).toHaveTextContent("La tua partita, parziale: 14-11");
+
+    // Within 30 s the next partial is shown but not read.
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2_000);
+      TestEventSource.last!.send(parziale(2, 15, 11));
+      await vi.advanceTimersByTimeAsync(2_000);
+    });
+    expect(within(mie).getByTestId("punteggio-parziale")).toHaveTextContent(
+      "15, Nome i3 e Nome i4 11",
+    );
+    expect(announcer).not.toHaveTextContent("15-11");
+    expect(document.querySelectorAll("[aria-live]")).toHaveLength(1);
+    expect(document.activeElement).toBe(focus);
+
+    // The standing of the group is untouched.
+    const girone = screen.getByRole("region", {
+      name: "Il tuo girone · Girone A",
+    });
+    expect(girone).not.toHaveTextContent("14");
+    focus.remove();
+  });
 });
