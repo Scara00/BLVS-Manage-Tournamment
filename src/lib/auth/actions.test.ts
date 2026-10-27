@@ -11,10 +11,12 @@ vi.mock("@/lib/supabase/server", () => ({
 }));
 
 const { signOut } = await import("./actions");
+const { SIGN_OUT_ERROR_MESSAGE } = await import("./sign-out-state");
 
 describe("signOut", () => {
   beforeEach(() => {
     signOutMock.mockReset();
+    signOutMock.mockResolvedValue({ error: null });
     redirectMock.mockReset();
   });
   afterEach(() => {
@@ -35,5 +37,20 @@ describe("signOut", () => {
     await signOut();
     expect(signOutMock).not.toHaveBeenCalled();
     expect(redirectMock).toHaveBeenCalledWith("/");
+  });
+
+  it("se Supabase non chiude la sessione restituisce l'errore e non reindirizza", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "pk");
+    const error = new Error("network");
+    signOutMock.mockResolvedValue({ error });
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+
+    await expect(signOut()).resolves.toEqual({ error: SIGN_OUT_ERROR_MESSAGE });
+    expect(redirectMock).not.toHaveBeenCalled();
+    expect(consoleError).toHaveBeenCalledWith("[auth] signOut failed", error);
+    consoleError.mockRestore();
   });
 });

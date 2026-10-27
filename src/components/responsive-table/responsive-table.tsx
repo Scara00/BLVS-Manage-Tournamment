@@ -45,6 +45,7 @@ export function ResponsiveTable<Row>({
   getRowKey,
   cardBadgeKey,
   cardTitleKey,
+  emptyMessage = "Nessun dato da mostrare.",
   className,
 }: {
   /** Names the table and, on mobile, the list. */
@@ -57,6 +58,8 @@ export function ResponsiveTable<Row>({
   cardBadgeKey?: string;
   /** Column used as the card title; defaults to the row-header column. */
   cardTitleKey?: string;
+  /** Shown instead of the table and the cards when `rows` is empty. */
+  emptyMessage?: string;
   className?: string;
 }) {
   const captionId = useId();
@@ -65,6 +68,29 @@ export function ResponsiveTable<Row>({
   const badge = columns.find((c) => c.key === cardBadgeKey);
   const title = columns.find((c) => c.key === titleKey);
   const details = columns.filter((c) => c !== badge && c !== title);
+
+  if (rows.length === 0) {
+    return (
+      <section
+        aria-labelledby={captionId}
+        className={cn("w-full min-w-0", className)}
+      >
+        <p
+          id={captionId}
+          className={cn(
+            captionHidden
+              ? "sr-only"
+              : "pb-space-3 font-heading text-xl font-semibold",
+          )}
+        >
+          {caption}
+        </p>
+        <p className="border border-border p-inset text-muted-foreground">
+          {emptyMessage}
+        </p>
+      </section>
+    );
+  }
 
   return (
     <div className={cn("w-full min-w-0", className)}>

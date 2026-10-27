@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 79 files · ~13,933 words
+- 81 files · ~14,557 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 384 nodes · 517 edges · 25 communities (17 shown, 8 thin omitted)
+- 390 nodes · 531 edges · 25 communities (17 shown, 8 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2a5a9cf4`
+- Built from commit: `ce44b349`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -86,8 +86,8 @@ Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.07
-Nodes (28): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+20 more)
+Cohesion: 0.06
+Nodes (29): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+21 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.22
@@ -110,8 +110,8 @@ Cohesion: 0.18
 Nodes (9): geistMono, geistSans, metadata, figtree, fontVariables, mono, outfit, preview (+1 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.12
-Nodes (17): useMediaQuery(), AdminSidebar(), adminNav, isNavItemActive(), NavItem, playerPrimaryNav, playerSecondaryNav, PlayerNav() (+9 more)
+Cohesion: 0.10
+Nodes (19): initialSignOutState, SignOutState, useMediaQuery(), AdminSidebar(), adminNav, isNavItemActive(), NavItem, playerPrimaryNav (+11 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.22
@@ -130,23 +130,23 @@ Cohesion: 0.17
 Nodes (8): expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, PAGES, WIDTHS, StoryIndex, VIEWPORTS
 
 ### Community 18 - "Community 18"
-Cohesion: 0.08
+Cohesion: 0.09
 Nodes (20): columns, metadata, stats, columns, metadata, demoLiveMatches, DemoMatch, DemoRegistration (+12 more)
 
 ## Knowledge Gaps
-- **198 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+193 more)
+- **199 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+194 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `AppShell()` connect `Community 9` to `Community 11`, `Community 4`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `Community 1` to `Community 2`?**
-  _High betweenness centrality (0.016) - this node is a cross-community bridge._
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `AppShell()` connect `Community 9` to `Community 11`, `Community 4`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
-  _198 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _199 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**

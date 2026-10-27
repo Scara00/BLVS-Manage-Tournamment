@@ -8,7 +8,7 @@ import { AppShell } from "./app-shell";
 import { PageContainer } from "./page-container";
 import { PlayerNav } from "./player-nav";
 
-const signOut = async () => {};
+const signOut = async () => ({ error: null });
 
 type Standing = { position: number; pair: string; points: number };
 

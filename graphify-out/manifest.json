@@ -220,13 +220,13 @@
     "semantic_hash": ""
   },
   "e2e/layout.spec.ts": {
-    "mtime": 1793048515.822475,
-    "ast_hash": "0efb8db51bd883c3ab420388e343e713",
+    "mtime": 1793088580.9916685,
+    "ast_hash": "f116b8dd5da1f06441d9c0331ca2e4c7",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/classifica/page.tsx": {
-    "mtime": 1793051464.1181953,
-    "ast_hash": "ee3b04570cb937c00922df710045900c",
+    "mtime": 1793088464.4435506,
+    "ast_hash": "448deaf60d1b0c325e5b2d2bf319c3b2",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/layout.tsx": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/page.tsx": {
-    "mtime": 1793048485.669896,
-    "ast_hash": "874564d5499e6c18f0ab0a0deab50fdf",
+    "mtime": 1793088464.4436562,
+    "ast_hash": "f6b77703881475de9ad5ca6c981b2868",
     "semantic_hash": ""
   },
   "src/app/admin/tappe/page.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/app-shell.stories.tsx": {
-    "mtime": 1793051464.2019827,
-    "ast_hash": "e71bc2da4ef885e148ef11303acd2257",
+    "mtime": 1793088432.3957634,
+    "ast_hash": "b140a534a8e8d3a94f2e3e15a24cf99b",
     "semantic_hash": ""
   },
   "src/components/layout/app-shell.test.tsx": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/sign-out-button.tsx": {
-    "mtime": 1793048187.2823296,
-    "ast_hash": "92abc05fd91591a8ed892e048d2e393b",
+    "mtime": 1793088432.3929546,
+    "ast_hash": "74734666945ec07d7bfe9fd6d8307556",
     "semantic_hash": ""
   },
   "src/components/layout/skip-link.tsx": {
@@ -350,18 +350,18 @@
     "semantic_hash": ""
   },
   "src/components/responsive-table/responsive-table.stories.tsx": {
-    "mtime": 1793051464.2403917,
-    "ast_hash": "f185b2252b88db151e94b35c98d65009",
+    "mtime": 1793088459.3569381,
+    "ast_hash": "55eca00fb8aa4ea43f817809e6e7a275",
     "semantic_hash": ""
   },
   "src/components/responsive-table/responsive-table.test.tsx": {
-    "mtime": 1793051464.2455208,
-    "ast_hash": "c3a2dff3ff4db1d037a20f3984c05750",
+    "mtime": 1793088459.356711,
+    "ast_hash": "1095d143944c28b03c46190cf8b977ba",
     "semantic_hash": ""
   },
   "src/components/responsive-table/responsive-table.tsx": {
-    "mtime": 1793051463.7121673,
-    "ast_hash": "02d70b640447f2dbfeb8e95e761590c9",
+    "mtime": 1793088459.356472,
+    "ast_hash": "1cfd25f749e1613a853e6827af471289",
     "semantic_hash": ""
   },
   "src/hooks/use-media-query.test.ts": {
@@ -375,13 +375,13 @@
     "semantic_hash": ""
   },
   "src/lib/auth/actions.test.ts": {
-    "mtime": 1793048256.9229088,
-    "ast_hash": "e398dbfb58057d8267af565d0166344c",
+    "mtime": 1793088483.7635922,
+    "ast_hash": "3241a2b7ed7209f48b8b928d25cabe5a",
     "semantic_hash": ""
   },
   "src/lib/auth/actions.ts": {
-    "mtime": 1793048256.92088,
-    "ast_hash": "1c128abe5c2ac66f184901704111dd3f",
+    "mtime": 1793088474.5285368,
+    "ast_hash": "290af21f336208335dcb38345688cab7",
     "semantic_hash": ""
   },
   "src/lib/demo/tournament.ts": {
@@ -397,6 +397,16 @@
   "src/test/root-font-size.tsx": {
     "mtime": 1793048383.546571,
     "ast_hash": "50502504d646cbfb42f4ed2c9ea3555f",
+    "semantic_hash": ""
+  },
+  "src/components/layout/sign-out-button.test.tsx": {
+    "mtime": 1793088464.714966,
+    "ast_hash": "77f59bf2e8952d087f3354f4e20f1ea7",
+    "semantic_hash": ""
+  },
+  "src/lib/auth/sign-out-state.ts": {
+    "mtime": 1793088432.387804,
+    "ast_hash": "42602ff5b81b0cde1947c4207dd22278",
     "semantic_hash": ""
   }
 }

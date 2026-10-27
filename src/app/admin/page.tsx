@@ -7,6 +7,7 @@ import {
 import {
   demoRegistrations,
   demoStages,
+  demoStandings,
   type DemoRegistration,
 } from "@/lib/demo/tournament";
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = { title: "Dashboard amministrazione" };
 const stats = [
   { label: "Tappe in calendario", value: demoStages.length },
   { label: "Iscrizioni da approvare", value: demoRegistrations.length },
-  { label: "Coppie in classifica", value: 48 },
+  { label: "Coppie in classifica", value: demoStandings.length },
 ];
 
 const columns: ResponsiveTableColumn<DemoRegistration>[] = [
@@ -47,6 +48,7 @@ export default function AdminDashboardPage() {
         columns={columns}
         rows={demoRegistrations}
         getRowKey={(row) => row.id}
+        emptyMessage="Nessuna iscrizione in attesa."
       />
     </PageContainer>
   );

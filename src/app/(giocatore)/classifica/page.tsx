@@ -34,6 +34,7 @@ export default function ClassificaPage() {
         rows={demoStandings}
         getRowKey={(row) => row.pair}
         cardBadgeKey="position"
+        emptyMessage="Nessuna coppia in classifica."
       />
     </PageContainer>
   );

@@ -216,3 +216,16 @@ test("admin: tour da tastiera e voce attiva", async ({ page }) => {
   }
   await expectNoA11yViolations(page);
 });
+
+test("«Esci» dall'area admin chiude la sessione e torna alla home", async ({
+  page,
+}) => {
+  await page.goto("/admin");
+  await page.waitForLoadState("networkidle"); // hydrated: useActionState form
+  // Axe before the click: afterwards the pointer still hovers the «Esci» of
+  // the next page and catches its colour transition mid-way.
+  await expectNoA11yViolations(page);
+  await page.getByRole("button", { name: "Esci" }).click();
+  await expect(page).toHaveURL("/");
+  await expect(page.getByText("Non è stato possibile uscire")).toHaveCount(0);
+});

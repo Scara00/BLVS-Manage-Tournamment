@@ -76,6 +76,10 @@ export const CaptionNascosta: Story = { args: { captionHidden: true } };
 
 export const TestoLungo: Story = { args: { rows: longRows } };
 
+export const Vuota: Story = {
+  args: { rows: [], emptyMessage: "Nessuna coppia in classifica." },
+};
+
 export const Testo200: Story = {
   args: { rows: longRows },
   decorators: [

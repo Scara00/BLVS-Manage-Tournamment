@@ -117,4 +117,21 @@ describe("ResponsiveTable · allineamento", () => {
     expect(container.querySelector("tbody td")).toHaveClass("text-start");
     expect(container.querySelector("thead th")).toHaveClass("text-start");
   });
+
+  it("senza righe mostra il messaggio di lista vuota al posto di tabella e card", () => {
+    render(
+      <ResponsiveTable
+        caption="Classifica generale"
+        columns={columns}
+        rows={[]}
+        getRowKey={(r) => r.pair}
+        emptyMessage="Nessuna coppia in classifica."
+      />,
+    );
+    expect(screen.queryByRole("table")).not.toBeInTheDocument();
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Classifica generale" }),
+    ).toHaveTextContent("Nessuna coppia in classifica.");
+  });
 });
