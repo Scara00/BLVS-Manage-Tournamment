@@ -55,6 +55,8 @@ export type Tappa = {
   stato: StatoTappa;
   iscrizioni_aprono_il: string | null;
   iscrizioni_chiudono_il: string | null;
+  /** Grows by 1 on every update (trigger `tappe_versione`). */
+  versione: number;
   created_at: string;
   updated_at: string;
 };
@@ -63,6 +65,8 @@ export type Tabellone = {
   id: string;
   tappa_id: string;
   categoria: Categoria;
+  /** Maximum registrations; never below the active ones. */
+  posti: number;
 };
 
 export type Iscrizione = {
