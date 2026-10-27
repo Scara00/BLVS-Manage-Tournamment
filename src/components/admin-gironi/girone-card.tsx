@@ -171,7 +171,13 @@ function EliminaGirone({
         variant="secondary"
         className="max-w-full"
         onClick={() => setOpen(true)}
-        aria-label={`Elimina ${girone.nome}`}
+        // The visible «Elimina girone» stays in the name (gold/silver groups
+        // are called «Gold A», «Silver A»: BLVS-39).
+        aria-label={
+          girone.nome.startsWith("Girone")
+            ? `Elimina ${girone.nome}`
+            : `Elimina girone ${girone.nome}`
+        }
       >
         <Trash2Icon aria-hidden />
         Elimina girone

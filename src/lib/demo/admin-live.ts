@@ -9,7 +9,7 @@ import {
   type TabelloneLive,
 } from "@/lib/tappe/live-admin/types";
 import { now } from "@/lib/time/server-time";
-import { getDemoAvvioFase } from "./avvio-fase";
+import { getDemoAvvioFase, getDemoGironiGiocati } from "./avvio-fase";
 
 /**
  * Matches of the started demo boards for w-admin-live when Supabase is not
@@ -55,10 +55,8 @@ const RITOCCHI: Record<string, Record<string, Ritocco>> = {
 };
 
 function creaPartite(tappaId: string, categoria: Categoria): PartitaLive[] {
-  const tabellone = getDemoAvvioFase(tappaId, categoria);
-  if (!tabellone) return [];
   const ritocchi = RITOCCHI[chiaveTabellone(tappaId, categoria)] ?? {};
-  return tabellone.gironi.flatMap((girone, i) =>
+  return getDemoGironiGiocati(tappaId, categoria).flatMap((girone, i) =>
     partiteGirone(girone).map((p): PartitaLive => {
       const id = `${girone.id}-t${p.turno}`;
       const giocatore = ({
@@ -68,9 +66,10 @@ function creaPartite(tappaId: string, categoria: Categoria): PartitaLive[] {
       }: (typeof p.squadraA)[number]) => ({ iscrizioneId, nome, cognome });
       return {
         id,
-        fase: "gironi",
+        fase: girone.fase?.startsWith("finale") ? "finale" : "gironi",
         gironeId: girone.id,
         gironeNome: girone.nome,
+        gironeFase: girone.fase ?? "iniziale",
         gironePosizione: i + 1,
         turno: p.turno,
         campo: `Campo ${(i % 4) + 1}`,
@@ -95,9 +94,15 @@ export function getDemoTabelloneLive(
   if (!tabellone) return null;
   const chiave = chiaveTabellone(tappaId, categoria);
   let partite = store().get(chiave);
-  if (!partite && tabellone.faseGioco !== null) {
-    partite = creaPartite(tappaId, categoria);
-    store().set(chiave, partite);
+  if (tabellone.faseGioco !== null) {
+    // A later phase (BLVS-39) adds its matches to those already played.
+    const nuove = creaPartite(tappaId, categoria).filter(
+      (p) => !partite?.some((q) => q.id === p.id),
+    );
+    if (!partite || nuove.length > 0) {
+      partite = [...(partite ?? []), ...nuove];
+      store().set(chiave, partite);
+    }
   }
   return {
     tappa: tabellone.tappa,

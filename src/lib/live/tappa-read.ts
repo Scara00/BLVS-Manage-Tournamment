@@ -2,8 +2,9 @@ import "server-only";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseTabellone } from "@/lib/db/types";
+import type { Categoria, FaseGirone, FaseTabellone } from "@/lib/db/types";
 import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
+import { coloreGirone, livelloGirone } from "@/lib/gironi/fasi/fase";
 import { classificaDemo, getDemoPunteggi } from "@/lib/demo/punteggi";
 import {
   nomiGiocatori,
@@ -27,6 +28,35 @@ export type LiveTappa =
       me: LiveMe;
       fasi: FasiTabelloni;
     };
+
+type UnoOMolti<T> = T | T[] | null;
+
+function primo<T>(valore: UnoOMolti<T>): T | null {
+  return Array.isArray(valore) ? (valore[0] ?? null) : valore;
+}
+
+type IscrizioneLive = {
+  id: string;
+  tabelloni: UnoOMolti<{ categoria: Categoria }>;
+  girone_iscrizioni: { gironi: UnoOMolti<{ fase: FaseGirone }> }[] | null;
+};
+
+const ORDINE_LIVELLO = ["iniziale", "gold_silver", "finali"] as const;
+
+/** Gold/Silver of the player's most advanced group, or null. */
+export function coloreDellIscrizione(
+  iscrizione: IscrizioneLive,
+): FaseTabellone | null {
+  const fasi = (iscrizione.girone_iscrizioni ?? [])
+    .map((gi) => primo(gi.gironi)?.fase)
+    .filter((f): f is FaseGirone => f !== undefined)
+    .sort(
+      (a, b) =>
+        ORDINE_LIVELLO.indexOf(livelloGirone(b)) -
+        ORDINE_LIVELLO.indexOf(livelloGirone(a)),
+    );
+  return fasi.length > 0 ? coloreGirone(fasi[0]) : null;
+}
 
 /**
  * Demo boards (no Supabase env): the men's board plays Gold, the women's
@@ -146,14 +176,19 @@ export async function readLiveTappa(tappaId: string): Promise<LiveTappa> {
   if (!user) return { status: "sessionExpired", tappa };
   const { data: iscrizione } = await user.supabase
     .from("iscrizioni")
-    .select("id")
+    .select("id, tabelloni (categoria), girone_iscrizioni (gironi (fase))")
     .eq("tappa_id", tappaId)
     .eq("utente_id", user.id)
     .in("stato", ["confermata", "in_attesa"])
-    .maybeSingle<{ id: string }>();
+    .maybeSingle<IscrizioneLive>();
 
   const fasi: FasiTabelloni = {};
   for (const t of tabelloni ?? []) if (t.fase) fasi[t.categoria] = t.fase;
+  // Gold/Silver of the player's own board comes from their latest group
+  // (BLVS-39); the board's `tabelloni.fase` is only the fallback.
+  const colore = iscrizione ? coloreDellIscrizione(iscrizione) : null;
+  const categoria = primo(iscrizione?.tabelloni ?? null)?.categoria;
+  if (colore && categoria) fasi[categoria] = colore;
   return {
     status: "ok",
     tappa,

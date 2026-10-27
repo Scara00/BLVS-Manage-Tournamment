@@ -15,9 +15,10 @@ import { partiteGirone } from "@/lib/tappe/avvio/regole";
 import {
   avviaFaseDemo,
   creaDemoAvvioFase,
-  getDemoAvvioFase,
+  getDemoGironiGiocati,
 } from "./avvio-fase";
 import { getDemoTappaGestione } from "./gestione-tappe";
+import { getDemoDecisioni } from "./spareggi";
 
 /**
  * Scores of the demo group matches when Supabase is not configured (CI,
@@ -76,9 +77,7 @@ export function getDemoPunteggi(tappaId: string): ElencoPunteggi | null {
   if (!tappa) return null;
   const partite: PartitaPunteggio[] = [];
   for (const categoria of CATEGORIE) {
-    const board = getDemoAvvioFase(tappaId, categoria);
-    if (!board || board.faseGioco === null) continue;
-    for (const girone of board.gironi) {
+    for (const girone of getDemoGironiGiocati(tappaId, categoria)) {
       for (const p of partiteGirone(girone)) {
         const id = `${girone.id}-t${p.turno}`;
         const giocatore = (g: (typeof p.squadraA)[number]) => ({
@@ -233,7 +232,21 @@ export function classificaDemo(
       },
       sets: p.sets,
     })),
+    { decisioni: getDemoDecisioni(gironeId) },
   );
+}
+
+/**
+ * Sets the score of a demo match directly, concluded (BLVS-39 e2e
+ * fixtures). The real path is `salvaPunteggioDemo`.
+ */
+export function impostaPunteggioDemo(partitaId: string, set: SetPunteggio) {
+  const prima = statoDi(partitaId);
+  store().punteggi.set(partitaId, {
+    sets: [{ ...set }],
+    stato: "conclusa",
+    versione: prima.versione + 1,
+  });
 }
 
 /**

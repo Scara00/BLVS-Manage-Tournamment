@@ -7,7 +7,10 @@ import {
   GironiEditorLoading,
   RigeneraGironi,
 } from "@/components/admin-gironi";
+import { ProssimaFase } from "@/components/admin-fasi";
 import { PageContainer } from "@/components/layout/page-container";
+import { proponiProssimaFase } from "@/lib/gironi/fasi/actions";
+import { readProssimaFase } from "@/lib/gironi/fasi/read";
 import { modificaGironi } from "@/lib/gironi/editor/actions";
 import { readEditorGironi } from "@/lib/gironi/editor/read";
 import { rigeneraGironi } from "@/lib/gironi/rigenera/actions";
@@ -31,9 +34,19 @@ async function EditorContent({
   categoria: string;
 }) {
   const editor = await readEditorGironi(id, categoria);
-  const rigenerazione = await readRigenerazione(editor);
+  const [rigenerazione, proposta] = await Promise.all([
+    readRigenerazione(editor),
+    readProssimaFase(editor.tappa.id, editor.categoria, "gold_silver"),
+  ]);
   return (
     <>
+      {proposta ? (
+        <ProssimaFase
+          key={`${editor.tappa.id}:${editor.categoria}`}
+          view={proposta}
+          action={proponiProssimaFase}
+        />
+      ) : null}
       <GironiEditor
         // A new board, or new groups after a regeneration (the version
         // grows), starts fresh.
@@ -64,7 +77,7 @@ export default function GironiEditorPage({
     <PageContainer
       title="Gironi"
       eyebrow="Amministrazione · Tappe"
-      description="Sposta e scambia i giocatori, aggiungi o elimina gironi. Vale per i gironi Gold e Silver."
+      description="Sposta e scambia i giocatori, aggiungi o elimina gironi. Vale per i gironi iniziali e per quelli gold e silver, prima del loro avvio."
     >
       <Suspense fallback={<GironiEditorLoading />}>
         {params.then(({ id, categoria }) => (

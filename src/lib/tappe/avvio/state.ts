@@ -1,4 +1,5 @@
-import type { Categoria } from "@/lib/db/types";
+import type { Categoria, FaseGioco } from "@/lib/db/types";
+import { FASE_GIOCO_LABEL } from "@/lib/gironi/fasi/fase";
 import type { ProblemaAvvio } from "./regole";
 
 /** Result of `avviaFase`; expected failures are values, never throws. */
@@ -32,6 +33,8 @@ export const AVVIO_MESSAGES = {
     "La fase di questo tabellone è già stata avviata: ricarica la pagina per vedere le partite.",
   nonAvviabile:
     "La tappa non è più a iscrizioni chiuse: ricarica la pagina per vedere lo stato attuale.",
+  gironiNonConclusi:
+    "Le partite della fase precedente non sono ancora tutte concluse: ricarica la pagina.",
   partiteIniziate:
     "Alcune partite dei gironi sono già iniziate: la fase non si può avviare di nuovo.",
   sessionExpired: "La sessione è scaduta: accedi di nuovo per continuare.",
@@ -44,8 +47,9 @@ export const AVVIO_MESSAGES = {
 export function messaggioSuccesso(
   categoria: Categoria,
   partite: number,
+  fase: FaseGioco = "gironi_iniziali",
 ): string {
   const tabellone = categoria === "M" ? "maschile" : "femminile";
   const n = partite === 1 ? "1 partita creata" : `${partite} partite create`;
-  return `Gironi iniziali avviati per il tabellone ${tabellone}: ${n}.`;
+  return `${FASE_GIOCO_LABEL[fase]} avviati per il tabellone ${tabellone}: ${n}.`;
 }

@@ -1,4 +1,5 @@
 import { partiteDaInserireLabel } from "@/lib/admin/tappe";
+import { annuncioFase } from "@/lib/gironi/fasi/fase";
 import type { LiveStatus } from "./client/live-connection";
 import { formatLiveTime } from "./format";
 import type { LiveEvent } from "./types";
@@ -21,9 +22,8 @@ export function announcementFor(event: LiveEvent): string {
     case "pending-scores":
       return `${event.stage.label}: ${partiteDaInserireLabel(event.stage.count)}`;
     case "phase-started": {
-      const { label, matches } = event.phase;
-      const partite = matches === 1 ? "1 partita" : `${matches} partite`;
-      return `${label}: iniziati i gironi, ${partite} da giocare`;
+      const { label, matches, phase } = event.phase;
+      return `${label}: ${annuncioFase(phase, matches)}`;
     }
     case "board-matches":
       return `${event.board.label}: ${event.board.change ?? "partite aggiornate"}`;

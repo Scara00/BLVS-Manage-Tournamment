@@ -13,10 +13,7 @@ export type LivePlayer = { id: string; name: string };
 
 /** Match state, as `partite.stato`. */
 export type LiveMatchState =
-  | "programmata"
-  | "in_corso"
-  | "conclusa"
-  | "annullata";
+  "programmata" | "in_corso" | "conclusa" | "annullata";
 
 export type LiveMatch = {
   id: string;
@@ -77,7 +74,10 @@ export type PendingScores = {
   count: number;
 };
 
-/** A board started a game phase (BLVS-29): its matches now exist. */
+/**
+ * A board started a game phase (BLVS-29), or moved on to the gold/silver
+ * groups or the finals (BLVS-39): its matches now exist.
+ */
 export type PhaseStarted = {
   /** `<stage id>:<category>`, one per board. */
   id: string;
@@ -85,7 +85,7 @@ export type PhaseStarted = {
   /** Spoken in announcements, e.g. «Tappa 3 · Cagliari, maschile». */
   label: string;
   category: "M" | "F";
-  phase: "gironi_iniziali";
+  phase: "gironi_iniziali" | "gironi_gold_silver" | "finali";
   /** Matches created, all still to play. */
   matches: number;
 };

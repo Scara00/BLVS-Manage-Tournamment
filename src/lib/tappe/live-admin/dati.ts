@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
   Categoria,
   FaseGioco,
+  FaseGirone,
   FasePartita,
   SetPunteggio,
   StatoPartita,
@@ -32,7 +33,7 @@ type PartitaDb = {
   programmata_il: string | null;
   stato: StatoPartita;
   girone_id: string | null;
-  gironi: UnoOMolti<{ nome: string; posizione: number }>;
+  gironi: UnoOMolti<{ nome: string; posizione: number; fase?: FaseGirone }>;
   punteggi: UnoOMolti<{ sets: SetPunteggio[]; versione: number }>;
   partita_giocatori: {
     squadra: "A" | "B";
@@ -45,7 +46,7 @@ type PartitaDb = {
 };
 
 const COLONNE_PARTITA = `id, fase, turno, campo, programmata_il, stato, girone_id,
-  gironi (nome, posizione),
+  gironi (nome, posizione, fase),
   punteggi (sets, versione),
   partita_giocatori (squadra, iscrizione_id, iscrizioni (posto, utenti (nome, cognome)))`;
 
@@ -76,6 +77,7 @@ function toPartita(row: PartitaDb): PartitaLive {
     fase: row.fase,
     gironeId: row.girone_id,
     gironeNome: girone?.nome ?? null,
+    gironeFase: girone?.fase,
     gironePosizione: girone?.posizione ?? 0,
     turno: row.turno,
     campo: row.campo,

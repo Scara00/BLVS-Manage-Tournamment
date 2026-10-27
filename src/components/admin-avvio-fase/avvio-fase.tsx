@@ -30,6 +30,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useOnline } from "@/hooks/use-online";
 import { CATEGORIE } from "@/lib/db/types";
+import { FASE_GIOCO_LABEL } from "@/lib/gironi/fasi/fase";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
 import {
   avviaLabel,
@@ -180,7 +181,7 @@ export function AvvioFase({
       />
     </>
   );
-  const etichetta = avviaLabel(view.riepilogo.partite);
+  const etichetta = avviaLabel(view.riepilogo.partite, view.fase);
 
   let azione;
   if (view.avviata) {
@@ -192,7 +193,8 @@ export function AvvioFase({
           className="font-heading text-lg font-semibold focus-ring"
           data-testid="fase-avviata"
         >
-          Fase «gironi iniziali» avviata: le partite sono da giocare.
+          Fase «{FASE_GIOCO_LABEL[view.faseGioco ?? view.fase].toLowerCase()}»
+          avviata: le partite sono da giocare.
         </p>
         <Link
           href={adminLivePath(view.tappa.id, view.categoria)}
@@ -265,16 +267,19 @@ export function AvvioFase({
             {campi}
             <AlertDialogHeader>
               <AlertDialogTitle>
-                Avviare i gironi iniziali del{" "}
+                Avviare i {view.faseLabel} del{" "}
                 {view.tabelloneLabel.toLowerCase()}?
               </AlertDialogTitle>
               <AlertDialogDescription>
                 Si creano {contaLabel(nelDialog.partite, "partita", "partite")}{" "}
                 da giocare per{" "}
                 {contaLabel(nelDialog.gironi, "girone", "gironi")} (
-                {contaLabel(nelDialog.giocatori, "giocatore", "giocatori")}). La
-                tappa passa a «in corso» e le pagine live mostrano le nuove
-                partite. Dopo l&apos;avvio i gironi non si cambiano più da qui.
+                {contaLabel(nelDialog.giocatori, "giocatore", "giocatori")}).{" "}
+                {view.fase === "gironi_iniziali"
+                  ? "La tappa passa a «in corso» e le"
+                  : "Le"}{" "}
+                pagine live mostrano le nuove partite. Dopo l&apos;avvio i
+                gironi non si cambiano più da qui.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

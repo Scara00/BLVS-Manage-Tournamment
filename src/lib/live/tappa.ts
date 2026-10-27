@@ -169,5 +169,7 @@ export function annuncioPartita(event: LiveEvent, me: LiveMe): string {
 export function eventoDellaTappa(event: LiveEvent, stageId: string): boolean {
   if (event.type === "score") return event.match.stageId === stageId;
   if (event.type === "group-standings") return event.group.stageId === stageId;
+  // A new game phase of this stage (BLVS-39: gold/silver groups, finals).
+  if (event.type === "phase-started") return event.phase.stageId === stageId;
   return false;
 }
