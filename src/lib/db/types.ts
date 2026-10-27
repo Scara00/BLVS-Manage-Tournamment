@@ -1,0 +1,99 @@
+/**
+ * Row types and enums of the schema in `supabase/migrations/`. Kept by hand:
+ * change them together with the SQL.
+ */
+
+export const RUOLI = ["admin", "giocatore"] as const;
+export type Ruolo = (typeof RUOLI)[number];
+
+export const CATEGORIE = ["M", "F"] as const;
+export type Categoria = (typeof CATEGORIE)[number];
+
+export const STATI_TAPPA = [
+  "bozza",
+  "iscrizioni_aperte",
+  "iscrizioni_chiuse",
+  "in_corso",
+  "conclusa",
+  "annullata",
+] as const;
+export type StatoTappa = (typeof STATI_TAPPA)[number];
+
+export const STATI_ISCRIZIONE = [
+  "in_attesa",
+  "confermata",
+  "rifiutata",
+  "ritirata",
+] as const;
+export type StatoIscrizione = (typeof STATI_ISCRIZIONE)[number];
+
+export const STATI_PARTITA = [
+  "programmata",
+  "in_corso",
+  "conclusa",
+  "annullata",
+] as const;
+export type StatoPartita = (typeof STATI_PARTITA)[number];
+
+export type Utente = {
+  id: string;
+  email: string;
+  ruolo: Ruolo;
+  categoria: Categoria | null;
+  nome: string;
+  cognome: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Tappa = {
+  id: string;
+  nome: string;
+  luogo: string;
+  data_inizio: string;
+  data_fine: string;
+  stato: StatoTappa;
+  iscrizioni_aprono_il: string | null;
+  iscrizioni_chiudono_il: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Tabellone = {
+  id: string;
+  tappa_id: string;
+  categoria: Categoria;
+};
+
+export type Iscrizione = {
+  id: string;
+  tappa_id: string;
+  tabellone_id: string;
+  utente_id: string;
+  stato: StatoIscrizione;
+  created_at: string;
+  updated_at: string;
+};
+
+export type SetPunteggio = { a: number; b: number };
+
+export type Punteggio = {
+  partita_id: string;
+  sets: SetPunteggio[];
+  versione: number;
+  aggiornato_da: string | null;
+  updated_at: string;
+};
+
+export type VoceRegistro = {
+  id: number;
+  attore_id: string | null;
+  azione: string;
+  entita: string;
+  entita_id: string | null;
+  dati: unknown;
+  created_at: string;
+};
+
+/** Version of the privacy notice a new player accepts at registration. */
+export const VERSIONE_INFORMATIVA_PRIVACY = "2026-10";
