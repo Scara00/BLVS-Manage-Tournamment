@@ -8,8 +8,11 @@ import {
   RigeneraGironi,
 } from "@/components/admin-gironi";
 import { PageContainer } from "@/components/layout/page-container";
+import { ParitaGirone } from "@/components/admin-parita";
 import { modificaGironi } from "@/lib/gironi/editor/actions";
 import { readEditorGironi } from "@/lib/gironi/editor/read";
+import { risolviParita } from "@/lib/gironi/parita/actions";
+import { readParitaTabellone } from "@/lib/gironi/parita/read";
 import { rigeneraGironi } from "@/lib/gironi/rigenera/actions";
 import { readRigenerazione } from "@/lib/gironi/rigenera/read";
 
@@ -31,7 +34,19 @@ async function EditorContent({
   categoria: string;
 }) {
   const editor = await readEditorGironi(id, categoria);
-  const rigenerazione = await readRigenerazione(editor);
+  const [rigenerazione, parita] = await Promise.all([
+    readRigenerazione(editor),
+    readParitaTabellone(editor.tappa.id, editor.categoria),
+  ]);
+  // BLVS-38: a finished group with a perfect tie shows it in its card.
+  const extraGironi = Object.fromEntries(
+    parita
+      .filter((g) => g.parita.length > 0)
+      .map((g) => [
+        g.gironeId,
+        <ParitaGirone key={g.gironeId} girone={g} risolvi={risolviParita} />,
+      ]),
+  );
   return (
     <>
       <GironiEditor
@@ -40,6 +55,7 @@ async function EditorContent({
         key={`${editor.tappa.id}:${editor.categoria}:${editor.composizione.versione}`}
         editor={editor}
         modifica={modificaGironi}
+        extraGironi={extraGironi}
       />
       <RigeneraGironi
         key={`${editor.tappa.id}:${editor.categoria}`}

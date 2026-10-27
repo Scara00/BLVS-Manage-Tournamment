@@ -133,6 +133,19 @@ describe("risolviParitaGirone", () => {
     ).toEqual(["d", "b", "a", "c"]);
   });
 
+  it("una parità già decisa si può decidere di nuovo", async () => {
+    decisioni = [{ firma: FIRMA, ordine: ["b", "a"] }];
+    const esito = await risolviParitaGirone(supabase, {
+      ...input,
+      ordine: ["a", "b"],
+    });
+    expect(rpc).toHaveBeenCalledWith(
+      "risolvi_parita_girone",
+      expect.objectContaining({ p_ordine: ["a", "b"] }),
+    );
+    expect(esito.ok).toBe(true);
+  });
+
   it.each([
     [{ motivo: "  " }, "invalid", SPAREGGIO_MESSAGES.motivoMancante],
     [{ motivo: "x".repeat(501) }, "invalid", SPAREGGIO_MESSAGES.motivoLungo],

@@ -15,13 +15,15 @@ import { Button } from "@/components/ui/button";
  * body scrolls, so the actions stay visible at 390 px. Padding is `inset`
  * on phones and `inset-lg` from `sm` up. If header and footer alone exceed
  * the height (e.g. 200 % text on a phone) the whole popup scrolls instead
- * of clipping.
+ * of clipping. Its x-axis is clipped: once it scrolls, the scrollbar
+ * takes width that the bleeding body and footer would turn into a sideways
+ * scroll (BLVS-38).
  */
 const overlayClassName =
   "fixed inset-0 isolate z-50 bg-black/60 duration-150 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none";
 
 const popupClassName =
-  "group/dialog-content fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-2*var(--spacing-space-4))] w-[calc(100vw-2*var(--spacing-space-4))] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col gap-stack overflow-y-auto rounded-none border border-border bg-popover p-inset font-sans text-base text-popover-foreground shadow-lg duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none sm:p-inset-lg";
+  "group/dialog-content fixed top-1/2 left-1/2 z-50 flex max-h-[calc(100dvh-2*var(--spacing-space-4))] w-[calc(100vw-2*var(--spacing-space-4))] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col gap-stack overflow-x-hidden overflow-y-auto rounded-none border border-border bg-popover p-inset font-sans text-base text-popover-foreground shadow-lg duration-150 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none sm:p-inset-lg";
 
 const headerClassName = "flex shrink-0 flex-col gap-stack-sm";
 

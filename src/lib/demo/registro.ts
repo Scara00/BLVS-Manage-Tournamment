@@ -137,6 +137,62 @@ function eventiTappa(): Evento[][] {
   return [tre, ieri, oggi];
 }
 
+type VoceAggiunta = {
+  tipo: TipoEventoRegistro;
+  autore: string;
+  prima: ValoreRegistro | null;
+  dopo: ValoreRegistro | null;
+  nota: string | null;
+  created_at: string;
+};
+
+const AGGIUNTE_KEY = Symbol.for("blvs.demo.registro.aggiunte");
+
+/** Entries written by demo actions (e.g. BLVS-38's decisions), per stage. */
+function aggiunte(): Map<string, VoceAggiunta[]> {
+  const g = globalThis as unknown as Record<
+    symbol,
+    Map<string, VoceAggiunta[]> | undefined
+  >;
+  return (g[AGGIUNTE_KEY] ??= new Map());
+}
+
+/** Ids of written entries start here, above every seeded one. */
+const PRIMO_ID_AGGIUNTO = 100_000;
+
+/**
+ * Logs an event of a demo action, as `registra_evento` would. It shows on
+ * top of the stage's log (newest first).
+ */
+export function aggiungiVoceDemoRegistro(
+  tappaId: string,
+  voce: Omit<VoceAggiunta, "created_at">,
+): void {
+  const elenco = aggiunte().get(tappaId) ?? [];
+  elenco.push({ ...voce, created_at: now().toISOString() });
+  aggiunte().set(tappaId, elenco);
+}
+
+function vociAggiunte(
+  tappaId: string,
+): (VoceRegistroDb & { partitaId: string | null })[] {
+  return (aggiunte().get(tappaId) ?? [])
+    .map((v, i) => ({
+      id: PRIMO_ID_AGGIUNTO + i,
+      tipo: v.tipo,
+      created_at: v.created_at,
+      autore: v.autore,
+      partita_id: null,
+      partita: null,
+      partitaId: null,
+      valore_prima: v.prima,
+      valore_dopo: v.dopo,
+      nota: v.nota,
+      totale: 0,
+    }))
+    .reverse();
+}
+
 function giornoDa(oggi: string, indietro: number): string {
   const data = new Date(`${oggi}T12:00:00Z`);
   data.setUTCDate(data.getUTCDate() - indietro);
@@ -147,7 +203,7 @@ function giornoDa(oggi: string, indietro: number): string {
 function vociTappa(
   tappaId: string,
 ): (VoceRegistroDb & { partitaId: string | null })[] {
-  if (tappaId !== STAGE_CON_VOCI) return [];
+  if (tappaId !== STAGE_CON_VOCI) return vociAggiunte(tappaId);
   const adesso = now();
   const oggi = romeToday(adesso);
   const [tre, ieri, oggiEventi] = eventiTappa();
@@ -181,7 +237,7 @@ function vociTappa(
       id++;
     });
   }
-  return voci.reverse();
+  return [...vociAggiunte(tappaId), ...voci.reverse()];
 }
 
 export type DemoRegistro = {

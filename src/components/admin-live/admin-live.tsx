@@ -14,6 +14,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 import { useLive } from "@/components/live";
 import { Tape } from "@/components/scoreboard";
@@ -64,6 +65,11 @@ type AdminLiveProps = {
   /** Storybook/axe: force offline, starting outcome. */
   offline?: boolean;
   initialState?: AzionePartitaState;
+  /**
+   * Extra content per group id, under the group's name (BLVS-38: the
+   * «Parità da risolvere» signal and its dialog).
+   */
+  extraGironi?: Readonly<Record<string, ReactNode>>;
 };
 
 const OFFLINE_ID = "admin-live-offline";
@@ -153,6 +159,7 @@ export function AdminLive({
   punteggio,
   offline: forceOffline,
   initialState = initialAzionePartitaState,
+  extraGironi,
 }: AdminLiveProps) {
   const online = useOnline(
     forceOffline === undefined ? undefined : !forceOffline,
@@ -392,6 +399,7 @@ export function AdminLive({
                       <Tape size={4} className="max-w-16" />
                     </div>
                   ) : null}
+                  {g.id ? extraGironi?.[g.id] : null}
                   <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-stack">
                     {g.partite.map((p) => (
                       <li key={p.id}>{voce(p)}</li>

@@ -8,6 +8,7 @@ import type { StatoPartita } from "@/lib/db/types";
 import {
   classificaGirone,
   ordineValido,
+  paritaPerfette,
   type ClassificaGirone,
   type DecisioneSpareggio,
   type PartitaGirone,
@@ -38,11 +39,18 @@ export function toPartitaGirone(row: PartitaGironeRow): PartitaGirone {
   };
 }
 
-/** The standing of `gironeId`, or null when the group doesn't exist. */
-export async function leggiClassificaGirone(
+/** What a group's standing is computed from. */
+export type DatiGirone = {
+  iscrizioni: string[];
+  partite: PartitaGirone[];
+  decisioni: DecisioneSpareggio[];
+};
+
+/** A group's players, matches and stored decisions; null when it's gone. */
+export async function leggiDatiGirone(
   supabase: SupabaseClient,
   gironeId: string,
-): Promise<ClassificaGirone | null> {
+): Promise<DatiGirone | null> {
   const [girone, iscritti, partite, decisioni] = await Promise.all([
     supabase.from("gironi").select("id").eq("id", gironeId).maybeSingle(),
     supabase
@@ -65,12 +73,25 @@ export async function leggiClassificaGirone(
     if (error) throw new Error(`classifica girone: ${error.message}`);
   }
   if (!girone.data) return null;
+  return {
+    iscrizioni: (iscritti.data as { iscrizione_id: string }[]).map(
+      (r) => r.iscrizione_id,
+    ),
+    partite: (partite.data as PartitaGironeRow[]).map(toPartitaGirone),
+    decisioni: decisioni.data as DecisioneSpareggio[],
+  };
+}
 
-  return classificaGirone(
-    (iscritti.data as { iscrizione_id: string }[]).map((r) => r.iscrizione_id),
-    (partite.data as PartitaGironeRow[]).map(toPartitaGirone),
-    { decisioni: decisioni.data as DecisioneSpareggio[] },
-  );
+/** The standing of `gironeId`, or null when the group doesn't exist. */
+export async function leggiClassificaGirone(
+  supabase: SupabaseClient,
+  gironeId: string,
+): Promise<ClassificaGirone | null> {
+  const dati = await leggiDatiGirone(supabase, gironeId);
+  if (!dati) return null;
+  return classificaGirone(dati.iscrizioni, dati.partite, {
+    decisioni: dati.decisioni,
+  });
 }
 
 export const MOTIVO_SPAREGGIO_MAX = 500;
@@ -106,10 +127,10 @@ export type RisolviParitaEsito =
 type PgError = { code?: string; hint?: string | null; message?: string };
 
 /**
- * Stores the admin's order for a perfect tie. The tie is checked against
- * the standing as it is now: if a score changed it, the call answers
- * `conflict` instead of fixing an order nobody looked at. The RPC checks
- * the admin role and the players again.
+ * Stores the admin's order for a perfect tie, or replaces an earlier one.
+ * The tie is checked against the standing as it is now: if a score changed
+ * it, the call answers `conflict` instead of fixing an order nobody looked
+ * at. The RPC checks the admin role and the players again.
  */
 export async function risolviParitaGirone(
   supabase: SupabaseClient,
@@ -131,8 +152,14 @@ export async function risolviParitaGirone(
     };
   }
 
-  const attuale = await leggiClassificaGirone(supabase, gironeId);
-  const parita = attuale?.parita.find((p) => p.firma === firma);
+  // A decided tie can be decided again (BLVS-38): look among every perfect
+  // tie, not only the open ones.
+  const dati = await leggiDatiGirone(supabase, gironeId);
+  const parita = dati
+    ? paritaPerfette(dati.iscrizioni, dati.partite).find(
+        (p) => p.firma === firma,
+      )
+    : undefined;
   if (!parita) {
     return {
       ok: false,

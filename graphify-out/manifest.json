@@ -615,8 +615,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/dialog.tsx": {
-    "mtime": 1793129848.697543,
-    "ast_hash": "ab269be6cb35b467d4ae6f97d9b03201",
+    "mtime": 1793130115.3887706,
+    "ast_hash": "51de3824245059a1bf6f09b960ed9d1a",
     "semantic_hash": ""
   },
   "src/components/ui/tabs.stories.tsx": {
@@ -3015,8 +3015,8 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/classifica.ts": {
-    "mtime": 1793129848.7049665,
-    "ast_hash": "19ddadb66469d966813284935f14f3da",
+    "mtime": 1793130115.3895106,
+    "ast_hash": "fa9980f1f8141b7606e5a00fe3810ff2",
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/criteri.test.ts": {
@@ -3030,13 +3030,13 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/dati.test.ts": {
-    "mtime": 1793129848.7051458,
-    "ast_hash": "1e43f04b6674c2e66fbb3727b18ce0ff",
+    "mtime": 1793130115.3897607,
+    "ast_hash": "e19f092ebed5af2a6abacbc0d5cb07b0",
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/dati.ts": {
-    "mtime": 1793129848.7052262,
-    "ast_hash": "cec9f38f90fc2202f1d025fd3b4975ed",
+    "mtime": 1793130115.390002,
+    "ast_hash": "f80ed07a24aec03acdbc32478ed94594",
     "semantic_hash": ""
   },
   "src/lib/gironi/classifica/index.ts": {
@@ -3170,8 +3170,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/gironi/[categoria]/page.tsx": {
-    "mtime": 1793129848.6664116,
-    "ast_hash": "388ce24b4e87631759588206bd763d0e",
+    "mtime": 1793130115.382408,
+    "ast_hash": "cf1c2fa039a9ecff659436c8bc491174",
     "semantic_hash": ""
   },
   "src/app/admin/anteprima/punteggio/fixture-form.tsx": {
@@ -3205,8 +3205,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-gironi/girone-card.tsx": {
-    "mtime": 1793129848.6752048,
-    "ast_hash": "787c2d3b26815ab1f01a14b9e146fdcf",
+    "mtime": 1793130115.3858645,
+    "ast_hash": "1986323117c03d383fd77745dd7165cc",
     "semantic_hash": ""
   },
   "src/components/admin-gironi/gironi-editor-loading.tsx": {
@@ -3225,8 +3225,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-gironi/gironi-editor.tsx": {
-    "mtime": 1793129848.6758811,
-    "ast_hash": "833ce7f2e76dcc4243169bf7504e47ce",
+    "mtime": 1793130115.3869298,
+    "ast_hash": "7d1ed4bb63539a65da249db6900ef0c6",
     "semantic_hash": ""
   },
   "src/components/admin-gironi/index.ts": {
@@ -3530,8 +3530,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/live/[categoria]/page.tsx": {
-    "mtime": 1793129848.666666,
-    "ast_hash": "8ef48c4811d0e3aba2040641a049da30",
+    "mtime": 1793130115.3835871,
+    "ast_hash": "927d5ad2dffe650dc28ab13362408abb",
     "semantic_hash": ""
   },
   "src/components/admin-live/admin-live-loading.tsx": {
@@ -3550,8 +3550,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-live/admin-live.tsx": {
-    "mtime": 1793129849.0994904,
-    "ast_hash": "f87273b72bcc8a86409c227ead00cb44",
+    "mtime": 1793130115.3870823,
+    "ast_hash": "1062f45a645bafc785986ee1d86fcad1",
     "semantic_hash": ""
   },
   "src/components/admin-live/avanzamento-fase.tsx": {
@@ -3700,8 +3700,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/registro.ts": {
-    "mtime": 1793129848.703133,
-    "ast_hash": "dbc13ac954767cc193e811d15e66540b",
+    "mtime": 1793130115.389259,
+    "ast_hash": "2f8be4857e829be314727f3d61477a0f",
     "semantic_hash": ""
   },
   "src/lib/registro/actions.ts": {
@@ -4197,6 +4197,86 @@
   "supabase/migrations/20261027400000_correzione_punteggio.sql": {
     "mtime": 1793129849.1015768,
     "ast_hash": "e28396037f00998ef7c65b6c7875df30",
+    "semantic_hash": ""
+  },
+  "e2e/admin-parita.spec.ts": {
+    "mtime": 1793130115.3712413,
+    "ast_hash": "0fdb0cef48a328c112f10ab2730921ba",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/parita/route.ts": {
+    "mtime": 1793130115.3847196,
+    "ast_hash": "325a9d12be6fd5bd2684a59914e7d0d2",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/index.ts": {
+    "mtime": 1793130115.3873653,
+    "ast_hash": "c0f2a259ffcdd6811fe083297ce923f8",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/parita-dialog.tsx": {
+    "mtime": 1793130115.387589,
+    "ast_hash": "88c3cfd67b04f2ae2254e03432e1e1c8",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/parita-girone.stories.tsx": {
+    "mtime": 1793130115.387789,
+    "ast_hash": "cbef5e6f63b8c766e740c0ade13c1f05",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/parita-girone.test.tsx": {
+    "mtime": 1793130115.3879995,
+    "ast_hash": "e223bee0adafe1b8cc2418870f988c3e",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/parita-girone.tsx": {
+    "mtime": 1793130115.3883646,
+    "ast_hash": "d89478d6f4e8a59db6c13dc0e9c1e7e5",
+    "semantic_hash": ""
+  },
+  "src/components/admin-parita/stories-data.ts": {
+    "mtime": 1793130115.38852,
+    "ast_hash": "7e7ec6416a2df372897a94759196b4e0",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/parita.ts": {
+    "mtime": 1793130115.3890052,
+    "ast_hash": "da124b2f2bff1c07b43d596d02c1e3e8",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/actions.test.ts": {
+    "mtime": 1793130115.3902633,
+    "ast_hash": "8d217e805f4ff71e8143590f579cf301",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/actions.ts": {
+    "mtime": 1793130115.3904521,
+    "ast_hash": "860da17b4ec2251e67737616fe48e68f",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/dati.ts": {
+    "mtime": 1793130115.390626,
+    "ast_hash": "8a3c74a0a37bc91a2321af950d1f2e2b",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/format.test.ts": {
+    "mtime": 1793130115.39089,
+    "ast_hash": "7808014fb2eddc15c4a5172e5df496f8",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/format.ts": {
+    "mtime": 1793130115.3910925,
+    "ast_hash": "0ce4154fe71e9259b336afb9a7ffee2f",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/read.ts": {
+    "mtime": 1793130115.3912404,
+    "ast_hash": "e50830a606ba020d6025569dc496c1e2",
+    "semantic_hash": ""
+  },
+  "src/lib/gironi/parita/types.ts": {
+    "mtime": 1793130115.3914373,
+    "ast_hash": "8984f81037671c498fefda3422aa18ee",
     "semantic_hash": ""
   }
 }
