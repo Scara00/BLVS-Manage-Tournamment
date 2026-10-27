@@ -141,7 +141,7 @@ function AlertDialogAction(props: DialogActionProps) {
 /** The safe action: closes the dialog and receives focus on open. */
 function AlertDialogCancel({
   className,
-  variant = "outline",
+  variant = "secondary",
   size = "default",
   ...props
 }: AlertDialogPrimitive.Close.Props &

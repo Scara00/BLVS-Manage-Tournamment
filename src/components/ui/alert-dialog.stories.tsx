@@ -37,7 +37,7 @@ function EliminaTorneo({
         if (!pending) setOpen(next);
       }}
     >
-      <AlertDialogTrigger render={<Button variant="outline" />}>
+      <AlertDialogTrigger render={<Button variant="secondary" />}>
         Elimina torneo
       </AlertDialogTrigger>
       <AlertDialogContent>

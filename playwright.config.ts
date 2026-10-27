@@ -52,7 +52,12 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
       // HTTPS is enforced only on staging/production; e2e runs on http://localhost.
-      env: { TZ: "Europe/Rome", ENFORCE_HTTPS: "false" },
+      // ERROR_PREVIEWS: the /anteprima/* routes that trigger 403 and 503.
+      env: {
+        TZ: "Europe/Rome",
+        ENFORCE_HTTPS: "false",
+        ERROR_PREVIEWS: "true",
+      },
     },
     {
       // CI downloads the storybook-static artifact and sets STORYBOOK_PREBUILT.

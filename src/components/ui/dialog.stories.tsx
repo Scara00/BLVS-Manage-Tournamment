@@ -58,7 +58,7 @@ export const Corto: Story = {
           </label>
         </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="secondary" />}>
             Annulla
           </DialogClose>
           <DialogAction>Salva</DialogAction>
@@ -87,7 +87,7 @@ function Regolamento(args: React.ComponentProps<typeof Dialog>) {
           </ol>
         </DialogBody>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="secondary" />}>
             Chiudi
           </DialogClose>
           <DialogClose render={<DialogAction />}>Ho capito</DialogClose>
@@ -105,7 +105,7 @@ export const Lungo: Story = {
 export const Distruttivo: Story = {
   render: (args) => (
     <Dialog {...args}>
-      <DialogTrigger render={<Button variant="outline" />}>
+      <DialogTrigger render={<Button variant="secondary" />}>
         Elimina girone
       </DialogTrigger>
       <DialogContent>
@@ -116,7 +116,7 @@ export const Distruttivo: Story = {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="secondary" />}>
             Annulla
           </DialogClose>
           <DialogAction tone="destructive">Elimina girone</DialogAction>
@@ -141,7 +141,7 @@ function EliminazioneInCorso({
         if (!pending) setOpen(next);
       }}
     >
-      <DialogTrigger render={<Button variant="outline" />}>
+      <DialogTrigger render={<Button variant="secondary" />}>
         Elimina girone
       </DialogTrigger>
       <DialogContent showCloseButton={!pending}>
@@ -152,7 +152,10 @@ function EliminazioneInCorso({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose disabled={pending} render={<Button variant="outline" />}>
+          <DialogClose
+            disabled={pending}
+            render={<Button variant="secondary" />}
+          >
             Annulla
           </DialogClose>
           <DialogAction
