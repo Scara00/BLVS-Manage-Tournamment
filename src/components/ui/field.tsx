@@ -304,7 +304,8 @@ function Fieldset({
  * Moves focus to the first control marked `aria-invalid="true"` inside
  * `root`, e.g. a form after a failed submit (client or server errors). A
  * radio group is not focusable itself, so focus goes to its checked radio,
- * or to the first enabled one. Call it after the errors have rendered.
+ * or to the first enabled one, and its field is scrolled into view below
+ * the sticky topbar. Call it after the errors have rendered.
  * Returns the focused element, or `null` when nothing is invalid.
  */
 function focusFirstInvalid(root: ParentNode): HTMLElement | null {
@@ -319,7 +320,16 @@ function focusFirstInvalid(root: ParentNode): HTMLElement | null {
           '[role="radio"]:not([aria-disabled="true"]):not([data-disabled])',
         ))
       : invalid;
-  target?.focus();
+  if (!target) return null;
+  // focus() alone scrolls the bare control to the viewport edge, ignoring
+  // scroll-padding-top, so it could end up under the sticky topbar.
+  // scrollIntoView honours it, and scrolling the field keeps its label in
+  // view too.
+  target.focus({ preventScroll: true });
+  const field = target.closest<HTMLElement>(
+    "[data-slot=field], [data-slot=fieldset], [data-slot=radio-card-group]",
+  );
+  (field ?? target).scrollIntoView?.({ block: "nearest" });
   return target;
 }
 

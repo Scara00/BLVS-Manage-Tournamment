@@ -15,3 +15,11 @@ test("porta alle sezioni del giocatore", () => {
     expect(screen.getByRole("link", { name })).toBeInTheDocument();
   }
 });
+
+test("invita i nuovi giocatori a registrarsi", () => {
+  render(<Home />);
+  expect(screen.getByRole("link", { name: "Registrati" })).toHaveAttribute(
+    "href",
+    "/registrati",
+  );
+});

@@ -40,6 +40,16 @@ describe("PlayerNav", () => {
     );
   });
 
+  it("«Profilo» è nel menu e, da desktop, accanto a «Esci»", () => {
+    render(<PlayerNav signOut={signOut} />);
+    const links = screen.getAllByRole("link", {
+      name: "Profilo",
+      hidden: true,
+    });
+    expect(links).toHaveLength(2);
+    for (const link of links) expect(link).toHaveAttribute("href", "/profilo");
+  });
+
   it("apre e chiude il menu aggiornando aria-expanded", () => {
     render(<PlayerNav signOut={signOut} />);
     expect(menuButton()).toHaveAttribute("aria-expanded", "false");

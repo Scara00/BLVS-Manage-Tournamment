@@ -9,6 +9,12 @@ const { signInWithPassword, signUp, signOut } = vi.hoisted(() => ({
   signUp: vi.fn(),
   signOut: vi.fn(),
 }));
+const { rememberPendingVerification } = vi.hoisted(() => ({
+  rememberPendingVerification: vi.fn(),
+}));
+vi.mock("@/lib/auth/email-verification/pending", () => ({
+  rememberPendingVerification,
+}));
 vi.mock("@/lib/supabase/server", () => ({
   createClient: async () => ({ auth: { signInWithPassword, signUp, signOut } }),
 }));
@@ -18,6 +24,10 @@ const register = await import("./register/route");
 const logout = await import("./logout/route");
 const { createMemoryRateLimitStore, setRateLimitStore } =
   await import("@/lib/auth/rate-limit");
+const { EMAIL_TAKEN_MESSAGE, REGISTERED_MESSAGE } =
+  await import("@/lib/auth/messages");
+const { CONSENT_REQUIRED_MESSAGE } = await import("@/lib/auth/signup");
+const { PRIVACY_POLICY_VERSION } = await import("@/lib/legal/privacy-policy");
 
 function post(path: string, body: unknown, ip = "203.0.113.7") {
   return new NextRequest(`https://blvs.example${path}`, {
@@ -42,6 +52,7 @@ beforeEach(() => {
   setRateLimitStore(createMemoryRateLimitStore());
   signInWithPassword.mockReset();
   signUp.mockReset();
+  rememberPendingVerification.mockReset();
   signOut.mockReset();
 });
 
@@ -128,12 +139,22 @@ describe("POST /api/auth/login", () => {
 });
 
 describe("POST /api/auth/register", () => {
-  it("registra un giocatore con il consenso privacy", async () => {
-    signUp.mockResolvedValue({ data: { user: { id: "u1" } }, error: null });
+  it("registra un giocatore con il consenso privacy e lo connette", async () => {
+    signUp.mockResolvedValue({
+      data: {
+        user: { id: "u1", identities: [{ id: "i1" }] },
+        session: { access_token: "t" },
+      },
+      error: null,
+    });
     const res = await register.POST(
       post("/api/auth/register", validRegistration),
     );
-    expect(res.status).toBe(202);
+    expect(res.status).toBe(201);
+    expect(await res.json()).toEqual({
+      messaggio: REGISTERED_MESSAGE,
+      connesso: true,
+    });
     expect(signUp).toHaveBeenCalledWith({
       email: "nuovo@example.it",
       password: "una-password-lunga",
@@ -142,10 +163,12 @@ describe("POST /api/auth/register", () => {
           nome: "Nuovo",
           cognome: "Giocatore",
           categoria: "F",
-          consenso_privacy: "2026-10",
+          consenso_privacy: PRIVACY_POLICY_VERSION.number,
+          consenso_privacy_data: PRIVACY_POLICY_VERSION.date,
         },
       },
     });
+    expect(rememberPendingVerification).not.toHaveBeenCalled();
   });
 
   it("non accetta un ruolo dal client", async () => {
@@ -174,15 +197,61 @@ describe("POST /api/auth/register", () => {
     expect(signUp).not.toHaveBeenCalled();
   });
 
-  it("un'email già registrata riceve la stessa risposta di una nuova", async () => {
+  it("senza sessione (conferma email attiva) chiede di confermare", async () => {
     signUp.mockResolvedValue({
-      data: { user: null },
-      error: { code: "user_already_exists" },
+      data: { user: { id: "u1", identities: [{ id: "i1" }] }, session: null },
+      error: null,
     });
     const res = await register.POST(
       post("/api/auth/register", validRegistration),
     );
-    expect(res.status).toBe(202);
+    expect(res.status).toBe(201);
+    expect(await res.json()).toMatchObject({ connesso: false });
+    // BLVS-15: no session yet, the «Conferma email» page needs the address.
+    expect(rememberPendingVerification).toHaveBeenCalledWith(
+      "nuovo@example.it",
+    );
+  });
+
+  it("un'email già registrata, con maiuscole diverse, risponde 409 sul campo", async () => {
+    signUp.mockResolvedValue({
+      data: { user: null, session: null },
+      error: { code: "user_already_exists" },
+    });
+    const res = await register.POST(
+      post("/api/auth/register", {
+        ...validRegistration,
+        email: "  NUOVO@example.IT ",
+      }),
+    );
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({
+      error: EMAIL_TAKEN_MESSAGE,
+      fields: { email: EMAIL_TAKEN_MESSAGE },
+    });
+    expect(signUp.mock.calls[0][0].email).toBe("nuovo@example.it");
+  });
+
+  it("riconosce l'email già registrata anche con la conferma email attiva", async () => {
+    signUp.mockResolvedValue({
+      data: { user: { id: "finto", identities: [] }, session: null },
+      error: null,
+    });
+    const res = await register.POST(
+      post("/api/auth/register", validRegistration),
+    );
+    expect(res.status).toBe(409);
+  });
+
+  it("senza consenso non registra e lo dice sul campo", async () => {
+    const { consensoPrivacy: _omesso, ...senzaConsenso } = validRegistration;
+    void _omesso;
+    const res = await register.POST(post("/api/auth/register", senzaConsenso));
+    expect(res.status).toBe(422);
+    expect((await res.json()).fields).toEqual({
+      consensoPrivacy: CONSENT_REQUIRED_MESSAGE,
+    });
+    expect(signUp).not.toHaveBeenCalled();
   });
 
   it("limita le registrazioni per IP", async () => {

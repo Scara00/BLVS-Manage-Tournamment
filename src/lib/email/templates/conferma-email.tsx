@@ -1,24 +1,30 @@
 import { Heading, Text } from "react-email";
 import { EmailAction } from "./email-action";
+import { confermaEmailCopy } from "./conferma-email-copy";
 import { EmailLayout, emailStyles } from "./email-layout";
 
 export type ConfermaEmailProps = {
   confirmationUrl: string;
+  /** How long the link stays valid (`otp_expiry` in supabase/config.toml). */
+  validityMinutes?: number;
 };
 
-export const confermaEmailSubject = "Conferma il tuo indirizzo email · BLVS";
+export { confermaEmailSubject } from "./conferma-email-copy";
 
-export function ConfermaEmail({ confirmationUrl }: ConfermaEmailProps) {
+export function ConfermaEmail({
+  confirmationUrl,
+  validityMinutes = 60,
+}: ConfermaEmailProps) {
   return (
     <EmailLayout preview="Conferma il tuo indirizzo email per attivare l'account BLVS">
       <Heading as="h1" style={emailStyles.heading}>
-        Conferma il tuo indirizzo email
+        {confermaEmailCopy.heading}
       </Heading>
+      <Text style={emailStyles.text}>{confermaEmailCopy.intro}</Text>
       <Text style={emailStyles.text}>
-        Ti diamo il benvenuto su BLVS! Per attivare l&apos;account e iscriverti
-        alle tappe, conferma che questo indirizzo è tuo.
+        {confermaEmailCopy.validity(validityMinutes)}
       </Text>
-      <EmailAction href={confirmationUrl} label="Conferma email" />
+      <EmailAction href={confirmationUrl} label={confermaEmailCopy.action} />
     </EmailLayout>
   );
 }

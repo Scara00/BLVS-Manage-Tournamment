@@ -136,6 +136,10 @@ test("giocatore: tour da tastiera completo", async ({ page }) => {
   );
   if (isDesktop(page)) {
     await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("link", { name: "Profilo", exact: true }),
+    ).toBeFocused();
+    await page.keyboard.press("Tab");
     await expect(page.getByRole("button", { name: "Esci" })).toBeFocused();
   }
 
@@ -217,7 +221,7 @@ test("admin: tour da tastiera e voce attiva", async ({ page }) => {
   await expectNoA11yViolations(page);
 });
 
-test("«Esci» dall'area admin chiude la sessione e torna alla home", async ({
+test("«Esci» dall'area admin chiude la sessione e porta al login con il messaggio di uscita", async ({
   page,
 }) => {
   await page.goto("/admin");
@@ -226,6 +230,7 @@ test("«Esci» dall'area admin chiude la sessione e torna alla home", async ({
   // the next page and catches its colour transition mid-way.
   await expectNoA11yViolations(page);
   await page.getByRole("button", { name: "Esci" }).click();
-  await expect(page).toHaveURL("/");
+  await expect(page).toHaveURL("/accesso?uscita=1");
+  await expect(page.getByText("Sei uscito dall'account.")).toBeVisible();
   await expect(page.getByText("Non è stato possibile uscire")).toHaveCount(0);
 });

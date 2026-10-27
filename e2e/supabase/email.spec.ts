@@ -39,8 +39,12 @@ test.describe("email di Supabase Auth con i modelli italiani", () => {
     expect(message.Subject).toBe("Conferma il tuo indirizzo email · BLVS");
     expect(message.HTML).toMatch(/<html[^>]*\slang="it"/);
 
-    const link = await getLatestLink(email, { match: /\/auth\/v1\/verify/ });
-    expect(new URL(link).searchParams.get("type")).toBe("signup");
+    // BLVS-15: the link goes to our route handler, which calls verifyOtp.
+    const link = await getLatestLink(email, {
+      match: /\/registrati\/conferma-email\/verifica\?/,
+    });
+    expect(new URL(link).searchParams.get("type")).toBe("email");
+    expect(new URL(link).searchParams.get("token_hash")).toBeTruthy();
   });
 
   test("reimpostazione password: arriva a Mailpit con il link", async () => {
@@ -57,8 +61,11 @@ test.describe("email di Supabase Auth con i modelli italiani", () => {
 
     const message = await waitForLatestEmail(email, { after: since });
     expect(message.Subject).toBe("Reimposta la password · BLVS");
-    const link = await getLatestLink(email, { match: /\/auth\/v1\/verify/ });
-    expect(new URL(link).searchParams.get("type")).toBe("recovery");
+    // BLVS-14: our page, which spends the token only when the user saves.
+    const link = new URL(
+      await getLatestLink(email, { match: /\/reimposta-password\?/ }),
+    );
+    expect(link.searchParams.get("token_hash")).toBeTruthy();
   });
 });
 
