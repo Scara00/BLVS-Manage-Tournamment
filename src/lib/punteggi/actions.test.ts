@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   rpc: vi.fn(),
   leggiPunteggi: vi.fn(),
   leggiClassificaGirone: vi.fn(),
+  pubblicaTabellone: vi.fn(),
 }));
 
 vi.mock("server-only", () => ({}));
@@ -27,6 +28,9 @@ vi.mock("@/lib/live/publish", () => ({
   publishPendingScores: mocks.publishPendingScores,
 }));
 vi.mock("./dati", () => ({ leggiPunteggi: mocks.leggiPunteggi }));
+vi.mock("@/lib/tappe/live-admin/pubblica", () => ({
+  pubblicaTabellone: mocks.pubblicaTabellone,
+}));
 vi.mock("@/lib/gironi/classifica", async (original) => ({
   ...(await original<typeof import("@/lib/gironi/classifica")>()),
   leggiClassificaGirone: mocks.leggiClassificaGirone,
@@ -202,7 +206,7 @@ describe("con il database", () => {
     );
   }
 
-  it("chiama salva_punteggio con la versione letta", async () => {
+  it("chiama correggi_punteggio con la versione letta", async () => {
     mocks.rpc.mockResolvedValue({
       data: [{ versione: 5, tipo: "correzione_punteggio" }],
       error: null,
@@ -213,17 +217,21 @@ describe("con il database", () => {
       tipo: "correzione",
       message: PUNTEGGIO_MESSAGES.corretto,
     });
-    expect(mocks.rpc).toHaveBeenCalledWith("salva_punteggio", {
+    expect(mocks.rpc).toHaveBeenCalledWith("correggi_punteggio", {
       p_partita: PARTITA,
       p_versione: 4,
       p_a: 23,
       p_b: 21,
+      p_scelta: null,
+      p_conferma: false,
+      p_attesi: null,
+      p_sovrascrivi: false,
     });
   });
 
   it("conflitto: legge il punteggio ufficiale per il dialog", async () => {
     mocks.rpc.mockImplementation(async (nome: string) =>
-      nome === "salva_punteggio"
+      nome === "correggi_punteggio"
         ? {
             data: null,
             error: { code: "40001", hint: "versione_superata", detail: "5" },
@@ -257,7 +265,7 @@ describe("con il database", () => {
     expect(mocks.refresh).not.toHaveBeenCalled();
   });
 
-  it("«Sovrascrivi» chiama sovrascrivi_punteggio con la versione vista", async () => {
+  it("«Sovrascrivi» passa la versione vista a correggi_punteggio", async () => {
     mocks.rpc.mockResolvedValue({
       data: [{ versione: 6, tipo: "correzione_punteggio" }],
       error: null,
@@ -274,13 +282,125 @@ describe("con il database", () => {
       }),
     );
     expect(state).toMatchObject({ status: "success", versione: 6 });
-    expect(mocks.rpc).toHaveBeenCalledWith("sovrascrivi_punteggio", {
+    expect(mocks.rpc).toHaveBeenCalledWith("correggi_punteggio", {
       p_partita: PARTITA,
-      p_versione_vista: 5,
+      p_versione: 5,
       p_a: 23,
       p_b: 21,
+      p_scelta: null,
+      p_conferma: false,
+      p_attesi: null,
+      p_sovrascrivi: true,
     });
   });
+
+  const FASE = [
+    {
+      partita_id: "f1",
+      fase: "finale",
+      turno: 1,
+      stato: "conclusa",
+      sets: [{ a: 21, b: 19 }],
+      squadra_a: ["Luca Rossi", "Marco Bianchi"],
+      squadra_b: ["Paolo Verdi", "Dario Neri"],
+    },
+    {
+      partita_id: "f2",
+      fase: "finale",
+      turno: 2,
+      stato: "programmata",
+      sets: [],
+      squadra_a: [],
+      squadra_b: [],
+    },
+  ];
+
+  function rifiutaCon(hint: string, code = "23514") {
+    mocks.rpc.mockImplementation(async (nome: string) =>
+      nome === "correggi_punteggio"
+        ? { data: null, error: { code, hint, detail: "1" } }
+        : { data: FASE, error: null },
+    );
+  }
+
+  it("con la fase successiva chiede la scelta, senza scrivere né pubblicare", async () => {
+    rifiutaCon("impatto_richiesto");
+    expect(await salva()).toMatchObject({
+      status: "impatto",
+      mio: { a: 23, b: 21 },
+      versione: 4,
+      erroreConferma: null,
+      avviso: null,
+      impatto: { punteggiPersi: 1, partite: [{ id: "f1" }, { id: "f2" }] },
+    });
+    expect(mocks.rpc).toHaveBeenCalledWith("fase_successiva_correzione", {
+      p_partita: PARTITA,
+    });
+    expect(mocks.publishScore).not.toHaveBeenCalled();
+    expect(mocks.refresh).not.toHaveBeenCalled();
+  });
+
+  it("«Rigenera» senza spunta torna con l'errore della casella", async () => {
+    rifiutaCon("conferma_richiesta");
+    expect(await salva()).toMatchObject({
+      status: "impatto",
+      erroreConferma: "Spunta la casella per confermare che perdi 1 punteggio.",
+    });
+  });
+
+  it("fase successiva cambiata: il dialog riapre con il nuovo conto", async () => {
+    rifiutaCon("punteggi_cambiati", "40001");
+    const state = await salva();
+    expect(state).toMatchObject({ status: "impatto" });
+    expect(state.status === "impatto" && state.avviso).toMatch(/1 punteggio/);
+  });
+
+  it.each([
+    ["mantieni", "", 0],
+    ["rigenera", "on", 1],
+  ])(
+    "«%s» passa la scelta e ricalcola le pagine live",
+    async (scelta, conferma, persi) => {
+      mocks.rpc.mockResolvedValue({
+        data: [
+          {
+            versione: 5,
+            tipo: "correzione_punteggio",
+            scelta,
+            punteggi_persi: persi,
+          },
+        ],
+        error: null,
+      });
+      const state = await salvaPunteggio(
+        initialPunteggioState,
+        form({
+          tappaId: "t",
+          partitaId: PARTITA,
+          versione: "4",
+          puntiA: "23",
+          puntiB: "21",
+          scelta,
+          conferma,
+          attesi: "1",
+        }),
+      );
+      expect(state).toMatchObject({
+        status: "success",
+        scelta,
+        punteggiPersi: persi,
+      });
+      expect(mocks.rpc).toHaveBeenCalledWith(
+        "correggi_punteggio",
+        expect.objectContaining({
+          p_scelta: scelta,
+          p_conferma: conferma === "on",
+          p_attesi: 1,
+        }),
+      );
+      expect(mocks.refresh).toHaveBeenCalled();
+    },
+  );
 
   it.each([
     [{ code: "40001", hint: "versione_superata" }, "conflict"],
@@ -321,5 +441,97 @@ describe("con il database", () => {
     mocks.getCurrentUser.mockResolvedValue({ ruolo: "giocatore", supabase });
     expect(await salva()).toMatchObject({ reason: "permissionDenied" });
     expect(mocks.rpc).not.toHaveBeenCalled();
+  });
+});
+
+describe("correzione con la fase successiva (BLVS-41, demo)", () => {
+  let tappa: string;
+  let partitaId: string;
+
+  beforeEach(() => {
+    mocks.readSupabaseEnv.mockReturnValue(null);
+    tappa = demo.creaDemoCorrezione(1);
+    partitaId = demo.getDemoPunteggi(tappa)!.partite[0].id;
+  });
+
+  function correggi(extra: Record<string, string> = {}) {
+    return salvaPunteggio(
+      initialPunteggioState,
+      form({
+        tappaId: tappa,
+        partitaId,
+        versione: "2",
+        puntiA: "15",
+        puntiB: "21",
+        ...extra,
+      }),
+    );
+  }
+
+  function vinte() {
+    const righe = mocks.publishGroupStandings.mock.calls[0][0].rows as {
+      playerId: string;
+      won: number;
+    }[];
+    return Object.fromEntries(righe.map((r) => [r.playerId, r.won]));
+  }
+
+  it("senza scelta apre l'impatto e non scrive", async () => {
+    expect(await correggi()).toMatchObject({
+      status: "impatto",
+      versione: 2,
+      impatto: { punteggiPersi: 1 },
+    });
+    expect(demo.getDemoPunteggi(tappa)!.partite[0].sets).toEqual([
+      { a: 21, b: 18 },
+    ]);
+    expect(mocks.publishScore).not.toHaveBeenCalled();
+  });
+
+  it("«Mantieni»: la classifica si ricalcola e la fase successiva resta", async () => {
+    const state = await correggi({ scelta: "mantieni", attesi: "1" });
+    expect(state).toMatchObject({
+      status: "success",
+      tipo: "correzione",
+      scelta: "mantieni",
+      punteggiPersi: 0,
+    });
+    const partita = demo.getDemoPunteggi(tappa)!.partite[0];
+    const [a1] = partita.squadre.a;
+    const [b1] = partita.squadre.b;
+    // Team B now wins match 1: the standing published follows it.
+    expect(vinte()[b1.iscrizioneId]).toBeGreaterThan(0);
+    expect(vinte()[a1.iscrizioneId]).toBeLessThan(3);
+    expect(demo.faseSuccessivaDemo(tappa, partitaId)?.partite).toHaveLength(2);
+  });
+
+  it("«Rigenera» senza spunta resta nel dialog con l'errore", async () => {
+    expect(await correggi({ scelta: "rigenera", attesi: "1" })).toMatchObject({
+      status: "impatto",
+      erroreConferma: expect.stringContaining("Spunta la casella"),
+    });
+    expect(demo.faseSuccessivaDemo(tappa, partitaId)).not.toBeNull();
+  });
+
+  it("«Rigenera» confermato: la classifica si ricalcola e la fase va rigenerata", async () => {
+    const state = await correggi({
+      scelta: "rigenera",
+      conferma: "on",
+      attesi: "1",
+    });
+    expect(state).toMatchObject({
+      status: "success",
+      scelta: "rigenera",
+      punteggiPersi: 1,
+    });
+    expect(mocks.publishGroupStandings).toHaveBeenCalled();
+    expect(demo.faseSuccessivaDemo(tappa, partitaId)).toBeNull();
+  });
+
+  it("un conto diverso da quello visto riapre l'impatto", async () => {
+    expect(await correggi({ scelta: "mantieni", attesi: "0" })).toMatchObject({
+      status: "impatto",
+      avviso: expect.stringContaining("è cambiata"),
+    });
   });
 });

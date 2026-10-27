@@ -19,7 +19,19 @@ import {
 } from "@/lib/live/publish";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
+import { pubblicaTabellone } from "@/lib/tappe/live-admin/pubblica";
 import type { PunteggioUfficiale } from "./conflitto/rileva";
+import {
+  erroreConferma,
+  messaggioImpattoCambiato,
+  toImpattoFase,
+  type PartitaSuccessivaRow,
+} from "./correzione/format";
+import {
+  SCELTE_IMPATTO,
+  type ImpattoFase,
+  type SceltaImpatto,
+} from "./correzione/types";
 import { leggiPunteggi } from "./dati";
 import {
   contaDaInserire,
@@ -68,9 +80,53 @@ const CODICI: readonly string[] = [
 ] satisfies CodiceErrore[];
 
 type Esito =
-  | { ok: true; versione: number; tipo: "inserimento" | "correzione" }
+  | {
+      ok: true;
+      versione: number;
+      tipo: "inserimento" | "correzione";
+      scelta: SceltaImpatto | null;
+      punteggiPersi: number;
+    }
   | { ok: false; reason: MotivoErrore; message: string }
-  | { ok: false; codice: CodiceErrore };
+  | { ok: false; codice: CodiceErrore }
+  /** BLVS-41: the next phase exists; `motivo` says why it was refused. */
+  | {
+      ok: false;
+      impatto: ImpattoFase | null;
+      motivo: "richiesto" | "conferma" | "cambiato";
+    };
+
+type OpzioniImpatto = {
+  scelta: SceltaImpatto | null;
+  conferma: boolean;
+  attesi: number | null;
+};
+
+const MOTIVI_IMPATTO: Record<string, "richiesto" | "conferma" | "cambiato"> = {
+  impatto_richiesto: "richiesto",
+  conferma_richiesta: "conferma",
+  punteggi_cambiati: "cambiato",
+};
+
+/** The next phase a correction would affect (`fase_successiva_correzione`). */
+async function leggiImpatto(
+  supabase: SupabaseClient,
+  partitaId: string,
+): Promise<ImpattoFase | null> {
+  try {
+    const { data, error } = await supabase.rpc("fase_successiva_correzione", {
+      p_partita: partitaId,
+    });
+    if (error) throw error;
+    return toImpattoFase((data ?? []) as PartitaSuccessivaRow[]);
+  } catch (error) {
+    console.error(
+      "[punteggi] lettura della fase successiva non riuscita",
+      error,
+    );
+    return null;
+  }
+}
 
 function errore(reason: MotivoErrore, message?: string) {
   return {
@@ -105,37 +161,60 @@ async function salvaDb(
   a: number,
   b: number,
   sovrascrivi: boolean,
+  opzioni: OpzioniImpatto,
 ): Promise<Esito> {
   if (!isUuid(partitaId)) return errore("nonGiocabile");
+  // `correggi_punteggio` (BLVS-41) wraps `salva_punteggio` unchanged and
+  // waits for «Mantieni»/«Rigenera» when the next phase already exists.
   // «Sovrascrivi» (BLVS-34): `versione` is the one shown in the conflict
   // dialog; the RPC refuses it again if another save landed since.
-  const { data, error } = sovrascrivi
-    ? await supabase.rpc("sovrascrivi_punteggio", {
-        p_partita: partitaId,
-        p_versione_vista: versione,
-        p_a: a,
-        p_b: b,
-      })
-    : await supabase.rpc("salva_punteggio", {
-        p_partita: partitaId,
-        p_versione: versione,
-        p_a: a,
-        p_b: b,
-      });
+  const { data, error } = await supabase.rpc("correggi_punteggio", {
+    p_partita: partitaId,
+    p_versione: versione,
+    p_a: a,
+    p_b: b,
+    p_scelta: opzioni.scelta,
+    p_conferma: opzioni.conferma,
+    p_attesi: opzioni.attesi,
+    p_sovrascrivi: sovrascrivi,
+  });
   if (error) {
     if (error.hint && CODICI.includes(error.hint)) {
       return { ok: false, codice: error.hint as CodiceErrore };
+    }
+    const motivo = error.hint ? MOTIVI_IMPATTO[error.hint] : undefined;
+    if (motivo) {
+      return {
+        ok: false,
+        motivo,
+        impatto: await leggiImpatto(supabase, partitaId),
+      };
     }
     const comune = erroreComune(error);
     if (comune) return comune;
     throw error;
   }
-  const row = (data as { versione: number; tipo: string }[])[0];
+  const row = (
+    data as {
+      versione: number;
+      tipo: string;
+      scelta: string | null;
+      punteggi_persi: number | null;
+    }[]
+  )[0];
   return {
     ok: true,
     versione: row.versione,
     tipo: row.tipo === "correzione_punteggio" ? "correzione" : "inserimento",
+    scelta: parseScelta(row.scelta),
+    punteggiPersi: Number(row.punteggi_persi ?? 0),
   };
+}
+
+function parseScelta(value: unknown): SceltaImpatto | null {
+  return SCELTE_IMPATTO.includes(value as SceltaImpatto)
+    ? (value as SceltaImpatto)
+    : null;
 }
 
 function salvaDemo(
@@ -145,13 +224,33 @@ function salvaDemo(
   a: number,
   b: number,
   at: number,
+  opzioni: OpzioniImpatto,
 ): Esito {
-  const esito = salvaPunteggioDemo(tappaId, partitaId, versione, { a, b }, at);
+  const esito = salvaPunteggioDemo(
+    tappaId,
+    partitaId,
+    versione,
+    { a, b },
+    at,
+    opzioni,
+  );
   switch (esito.status) {
     case "ok":
-      return { ok: true, versione: esito.versione, tipo: esito.tipo };
+      return {
+        ok: true,
+        versione: esito.versione,
+        tipo: esito.tipo,
+        scelta: esito.scelta,
+        punteggiPersi: esito.punteggiPersi,
+      };
     case "nonValido":
       return { ok: false, codice: esito.codice };
+    case "impatto":
+      return { ok: false, motivo: "richiesto", impatto: esito.impatto };
+    case "confermaRichiesta":
+      return { ok: false, motivo: "conferma", impatto: esito.impatto };
+    case "impattoCambiato":
+      return { ok: false, motivo: "cambiato", impatto: esito.impatto };
     case "versioneSuperata":
       return errore("conflict");
     default:
@@ -207,6 +306,7 @@ async function pubblica(
   supabase: SupabaseClient | null,
   tappaId: string,
   partitaId: string,
+  cambio: string | null = null,
 ) {
   try {
     const elenco = supabase
@@ -237,6 +337,8 @@ async function pubblica(
       label: elenco.tappa.nome,
       count: contaDaInserire(elenco.partite),
     });
+    // w-admin-live (BLVS-31) shows the board's matches, next phase too.
+    await pubblicaTabellone({ supabase }, tappaId, partita.categoria, cambio);
   } catch (error) {
     console.error("[punteggi] pubblicazione live non riuscita", error);
   }
@@ -267,6 +369,13 @@ export async function salvaPunteggio(
   const partitaId = String(formData.get("partitaId") ?? "");
   const versione = Number(formData.get("versione"));
   const sovrascrivi = formData.get("sovrascrivi") === "1";
+  // BLVS-41: the choice made in the impact dialog, sent with the values.
+  const attesiRaw = formData.get("attesi");
+  const opzioni: OpzioniImpatto = {
+    scelta: parseScelta(formData.get("scelta")),
+    conferma: formData.get("conferma") === "on",
+    attesi: attesiRaw === null || attesiRaw === "" ? null : Number(attesiRaw),
+  };
   const verifica = validaPunteggio({
     a: String(formData.get("puntiA") ?? ""),
     b: String(formData.get("puntiB") ?? ""),
@@ -294,14 +403,48 @@ export async function salvaPunteggio(
   let esito: Esito;
   try {
     esito = sessione.supabase
-      ? await salvaDb(sessione.supabase, partitaId, versione, a, b, sovrascrivi)
-      : salvaDemo(tappaId, partitaId, versione, a, b, at);
+      ? await salvaDb(
+          sessione.supabase,
+          partitaId,
+          versione,
+          a,
+          b,
+          sovrascrivi,
+          opzioni,
+        )
+      : salvaDemo(tappaId, partitaId, versione, a, b, at, opzioni);
   } catch (error) {
     console.error("[punteggi] salvataggio non riuscito", error);
     esito = errore("network");
   }
 
   if (!esito.ok) {
+    if ("motivo" in esito) {
+      if (!esito.impatto) {
+        return {
+          status: "error",
+          reason: "network",
+          message: PUNTEGGIO_MESSAGES.network,
+          at,
+        };
+      }
+      return {
+        status: "impatto",
+        impatto: esito.impatto,
+        mio: { a, b },
+        versione,
+        erroreConferma:
+          esito.motivo === "conferma"
+            ? erroreConferma(esito.impatto.punteggiPersi)
+            : null,
+        avviso:
+          esito.motivo === "cambiato"
+            ? messaggioImpattoCambiato(esito.impatto.punteggiPersi)
+            : null,
+        message: PUNTEGGIO_MESSAGES.impatto,
+        at,
+      };
+    }
     if ("reason" in esito && esito.reason === "conflict") {
       // Never overwritten silently: the admin chooses in the dialog.
       const salvato = await leggiUfficiale(
@@ -336,7 +479,12 @@ export async function salvaPunteggio(
     };
   }
 
-  await pubblica(sessione.supabase, tappaId, partitaId);
+  await pubblica(
+    sessione.supabase,
+    tappaId,
+    partitaId,
+    esito.tipo === "correzione" ? "Punteggio corretto" : "Punteggio salvato",
+  );
   refresh();
   return {
     status: "success",
@@ -344,6 +492,8 @@ export async function salvaPunteggio(
     versione: esito.versione,
     punteggio: { a, b },
     tipo: esito.tipo,
+    scelta: esito.scelta,
+    punteggiPersi: esito.punteggiPersi,
     message:
       esito.tipo === "correzione"
         ? PUNTEGGIO_MESSAGES.corretto

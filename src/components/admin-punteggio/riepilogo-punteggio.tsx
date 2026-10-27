@@ -6,15 +6,19 @@ import type { FormEventHandler, RefObject } from "react";
 import { Tape } from "@/components/scoreboard";
 import { Button } from "@/components/ui/button";
 import { coppie, nomiCompleti, setPartita } from "@/lib/punteggi/format";
+import type { CosaCambia as CosaCambiaValore } from "@/lib/punteggi/correzione/cosa-cambia";
 import { PUNTEGGIO_MESSAGES } from "@/lib/punteggi/state";
 import type { PartitaPunteggio } from "@/lib/punteggi/types";
 import type { Lato } from "@/lib/punteggi/validazione";
+import { CosaCambia } from "./cosa-cambia";
 
 type RiepilogoPunteggioProps = {
   partita: PartitaPunteggio;
   valori: Record<Lato, number | null>;
   vincitore: Lato | null;
   correzione: boolean;
+  /** BLVS-41: what the correction changes, listed before saving. */
+  cambio?: CosaCambiaValore | null;
   headingRef: RefObject<HTMLHeadingElement | null>;
   tappaId: string;
   versione: number;
@@ -34,6 +38,7 @@ export function RiepilogoPunteggio({
   valori,
   vincitore,
   correzione,
+  cambio = null,
   headingRef,
   tappaId,
   versione,
@@ -92,13 +97,23 @@ export function RiepilogoPunteggio({
         })}
       </dl>
       {correzione && attuale ? (
-        <p data-testid="riepilogo-correzione">
-          Sostituisce il punteggio salvato{" "}
-          <span className="font-mono font-bold tabular-nums">
-            {attuale.a}–{attuale.b}
-          </span>
-          : la correzione resta nel registro.
-        </p>
+        <>
+          <p data-testid="riepilogo-correzione">
+            Sostituisce il punteggio salvato{" "}
+            <span className="font-mono font-bold tabular-nums">
+              {attuale.a}–{attuale.b}
+            </span>
+            : la correzione resta nel registro.
+          </p>
+          {cambio ? (
+            <CosaCambia
+              id="riepilogo-cosa-cambia"
+              cambio={cambio}
+              vecchio={attuale}
+              nuovo={valori}
+            />
+          ) : null}
+        </>
       ) : (
         <p>
           Il salvataggio conclude la partita, aggiorna la classifica del girone
