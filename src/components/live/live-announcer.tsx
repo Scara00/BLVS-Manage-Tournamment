@@ -14,6 +14,7 @@ const MAX_SENTENCES = 3;
 function eventGroupId(event: LiveEvent): string | undefined {
   if (event.type === "score") return event.match.groupId;
   if (event.type === "group-standings") return event.group.id;
+  if (event.type === "board-matches") return event.board.id;
   return undefined;
 }
 
@@ -29,7 +30,10 @@ export function LiveAnnouncer({
 }: {
   /** Which kinds of change this page announces. */
   types?: readonly LiveEvent["type"][];
-  /** Only this group's results and standings (girone page). */
+  /**
+   * Only this group's results and standings (girone page), or this board's
+   * matches (`<stage>:<M|F>`, w-admin-live).
+   */
   groupId?: string;
   intervalMs?: number;
 }) {

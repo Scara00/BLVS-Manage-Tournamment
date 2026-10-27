@@ -6,6 +6,12 @@ import type { AvvioFaseAction } from "@/lib/tappe/avvio/state";
 import { AvvioFase } from "./avvio-fase";
 import { avviata, bloccata, erroriServer, pronta } from "./stories-data";
 
+const router = vi.hoisted(() => ({ push: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => router }));
+
+const AVVIA_PRONTA = "Avvia le 9 partite";
+const AVVIA_BLOCCATA = `Avvia le ${bloccata.riepilogo.partite} partite`;
+
 function renderAvvio(
   props: Partial<Parameters<typeof AvvioFase>[0]> & {
     action: AvvioFaseAction;
@@ -45,7 +51,7 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
     );
   });
 
-  it("conferma e avvia: toast e fuoco sul messaggio finale", async () => {
+  it("conferma e avvia: toast, poi la gestione live del tabellone", async () => {
     const user = userEvent.setup();
     const action = vi.fn<AvvioFaseAction>(async () => ({
       status: "success",
@@ -56,9 +62,7 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
     }));
     const { rerender } = renderAvvio({ action });
 
-    await user.click(
-      screen.getByRole("button", { name: "Avvia i gironi iniziali" }),
-    );
+    await user.click(screen.getByRole("button", { name: AVVIA_PRONTA }));
     const dialog = await screen.findByRole("alertdialog", {
       name: "Avviare i gironi iniziali del tabellone maschile?",
     });
@@ -71,6 +75,9 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
     const data = action.mock.calls[0][1];
     expect(data.get("tappaId")).toBe("cagliari");
     expect(data.get("categoria")).toBe("m");
+    await waitFor(() =>
+      expect(router.push).toHaveBeenCalledWith("/admin/tappe/cagliari/live/m"),
+    );
 
     // The page refreshes with the started board.
     rerender(
@@ -112,9 +119,7 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
       at: 1,
     }));
     renderAvvio({ view: bloccata, action });
-    await user.click(
-      screen.getByRole("button", { name: "Avvia i gironi iniziali" }),
-    );
+    await user.click(screen.getByRole("button", { name: AVVIA_BLOCCATA }));
 
     await waitFor(() =>
       expect(screen.getByTestId("avvio-annuncio")).toHaveTextContent(
@@ -132,9 +137,7 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
 
   it("offline non avvia e spiega perché", () => {
     renderAvvio({ action: vi.fn(), offline: true });
-    const button = screen.getByRole("button", {
-      name: "Avvia i gironi iniziali",
-    });
+    const button = screen.getByRole("button", { name: AVVIA_PRONTA });
     expect(button).toHaveAttribute("aria-disabled", "true");
     expect(button).toHaveAccessibleDescription(/Sei offline/);
   });

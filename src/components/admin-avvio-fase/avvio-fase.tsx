@@ -1,7 +1,13 @@
 "use client";
 
-import { AlertCircleIcon, ArrowLeftIcon, PlayIcon } from "lucide-react";
+import {
+  AlertCircleIcon,
+  ArrowLeftIcon,
+  PlayIcon,
+  RadioIcon,
+} from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useActionState,
   useCallback,
@@ -25,7 +31,11 @@ import { useToast } from "@/components/ui/toast";
 import { useOnline } from "@/hooks/use-online";
 import { CATEGORIE } from "@/lib/db/types";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
-import { contaLabel, type AvvioFaseView } from "@/lib/tappe/avvio/format";
+import {
+  avviaLabel,
+  contaLabel,
+  type AvvioFaseView,
+} from "@/lib/tappe/avvio/format";
 import {
   avvioFasePath,
   CATEGORIA_NOME,
@@ -38,6 +48,7 @@ import {
   type AvvioFaseState,
 } from "@/lib/tappe/avvio/state";
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
+import { adminLivePath } from "@/lib/tappe/live-admin/paths";
 import { AnteprimaPartite } from "./anteprima-partite";
 import { ControlliAvvio } from "./controlli-avvio";
 import { ErroriAvvio } from "./errori-avvio";
@@ -102,6 +113,7 @@ export function AvvioFase({
     forceOffline === undefined ? undefined : !forceOffline,
   );
   const toast = useToast();
+  const router = useRouter();
   const erroriRef = useRef<HTMLHeadingElement>(null);
   const fineRef = useRef<HTMLParagraphElement>(null);
   // The dialog keeps the summary it was opened with while it fades out.
@@ -140,7 +152,11 @@ export function AvvioFase({
     if (state.status === "success") {
       toast.add({ title: state.message });
       fuocoAllaFine.current = true;
+      // The matches exist: follow them on w-admin-live (BLVS-31).
+      router.push(adminLivePath(view.tappa.id, view.categoria));
     }
+    // Only a new outcome navigates, not a refreshed view.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, toast]);
   useEffect(() => {
     if (fuocoAllaFine.current && fineRef.current) {
@@ -164,19 +180,32 @@ export function AvvioFase({
       />
     </>
   );
-  const etichetta = "Avvia i gironi iniziali";
+  const etichetta = avviaLabel(view.riepilogo.partite);
 
   let azione;
   if (view.avviata) {
     azione = (
-      <p
-        ref={fineRef}
-        tabIndex={-1}
-        className="self-start font-heading text-lg font-semibold focus-ring"
-        data-testid="fase-avviata"
-      >
-        Fase «gironi iniziali» avviata: le partite sono da giocare.
-      </p>
+      <div className="flex flex-col items-start gap-space-2">
+        <p
+          ref={fineRef}
+          tabIndex={-1}
+          className="font-heading text-lg font-semibold focus-ring"
+          data-testid="fase-avviata"
+        >
+          Fase «gironi iniziali» avviata: le partite sono da giocare.
+        </p>
+        <Link
+          href={adminLivePath(view.tappa.id, view.categoria)}
+          className={buttonVariants({
+            variant: "primary",
+            size: "campo",
+            className: "max-w-full",
+          })}
+        >
+          <RadioIcon aria-hidden />
+          Vai alla gestione live
+        </Link>
+      </div>
     );
   } else if (view.nonDisponibile) {
     azione = <p className="self-start">{view.nonDisponibile}</p>;

@@ -32,6 +32,28 @@ describe("announcementFor", () => {
     );
   });
 
+  it("annuncia il cambio di una partita di un tabellone", () => {
+    const board = {
+      id: "jesolo:M",
+      stageId: "jesolo",
+      category: "M" as const,
+      label: "Tappa 1 · Jesolo, maschile",
+      change: "Girone A · turno 2: partita conclusa",
+      updatedAt: meta.savedAt,
+      matches: [],
+    };
+    expect(announcementFor({ ...meta, type: "board-matches", board })).toBe(
+      "Tappa 1 · Jesolo, maschile: Girone A · turno 2: partita conclusa",
+    );
+    expect(
+      announcementFor({
+        ...meta,
+        type: "board-matches",
+        board: { ...board, change: null },
+      }),
+    ).toBe("Tappa 1 · Jesolo, maschile: partite aggiornate");
+  });
+
   it("annuncia le partite da inserire della tappa", () => {
     const event: LiveEvent = {
       ...meta,

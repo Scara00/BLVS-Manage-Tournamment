@@ -7,6 +7,7 @@ import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
 import type { Categoria } from "@/lib/db/types";
 import { avviaFaseDemo, getDemoAvvioFase } from "@/lib/demo/avvio-fase";
 import { publishPhaseStarted } from "@/lib/live/publish";
+import { pubblicaTabellone } from "@/lib/tappe/live-admin/pubblica";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
 import { CATEGORIA_NOME, parseCategoriaSegmento } from "./paths";
@@ -193,6 +194,12 @@ export async function avviaFase(
     phase: "gironi_iniziali",
     matches: esito.partite,
   });
+  await pubblicaTabellone(
+    { supabase: sessione.supabase },
+    tappaId,
+    categoria,
+    `iniziati i gironi, ${esito.partite === 1 ? "1 partita" : `${esito.partite} partite`} da giocare`,
+  );
   refresh();
   return {
     status: "success",

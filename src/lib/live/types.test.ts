@@ -52,3 +52,36 @@ describe("applyLiveEvent: fase avviata", () => {
     expect(next.seq).toBe(4);
   });
 });
+
+describe("applyLiveEvent: partite di un tabellone (BLVS-31)", () => {
+  const board = {
+    id: "jesolo:M",
+    stageId: "jesolo",
+    category: "M" as const,
+    label: "Tappa 1 · Jesolo, maschile",
+    change: "Girone A · turno 1: partita in corso",
+    updatedAt: "2026-06-14T08:05:00.000Z",
+    matches: [],
+  };
+
+  it("aggiunge il tabellone, poi lo sostituisce", () => {
+    const once = applyLiveEvent(empty, {
+      type: "board-matches",
+      board,
+      seq: 5,
+      savedAt: "2026-06-14T08:05:00.000Z",
+    });
+    expect(once.boards).toEqual([board]);
+    const changed = {
+      ...board,
+      change: "Girone A · turno 1: partita conclusa",
+    };
+    const twice = applyLiveEvent(once, {
+      type: "board-matches",
+      board: changed,
+      seq: 6,
+      savedAt: "2026-06-14T08:06:00.000Z",
+    });
+    expect(twice.boards).toEqual([changed]);
+  });
+});

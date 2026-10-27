@@ -1,6 +1,7 @@
 import "server-only";
 import { getLiveBus } from "./bus";
 import type {
+  BoardMatches,
   GroupStandings,
   LiveEvent,
   LiveMatch,
@@ -37,4 +38,9 @@ export function publishPendingScores(stage: PendingScores): LiveEvent {
 /** A board's phase started and its matches were created (BLVS-29). */
 export function publishPhaseStarted(phase: PhaseStarted): LiveEvent {
   return getLiveBus().publish({ type: "phase-started", phase });
+}
+
+/** An admin changed a match of a board: its whole list (BLVS-31). */
+export function publishBoardMatches(board: BoardMatches): LiveEvent {
+  return getLiveBus().publish({ type: "board-matches", board });
 }
