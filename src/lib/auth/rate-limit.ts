@@ -96,7 +96,7 @@ export function setRateLimitStore(next: RateLimitStore | undefined) {
 }
 
 /** Client IP as seen by Vercel / the TLS-terminating proxy. */
-export function clientIp(request: Request): string {
+export function clientIp(request: { headers: Pick<Headers, "get"> }): string {
   const forwarded = request.headers
     .get("x-forwarded-for")
     ?.split(",")[0]
@@ -107,20 +107,22 @@ export function clientIp(request: Request): string {
 export const RATE_LIMITED_MESSAGE =
   "Troppi tentativi. Riprova tra qualche minuto.";
 
+export type AuthAttemptCheck =
+  | { status: "allowed" }
+  | { status: "blocked"; retryAt: Date; retryAfterSeconds: number }
+  | { status: "unavailable" };
+
 /**
- * Counts the attempt on every rule of `action` and returns a 429 response
- * (with `Retry-After`) when any is exceeded, `null` when the request may go on.
- * If the counter cannot be reached the request is refused (fail closed).
+ * Counts one attempt of `action` from `ip` on `email` on every rule and says
+ * whether it may go on. When blocked, `retryAt` is the end of the longest
+ * window exceeded. A counter error is `unavailable` (callers fail closed).
  */
-export async function limitAuthAttempt(
-  request: Request,
+export async function checkAuthAttempt(
+  ip: string,
   action: AuthAction,
   email: string | null,
-): Promise<Response | null> {
-  const subjects = {
-    ip: clientIp(request),
-    email: email?.trim().toLowerCase(),
-  };
+): Promise<AuthAttemptCheck> {
+  const subjects = { ip, email: email?.trim().toLowerCase() };
   let hits: RateLimitHit[];
   try {
     hits = await Promise.all(
@@ -136,15 +138,38 @@ export async function limitAuthAttempt(
     );
   } catch (error) {
     console.error("[auth] limite ai tentativi non raggiungibile", error);
-    return jsonError(503, "Servizio momentaneamente non disponibile. Riprova.");
+    return { status: "unavailable" };
   }
 
   const blocked = hits.filter((hit) => !hit.allowed);
-  if (blocked.length === 0) return null;
+  if (blocked.length === 0) return { status: "allowed" };
 
   const resetAt = Math.max(...blocked.map((hit) => hit.resetAt.getTime()));
-  const retryAfter = Math.max(1, Math.ceil((resetAt - now().getTime()) / 1000));
+  return {
+    status: "blocked",
+    retryAt: new Date(resetAt),
+    retryAfterSeconds: Math.max(
+      1,
+      Math.ceil((resetAt - now().getTime()) / 1000),
+    ),
+  };
+}
+
+/**
+ * Counts the attempt on every rule of `action` and returns a 429 response
+ * (with `Retry-After`) when any is exceeded, `null` when the request may go on.
+ * If the counter cannot be reached the request is refused (fail closed).
+ */
+export async function limitAuthAttempt(
+  request: Request,
+  action: AuthAction,
+  email: string | null,
+): Promise<Response | null> {
+  const check = await checkAuthAttempt(clientIp(request), action, email);
+  if (check.status === "allowed") return null;
+  if (check.status === "unavailable")
+    return jsonError(503, "Servizio momentaneamente non disponibile. Riprova.");
   return jsonError(429, RATE_LIMITED_MESSAGE, {
-    headers: { "Retry-After": String(retryAfter) },
+    headers: { "Retry-After": String(check.retryAfterSeconds) },
   });
 }
