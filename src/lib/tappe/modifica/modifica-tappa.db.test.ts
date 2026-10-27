@@ -13,8 +13,10 @@ let giocatore: string;
 
 async function createStage(stato = "iscrizioni_aperte") {
   const { rows } = await db.query<{ id: string }>(
-    `insert into tappe (nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il)
-     values ('Tappa test', 'Spiaggia', '2099-06-01', '2099-06-02', $1, '2099-05-20T18:00:00Z')
+    `insert into tappe (nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il,
+       motivo_annullamento)
+     values ('Tappa test', 'Spiaggia', '2099-06-01', '2099-06-02', $1::stato_tappa, '2099-05-20T18:00:00Z',
+       case when $1::text = 'annullata' then 'Maltempo' end)
      returning id`,
     [stato],
   );

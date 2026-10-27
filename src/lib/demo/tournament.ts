@@ -162,7 +162,10 @@ export type DemoAdminStage = {
     | "iscrizioni_chiuse"
     | "in_corso"
     | "conclusa"
-    | "annullata";
+    | "annullata"
+    | "archiviata";
+  /** Why it was cancelled (cancelled stages only). */
+  reason?: string;
   /** [M, F]: registered players, seats and Gold/Silver phase. */
   boards: readonly [DemoAdminBoard, DemoAdminBoard];
   pendingScores: number;
@@ -172,11 +175,14 @@ export type DemoAdminBoard = {
   registered: number;
   seats: number;
   phase: "gold" | "silver" | null;
+  /** Results closed (BLVS-43). */
+  concluded?: boolean;
 };
 
 /**
  * The admin view of the calendar: the public stages plus a draft and a
- * finished one. The stage in progress is racing today.
+ * finished one (results closed, so it can be archived) and a cancelled one.
+ * The stage in progress is racing today.
  */
 export const demoAdminStages: readonly DemoAdminStage[] = [
   {
@@ -185,8 +191,8 @@ export const demoAdminStages: readonly DemoAdminStage[] = [
     date: "31 maggio – 1 giugno",
     status: "conclusa",
     boards: [
-      { registered: 16, seats: 16, phase: "silver" },
-      { registered: 14, seats: 16, phase: "silver" },
+      { registered: 16, seats: 16, phase: "silver", concluded: true },
+      { registered: 14, seats: 16, phase: "silver", concluded: true },
     ],
     pendingScores: 0,
   },
@@ -231,6 +237,18 @@ export const demoAdminStages: readonly DemoAdminStage[] = [
     boards: [
       { registered: 0, seats: 24, phase: null },
       { registered: 0, seats: 24, phase: null },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "olbia",
+    name: "Tappa 5 · Olbia",
+    date: "9–10 agosto",
+    status: "annullata",
+    reason: "La spiaggia non è disponibile per lavori del Comune.",
+    boards: [
+      { registered: 6, seats: 16, phase: null },
+      { registered: 4, seats: 16, phase: null },
     ],
     pendingScores: 0,
   },

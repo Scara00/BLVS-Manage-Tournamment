@@ -17,8 +17,10 @@ async function createStage({
   posti = 16,
 }: { stato?: string; chiudono?: string | null; posti?: number } = {}) {
   const { rows } = await db.query<{ id: string }>(
-    `insert into tappe (nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il)
-     values ('Tappa test', 'Spiaggia', '2099-06-10', '2099-06-11', $1, $2)
+    `insert into tappe (nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il,
+       motivo_annullamento)
+     values ('Tappa test', 'Spiaggia', '2099-06-10', '2099-06-11', $1::stato_tappa, $2,
+       case when $1::text = 'annullata' then 'Maltempo' end)
      returning id`,
     [stato, chiudono],
   );
@@ -145,7 +147,7 @@ describe("iscriviti_tappa(): posto garantito", () => {
   });
 
   it.each([
-    ["annullata", "annullata"],
+    ["annullata", "tappa_annullata"], // BLVS-22 trigger runs first
     ["iscrizioni_chiuse", "chiuse"],
     ["in_corso", "chiuse"],
   ])("tappa %s: rifiutata con hint %s", async (stato, hint) => {

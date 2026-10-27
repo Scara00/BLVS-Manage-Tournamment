@@ -152,7 +152,7 @@ describe("chiusura automatica alla scadenza", () => {
           [id, giocatore],
         ),
       ),
-    ).rejects.toMatchObject({ code: "42501" });
+    ).rejects.toMatchObject({ code: "23514", hint: "scadute" });
   });
 
   it("prima della scadenza il giocatore si iscrive", async () => {

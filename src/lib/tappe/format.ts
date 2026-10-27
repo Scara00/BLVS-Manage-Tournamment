@@ -23,6 +23,7 @@ export const STATO_TAPPA_LABEL: Record<StatoTappa, string> = {
   in_corso: "In corso",
   conclusa: "Conclusa",
   annullata: "Annullata",
+  archiviata: "Archiviata",
 };
 
 const DEMO_STATO: Record<DemoStage["status"], StatoTappa> = {

@@ -123,6 +123,19 @@ describe("POST /api/iscrizioni", () => {
     expect(await res.json()).toEqual({ error: "Tappa non trovata." });
   });
 
+  it.each([
+    ["tappa_annullata", "La tappa è annullata: non accetta nuove iscrizioni."],
+    [
+      "tappa_archiviata",
+      "La tappa è archiviata: non accetta nuove iscrizioni.",
+    ],
+  ])("una tappa con hint %s risponde 409", async (hint, message) => {
+    db.rpcError = { code: "23514", message: "bloccata", hint };
+    const res = await post({ tappaId: TAPPA });
+    expect(res.status).toBe(409);
+    expect(await res.json()).toEqual({ error: message });
+  });
+
   it("senza sessione risponde 403", async () => {
     getCurrentUser.mockResolvedValue(null);
     expect((await post({ tappaId: TAPPA })).status).toBe(403);

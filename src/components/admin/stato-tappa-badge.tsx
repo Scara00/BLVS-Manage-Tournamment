@@ -1,4 +1,5 @@
 import {
+  Archive,
   Ban,
   CircleDot,
   DoorOpen,
@@ -12,7 +13,7 @@ import type { StatoTappa } from "@/lib/db/types";
 import { STATO_TAPPA_LABEL } from "@/lib/tappe/format";
 
 type Variant =
-  "reg-draft" | "reg-open" | "reg-closed" | "reg-cancelled" | "live";
+  "reg-draft" | "reg-open" | "reg-closed" | "reg-cancelled" | "live" | "tape";
 
 const stati: Record<StatoTappa, { icon: LucideIcon; variant: Variant }> = {
   bozza: { icon: PencilLine, variant: "reg-draft" },
@@ -21,6 +22,7 @@ const stati: Record<StatoTappa, { icon: LucideIcon; variant: Variant }> = {
   in_corso: { icon: CircleDot, variant: "live" },
   conclusa: { icon: Flag, variant: "reg-closed" },
   annullata: { icon: Ban, variant: "reg-cancelled" },
+  archiviata: { icon: Archive, variant: "tape" },
 };
 
 /** Stage status as text plus icon: colour never carries it alone. */

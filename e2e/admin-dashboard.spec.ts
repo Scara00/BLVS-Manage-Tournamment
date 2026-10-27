@@ -47,6 +47,7 @@ test("dashboard: banner, tabella con intestazioni e nessuna violazione axe", asy
       "Iscrizioni",
       "Maschile",
       "Femminile",
+      "Azioni",
     ]);
     await expect(
       table.getByRole("rowheader", { name: "Tappa 1 · Jesolo" }),
@@ -56,8 +57,8 @@ test("dashboard: banner, tabella con intestazioni e nessuna violazione axe", asy
       page.getByRole("list", { name: "Tappe del circuito" }),
     ).toBeVisible();
   }
-  // Drafts are listed in the admin table.
-  await expect(rows(page)).toHaveCount(5);
+  // Drafts (and the cancelled stage, BLVS-22) are listed in the admin table.
+  await expect(rows(page)).toHaveCount(6);
   await expect(tappeSection(page)).toContainText("Tappa 4 · Pescara");
   await expect(tappeSection(page)).toContainText("16 iscritti su 16 posti");
 
@@ -82,20 +83,20 @@ test("filtro per stato: da tastiera, solo le tappe in bozza", async ({
   await expect(rows(page)).toHaveCount(1);
   await expect(rows(page)).toContainText("Tappa 4 · Pescara");
   await expect(tappeSection(page).getByRole("status")).toHaveText(
-    /^1 di 5 tappe · stato «(In )?bozza»$/i,
+    /^1 di 6 tappe · stato «(In )?bozza»$/i,
   );
   await expectNoA11yViolations(page);
 });
 
 test("filtro senza risultati e pagina Tappe admin", async ({ page }) => {
-  await page.goto("/admin/tappe?stato=annullata");
+  await page.goto("/admin/tappe?stato=archiviata");
   await expect(
-    page.getByText("Nessuna tappa nello stato «Annullata»."),
+    page.getByText("Nessuna tappa nello stato «Archiviata»."),
   ).toBeVisible();
   await expectNoA11yViolations(page);
 
   await page.goto("/admin/tappe");
-  await expect(rows(page)).toHaveCount(5);
+  await expect(rows(page)).toHaveCount(6);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Tappe");
 });
 

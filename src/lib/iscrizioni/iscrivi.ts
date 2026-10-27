@@ -9,6 +9,8 @@ import {
   ISCRIZIONI_SCADUTE_MESSAGE,
   NO_CATEGORY_MESSAGE,
   POSTI_ESAURITI_MESSAGE,
+  STAGE_ARCHIVED_MESSAGE,
+  STAGE_CANCELLED_MESSAGE,
   TAPPA_ANNULLATA_MESSAGE,
   TAPPA_NON_TROVATA_MESSAGE,
 } from "./messages";
@@ -40,6 +42,9 @@ const PER_HINT: Record<string, { motivo: MotivoRifiuto; message: string }> = {
   chiuse: { motivo: "chiuse", message: ISCRIZIONI_CHIUSE_MESSAGE },
   scadute: { motivo: "scadute", message: ISCRIZIONI_SCADUTE_MESSAGE },
   annullata: { motivo: "annullata", message: TAPPA_ANNULLATA_MESSAGE },
+  // BLVS-22: trigger `iscrizioni_blocca_tappa_chiusa` on the RPC's insert.
+  tappa_annullata: { motivo: "annullata", message: STAGE_CANCELLED_MESSAGE },
+  tappa_archiviata: { motivo: "chiuse", message: STAGE_ARCHIVED_MESSAGE },
   categoria_mancante: {
     motivo: "categoria_mancante",
     message: NO_CATEGORY_MESSAGE,

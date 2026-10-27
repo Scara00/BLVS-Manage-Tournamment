@@ -124,8 +124,8 @@ describe("admin_riepilogo_tappe()", () => {
     expect(rows.map((r) => r.nome).sort()).toEqual(["Aperta", "Bozza"]);
     const row = rows.find((r) => r.id === aperta)!;
     expect(row.categorie).toEqual([
-      { categoria: "M", posti: 8, fase: "gold", iscritti: 2 },
-      { categoria: "F", posti: 16, fase: null, iscritti: 0 },
+      { categoria: "M", posti: 8, fase: "gold", concluso: false, iscritti: 2 },
+      { categoria: "F", posti: 16, fase: null, concluso: false, iscritti: 0 },
     ]);
     expect(rows.find((r) => r.id === bozza)!.stato).toBe("bozza");
   });

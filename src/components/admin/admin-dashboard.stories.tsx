@@ -4,6 +4,7 @@ import { ForbiddenContent } from "@/components/error-page";
 import { AppShell } from "@/components/layout/app-shell";
 import { MinimalShell } from "@/components/layout/minimal-shell";
 import { PageContainer } from "@/components/layout/page-container";
+import { Toaster, ToastProvider } from "@/components/ui/toast";
 import {
   LiveAnnouncer,
   LiveBarConnected,
@@ -22,8 +23,15 @@ import { demoLiveSnapshot } from "@/lib/live/seed";
 import { AdminTappeLoading } from "./admin-tappe-loading";
 import { AdminTappeSection } from "./admin-tappe-section";
 import { PendingScoresBanner } from "./pending-scores-banner";
+import type { AzioniTappe } from "./tappe-table";
 
 const signOut = async () => ({ error: null });
+
+/** BLVS-22 actions: never settle, nothing to save in Storybook. */
+const azioniFinte: AzioniTappe = {
+  annulla: () => new Promise(() => {}),
+  archivia: () => new Promise(() => {}),
+};
 
 const initial = {
   snapshot: demoLiveSnapshot("2026-06-14T08:05:00.000Z"),
@@ -120,6 +128,7 @@ function Schermata({
                 tappe={visibili}
                 filtro={filtro}
                 basePath="/admin"
+                azioni={azioniFinte}
               />
             </>
           )}
@@ -133,6 +142,15 @@ const meta = {
   title: "Amministrazione/Dashboard",
   component: Schermata,
   args: { stato: "pronto", filtro: "tutte" },
+  // The stage actions (BLVS-22) toast their outcome; no root layout here.
+  decorators: [
+    (Story) => (
+      <ToastProvider>
+        <Story />
+        <Toaster />
+      </ToastProvider>
+    ),
+  ],
   argTypes: {
     stato: {
       control: "inline-radio",

@@ -7,7 +7,7 @@ import {
   type FiltroStato,
 } from "@/lib/admin/tappe";
 import { filtroLabel, StatoFilter } from "./stato-filter";
-import { TappeTable } from "./tappe-table";
+import { TappeTable, type AzioniTappe } from "./tappe-table";
 
 /** BLVS-19's page (`NUOVA_TAPPA_PATH` in `src/lib/tappe/nuova/types.ts`). */
 const NUOVA_TAPPA_PATH = "/admin/tappe/nuova";
@@ -20,10 +20,13 @@ export function AdminTappeSection({
   tappe,
   filtro,
   basePath,
+  azioni,
 }: {
   tappe: readonly AdminTappa[];
   filtro: FiltroStato;
   basePath: string;
+  /** BLVS-22 cancel/archive actions; without them the table is read-only. */
+  azioni?: AzioniTappe;
 }) {
   const visibili = filtraPerStato(tappe, filtro);
   const filtered = filtro !== "tutte";
@@ -56,6 +59,7 @@ export function AdminTappeSection({
       </p>
       <TappeTable
         tappe={visibili}
+        azioni={azioni ? { ...azioni, returnPath: basePath } : undefined}
         caption={
           filtered ? `Tappe · ${filtroLabel(filtro)}` : "Tappe del circuito"
         }

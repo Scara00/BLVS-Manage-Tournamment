@@ -36,6 +36,12 @@ export function readTappa(body: Record<string, unknown>, partial: boolean) {
   ) {
     reader.errors.dataFine ??= "La fine non può precedere l'inizio.";
   }
+  // BLVS-22: cancelling (reason + emails) and archiving have their own
+  // actions on the admin dashboard; this API never takes those states.
+  if (values.stato === "annullata" || values.stato === "archiviata") {
+    reader.errors.stato =
+      "Annulla o archivia la tappa dalla dashboard admin: servono il motivo e l'avviso agli iscritti.";
+  }
   if (partial && reader.ok && Object.keys(values).length === 0) {
     reader.errors._ = "Nessun campo da aggiornare.";
   }
