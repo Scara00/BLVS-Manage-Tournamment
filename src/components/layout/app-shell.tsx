@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
 import { AdminSidebar } from "./admin-sidebar";
+import { AppFooter } from "./app-footer";
 import { PlayerNav } from "./player-nav";
 import type { SignOutAction } from "./sign-out-button";
 import { MAIN_CONTENT_ID, SkipLink } from "./skip-link";
 import { Topbar } from "./topbar";
 
 /**
- * Page frame: skip link, black Topbar, optional sidebar and the `main`
- * landmark the skip link targets. Layouts switch at `md` in CSS only.
+ * Page frame: skip link, black Topbar, optional sidebar, the `main`
+ * landmark the skip link targets, and the footer with the privacy link.
+ * Layouts switch at `md` in CSS only.
  */
 export function AppShell({
   variant,
@@ -50,6 +52,7 @@ export function AppShell({
           {children}
         </main>
       </div>
+      <AppFooter />
     </>
   );
 }

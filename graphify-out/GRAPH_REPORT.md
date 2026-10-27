@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 134 files · ~29,133 words
+- 152 files · ~33,238 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 671 nodes · 1027 edges · 46 communities (37 shown, 9 thin omitted)
+- 730 nodes · 1143 edges · 49 communities (40 shown, 9 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `abdbca23`
+- Built from commit: `1c086c1f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -60,35 +60,38 @@
 - [[_COMMUNITY_Community 43|Community 43]]
 - [[_COMMUNITY_Community 44|Community 44]]
 - [[_COMMUNITY_Community 45|Community 45]]
+- [[_COMMUNITY_Community 46|Community 46]]
+- [[_COMMUNITY_Community 47|Community 47]]
+- [[_COMMUNITY_Community 48|Community 48]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `compilerOptions` - 16 edges
 2. `scripts` - 15 edges
 3. `Button()` - 13 edges
-4. `expectNoA11yViolations()` - 9 edges
-5. `PageContainer()` - 9 edges
-6. `useReducedMotion()` - 8 edges
+4. `expectNoA11yViolations()` - 10 edges
+5. `PageContainer()` - 10 edges
+6. `useReducedMotion()` - 10 edges
 7. `useFieldControl()` - 8 edges
 8. `mergeIds()` - 8 edges
 9. `BLVS-Manage-Tournamment` - 8 edges
-10. `tailwind` - 6 edges
+10. `test` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `gotoClosed()` --calls--> `gotoStory()`  [EXTRACTED]
   e2e/storybook-overlays.spec.ts → e2e/storybook-helpers.ts
-- `FlipDigits()` --calls--> `useReducedMotion()`  [EXTRACTED]
-  src/components/scoreboard/flip-digits.tsx → src/components/scoreboard/use-prefers-reduced-motion.ts
+- `VersionLine()` --calls--> `formatPolicyDate()`  [EXTRACTED]
+  src/components/privacy/privacy-policy.tsx → src/lib/legal/privacy-policy.ts
+- `PrivacyPolicy()` --calls--> `buttonVariants`  [EXTRACTED]
+  src/components/privacy/privacy-policy.tsx → src/components/ui/button.tsx
+- `ReturnLinkFromParams()` --calls--> `safeReturnPath()`  [EXTRACTED]
+  src/components/privacy/return-link.tsx → src/lib/navigation/safe-return-path.ts
 - `Tape()` --calls--> `useReducedMotion()`  [EXTRACTED]
   src/components/scoreboard/tape.tsx → src/components/scoreboard/use-prefers-reduced-motion.ts
-- `Button()` --calls--> `mergeIds()`  [EXTRACTED]
-  src/components/ui/button.tsx → src/lib/utils.ts
-- `Input()` --calls--> `useFieldControl()`  [EXTRACTED]
-  src/components/ui/input.tsx → src/components/ui/field.tsx
 
 ## Import Cycles
 - None detected.
 
-## Communities (46 total, 9 thin omitted)
+## Communities (49 total, 9 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
@@ -131,8 +134,8 @@ Cohesion: 0.09
 Nodes (21): geistMono, geistSans, metadata, Providers(), figtree, fontVariables, mono, outfit (+13 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.10
-Nodes (19): initialSignOutState, SignOutState, useMediaQuery(), AdminSidebar(), adminNav, isNavItemActive(), NavItem, playerPrimaryNav (+11 more)
+Cohesion: 0.08
+Nodes (25): initialSignOutState, SignOutState, useMediaQuery(), AdminSidebar(), MinimalShell(), adminNav, isNavItemActive(), NavItem (+17 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.13
@@ -147,12 +150,12 @@ Cohesion: 0.40
 Nodes (4): desktop1440, mobile390, PORT, STORYBOOK_PORT
 
 ### Community 17 - "Community 17"
-Cohesion: 0.10
-Nodes (15): analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, PAGES, WIDTHS, StoryIndex (+7 more)
+Cohesion: 0.09
+Nodes (16): analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, PAGES, WIDTHS, WIDTHS (+8 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.27
-Nodes (7): Phase, PhaseBadge(), PhaseBadgeProps, phases, ScoreDigits(), ScoreDigitsProps, tones
+Cohesion: 0.26
+Nodes (8): Category, CategoryLabel(), CategoryLabelProps, labels, Phase, PhaseBadge(), PhaseBadgeProps, phases
 
 ### Community 21 - "Community 21"
 Cohesion: 0.13
@@ -160,7 +163,7 @@ Nodes (12): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Sta
 
 ### Community 25 - "Community 25"
 Cohesion: 0.16
-Nodes (15): FieldContext, FieldContextValue, FieldControlOwnProps, FieldError(), FieldHint(), FieldMessagesProps, FieldProps, FieldsetProps (+7 more)
+Nodes (14): FieldContext, FieldContextValue, FieldControlOwnProps, FieldError(), FieldHint(), FieldMessagesProps, FieldProps, FieldsetProps (+6 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.16
@@ -195,64 +198,76 @@ Cohesion: 0.21
 Nodes (11): Disabilitata, MOLTE, MolteSchede, Predefinito, SEZIONI, Story, Testo200, Tabs() (+3 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.16
-Nodes (7): FlipDigits(), FlipDigitsProps, Default, Interattivo, Orario, RiduzioneMovimento, Story
+Cohesion: 0.33
+Nodes (5): Default, Interattivo, Orario, RiduzioneMovimento, Story
 
 ### Community 36 - "Community 36"
-Cohesion: 0.23
-Nodes (10): Field(), Fieldset(), focusFirstInvalid(), useFieldMessages(), Default, Errors, ModuloIscrizione(), Story (+2 more)
+Cohesion: 0.22
+Nodes (11): mergeIds(), Checkbox(), CheckboxProps, Field(), Fieldset(), focusFirstInvalid(), useFieldMessages(), Default (+3 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.17
-Nodes (11): Input(), InputProps, BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus (+3 more)
+Cohesion: 0.20
+Nodes (9): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Obbligatorio, Story (+1 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.18
-Nodes (11): controlVariants, Select(), SelectProps, BordoCampo, Caricamento, Default, Disabilitato, Errore (+3 more)
-
-### Community 39 - "Community 39"
-Cohesion: 0.24
-Nodes (7): Default, RiduzioneMovimento, Spessa, Story, Tape(), TapeProps, mockMatchMedia()
-
-### Community 40 - "Community 40"
-Cohesion: 0.24
-Nodes (7): Category, CategoryLabel(), CategoryLabelProps, labels, Default, Femminile, Story
-
-### Community 41 - "Community 41"
 Cohesion: 0.22
 Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story, Testo200
 
+### Community 39 - "Community 39"
+Cohesion: 0.29
+Nodes (6): Default, RiduzioneMovimento, Spessa, Story, Tape(), TapeProps
+
+### Community 40 - "Community 40"
+Cohesion: 0.50
+Nodes (3): Default, Femminile, Story
+
+### Community 41 - "Community 41"
+Cohesion: 0.17
+Nodes (10): RadioCard(), RadioCardGroup(), BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus (+2 more)
+
 ### Community 42 - "Community 42"
-Cohesion: 0.52
-Nodes (4): mergeIds(), Checkbox(), CheckboxProps, useFieldControl()
+Cohesion: 0.42
+Nodes (7): FieldSize, useFieldControl(), controlVariants, Input(), InputProps, Select(), SelectProps
 
 ### Community 44 - "Community 44"
-Cohesion: 0.33
-Nodes (5): Classifica, Default, RiduzioneMovimento, Story, Toni
+Cohesion: 0.22
+Nodes (8): ScoreDigits(), ScoreDigitsProps, Classifica, Default, RiduzioneMovimento, Story, Toni, tones
 
 ### Community 45 - "Community 45"
 Cohesion: 0.40
 Nodes (4): Default, Fasi, RiduzioneMovimento, Story
 
+### Community 46 - "Community 46"
+Cohesion: 0.11
+Nodes (15): dateFormatter, formatPolicyDate(), PRIVACY_CONTROLLER, PRIVACY_POLICY_VERSION, PrivacyPolicyVersion, PrivacySection, PrivacySectionId, metadata (+7 more)
+
+### Community 47 - "Community 47"
+Cohesion: 0.29
+Nodes (6): AppFooter(), privacyHref(), safeReturnPath(), ReturnLink(), ReturnLinkFromParams(), ReturnLinkProps
+
+### Community 48 - "Community 48"
+Cohesion: 0.27
+Nodes (6): Phase, PrivacySampleRow(), SAMPLE_ROW, FlipDigits(), FlipDigitsProps, useReducedMotion()
+
 ## Knowledge Gaps
-- **319 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+314 more)
+- **334 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+329 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Button()` connect `Community 33` to `Community 35`, `Community 36`, `Community 10`, `Community 42`, `Community 12`?**
-  _High betweenness centrality (0.053) - this node is a cross-community bridge._
-- **Why does `FlipDigits()` connect `Community 35` to `Community 18`, `Community 43`?**
-  _High betweenness centrality (0.041) - this node is a cross-community bridge._
+- **Why does `PRIVACY_POLICY_VERSION` connect `Community 46` to `Community 17`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `Button()` connect `Community 33` to `Community 10`, `Community 35`, `Community 36`, `Community 12`?**
+  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+- **Why does `PageContainer()` connect `Community 31` to `Community 32`, `Community 2`, `Community 46`, `Community 21`, `Community 28`?**
+  _High betweenness centrality (0.024) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
-  _319 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _334 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
   _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
-- **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.058823529411764705 - nodes in this community are weakly interconnected._
