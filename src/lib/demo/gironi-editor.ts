@@ -13,7 +13,7 @@ import { getDemoTappaGestione } from "./gestione-tappe";
  * e2e), like the other demo stores: one server instance, reset on restart.
  * A board of a demo stage is seeded the first time it is opened: its
  * confirmed players, in order, in groups of 4. It applies the same rules
- * as the RPCs of migration 20261027350000_editor_gironi.sql.
+ * as the RPCs of migration 20261027350100_editor_gironi.sql.
  */
 type Store = Map<string, EditorGironi>;
 

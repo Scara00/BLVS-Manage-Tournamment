@@ -131,6 +131,19 @@ describe("LoginFormView", () => {
     expect(toggle).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByLabelText(/^Password/)).toHaveAttribute("type", "text");
   });
+
+  it("porta al recupero della password e alla registrazione, con il ritorno", () => {
+    render(
+      <LoginFormView state={initialSignInState} returnTo="/tappe/rimini" />,
+    );
+    expect(
+      screen.getByRole("link", { name: "Password dimenticata?" }),
+    ).toHaveAttribute("href", "/password-dimenticata");
+    expect(screen.getByRole("link", { name: "Registrati" })).toHaveAttribute(
+      "href",
+      "/registrati?da=%2Ftappe%2Frimini",
+    );
+  });
 });
 
 describe("LoginForm", () => {

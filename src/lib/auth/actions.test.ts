@@ -141,6 +141,28 @@ describe("signIn: redirect di ritorno", () => {
     ).toBe("/admin/tappe");
   });
 
+  it("un admin senza pagina di ritorno va alla dashboard admin", async () => {
+    auth.ruolo = "admin";
+    expect(await redirectedTo(signIn(initialSignInState, form(valid)))).toBe(
+      "/admin",
+    );
+  });
+
+  it("un admin che partiva da una pagina giocatore ci torna", async () => {
+    auth.ruolo = "admin";
+    expect(
+      await redirectedTo(
+        signIn(initialSignInState, form({ ...valid, da: "/tappe" })),
+      ),
+    ).toBe("/tappe");
+  });
+
+  it("un giocatore senza pagina di ritorno va alla home", async () => {
+    expect(await redirectedTo(signIn(initialSignInState, form(valid)))).toBe(
+      "/",
+    );
+  });
+
   it("un giocatore che partiva dall'area admin riceve permissionDenied", async () => {
     const state = await signIn(
       initialSignInState,

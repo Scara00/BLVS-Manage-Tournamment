@@ -102,19 +102,24 @@ export async function signIn(
     };
   }
 
-  if (isAdminPath(target)) {
+  const toHome = target === "/";
+  if (toHome || isAdminPath(target)) {
     const { data: utente } = await supabase
       .from("utenti")
       .select("ruolo")
       .eq("id", data.user.id)
       .maybeSingle<{ ruolo: Ruolo }>();
-    if (utente?.ruolo !== "admin")
+    const isAdmin = utente?.ruolo === "admin";
+    if (!toHome && !isAdmin)
       return {
         status: "permissionDenied",
         message: PERMISSION_DENIED_MESSAGE,
         email,
         attempt,
       };
+    // With no page to go back to, an admin starts from the dashboard: the
+    // player navigation has no way into the admin area.
+    if (toHome && isAdmin) redirect("/admin");
   }
 
   redirect(target);

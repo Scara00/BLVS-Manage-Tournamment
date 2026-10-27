@@ -89,7 +89,7 @@ function demo(input: ModificaGironiInput): EsitoGironi {
 
 /**
  * Saves one change of the groups editor at once (move, swap, add, delete)
- * through the RPCs of migration 20261027350000 (RLS as the admin). The
+ * through the RPCs of migration 20261027350100 (RLS as the admin). The
  * client sends the `versione` it shows: if the groups changed in between
  * nothing is written and it gets the current groups (`conflict`).
  * Without Supabase env it saves into the in-memory demo store.

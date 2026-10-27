@@ -3,6 +3,11 @@ import {
   playerPrimaryNav,
   playerSecondaryNav,
 } from "@/components/layout/nav-items";
+import {
+  FORGOT_PASSWORD_PATH,
+  RESET_PASSWORD_PATH,
+} from "@/lib/auth/password-reset/messages";
+import { SIGNUP_PATH } from "@/lib/auth/paths";
 import { PRIVACY_PATH, RETURN_PARAM, safeReturnPath } from "./safe-return-path";
 
 /** Login page (w-login). */
@@ -19,8 +24,19 @@ export const REASON_PARAM = "motivo";
 
 export type LoginReason = "scaduta";
 
-/** Pages a signed-out visitor may open; everything else needs a session. */
-const PUBLIC_PATHS = [PRIVACY_PATH, LOGIN_PATH, SESSION_EXPIRED_PATH];
+/**
+ * Pages a signed-out visitor may open; everything else needs a session.
+ * Sign-up (with its email confirmation) and password reset come before
+ * there is one.
+ */
+const PUBLIC_PATHS = [
+  PRIVACY_PATH,
+  LOGIN_PATH,
+  SESSION_EXPIRED_PATH,
+  SIGNUP_PATH,
+  FORGOT_PASSWORD_PATH,
+  RESET_PASSWORD_PATH,
+];
 
 /** Error previews (BLVS-10) stay reachable without a session. */
 const PUBLIC_PREFIXES = ["/anteprima/", "/admin/anteprima/"];

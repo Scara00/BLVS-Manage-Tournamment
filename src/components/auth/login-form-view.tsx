@@ -7,12 +7,15 @@ import {
   EyeOffIcon,
   LogOutIcon,
 } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ActionLink } from "@/components/error-page/action-link";
 import { Tape } from "@/components/scoreboard";
 import { Button } from "@/components/ui/button";
 import { Field, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { FORGOT_PASSWORD_PATH } from "@/lib/auth/password-reset/messages";
+import { signupHref } from "@/lib/auth/paths";
 import type { SignInState } from "@/lib/auth/sign-in-state";
 import { RETURN_PARAM } from "@/lib/navigation/safe-return-path";
 import { useRetryCountdown } from "./use-retry-countdown";
@@ -36,6 +39,9 @@ export type LoginFormViewProps = {
   /** «Esci» for the permission-denied state (signed in, wrong role). */
   signOutAction?: (formData: FormData) => void;
 };
+
+const linkClass =
+  "font-semibold underline decoration-1 underline-offset-4 focus-ring hover:decoration-2";
 
 const FORM_ERRORS = new Set<SignInState["status"]>([
   "invalid",
@@ -206,6 +212,18 @@ export function LoginFormView({
         >
           Accedi
         </Button>
+
+        <p className="text-base">
+          <Link href={FORGOT_PASSWORD_PATH} className={linkClass}>
+            Password dimenticata?
+          </Link>
+        </p>
+        <p className="text-base">
+          Non hai un account?{" "}
+          <Link href={signupHref(returnTo)} className={linkClass}>
+            Registrati
+          </Link>
+        </p>
       </form>
     </div>
   );
