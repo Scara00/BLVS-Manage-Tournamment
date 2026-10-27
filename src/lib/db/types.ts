@@ -94,6 +94,8 @@ export type Tabellone = {
   fase: FaseTabellone | null;
   /** When the board was concluded (BLVS-43); null while still open. */
   concluso_il: string | null;
+  /** Version of its groups: +1 on every change saved by the editor (BLVS-28). */
+  versione_gironi: number;
 };
 
 export type Iscrizione = {
