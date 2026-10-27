@@ -238,6 +238,16 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# BLVS-08: Italian templates, generated from the React Email components in
+# src/lib/email/templates (`npm run email:auth-templates`).
+[auth.email.template.confirmation]
+subject = "Conferma il tuo indirizzo email · BLVS"
+content_path = "./supabase/templates/conferma-email.html"
+
+[auth.email.template.recovery]
+subject = "Reimposta la password · BLVS"
+content_path = "./supabase/templates/reimposta-password.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"
@@ -377,8 +387,19 @@ inspector_port = 8083
 # The Deno major version to use.
 deno_version = 2
 
-# [edge_runtime.secrets]
-# secret_key = "env(SECRET_VALUE)"
+# BLVS-08: local values only. Production secrets are set with
+# `supabase secrets set` (see README, «Registro ed email»).
+[edge_runtime.secrets]
+# Same value as e2e/supabase/env.ts.
+EMAIL_WORKER_SECRET = "blvs-locale-solo-sviluppo"
+# Mailpit container of `supabase start` (supabase_inbucket_<project_id>).
+MAILPIT_SMTP_HOST = "supabase_inbucket_blvs-manage-tournament"
+MAILPIT_SMTP_PORT = "1025"
+EMAIL_FROM = "BLVS <noreply@blvs.local>"
+
+# Called by pg_cron with its own secret, not with a user JWT.
+[functions.send-emails]
+verify_jwt = false
 
 [analytics]
 enabled = true

@@ -20,13 +20,13 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1793090637.674259,
-    "ast_hash": "8e665d9c74d8f2a41c9804b02a9c8b62",
+    "mtime": 1793090708.2031884,
+    "ast_hash": "8af38cceaf808d52831c1af7126b0b03",
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1793090702.9171805,
-    "ast_hash": "ea96b823d6b0b053d4192a1037cfe8c8",
+    "mtime": 1793090708.2033439,
+    "ast_hash": "a9835ef4d4d3c9e049ff6b795c692d80",
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "tsconfig.json": {
-    "mtime": 1793090602.9737368,
-    "ast_hash": "ee17fd1c97c735e9f3564e3f5251f125",
+    "mtime": 1793090708.2060375,
+    "ast_hash": "c80bb711ed86ffc809961971b1900acf",
     "semantic_hash": ""
   },
   "AGENTS.md": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793090637.6709824,
-    "ast_hash": "ff35fb363d7230e5ced239a62011a942",
+    "mtime": 1793090708.1979795,
+    "ast_hash": "bac7cf183c1797fea5af89446d991927",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1793090602.9602904,
-    "ast_hash": "21973b4e3d9ddfde0905ae46768a286a",
+    "mtime": 1793090708.1973631,
+    "ast_hash": "1161286049f079ba53cb00ca6003336d",
     "semantic_hash": ""
   },
   "CONTRIBUTING.md": {
@@ -1227,6 +1227,141 @@
   "src/lib/live/types.ts": {
     "mtime": 1793090671.1463418,
     "ast_hash": "f57b7ba4f6c103ed6840993efc2eb1ea",
+    "semantic_hash": ""
+  },
+  "e2e/mailpit.ts": {
+    "mtime": 1793090708.1980932,
+    "ast_hash": "0c88fe649c76e3a21921545c0ba407da",
+    "semantic_hash": ""
+  },
+  "e2e/supabase/email.spec.ts": {
+    "mtime": 1793090708.1982243,
+    "ast_hash": "b03e7c5babe881777f4a89c3422bcaa5",
+    "semantic_hash": ""
+  },
+  "e2e/supabase/env.ts": {
+    "mtime": 1793090708.198291,
+    "ast_hash": "de974bf495da6d1a40f6e80cb851d09b",
+    "semantic_hash": ""
+  },
+  "playwright.supabase.config.ts": {
+    "mtime": 1793090708.2034152,
+    "ast_hash": "d889cd00493388184c73bf8750149045",
+    "semantic_hash": ""
+  },
+  "src/lib/audit/eventi.ts": {
+    "mtime": 1793090708.203527,
+    "ast_hash": "e3f60419e489c3dafc1f7a99fbf42f83",
+    "semantic_hash": ""
+  },
+  "src/lib/audit/index.ts": {
+    "mtime": 1793090708.2035837,
+    "ast_hash": "9b0a799c94458d066acb1d3b61566548",
+    "semantic_hash": ""
+  },
+  "src/lib/audit/registro.db.test.ts": {
+    "mtime": 1793090708.2037785,
+    "ast_hash": "3b6722ded7240da8c0c2acfe5ef48322",
+    "semantic_hash": ""
+  },
+  "src/lib/audit/registro.test.ts": {
+    "mtime": 1793090708.2038853,
+    "ast_hash": "0a7eea9ff522b375e7fecc148f26bae6",
+    "semantic_hash": ""
+  },
+  "src/lib/audit/registro.ts": {
+    "mtime": 1793090708.2039628,
+    "ast_hash": "7b237e46494bc782d58db2dea74f0de6",
+    "semantic_hash": ""
+  },
+  "src/lib/email/auth-templates.test.ts": {
+    "mtime": 1793090708.2040703,
+    "ast_hash": "fc7b0d1883bce13fef80f8f3c7fab178",
+    "semantic_hash": ""
+  },
+  "src/lib/email/auth-templates.ts": {
+    "mtime": 1793090708.2041302,
+    "ast_hash": "75579018aadde7f1ba0a13ede3850921",
+    "semantic_hash": ""
+  },
+  "src/lib/email/queue.test.ts": {
+    "mtime": 1793090708.2041972,
+    "ast_hash": "f8cbaf99e9b4994b958568360acbc5a7",
+    "semantic_hash": ""
+  },
+  "src/lib/email/queue.ts": {
+    "mtime": 1793090708.2042606,
+    "ast_hash": "55f1a2bbc434337ac25337e372d1d4b2",
+    "semantic_hash": ""
+  },
+  "src/lib/email/render.test.tsx": {
+    "mtime": 1793090708.2043207,
+    "ast_hash": "d5a99a61df11e5536e4fb0a73e5f4daa",
+    "semantic_hash": ""
+  },
+  "src/lib/email/render.tsx": {
+    "mtime": 1793090708.2043765,
+    "ast_hash": "1a3166f58f0ba07b253b4e30041a44c7",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/conferma-email.tsx": {
+    "mtime": 1793090708.204476,
+    "ast_hash": "ae10e4029e2730f5963138d5dd0cd426",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/email-action.tsx": {
+    "mtime": 1793090708.2045343,
+    "ast_hash": "53472b943a445835f7fd53e809020eb1",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/email-layout.tsx": {
+    "mtime": 1793090708.2045877,
+    "ast_hash": "a3673309e88f5825c6e787d52fce4650",
+    "semantic_hash": ""
+  },
+  "src/lib/email/templates/tappa-annullata.tsx": {
+    "mtime": 1793090708.2047036,
+    "ast_hash": "21a8d7e13da7346331aeb57ccb92a0eb",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/email-queue.test.ts": {
+    "mtime": 1793090708.205119,
+    "ast_hash": "546e2b8282aefbd6547531e368aca0b9",
+    "semantic_hash": ""
+  },
+  "supabase/functions/_shared/email-queue.ts": {
+    "mtime": 1793090708.2051885,
+    "ast_hash": "b06a71f4712a17aa57e05829d6347793",
+    "semantic_hash": ""
+  },
+  "supabase/functions/send-emails/index.ts": {
+    "mtime": 1793090708.205308,
+    "ast_hash": "ffd0724c0c9ada141d2e3899189c2090",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027200000_registro_eventi.sql": {
+    "mtime": 1793090708.2053723,
+    "ast_hash": "44f9aa0a69db339a3260ef9096255687",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027200100_coda_email.sql": {
+    "mtime": 1793090708.2054393,
+    "ast_hash": "e7e17f98dd1a3fc181cb4f4dceb84861",
+    "semantic_hash": ""
+  },
+  "supabase/tests/database/coda_email.test.sql": {
+    "mtime": 1793090708.2058253,
+    "ast_hash": "88413bfd6c8fbd7c5b3b85004d2357b4",
+    "semantic_hash": ""
+  },
+  "supabase/tests/database/registro_eventi.test.sql": {
+    "mtime": 1793090708.205912,
+    "ast_hash": "fe3778d4a005dacf274f0c1ca75ff035",
+    "semantic_hash": ""
+  },
+  "supabase/templates/conferma-email.html": {
+    "mtime": 1793090708.2055817,
+    "ast_hash": "2d6b3f4551e5a9c9a9d2829399f72da9",
     "semantic_hash": ""
   }
 }

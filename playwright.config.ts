@@ -30,12 +30,13 @@ export default defineConfig({
   projects: [
     {
       name: "mobile-390",
-      testIgnore: /storybook/,
+      // e2e/supabase needs `supabase start`: playwright.supabase.config.ts.
+      testIgnore: [/storybook/, /supabase\//],
       use: mobile390,
     },
     {
       name: "desktop-1440",
-      testIgnore: /storybook/,
+      testIgnore: [/storybook/, /supabase\//],
       use: desktop1440,
     },
     {
