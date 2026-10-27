@@ -47,6 +47,7 @@ export function ResponsiveTable<Row>({
   cardTitleKey,
   emptyMessage = "Nessun dato da mostrare.",
   rowAttributes,
+  stackBelow = "md",
   className,
 }: {
   /** Names the table and, on mobile, the list. */
@@ -63,6 +64,11 @@ export function ResponsiveTable<Row>({
   emptyMessage?: string;
   /** Extra `data-*` attributes for each row (table row and card alike). */
   rowAttributes?: (row: Row) => Record<`data-${string}`, string>;
+  /**
+   * Below this breakpoint the rows are cards. `lg` for dense tables with
+   * buttons, which do not fit 768px columns with 200 % text.
+   */
+  stackBelow?: "md" | "lg";
   className?: string;
 }) {
   const captionId = useId();
@@ -97,7 +103,12 @@ export function ResponsiveTable<Row>({
 
   return (
     <div className={cn("w-full min-w-0", className)}>
-      <table className="hidden w-full table-fixed border-collapse text-start md:table">
+      <table
+        className={cn(
+          "hidden w-full table-fixed border-collapse text-start",
+          stackBelow === "lg" ? "lg:table" : "md:table",
+        )}
+      >
         <caption
           className={cn(
             captionHidden
@@ -157,7 +168,7 @@ export function ResponsiveTable<Row>({
         </tbody>
       </table>
 
-      <div className="md:hidden">
+      <div className={stackBelow === "lg" ? "lg:hidden" : "md:hidden"}>
         {captionHidden ? null : (
           <p
             id={captionId}

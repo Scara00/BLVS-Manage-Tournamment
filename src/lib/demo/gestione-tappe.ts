@@ -13,6 +13,8 @@ import { isTransizionePermessa, requisitoApertura } from "@/lib/tappe/stato";
 export type DemoTappaGestione = {
   row: TappaGestioneRow;
   tabelloni: TabelloneRow[];
+  /** Maximum per board; the default (16) when missing. */
+  posti?: number;
 };
 
 type Store = Map<string, DemoTappaGestione>;
@@ -101,6 +103,7 @@ function store(): Store {
 
 function copy(tappa: DemoTappaGestione): DemoTappaGestione {
   return {
+    ...tappa,
     row: { ...tappa.row },
     tabelloni: tappa.tabelloni.map((t) => ({ ...t })),
   };
@@ -133,6 +136,23 @@ export function listDemoTappeGestione(): DemoTappaGestione[] {
 export function getDemoTappaGestione(id: string): DemoTappaGestione | null {
   const tappa = store().get(id);
   return tappa ? copy(tappa) : null;
+}
+
+/**
+ * BLVS-25: the registrants store (`iscritti-admin.ts`) writes back the
+ * counts of a board after an add or a removal, so every page agrees.
+ */
+export function aggiornaContiDemo(
+  id: string,
+  categoria: "M" | "F",
+  conti: { confermate: number; inAttesa: number },
+): void {
+  const board = store()
+    .get(id)
+    ?.tabelloni.find((t) => t.categoria === categoria);
+  if (!board) return;
+  board.confermate = conti.confermate;
+  board.inAttesa = conti.inAttesa;
 }
 
 export type DemoEsito =
@@ -188,10 +208,13 @@ export function creaDemoTappa({
   stato = "bozza",
   chiudonoIl,
   nome,
+  posti,
 }: {
   stato?: StatoTappa;
   chiudonoIl: string | null;
   nome?: string;
+  /** Maximum per board (BLVS-25 e2e fill a board). */
+  posti?: number;
 }): string {
   const id = `e2e-${crypto.randomUUID()}`;
   store().set(id, {
@@ -208,6 +231,7 @@ export function creaDemoTappa({
       chiusura_automatica: false,
     },
     tabelloni: [board("M", 4, 1), board("F", 3, 0)],
+    posti,
   });
   return id;
 }

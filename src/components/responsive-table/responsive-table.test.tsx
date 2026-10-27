@@ -69,6 +69,24 @@ describe("ResponsiveTable", () => {
     );
   });
 
+  it("stackBelow=lg: card fino a lg, per tabelle fitte con pulsanti", () => {
+    const { container } = render(
+      <ResponsiveTable
+        caption="Iscritti"
+        columns={[{ key: "nome", header: "Nome", rowHeader: true }]}
+        rows={[{ nome: "Rossi Luca" }]}
+        getRowKey={(row) => row.nome}
+        stackBelow="lg"
+      />,
+    );
+    const table = container.querySelector("table");
+    expect(table).toHaveClass("hidden", "lg:table");
+    expect(table).not.toHaveClass("md:table");
+    expect(container.querySelector("ol")!.parentElement).toHaveClass(
+      "lg:hidden",
+    );
+  });
+
   it("la lista di card ha un nome e segue l'ordine posizione → nome → punti", () => {
     renderTable(true);
     const list = screen.getByRole("list", { name: "Classifica generale" });
