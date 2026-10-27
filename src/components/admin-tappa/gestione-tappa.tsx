@@ -134,7 +134,7 @@ export function GestioneTappa({
         ) : null}
       </Sezione>
 
-      <TabelloniRiepilogo tabelloni={tappa.tabelloni} />
+      <TabelloniRiepilogo tappaId={tappa.id} tabelloni={tappa.tabelloni} />
 
       <Link
         href={ADMIN_TAPPE_PATH}

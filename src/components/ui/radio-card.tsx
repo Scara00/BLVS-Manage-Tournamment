@@ -89,7 +89,7 @@ function RadioCardGroup<Value>({
 
 type RadioCardProps<Value> = Omit<
   RadioPrimitive.Root.Props<Value>,
-  "className" | "children"
+  "className" | "children" | "title"
 > & {
   /** Card title: the radio's accessible name. */
   title: ReactNode;
