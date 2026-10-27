@@ -16,7 +16,7 @@ export type TappaRow = Pick<
 >;
 
 export const STATO_TAPPA_LABEL: Record<StatoTappa, string> = {
-  bozza: "Bozza",
+  bozza: "In bozza",
   iscrizioni_aperte: "Iscrizioni aperte",
   iscrizioni_chiuse: "Iscrizioni chiuse",
   in_corso: "In corso",
