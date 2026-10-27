@@ -10,8 +10,9 @@ import {
 } from "./format";
 
 /**
- * The stage calendar, oldest first. RLS hides drafts from everyone but
- * admins. Without Supabase env (CI, e2e) it returns the demo stages.
+ * The stage calendar, oldest first. Drafts are left out for everyone:
+ * RLS hides them from players, and admins see them only in the admin
+ * dashboard. Without Supabase env (CI, e2e) it returns the demo stages.
  */
 export async function readTappe(): Promise<TappaCard[]> {
   if (!readSupabaseEnv()) return demoStages.map(demoTappaCard);
@@ -20,6 +21,7 @@ export async function readTappe(): Promise<TappaCard[]> {
   const { data, error } = await supabase
     .from("tappe")
     .select("id, nome, luogo, data_inizio, data_fine, stato")
+    .neq("stato", "bozza")
     .order("data_inizio", { ascending: true });
   if (error) throw new Error(`tappe: ${error.message}`);
   return (data as TappaRow[]).map(toTappaCard);

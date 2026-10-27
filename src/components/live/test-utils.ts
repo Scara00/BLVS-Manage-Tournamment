@@ -52,6 +52,7 @@ export const baseSnapshot: LiveSnapshot = {
     },
   ],
   overall: [],
+  pendingScores: [],
 };
 
 export const baseSync: LiveSync = {

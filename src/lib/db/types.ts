@@ -35,6 +35,9 @@ export const STATI_PARTITA = [
 ] as const;
 export type StatoPartita = (typeof STATI_PARTITA)[number];
 
+export const FASI_TABELLONE = ["gold", "silver"] as const;
+export type FaseTabellone = (typeof FASI_TABELLONE)[number];
+
 export type Utente = {
   id: string;
   email: string;
@@ -67,6 +70,10 @@ export type Tabellone = {
   id: string;
   tappa_id: string;
   categoria: Categoria;
+  /** Seats on this board (one category of the stage). */
+  posti: number;
+  /** Gold/Silver phase, set by the admin; null until then. */
+  fase: FaseTabellone | null;
 };
 
 export type Iscrizione = {

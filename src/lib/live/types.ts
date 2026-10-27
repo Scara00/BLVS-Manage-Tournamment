@@ -37,6 +37,15 @@ export type OverallStandingRow = {
   points: number;
 };
 
+/** Results still to enter for a stage raced today (admin banner). */
+export type PendingScores = {
+  /** Stage id. */
+  id: string;
+  /** Stage name, spoken in announcements. */
+  label: string;
+  count: number;
+};
+
 export type LiveSnapshot = {
   /** Sequence number of the last event folded into this snapshot. */
   seq: number;
@@ -45,6 +54,8 @@ export type LiveSnapshot = {
   matches: readonly LiveMatch[];
   groups: readonly GroupStandings[];
   overall: readonly OverallStandingRow[];
+  /** Per stage, only for the stages that published a count. */
+  pendingScores: readonly PendingScores[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -53,7 +64,8 @@ export type LiveSync = { snapshot: LiveSnapshot; syncedAt: string };
 export type LiveEventPayload =
   | { type: "score"; match: LiveMatch }
   | { type: "group-standings"; group: GroupStandings }
-  | { type: "overall-standings"; rows: readonly OverallStandingRow[] };
+  | { type: "overall-standings"; rows: readonly OverallStandingRow[] }
+  | { type: "pending-scores"; stage: PendingScores };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -66,6 +78,7 @@ export const LIVE_EVENT_TYPES = [
   "score",
   "group-standings",
   "overall-standings",
+  "pending-scores",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -87,5 +100,10 @@ export function applyLiveEvent(
       return { ...base, groups: upsert(snapshot.groups, event.group) };
     case "overall-standings":
       return { ...base, overall: event.rows };
+    case "pending-scores":
+      return {
+        ...base,
+        pendingScores: upsert(snapshot.pendingScores ?? [], event.stage),
+      };
   }
 }
