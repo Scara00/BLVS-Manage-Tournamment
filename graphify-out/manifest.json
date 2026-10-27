@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "playwright.config.ts": {
-    "mtime": 1793090603.0262208,
-    "ast_hash": "715084a7de6447c68b848fe72e0272bc",
+    "mtime": 1793090702.9171805,
+    "ast_hash": "ea96b823d6b0b053d4192a1037cfe8c8",
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "e2e/storybook-a11y.spec.ts": {
-    "mtime": 1793090631.6125748,
-    "ast_hash": "1ab1a6274b79a36db279c61da91a2ea9",
+    "mtime": 1793090702.9172862,
+    "ast_hash": "b63a287602f1eed3577a80fbec7ee454",
     "semantic_hash": ""
   },
   "src/components/ui/button.stories.tsx": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/classifica/page.tsx": {
-    "mtime": 1793090602.964683,
-    "ast_hash": "448deaf60d1b0c325e5b2d2bf319c3b2",
+    "mtime": 1793090671.138497,
+    "ast_hash": "3c318e0aee3f2c39cd9633f1bf903c00",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/layout.tsx": {
@@ -335,8 +335,8 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/live/page.tsx": {
-    "mtime": 1793090602.964822,
-    "ast_hash": "91524fd9bca5c81a0b123e14fe891c2a",
+    "mtime": 1793090671.1390517,
+    "ast_hash": "d1e3b41c7fe332dcf7015eb37333240e",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/page.test.tsx": {
@@ -465,8 +465,8 @@
     "semantic_hash": ""
   },
   "src/components/responsive-table/responsive-table.tsx": {
-    "mtime": 1793090602.967296,
-    "ast_hash": "1cfd25f749e1613a853e6827af471289",
+    "mtime": 1793090671.1427584,
+    "ast_hash": "9d8ce6106f151211d9a17ae4c6cf99cc",
     "semantic_hash": ""
   },
   "src/hooks/use-media-query.test.ts": {
@@ -495,8 +495,8 @@
     "semantic_hash": ""
   },
   "src/lib/demo/tournament.ts": {
-    "mtime": 1793090602.971952,
-    "ast_hash": "c239cd9e234a2b0f9e460e0ad98e0aa7",
+    "mtime": 1793090671.1429439,
+    "ast_hash": "1d5deefe6d5f8167dfd356aa2bcf0b24",
     "semantic_hash": ""
   },
   "src/test/media-query-mock.ts": {
@@ -1037,6 +1037,196 @@
   "src/lib/navigation/safe-return-path.ts": {
     "mtime": 1793090603.106074,
     "ast_hash": "e592d3929d6988f02feb37c9fef0710a",
+    "semantic_hash": ""
+  },
+  "e2e/live.spec.ts": {
+    "mtime": 1793090671.1344225,
+    "ast_hash": "116fc596edd2b00b4a4af6475a735443",
+    "semantic_hash": ""
+  },
+  "e2e/storybook-live.spec.ts": {
+    "mtime": 1793090671.1347914,
+    "ast_hash": "828b2b66be3a0d9b949744a236624de0",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/gironi/[id]/page.tsx": {
+    "mtime": 1793090671.138799,
+    "ast_hash": "3443d977b02952df3cd0fdaff60995f7",
+    "semantic_hash": ""
+  },
+  "src/app/api/live/publish/route.test.ts": {
+    "mtime": 1793090671.139351,
+    "ast_hash": "5caf7368f8644b689a4a6e03516c05a1",
+    "semantic_hash": ""
+  },
+  "src/app/api/live/publish/route.ts": {
+    "mtime": 1793090671.1395137,
+    "ast_hash": "88a9c48517ccf1b4445f85003843b48a",
+    "semantic_hash": ""
+  },
+  "src/app/api/live/snapshot/route.ts": {
+    "mtime": 1793090671.1397405,
+    "ast_hash": "33476a9dbd47c641104842dcae6994b5",
+    "semantic_hash": ""
+  },
+  "src/app/api/live/stream/route.test.ts": {
+    "mtime": 1793090671.1399395,
+    "ast_hash": "c2b86b6ca80f213bafd1f78b6ce59361",
+    "semantic_hash": ""
+  },
+  "src/app/api/live/stream/route.ts": {
+    "mtime": 1793090671.1401799,
+    "ast_hash": "5bfd23fc54d555feaae043a4119efcd8",
+    "semantic_hash": ""
+  },
+  "src/components/live/index.ts": {
+    "mtime": 1793090671.1403863,
+    "ast_hash": "91d258d87d77edff8e24d118314636f7",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-announcer.test.tsx": {
+    "mtime": 1793090671.1405861,
+    "ast_hash": "d91f46d8d1012cdfae66a0d63278d7cf",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-announcer.tsx": {
+    "mtime": 1793090671.140741,
+    "ast_hash": "2612fa6adc75b726907cd9d7695edcdb",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-bar.stories.tsx": {
+    "mtime": 1793090671.140888,
+    "ast_hash": "8fa912bc5d64a574893c6ad92cb3ec99",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-bar.test.tsx": {
+    "mtime": 1793090671.1410291,
+    "ast_hash": "5d2f3022c593695e8ee7425b506a5aeb",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-bar.tsx": {
+    "mtime": 1793090671.141423,
+    "ast_hash": "4f4d1a9c5a098c3474d9388c3050b91f",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-loading.tsx": {
+    "mtime": 1793090671.141575,
+    "ast_hash": "a74e36aee05a1eca2f08eee257b43f31",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-provider.tsx": {
+    "mtime": 1793090671.1417212,
+    "ast_hash": "40a081bead919b422694071718b04770",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-screens.stories.tsx": {
+    "mtime": 1793090671.141854,
+    "ast_hash": "f848d7a426bc618e32d11f133abe13f4",
+    "semantic_hash": ""
+  },
+  "src/components/live/live-views.tsx": {
+    "mtime": 1793090671.1420228,
+    "ast_hash": "80fffa3b9b902efd34c0d279b15e91da",
+    "semantic_hash": ""
+  },
+  "src/components/live/test-utils.ts": {
+    "mtime": 1793090671.1422453,
+    "ast_hash": "0bed0617c536964502573fc8463c670c",
+    "semantic_hash": ""
+  },
+  "src/components/live/use-live-row-motion.test.tsx": {
+    "mtime": 1793090671.1423826,
+    "ast_hash": "170ac282ef8c872dfac7e2f2830399d1",
+    "semantic_hash": ""
+  },
+  "src/components/live/use-live-row-motion.ts": {
+    "mtime": 1793090671.1425269,
+    "ast_hash": "c351ec6c4c6b17fa3d97d2db75995b1a",
+    "semantic_hash": ""
+  },
+  "src/lib/live/announce.test.ts": {
+    "mtime": 1793090671.1434932,
+    "ast_hash": "988c91d6ca1b0e4b8f76465fa44d00c3",
+    "semantic_hash": ""
+  },
+  "src/lib/live/announce.ts": {
+    "mtime": 1793090671.143635,
+    "ast_hash": "2e1e1f85a995587db837fab0f6a60cd6",
+    "semantic_hash": ""
+  },
+  "src/lib/live/bus.test.ts": {
+    "mtime": 1793090671.1437595,
+    "ast_hash": "2ad884e3ca40f8c9a3a5eca0463fb478",
+    "semantic_hash": ""
+  },
+  "src/lib/live/bus.ts": {
+    "mtime": 1793090671.1439211,
+    "ast_hash": "44021ffe4610761d22e1ef876f243772",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/backoff.test.ts": {
+    "mtime": 1793090671.1441462,
+    "ast_hash": "abf4198cc1d6e660238edb425e738902",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/backoff.ts": {
+    "mtime": 1793090671.144281,
+    "ast_hash": "812d2131c8f6c3ecf870ecdbc3a06b2c",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/dedupe.test.ts": {
+    "mtime": 1793090671.1444795,
+    "ast_hash": "e0c349a286d68a5d601fab76c842e795",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/dedupe.ts": {
+    "mtime": 1793090671.1446319,
+    "ast_hash": "8413b6a36a73f36e24f7b67bb591e447",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/live-connection.test.ts": {
+    "mtime": 1793090671.144918,
+    "ast_hash": "66f152bdff7b9e8d40f0828951038b6f",
+    "semantic_hash": ""
+  },
+  "src/lib/live/client/live-connection.ts": {
+    "mtime": 1793090671.1451023,
+    "ast_hash": "0e3a5e8fce510a76911f95ba613d15b6",
+    "semantic_hash": ""
+  },
+  "src/lib/live/format.ts": {
+    "mtime": 1793090671.1452513,
+    "ast_hash": "25e4ebb2d29feebe4f7af957f1b87472",
+    "semantic_hash": ""
+  },
+  "src/lib/live/publish.ts": {
+    "mtime": 1793090671.1453974,
+    "ast_hash": "8c91a72e15f6d1396f7deb58ec9a77c7",
+    "semantic_hash": ""
+  },
+  "src/lib/live/read.ts": {
+    "mtime": 1793090671.1455832,
+    "ast_hash": "f3d8e5712ad31e562bc94e4766e8584b",
+    "semantic_hash": ""
+  },
+  "src/lib/live/seed.ts": {
+    "mtime": 1793090671.1457498,
+    "ast_hash": "2cd4ed26f34e69b414420a0cafff9896",
+    "semantic_hash": ""
+  },
+  "src/lib/live/sse.ts": {
+    "mtime": 1793090671.1459134,
+    "ast_hash": "b384f2dff5c4a719cf673f4a9baf7088",
+    "semantic_hash": ""
+  },
+  "src/lib/live/stream.ts": {
+    "mtime": 1793090671.1460464,
+    "ast_hash": "6f77a313cb1306a6d3679749a7b7f09a",
+    "semantic_hash": ""
+  },
+  "src/lib/live/types.ts": {
+    "mtime": 1793090671.1463418,
+    "ast_hash": "f57b7ba4f6c103ed6840993efc2eb1ea",
     "semantic_hash": ""
   }
 }

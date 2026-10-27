@@ -53,10 +53,12 @@ export default defineConfig({
       timeout: 180_000,
       // HTTPS is enforced only on staging/production; e2e runs on http://localhost.
       // ERROR_PREVIEWS: the /anteprima/* routes that trigger 403 and 503.
+      // LIVE_DEMO_PUBLISH opens POST /api/live/publish so e2e can "save" a result.
       env: {
         TZ: "Europe/Rome",
         ENFORCE_HTTPS: "false",
         ERROR_PREVIEWS: "true",
+        LIVE_DEMO_PUBLISH: "true",
       },
     },
     {
