@@ -126,3 +126,22 @@ export function creaDemoGironi({
   });
   return { id, categoria: "M" };
 }
+
+/**
+ * Replaces a demo board's composition (BLVS-30 regeneration). The change
+ * function receives a copy; the version grows by 1, as the RPC does.
+ */
+export function sostituisciDemoGironi(
+  tappaId: string,
+  categoria: Categoria,
+  cambia: (attuale: ComposizioneGironi) => ComposizioneGironi,
+): ComposizioneGironi | null {
+  if (!getDemoGironi(tappaId, categoria)) return null;
+  const editor = store().get(chiave(tappaId, categoria))!;
+  const versione = editor.composizione.versione + 1;
+  editor.composizione = {
+    ...cambia(structuredClone(editor.composizione)),
+    versione,
+  };
+  return structuredClone(editor.composizione);
+}
