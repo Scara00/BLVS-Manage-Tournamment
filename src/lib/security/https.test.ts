@@ -35,6 +35,23 @@ describe("enforceHttps", () => {
       expect(res?.headers.get("location")).toBe("https://example.com/a");
     });
 
+    it("rifiuta con 403 le API in HTTP invece di reindirizzarle", async () => {
+      vi.stubEnv("ENFORCE_HTTPS", "true");
+      for (const url of [
+        "http://example.com/api",
+        "http://example.com/api/auth/login",
+      ]) {
+        const res = enforceHttps(request(url));
+        expect(res?.status).toBe(403);
+        expect(res?.headers.get("location")).toBeNull();
+        expect(await res?.json()).toEqual({ error: "HTTPS obbligatorio." });
+      }
+      // «/apiario» non è un'API.
+      expect(enforceHttps(request("http://example.com/apiario"))?.status).toBe(
+        308,
+      );
+    });
+
     it("non tocca le richieste già in HTTPS", () => {
       vi.stubEnv("ENFORCE_HTTPS", "true");
       expect(enforceHttps(request("https://example.com/"))).toBeNull();
