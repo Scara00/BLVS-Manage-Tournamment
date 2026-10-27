@@ -46,6 +46,7 @@ function snapshot(seq: number): LiveSnapshot {
     matches: [],
     groups: [],
     overall: [],
+    pendingScores: [],
   };
 }
 

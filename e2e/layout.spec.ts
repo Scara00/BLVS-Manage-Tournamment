@@ -183,9 +183,19 @@ test("giocatore: il menu mobile si apre da tastiera e si chiude con Esc", async 
   await expect(home).toBeHidden();
 });
 
+/**
+ * On race day the dashboard keeps an SSE stream open, so «networkidle» never
+ * comes: wait for the live channel instead (it connects once hydrated).
+ */
+async function waitForAdminHydrated(page: Page) {
+  await expect(
+    page.getByRole("region", { name: "Stato degli aggiornamenti" }),
+  ).toHaveAttribute("data-status", "live", { timeout: 15_000 });
+}
+
 test("admin: tour da tastiera e voce attiva", async ({ page }) => {
   await page.goto("/admin");
-  await page.waitForLoadState("networkidle");
+  await waitForAdminHydrated(page);
   await page.keyboard.press("Tab");
   await expect(
     page.getByRole("link", { name: "Vai al contenuto" }),
@@ -225,7 +235,7 @@ test("«Esci» dall'area admin chiude la sessione e porta al login con il messag
   page,
 }) => {
   await page.goto("/admin");
-  await page.waitForLoadState("networkidle"); // hydrated: useActionState form
+  await waitForAdminHydrated(page); // hydrated: useActionState form
   // Axe before the click: afterwards the pointer still hovers the «Esci» of
   // the next page and catches its colour transition mid-way.
   await expectNoA11yViolations(page);

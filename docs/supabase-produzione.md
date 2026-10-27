@@ -52,7 +52,13 @@ NEXT_PUBLIC_SUPABASE_URL=https://<ref>.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_…
 SUPABASE_SECRET_KEY=sb_secret_…        # solo server, mai NEXT_PUBLIC_
 ENFORCE_HTTPS=true                     # solo su Vercel
+CRON_SECRET=<stringa casuale lunga>    # solo su Vercel: protegge /api/cron/*
 ```
+
+`CRON_SECRET` serve al job che chiude le iscrizioni alla scadenza
+(`vercel.json` → `/api/cron/chiudi-iscrizioni`); senza, la route risponde 503
+e le iscrizioni scadute si chiudono solo quando un admin apre le pagine delle
+tappe (la policy RLS impedisce comunque di iscriversi dopo la scadenza).
 
 Ridistribuisci dopo averle impostate: `ENFORCE_HTTPS` è letta al build.
 

@@ -2,7 +2,7 @@ import { BodyReader } from "./validation";
 import { STATI_TAPPA } from "@/lib/db/types";
 
 export const TAPPA_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, created_at, updated_at, tabelloni (id, categoria)";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, created_at, updated_at, tabelloni (id, categoria)";
 
 /** Reads the writable fields of a stage; `partial` for PATCH. */
 export function readTappa(body: Record<string, unknown>, partial: boolean) {
@@ -35,6 +35,12 @@ export function readTappa(body: Record<string, unknown>, partial: boolean) {
     values.data_fine < values.data_inizio
   ) {
     reader.errors.dataFine ??= "La fine non può precedere l'inizio.";
+  }
+  // BLVS-22: cancelling (reason + emails) and archiving have their own
+  // actions on the admin dashboard; this API never takes those states.
+  if (values.stato === "annullata" || values.stato === "archiviata") {
+    reader.errors.stato =
+      "Annulla o archivia la tappa dalla dashboard admin: servono il motivo e l'avviso agli iscritti.";
   }
   if (partial && reader.ok && Object.keys(values).length === 0) {
     reader.errors._ = "Nessun campo da aggiornare.";

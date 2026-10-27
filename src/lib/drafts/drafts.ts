@@ -8,6 +8,19 @@
 
 const PREFIX = "blvs:bozza:";
 
+/**
+ * Window event that asks every mounted `useFormDraft` to write its pending
+ * changes now, skipping the typing delay (e.g. right before the session
+ * closes and the page is left).
+ */
+export const FLUSH_DRAFTS_EVENT = "blvs:salva-bozze";
+
+/** Writes every pending draft on this page immediately. */
+export function flushDrafts(): void {
+  if (typeof window !== "undefined")
+    window.dispatchEvent(new Event(FLUSH_DRAFTS_EVENT));
+}
+
 export type DraftValues = Record<string, string | string[]>;
 
 export type Draft = {

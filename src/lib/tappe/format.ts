@@ -1,5 +1,6 @@
 import type { DemoStage } from "@/lib/demo/tournament";
-import type { StatoTappa, Tappa } from "@/lib/db/types";
+import type { Categoria, FasePartita, StatoTappa, Tappa } from "@/lib/db/types";
+import { SERVER_LOCALE, SERVER_TIME_ZONE } from "@/lib/time/server-time";
 
 /** A stage as the calendar shows it. */
 export type TappaCard = {
@@ -22,6 +23,7 @@ export const STATO_TAPPA_LABEL: Record<StatoTappa, string> = {
   in_corso: "In corso",
   conclusa: "Conclusa",
   annullata: "Annullata",
+  archiviata: "Archiviata",
 };
 
 const DEMO_STATO: Record<DemoStage["status"], StatoTappa> = {
@@ -86,4 +88,145 @@ export function demoTappaCard(stage: DemoStage): TappaCard {
     date: stage.date,
     stato: DEMO_STATO[stage.status],
   };
+}
+
+// ---------------------------------------------------------------------------
+// Player list (w-tappe): seats in the player's category, deadline, phase
+// ---------------------------------------------------------------------------
+
+/** A row of `public.tappe` as the player list reads it. */
+export type TappaGiocatoreRow = TappaRow &
+  Pick<Tappa, "iscrizioni_chiudono_il">;
+
+/** A row of RPC `public.posti_tappe()`: one board of a non-draft stage. */
+export type PostiRow = {
+  tappa_id: string;
+  categoria: Categoria;
+  posti: number;
+  occupati: number;
+  fase: FasePartita | null;
+};
+
+export type Posti = { liberi: number; totali: number };
+
+/** A stage as the player list shows it. */
+export type TappaGiocatore = TappaCard & {
+  /** «19 giugno, 23:59» (Europe/Rome), or null when no deadline is set. */
+  scadenza: string | null;
+  scadenzaIso: string | null;
+  /** Seats in the player's category; null without a category or when cancelled. */
+  posti: Posti | null;
+  /** Most advanced match phase, only while the stage is in progress. */
+  fase: FasePartita | null;
+  /** Open for registration with seats left in the player's category. */
+  iscrivibile: boolean;
+};
+
+export const FASE_LABEL: Record<FasePartita, string> = {
+  gironi: "Gironi",
+  eliminazione: "Eliminazione",
+  finale: "Finale",
+};
+
+const FASE_ORDINE: Record<FasePartita, number> = {
+  gironi: 1,
+  eliminazione: 2,
+  finale: 3,
+};
+
+const deadline = new Intl.DateTimeFormat(SERVER_LOCALE, {
+  day: "numeric",
+  month: "long",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: SERVER_TIME_ZONE,
+});
+
+/** «19 giugno, 23:59», in Italian time whatever the host zone. */
+export function formatScadenza(iso: string): string {
+  return deadline.format(new Date(iso));
+}
+
+/**
+ * Drafts never reach players. RLS already hides them, but the demo data and
+ * an admin session can still see them, so the list filters them again.
+ */
+export function escludiBozze<Row extends { stato: StatoTappa }>(
+  rows: readonly Row[],
+): Row[] {
+  return rows.filter((row) => row.stato !== "bozza");
+}
+
+/** «N liberi su M» for one category of one stage; null when unknown. */
+export function postiPerCategoria(
+  posti: readonly PostiRow[],
+  tappaId: string,
+  categoria: Categoria | null,
+): Posti | null {
+  if (!categoria) return null;
+  const row = posti.find(
+    (p) => p.tappa_id === tappaId && p.categoria === categoria,
+  );
+  if (!row) return null;
+  return {
+    liberi: Math.max(0, row.posti - row.occupati),
+    totali: row.posti,
+  };
+}
+
+/**
+ * The phase of the player's board, or, without a category, the most
+ * advanced one across both boards.
+ */
+export function faseTappa(
+  posti: readonly PostiRow[],
+  tappaId: string,
+  categoria: Categoria | null,
+): FasePartita | null {
+  const boards = posti.filter((p) => p.tappa_id === tappaId && p.fase);
+  const own = categoria && boards.find((p) => p.categoria === categoria);
+  if (own) return own.fase;
+  return boards.reduce<FasePartita | null>(
+    (best, p) =>
+      p.fase && (!best || FASE_ORDINE[p.fase] > FASE_ORDINE[best])
+        ? p.fase
+        : best,
+    null,
+  );
+}
+
+export function descriviPosti({ liberi, totali }: Posti): string {
+  return `${liberi} ${liberi === 1 ? "libero" : "liberi"} su ${totali}`;
+}
+
+export function toTappeGiocatore(
+  rows: readonly TappaGiocatoreRow[],
+  posti: readonly PostiRow[],
+  categoria: Categoria | null,
+): TappaGiocatore[] {
+  return escludiBozze(rows).map((row) => {
+    const annullata = row.stato === "annullata";
+    const seats = annullata
+      ? null
+      : postiPerCategoria(posti, row.id, categoria);
+    return {
+      ...toTappaCard(row),
+      scadenza: row.iscrizioni_chiudono_il
+        ? formatScadenza(row.iscrizioni_chiudono_il)
+        : null,
+      scadenzaIso: row.iscrizioni_chiudono_il,
+      posti: seats,
+      fase:
+        row.stato === "in_corso" ? faseTappa(posti, row.id, categoria) : null,
+      iscrivibile:
+        row.stato === "iscrizioni_aperte" && seats !== null && seats.liberi > 0,
+    };
+  });
+}
+
+/** The stage being played now, for the live strip at the top of the list. */
+export function tappaInCorso(
+  tappe: readonly TappaGiocatore[],
+): TappaGiocatore | null {
+  return tappe.find((t) => t.stato === "in_corso") ?? null;
 }

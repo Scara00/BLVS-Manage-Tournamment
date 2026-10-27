@@ -52,3 +52,28 @@ export const Text200: Story = {
   args: { ...ConBozze.args },
   parameters: { text200: true },
 };
+
+/** w-admin-sessione: the admin session closed after the idle timeout. */
+export const SessioneAdminChiusa: Story = {
+  args: {
+    variant: "admin",
+    drafts: [
+      {
+        id: "admin-tappa-nuova",
+        label: "Nuova tappa · Rimini",
+        path: "/admin/tappe",
+        savedAt: "2026-10-27T09:42:00.000Z",
+        values: {},
+      },
+    ],
+  },
+};
+
+export const SessioneAdminChiusaSenzaBozze: Story = {
+  args: { variant: "admin", drafts: [] },
+};
+
+export const SessioneAdminChiusaText200: Story = {
+  args: { ...SessioneAdminChiusa.args },
+  parameters: { text200: true },
+};

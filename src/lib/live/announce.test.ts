@@ -14,6 +14,17 @@ const match: LiveMatch = {
 const meta = { seq: 1, savedAt: "2026-06-14T08:30:00.000Z" };
 
 describe("announcementFor", () => {
+  it("annuncia le partite da inserire della tappa", () => {
+    const event: LiveEvent = {
+      ...meta,
+      type: "pending-scores",
+      stage: { id: "jesolo", label: "Tappa 1 · Jesolo", count: 2 },
+    };
+    expect(announcementFor(event)).toBe(
+      "Tappa 1 · Jesolo: 2 partite da inserire",
+    );
+  });
+
   it("annuncia il nuovo risultato con il girone", () => {
     const event: LiveEvent = { ...meta, type: "score", match };
     expect(announcementFor(event)).toBe("Girone A: nuovo risultato 21-18");

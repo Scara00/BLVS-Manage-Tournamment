@@ -16,6 +16,7 @@ export const STATI_TAPPA = [
   "in_corso",
   "conclusa",
   "annullata",
+  "archiviata",
 ] as const;
 export type StatoTappa = (typeof STATI_TAPPA)[number];
 
@@ -34,6 +35,12 @@ export const STATI_PARTITA = [
   "annullata",
 ] as const;
 export type StatoPartita = (typeof STATI_PARTITA)[number];
+
+export const FASI_TABELLONE = ["gold", "silver"] as const;
+export type FaseTabellone = (typeof FASI_TABELLONE)[number];
+
+export const FASI_PARTITA = ["gironi", "eliminazione", "finale"] as const;
+export type FasePartita = (typeof FASI_PARTITA)[number];
 
 export type Utente = {
   id: string;
@@ -55,6 +62,24 @@ export type Tappa = {
   stato: StatoTappa;
   iscrizioni_aprono_il: string | null;
   iscrizioni_chiudono_il: string | null;
+  /** When registrations closed (set by the DB on the change of state). */
+  iscrizioni_chiuse_il: string | null;
+  /** True when `chiudi_iscrizioni_scadute()` closed them at the deadline. */
+  chiusura_automatica: boolean;
+  /** Grows by 1 on every update (trigger `tappe_versione`). */
+  versione: number;
+  /** Meeting point shown to registered players (BLVS-24). */
+  ritrovo: string | null;
+  ritrovo_alle: string | null;
+  /** Free-text programme set by the admin. */
+  programma: string | null;
+  /** Players may cancel until then; null = the registration deadline. */
+  annullabile_fino_al: string | null;
+  /** Why the stage was cancelled; set only when cancelling it (BLVS-22). */
+  motivo_annullamento: string | null;
+  /** When it was cancelled / archived; written by the DB trigger only. */
+  annullata_il: string | null;
+  archiviata_il: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -63,6 +88,12 @@ export type Tabellone = {
   id: string;
   tappa_id: string;
   categoria: Categoria;
+  /** Seats on this board (one category of the stage); maximum registrations, never below the active ones. */
+  posti: number;
+  /** Gold/Silver phase, set by the admin; null until then. */
+  fase: FaseTabellone | null;
+  /** When the board was concluded (BLVS-43); null while still open. */
+  concluso_il: string | null;
 };
 
 export type Iscrizione = {
@@ -71,6 +102,8 @@ export type Iscrizione = {
   tabellone_id: string;
   utente_id: string;
   stato: StatoIscrizione;
+  /** Seat number on the board, assigned by the database. */
+  posto: number | null;
   created_at: string;
   updated_at: string;
 };

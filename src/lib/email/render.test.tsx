@@ -80,6 +80,15 @@ describe("renderEmail", () => {
     expect(text).toContain("Motivo: Allerta meteo");
   });
 
+  it("tappa annullata: una data senza ora resta quel giorno", async () => {
+    const { text } = await renderEmail("tappa-annullata", {
+      ...casi[2].props,
+      startsAt: "2027-06-12",
+    } as never);
+    expect(text).toContain("prevista per sabato 12 giugno 2027");
+    expect(text).not.toContain("alle ore");
+  });
+
   it("tappa annullata: senza motivo né luogo non lascia testo vuoto", async () => {
     const { text } = await renderEmail("tappa-annullata", {
       stageName: "Tappa di Bari",

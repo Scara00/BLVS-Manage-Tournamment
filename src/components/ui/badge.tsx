@@ -18,6 +18,8 @@ const badgeVariants = cva(
         "reg-closed": "border-transparent bg-reg-closed-bg text-reg-closed-fg",
         "reg-cancelled":
           "border-transparent bg-reg-cancelled-bg text-reg-cancelled-fg",
+        /** Black on yellow tape (contrastPairs «Nero su tape»). */
+        tape: "border-transparent bg-tape text-primary",
       },
       shape: {
         square: "rounded-none",

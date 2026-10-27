@@ -27,10 +27,13 @@ async function register(utenteId: string, tappaStato: string, stato: string) {
      select $1, id, $2, $3 from tabelloni where tappa_id = $1 and categoria = 'M'`,
     [tappaId, utenteId, stato],
   );
-  await db.query("update tappe set stato = $2 where id = $1", [
-    tappaId,
-    tappaStato,
-  ]);
+  // BLVS-22: a stage is cancelled only with a reason.
+  await db.query(
+    `update tappe set stato = $2::stato_tappa,
+       motivo_annullamento = case when $2::text = 'annullata' then 'Maltempo' end
+     where id = $1`,
+    [tappaId, tappaStato],
+  );
   return tappaId;
 }
 

@@ -9,7 +9,10 @@ import {
   safeAfterLoginPath,
 } from "@/lib/navigation/auth-paths";
 import { RETURN_PARAM } from "@/lib/navigation/safe-return-path";
-import { SessionExpiredView } from "./session-expired-view";
+import {
+  SessionExpiredView,
+  sessionExpiredVariant,
+} from "./session-expired-view";
 
 function SessionExpiredFromParams() {
   const params = useSearchParams();
@@ -27,6 +30,7 @@ function SessionExpiredFromParams() {
       returnPath={returnPath}
       loginHref={loginHref(returnPath, { reason: "scaduta" })}
       drafts={drafts}
+      variant={sessionExpiredVariant(returnPath)}
     />
   );
 }

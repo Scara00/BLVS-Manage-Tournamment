@@ -1,3 +1,4 @@
+import { partiteDaInserireLabel } from "@/lib/admin/tappe";
 import type { LiveStatus } from "./client/live-connection";
 import { formatLiveTime } from "./format";
 import type { LiveEvent } from "./types";
@@ -17,6 +18,8 @@ export function announcementFor(event: LiveEvent): string {
       return `Classifica ${event.group.label} aggiornata`;
     case "overall-standings":
       return "Classifica generale aggiornata";
+    case "pending-scores":
+      return `${event.stage.label}: ${partiteDaInserireLabel(event.stage.count)}`;
   }
 }
 

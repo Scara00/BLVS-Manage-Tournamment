@@ -151,3 +151,222 @@ export const demoRegistrations: readonly DemoRegistration[] = [
     received: "10 giugno",
   },
 ];
+
+export type DemoAdminStage = {
+  id: string;
+  name: string;
+  date: string;
+  status:
+    | "bozza"
+    | "iscrizioni_aperte"
+    | "iscrizioni_chiuse"
+    | "in_corso"
+    | "conclusa"
+    | "annullata"
+    | "archiviata";
+  /** Why it was cancelled (cancelled stages only). */
+  reason?: string;
+  /** [M, F]: registered players, seats and Gold/Silver phase. */
+  boards: readonly [DemoAdminBoard, DemoAdminBoard];
+  pendingScores: number;
+};
+
+export type DemoAdminBoard = {
+  registered: number;
+  seats: number;
+  phase: "gold" | "silver" | null;
+  /** Results closed (BLVS-43). */
+  concluded?: boolean;
+};
+
+/**
+ * The admin view of the calendar: the public stages plus a draft and a
+ * finished one (results closed, so it can be archived) and a cancelled one.
+ * The stage in progress is racing today.
+ */
+export const demoAdminStages: readonly DemoAdminStage[] = [
+  {
+    id: "lignano",
+    name: "Tappa 0 · Lignano",
+    date: "31 maggio – 1 giugno",
+    status: "conclusa",
+    boards: [
+      { registered: 16, seats: 16, phase: "silver", concluded: true },
+      { registered: 14, seats: 16, phase: "silver", concluded: true },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "jesolo",
+    name: "Tappa 1 · Jesolo",
+    date: "14–15 giugno",
+    status: "in_corso",
+    boards: [
+      { registered: 16, seats: 16, phase: "gold" },
+      { registered: 12, seats: 16, phase: "silver" },
+    ],
+    pendingScores: 3,
+  },
+  {
+    id: "rimini",
+    name: "Tappa 2 · Rimini",
+    date: "28–29 giugno",
+    status: "iscrizioni_aperte",
+    boards: [
+      { registered: 9, seats: 16, phase: null },
+      { registered: 17, seats: 16, phase: null },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "cagliari",
+    name: "Tappa 3 · Cagliari",
+    date: "12–13 luglio",
+    status: "iscrizioni_chiuse",
+    boards: [
+      { registered: 16, seats: 16, phase: "gold" },
+      { registered: 16, seats: 16, phase: "gold" },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "pescara",
+    name: "Tappa 4 · Pescara",
+    date: "26–27 luglio",
+    status: "bozza",
+    boards: [
+      { registered: 0, seats: 24, phase: null },
+      { registered: 0, seats: 24, phase: null },
+    ],
+    pendingScores: 0,
+  },
+  {
+    id: "olbia",
+    name: "Tappa 5 · Olbia",
+    date: "9–10 agosto",
+    status: "annullata",
+    reason: "La spiaggia non è disponibile per lavori del Comune.",
+    boards: [
+      { registered: 6, seats: 16, phase: null },
+      { registered: 4, seats: 16, phase: null },
+    ],
+    pendingScores: 0,
+  },
+];
+
+/**
+ * The player stage list (w-tappe) in the shape of `public.tappe` and RPC
+ * `posti_tappe()`. It includes a draft (never shown to players) and a
+ * cancelled stage, so the demo exercises every rule of the list. The 2027
+ * season keeps Rimini's deadline in the future, so the stage detail
+ * (BLVS-24) can take a seat in the demo.
+ */
+export const demoTappeGiocatore = {
+  /** The demo player's category. */
+  categoria: "M" as const,
+  tappe: [
+    {
+      id: "jesolo",
+      nome: "Tappa 1 · Jesolo",
+      luogo: "Jesolo Lido, Piazza Mazzini",
+      data_inizio: "2027-06-14",
+      data_fine: "2027-06-15",
+      stato: "in_corso" as const,
+      iscrizioni_chiudono_il: "2027-06-07T21:59:00Z",
+    },
+    {
+      id: "rimini",
+      nome: "Tappa 2 · Rimini",
+      luogo: "Rimini, Bagno 26",
+      data_inizio: "2027-06-28",
+      data_fine: "2027-06-29",
+      stato: "iscrizioni_aperte" as const,
+      iscrizioni_chiudono_il: "2027-06-21T21:59:00Z",
+    },
+    {
+      id: "cagliari",
+      nome: "Tappa 3 · Cagliari",
+      luogo: "Cagliari, Poetto",
+      data_inizio: "2027-07-12",
+      data_fine: "2027-07-13",
+      stato: "iscrizioni_chiuse" as const,
+      iscrizioni_chiudono_il: "2027-07-05T21:59:00Z",
+    },
+    {
+      id: "pescara",
+      nome: "Tappa 4 · Pescara",
+      luogo: "Pescara, Lungomare Matteotti",
+      data_inizio: "2027-07-26",
+      data_fine: "2027-07-27",
+      stato: "annullata" as const,
+      iscrizioni_chiudono_il: "2027-07-19T21:59:00Z",
+    },
+    {
+      id: "lignano",
+      nome: "Tappa 5 · Lignano (bozza)",
+      luogo: "Lignano Sabbiadoro",
+      data_inizio: "2027-08-09",
+      data_fine: "2027-08-10",
+      stato: "bozza" as const,
+      iscrizioni_chiudono_il: null,
+    },
+  ],
+  posti: [
+    {
+      tappa_id: "jesolo",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 16,
+      fase: "gironi" as const,
+    },
+    {
+      tappa_id: "jesolo",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 12,
+      fase: "gironi" as const,
+    },
+    {
+      tappa_id: "rimini",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 11,
+      fase: null,
+    },
+    {
+      tappa_id: "rimini",
+      categoria: "F" as const,
+      posti: 12,
+      occupati: 12,
+      fase: null,
+    },
+    {
+      tappa_id: "cagliari",
+      categoria: "M" as const,
+      posti: 32,
+      occupati: 24,
+      fase: null,
+    },
+    {
+      tappa_id: "cagliari",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 9,
+      fase: null,
+    },
+    {
+      tappa_id: "pescara",
+      categoria: "M" as const,
+      posti: 16,
+      occupati: 3,
+      fase: null,
+    },
+    {
+      tappa_id: "pescara",
+      categoria: "F" as const,
+      posti: 16,
+      occupati: 2,
+      fase: null,
+    },
+  ],
+};

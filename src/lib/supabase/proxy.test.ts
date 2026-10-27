@@ -225,4 +225,130 @@ describe("updateSession", () => {
     );
     expect(res.status).toBe(403);
   });
+
+  describe("scadenza della sessione admin (BLVS-18)", () => {
+    const NOW = new Date("2026-10-27T10:00:00Z").getTime();
+    const signOut = vi.fn();
+
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ["Date"] });
+      vi.setSystemTime(NOW);
+      signOut.mockReset();
+      createServerClient.mockImplementation((_url, _key, { cookies }) => ({
+        auth: {
+          getClaims: getClaims.mockResolvedValue({
+            data: { claims: { sub: "u1" } },
+            error: null,
+          }),
+          signOut: signOut.mockImplementation(async () => {
+            cookies.setAll(
+              [
+                {
+                  name: "sb-ref-auth-token",
+                  value: "",
+                  options: { maxAge: 0 },
+                },
+              ],
+              { "Cache-Control": "private, no-store" },
+            );
+            return { error: null };
+          }),
+        },
+      }));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    const request = (
+      path: string,
+      deadline?: number,
+      init: { method?: string; headers?: Record<string, string> } = {},
+    ) =>
+      new NextRequest(`https://localhost${path}`, {
+        method: init.method,
+        headers: {
+          ...init.headers,
+          cookie: [
+            "sb-ref-auth-token=valido",
+            deadline === undefined ? null : `blvs_admin_scadenza=${deadline}`,
+          ]
+            .filter(Boolean)
+            .join("; "),
+        },
+      });
+
+    it("la prima pagina admin fissa la scadenza a 30 minuti, in un cookie httpOnly", async () => {
+      const updateSession = await loadUpdateSession();
+      const res = await updateSession(request("/admin"));
+      const cookie = res.cookies.get("blvs_admin_scadenza");
+      expect(cookie?.value).toBe(String(NOW + 30 * 60 * 1000));
+      expect(cookie?.httpOnly).toBe(true);
+      expect(res.headers.get("x-middleware-next")).toBe("1");
+    });
+
+    it("ogni pagina o richiesta admin sposta in avanti la scadenza", async () => {
+      const updateSession = await loadUpdateSession();
+      const page = await updateSession(request("/admin/tappe", NOW + 60_000));
+      expect(page.cookies.get("blvs_admin_scadenza")?.value).toBe(
+        String(NOW + 1_800_000),
+      );
+      const api = await updateSession(
+        request("/api/admin/tappe", NOW + 60_000, { method: "POST" }),
+      );
+      expect(api.cookies.get("blvs_admin_scadenza")?.value).toBe(
+        String(NOW + 1_800_000),
+      );
+    });
+
+    it("il controllo del tempo rimasto e i prefetch non contano come attività", async () => {
+      const updateSession = await loadUpdateSession();
+      const poll = await updateSession(
+        request("/api/admin/sessione", NOW + 60_000),
+      );
+      expect(poll.cookies.get("blvs_admin_scadenza")).toBeUndefined();
+      const prefetch = await updateSession(
+        request("/admin/tappe", NOW + 60_000, {
+          headers: { "next-router-prefetch": "1" },
+        }),
+      );
+      expect(prefetch.cookies.get("blvs_admin_scadenza")).toBeUndefined();
+    });
+
+    it("le pagine fuori dall'area admin non toccano la scadenza", async () => {
+      const updateSession = await loadUpdateSession();
+      const res = await updateSession(request("/classifica", NOW - 1));
+      expect(res.cookies.get("blvs_admin_scadenza")).toBeUndefined();
+      expect(signOut).not.toHaveBeenCalled();
+      expect(res.headers.get("x-middleware-next")).toBe("1");
+    });
+
+    it("dopo la scadenza chiude la sessione e manda a «Sessione scaduta» con la pagina di ritorno", async () => {
+      const updateSession = await loadUpdateSession();
+      const res = await updateSession(
+        request("/admin/tappe?stato=aperte", NOW),
+      );
+      expect(signOut).toHaveBeenCalledWith({ scope: "local" });
+      expect(res.status).toBe(307);
+      expect(res.headers.get("location")).toBe(
+        "https://localhost/sessione-scaduta?da=%2Fadmin%2Ftappe%3Fstato%3Daperte",
+      );
+      expect(res.cookies.get("sb-ref-auth-token")?.value).toBe("");
+      expect(res.cookies.get("blvs_admin_scadenza")?.value).toBe("");
+      expect(res.headers.get("cache-control")).toBe("private, no-store");
+    });
+
+    it("dopo la scadenza le API admin rispondono 401", async () => {
+      const updateSession = await loadUpdateSession();
+      const res = await updateSession(
+        request("/api/admin/sessione", NOW - 1, { method: "POST" }),
+      );
+      expect(res.status).toBe(401);
+      expect(await res.json()).toEqual({
+        error: "La sessione di amministrazione è scaduta. Accedi di nuovo.",
+      });
+      expect(res.cookies.get("sb-ref-auth-token")?.value).toBe("");
+    });
+  });
 });

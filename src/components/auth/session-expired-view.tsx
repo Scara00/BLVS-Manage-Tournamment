@@ -14,7 +14,38 @@ export type SessionExpiredViewProps = {
   loginHref: string;
   /** Local drafts; `null` while they are being read (first render). */
   drafts: Draft[] | null;
+  /**
+   * `admin` (w-admin-sessione): the admin session closed after the idle
+   * timeout, with the admin's own «Cosa è salvato».
+   */
+  variant?: "player" | "admin";
 };
+
+const COPY = {
+  player: {
+    eyebrow: "Sessione scaduta",
+    title: "Per sicurezza ti abbiamo disconnesso",
+    lead: "È passato troppo tempo dall'ultima attività. Accedi di nuovo per continuare da dove eri rimasto.",
+    saved:
+      "Tutto quello che hai inviato e che ti è stato confermato prima della scadenza (iscrizioni, punteggi, modifiche ai dati) è salvato sul server e non va rifatto.",
+  },
+  admin: {
+    eyebrow: "Sessione admin chiusa",
+    title: "Per sicurezza abbiamo chiuso la sessione di amministrazione",
+    lead: "Dopo un periodo senza attività l'area admin si chiude da sola. Accedi di nuovo per riprendere da dove eri rimasto.",
+    saved:
+      "Tutto quello che hai inviato e che ti è stato confermato prima della chiusura (tappe create o modificate, iscrizioni approvate o rifiutate, punteggi confermati) è salvato sul server e non va rifatto.",
+  },
+} as const;
+
+/** The admin variant goes with a return path inside the admin area. */
+export function sessionExpiredVariant(returnPath: string): "player" | "admin" {
+  return returnPath === "/admin" ||
+    returnPath.startsWith("/admin/") ||
+    returnPath.startsWith("/admin?")
+    ? "admin"
+    : "player";
+}
 
 const sectionTitle = "font-heading text-xl font-semibold";
 
@@ -27,21 +58,20 @@ export function SessionExpiredView({
   returnPath,
   loginHref,
   drafts,
+  variant = "player",
 }: SessionExpiredViewProps) {
+  const copy = COPY[variant];
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-stack-lg px-inset py-space-6 md:py-space-8">
       <header className="flex flex-col gap-space-3">
         <p className="text-sm font-semibold tracking-wide uppercase">
-          Sessione scaduta
+          {copy.eyebrow}
         </p>
         <h1 className="font-heading text-3xl font-semibold tracking-tight text-balance md:text-4xl">
-          Per sicurezza ti abbiamo disconnesso
+          {copy.title}
         </h1>
         <Tape size={8} className="max-w-24" />
-        <p className="text-lg text-pretty">
-          È passato troppo tempo dall&apos;ultima attività. Accedi di nuovo per
-          continuare da dove eri rimasto.
-        </p>
+        <p className="text-lg text-pretty">{copy.lead}</p>
       </header>
 
       <section
@@ -70,11 +100,7 @@ export function SessionExpiredView({
             aria-hidden
             className="mt-1 size-5 shrink-0 text-success-fg"
           />
-          <span>
-            Tutto quello che hai inviato e che ti è stato confermato prima della
-            scadenza (iscrizioni, punteggi, modifiche ai dati) è salvato sul
-            server e non va rifatto.
-          </span>
+          <span>{copy.saved}</span>
         </p>
       </section>
 
