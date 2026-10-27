@@ -121,6 +121,8 @@ export function toGroupStandings(
   classifica: ClassificaGirone,
   nomi: ReadonlyMap<string, string>,
   board?: { stageId: string; category: "M" | "F" },
+  /** BLVS-42: «Ritirato», «Assente in 1 partita», by registration id. */
+  note?: ReadonlyMap<string, string>,
 ): GroupStandings {
   return {
     id: girone.id,
@@ -130,6 +132,7 @@ export function toGroupStandings(
       position: r.posizione,
       playerId: r.iscrizioneId,
       pair: nomi.get(r.iscrizioneId) ?? r.iscrizioneId,
+      ...(note?.get(r.iscrizioneId) ? { note: note.get(r.iscrizioneId) } : {}),
       played: r.giocate,
       won: r.vinte,
       points: r.puntiFatti,

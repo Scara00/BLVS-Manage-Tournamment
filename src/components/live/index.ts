@@ -12,3 +12,4 @@ export {
   LiveTappaSessioneScaduta,
   type LiveTappaProps,
 } from "./live-tappa";
+export { NotaAssenza } from "./nota-assenza";

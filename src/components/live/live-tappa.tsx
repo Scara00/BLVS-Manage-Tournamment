@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import { LiveAnnouncer } from "./live-announcer";
 import { LiveBarConnected } from "./live-bar";
 import { LiveProvider, useLive } from "./live-provider";
+import { NotaAssenza } from "./nota-assenza";
 import { PunteggioParziale } from "./punteggio-parziale";
 import { liveRowAttributes, useLiveRowMotion } from "./use-live-row-motion";
 
@@ -374,6 +375,7 @@ function MioGirone({
       render: (row) => (
         <span className="inline-flex flex-wrap items-center gap-space-2 [overflow-wrap:anywhere]">
           {row.pair}
+          {row.note ? <NotaAssenza nota={row.note} /> : null}
           {row.playerId === me ? (
             <span className="bg-primary px-space-2 font-heading text-xs font-semibold tracking-wider text-primary-foreground uppercase">
               Tu

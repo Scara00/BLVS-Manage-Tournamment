@@ -468,3 +468,19 @@ export function creaDemoPartitaInCorso(): { id: string; partitaId: string } {
   iniziaPartitaDemo(partitaId);
   return { id, partitaId };
 }
+
+/** BLVS-42: a demo match voided by a withdrawal (see `annullaPartitaDemo`). */
+export function annullaPartitaPunteggiDemo(partitaId: string) {
+  const prima = statoDi(partitaId);
+  store().punteggi.set(partitaId, {
+    sets: [],
+    stato: "annullata",
+    versione: prima.sets.length > 0 ? prima.versione + 1 : prima.versione,
+  });
+  store().parziali.delete(partitaId);
+}
+
+/** BLVS-42: «Rigenera» after a withdrawal drops the demo next phase. */
+export function eliminaFaseSuccessivaDemo(tappaId: string, categoria: string) {
+  store().successive.delete(chiaveBoard(tappaId, categoria));
+}

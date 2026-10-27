@@ -75,6 +75,42 @@ describe("riepilogoValori", () => {
       dopo: "Ritirato",
     });
   });
+
+  it("ritiro e assenza (BLVS-42): partite prima e dopo la regola", () => {
+    const partite = (dopo: boolean) => [
+      {
+        partita_id: "p1",
+        girone: "Girone A",
+        turno: 1,
+        sets: dopo ? [] : [{ a: 21, b: 18 }],
+        stato: dopo ? "annullata" : "conclusa",
+      },
+      {
+        partita_id: "p2",
+        girone: "Girone A",
+        turno: 2,
+        sets: [],
+        stato: dopo ? "annullata" : "programmata",
+      },
+    ];
+    expect(
+      riepilogoValori(
+        "assenza",
+        { giocatore: "Luca Rossi", partite: partite(false) },
+        { giocatore: "Luca Rossi", partite: partite(true) },
+      ),
+    ).toEqual({
+      prima: "Luca Rossi · Girone A t1 21–18, Girone A t2 da giocare",
+      dopo: "Girone A t1 annullata, Girone A t2 annullata",
+    });
+    expect(
+      riepilogoValori(
+        "correzione_punteggio",
+        { sets: [{ a: 21, b: 18 }], stato: "conclusa" },
+        { sets: [], stato: "annullata" },
+      ),
+    ).toEqual({ prima: "21–18", dopo: "Partita annullata" });
+  });
 });
 
 describe("toVoceView", () => {
