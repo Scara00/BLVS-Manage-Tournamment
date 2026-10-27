@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Badge } from "./badge";
 import { Button } from "./button";
 import { Checkbox } from "./checkbox";
-import { Field, Fieldset } from "./field";
+import { Field, Fieldset, focusFirstInvalid } from "./field";
 import { Input } from "./input";
 import { RadioCard, RadioCardGroup } from "./radio-card";
 import { Select } from "./select";
@@ -19,6 +19,16 @@ type Errors = Partial<
 function ModuloIscrizione() {
   const [errors, setErrors] = useState<Errors>({});
   const [inviato, setInviato] = useState(false);
+  // Bumped on every failed submit, so focus moves even when the errors
+  // are the same as last time.
+  const [tentativiFalliti, setTentativiFalliti] = useState(0);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // After the errors have rendered, take the user to the first one.
+  useEffect(() => {
+    if (tentativiFalliti > 0 && formRef.current)
+      focusFirstInvalid(formRef.current);
+  }, [tentativiFalliti]);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -30,12 +40,15 @@ function ModuloIscrizione() {
     if (!data.get("formula")) next.formula = "Scegli una formula";
     if (!data.get("regolamento"))
       next.regolamento = "Devi accettare il regolamento";
+    const valido = Object.keys(next).length === 0;
     setErrors(next);
-    setInviato(Object.keys(next).length === 0);
+    setInviato(valido);
+    if (!valido) setTentativiFalliti((n) => n + 1);
   }
 
   return (
     <form
+      ref={formRef}
       noValidate
       onSubmit={onSubmit}
       aria-labelledby="titolo-iscrizione"

@@ -300,6 +300,29 @@ function Fieldset({
   );
 }
 
+/**
+ * Moves focus to the first control marked `aria-invalid="true"` inside
+ * `root`, e.g. a form after a failed submit (client or server errors). A
+ * radio group is not focusable itself, so focus goes to its checked radio,
+ * or to the first enabled one. Call it after the errors have rendered.
+ * Returns the focused element, or `null` when nothing is invalid.
+ */
+function focusFirstInvalid(root: ParentNode): HTMLElement | null {
+  const invalid = root.querySelector<HTMLElement>('[aria-invalid="true"]');
+  if (!invalid) return null;
+  const target =
+    invalid.getAttribute("role") === "radiogroup"
+      ? (invalid.querySelector<HTMLElement>(
+          '[role="radio"][aria-checked="true"]',
+        ) ??
+        invalid.querySelector<HTMLElement>(
+          '[role="radio"]:not([aria-disabled="true"]):not([data-disabled])',
+        ))
+      : invalid;
+  target?.focus();
+  return target;
+}
+
 export {
   Field,
   FieldContext,
@@ -308,6 +331,7 @@ export {
   FieldLabel,
   Fieldset,
   FieldStatus,
+  focusFirstInvalid,
   RequiredMark,
   useFieldControl,
   useFieldMessages,

@@ -441,7 +441,7 @@
       "source_file": "package.json",
       "source_location": "L1",
       "id": "package",
-      "community": 4,
+      "community": 1,
       "norm_label": "package.json"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "package.json",
       "source_location": "L2",
       "id": "package_name",
-      "community": 4,
+      "community": 1,
       "norm_label": "name"
     },
     {
@@ -459,7 +459,7 @@
       "source_file": "package.json",
       "source_location": "L3",
       "id": "package_version",
-      "community": 4,
+      "community": 1,
       "norm_label": "version"
     },
     {
@@ -468,7 +468,7 @@
       "source_file": "package.json",
       "source_location": "L4",
       "id": "package_private",
-      "community": 4,
+      "community": 1,
       "norm_label": "private"
     },
     {
@@ -963,7 +963,7 @@
       "source_file": "package.json",
       "source_location": "L62",
       "id": "package_engines",
-      "community": 4,
+      "community": 1,
       "norm_label": "engines"
     },
     {
@@ -972,7 +972,7 @@
       "source_file": "package.json",
       "source_location": "L63",
       "id": "package_engines_node",
-      "community": 4,
+      "community": 1,
       "norm_label": "node"
     },
     {
@@ -1705,12 +1705,21 @@
       "norm_label": "fieldset()"
     },
     {
+      "label": "focusFirstInvalid()",
+      "file_type": "code",
+      "source_file": "src/components/ui/field.tsx",
+      "source_location": "L310",
+      "id": "ui_field_focusfirstinvalid",
+      "community": 18,
+      "norm_label": "focusfirstinvalid()"
+    },
+    {
       "label": "input.stories.tsx",
       "file_type": "code",
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L1",
       "id": "ui_input_stories",
-      "community": 18,
+      "community": 28,
       "norm_label": "input.stories.tsx"
     },
     {
@@ -1719,7 +1728,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L24",
       "id": "ui_input_stories_story",
-      "community": 18,
+      "community": 28,
       "norm_label": "story"
     },
     {
@@ -1728,7 +1737,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L26",
       "id": "ui_input_stories_default",
-      "community": 18,
+      "community": 28,
       "norm_label": "default"
     },
     {
@@ -1737,7 +1746,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L28",
       "id": "ui_input_stories_focus",
-      "community": 18,
+      "community": 28,
       "norm_label": "focus"
     },
     {
@@ -1746,7 +1755,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L34",
       "id": "ui_input_stories_obbligatorio",
-      "community": 18,
+      "community": 28,
       "norm_label": "obbligatorio"
     },
     {
@@ -1755,7 +1764,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L36",
       "id": "ui_input_stories_disabilitato",
-      "community": 18,
+      "community": 28,
       "norm_label": "disabilitato"
     },
     {
@@ -1764,7 +1773,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L40",
       "id": "ui_input_stories_errore",
-      "community": 18,
+      "community": 28,
       "norm_label": "errore"
     },
     {
@@ -1773,7 +1782,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L48",
       "id": "ui_input_stories_caricamento",
-      "community": 18,
+      "community": 28,
       "norm_label": "caricamento"
     },
     {
@@ -1782,7 +1791,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L50",
       "id": "ui_input_stories_testo200",
-      "community": 18,
+      "community": 28,
       "norm_label": "testo200"
     },
     {
@@ -1791,7 +1800,7 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L55",
       "id": "ui_input_stories_bordocampo",
-      "community": 18,
+      "community": 28,
       "norm_label": "bordocampo"
     },
     {
@@ -1861,7 +1870,7 @@
       "label": "Story",
       "file_type": "code",
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
-      "source_location": "L108",
+      "source_location": "L121",
       "id": "ui_modulo_di_esempio_stories_story",
       "community": 18,
       "norm_label": "story"
@@ -1870,7 +1879,7 @@
       "label": "Default",
       "file_type": "code",
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
-      "source_location": "L110",
+      "source_location": "L123",
       "id": "ui_modulo_di_esempio_stories_default",
       "community": 18,
       "norm_label": "default"
@@ -3659,9 +3668,9 @@
       "source_file": "e2e/fixtures.ts",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_fixtures",
-      "target": "e2e_fixtures_analyzewhenidle",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures_analyzewhenidle"
     },
     {
       "relation": "contains",
@@ -3722,9 +3731,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_fixtures",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures"
     },
     {
       "relation": "calls",
@@ -3733,9 +3742,9 @@
       "source_file": "e2e/fixtures.ts",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_fixtures_analyzewhenidle",
-      "target": "e2e_fixtures_makeaxebuilder",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures_makeaxebuilder"
     },
     {
       "relation": "calls",
@@ -3755,9 +3764,9 @@
       "source_file": "e2e/fixtures.ts",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_fixtures_expectnoa11yviolations",
-      "target": "e2e_fixtures_analyzewhenidle",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures_analyzewhenidle"
     },
     {
       "relation": "imports",
@@ -3788,9 +3797,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_fixtures_expectnoa11yviolations",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures_expectnoa11yviolations"
     },
     {
       "relation": "imports",
@@ -3841,9 +3850,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_fixtures_test",
-      "confidence_score": 1.0
+      "target": "e2e_fixtures_test"
     },
     {
       "relation": "contains",
@@ -3851,9 +3860,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_storybook_keyboard_spec_description",
-      "confidence_score": 1.0
+      "target": "e2e_storybook_keyboard_spec_description"
     },
     {
       "relation": "contains",
@@ -3861,9 +3870,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_storybook_keyboard_spec_expectfocusring",
-      "confidence_score": 1.0
+      "target": "e2e_storybook_keyboard_spec_expectfocusring"
     },
     {
       "relation": "contains",
@@ -3871,9 +3880,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L27",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_storybook_keyboard_spec_expectminsize",
-      "confidence_score": 1.0
+      "target": "e2e_storybook_keyboard_spec_expectminsize"
     },
     {
       "relation": "contains",
@@ -3881,9 +3890,9 @@
       "source_file": "e2e/storybook-keyboard.spec.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "e2e_storybook_keyboard_spec",
-      "target": "e2e_storybook_keyboard_spec_openstory",
-      "confidence_score": 1.0
+      "target": "e2e_storybook_keyboard_spec_openstory"
     },
     {
       "relation": "contains",
@@ -4669,9 +4678,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge"
     },
     {
       "relation": "imports",
@@ -4680,9 +4689,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge_badge"
     },
     {
       "relation": "contains",
@@ -4690,9 +4699,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -4700,9 +4709,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_default"
     },
     {
       "relation": "contains",
@@ -4710,9 +4719,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_errore"
     },
     {
       "relation": "contains",
@@ -4720,9 +4729,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_pillola",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_pillola"
     },
     {
       "relation": "contains",
@@ -4730,9 +4739,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_soloicona",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_soloicona"
     },
     {
       "relation": "contains",
@@ -4740,9 +4749,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_story"
     },
     {
       "relation": "contains",
@@ -4750,9 +4759,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_testo200"
     },
     {
       "relation": "contains",
@@ -4760,9 +4769,9 @@
       "source_file": "src/components/ui/badge.stories.tsx",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_stories",
-      "target": "ui_badge_stories_toni",
-      "confidence_score": 1.0
+      "target": "ui_badge_stories_toni"
     },
     {
       "relation": "imports_from",
@@ -4771,9 +4780,9 @@
       "source_file": "src/components/ui/badge.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_test",
-      "target": "ui_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge"
     },
     {
       "relation": "imports",
@@ -4782,9 +4791,9 @@
       "source_file": "src/components/ui/badge.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_test",
-      "target": "ui_badge_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge_badge"
     },
     {
       "relation": "contains",
@@ -4792,9 +4801,9 @@
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge",
-      "target": "ui_badge_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge_badge"
     },
     {
       "relation": "contains",
@@ -4802,9 +4811,9 @@
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge",
-      "target": "ui_badge_badgecontent",
-      "confidence_score": 1.0
+      "target": "ui_badge_badgecontent"
     },
     {
       "relation": "contains",
@@ -4812,9 +4821,9 @@
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge",
-      "target": "ui_badge_badgeprops",
-      "confidence_score": 1.0
+      "target": "ui_badge_badgeprops"
     },
     {
       "relation": "contains",
@@ -4822,9 +4831,9 @@
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge",
-      "target": "ui_badge_badgevariants",
-      "confidence_score": 1.0
+      "target": "ui_badge_badgevariants"
     },
     {
       "relation": "imports_from",
@@ -4833,9 +4842,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge"
     },
     {
       "relation": "calls",
@@ -4844,9 +4853,9 @@
       "source_file": "src/components/ui/badge.tsx",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_badge_badge",
-      "target": "ui_badge_badgevariants",
-      "confidence_score": 1.0
+      "target": "ui_badge_badgevariants"
     },
     {
       "relation": "imports",
@@ -4855,9 +4864,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_badge_badge",
-      "confidence_score": 1.0
+      "target": "ui_badge_badge"
     },
     {
       "relation": "imports_from",
@@ -4887,9 +4896,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L144",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_bordocampo",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_bordocampo"
     },
     {
       "relation": "contains",
@@ -4897,9 +4906,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -4947,9 +4956,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_disabilitatoconmotivo",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_disabilitatoconmotivo"
     },
     {
       "relation": "contains",
@@ -4957,9 +4966,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_errore"
     },
     {
       "relation": "contains",
@@ -4967,9 +4976,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_focus",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_focus"
     },
     {
       "relation": "contains",
@@ -4997,9 +5006,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_susfondonero",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_susfondonero"
     },
     {
       "relation": "contains",
@@ -5007,9 +5016,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_button_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_button_stories_testo200"
     },
     {
       "relation": "contains",
@@ -5028,9 +5037,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports",
@@ -5039,9 +5048,9 @@
       "source_file": "src/components/ui/button.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_stories",
-      "target": "ui_field_fielderror",
-      "confidence_score": 1.0
+      "target": "ui_field_fielderror"
     },
     {
       "relation": "imports_from",
@@ -5050,9 +5059,9 @@
       "source_file": "src/components/ui/button.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_test",
-      "target": "ui_button",
-      "confidence_score": 1.0
+      "target": "ui_button"
     },
     {
       "relation": "imports",
@@ -5061,9 +5070,9 @@
       "source_file": "src/components/ui/button.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button_test",
-      "target": "ui_button_button",
-      "confidence_score": 1.0
+      "target": "ui_button_button"
     },
     {
       "relation": "imports_from",
@@ -5072,9 +5081,9 @@
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button",
-      "target": "lib_utils",
-      "confidence_score": 1.0
+      "target": "lib_utils"
     },
     {
       "relation": "imports",
@@ -5083,9 +5092,9 @@
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "contains",
@@ -5103,9 +5112,9 @@
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_button",
-      "target": "ui_button_buttonprops",
-      "confidence_score": 1.0
+      "target": "ui_button_buttonprops"
     },
     {
       "relation": "contains",
@@ -5124,9 +5133,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_button",
-      "confidence_score": 1.0
+      "target": "ui_button"
     },
     {
       "relation": "calls",
@@ -5157,9 +5166,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_button_button",
-      "confidence_score": 1.0
+      "target": "ui_button_button"
     },
     {
       "relation": "imports_from",
@@ -5168,9 +5177,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox"
     },
     {
       "relation": "imports",
@@ -5179,9 +5188,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_checkbox"
     },
     {
       "relation": "contains",
@@ -5189,9 +5198,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_bordocampo",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_bordocampo"
     },
     {
       "relation": "contains",
@@ -5199,9 +5208,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L67",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -5209,9 +5218,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_condescrizione",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_condescrizione"
     },
     {
       "relation": "contains",
@@ -5219,9 +5228,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_default"
     },
     {
       "relation": "contains",
@@ -5229,9 +5238,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_disabilitato",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_disabilitato"
     },
     {
       "relation": "contains",
@@ -5239,9 +5248,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_errore"
     },
     {
       "relation": "contains",
@@ -5249,9 +5258,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_focus",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_focus"
     },
     {
       "relation": "contains",
@@ -5259,9 +5268,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_gruppo",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_gruppo"
     },
     {
       "relation": "contains",
@@ -5269,9 +5278,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_selezionata",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_selezionata"
     },
     {
       "relation": "contains",
@@ -5279,9 +5288,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_story"
     },
     {
       "relation": "contains",
@@ -5289,9 +5298,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L75",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_checkbox_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_stories_testo200"
     },
     {
       "relation": "imports_from",
@@ -5300,9 +5309,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports",
@@ -5311,9 +5320,9 @@
       "source_file": "src/components/ui/checkbox.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_stories",
-      "target": "ui_field_fieldset",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldset"
     },
     {
       "relation": "imports_from",
@@ -5322,9 +5331,9 @@
       "source_file": "src/components/ui/checkbox.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_test",
-      "target": "ui_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox"
     },
     {
       "relation": "imports",
@@ -5333,9 +5342,9 @@
       "source_file": "src/components/ui/checkbox.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_test",
-      "target": "ui_checkbox_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_checkbox"
     },
     {
       "relation": "imports_from",
@@ -5344,9 +5353,9 @@
       "source_file": "src/components/ui/checkbox.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_test",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports",
@@ -5355,9 +5364,9 @@
       "source_file": "src/components/ui/checkbox.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox_test",
-      "target": "ui_field_fieldset",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldset"
     },
     {
       "relation": "imports_from",
@@ -5366,9 +5375,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "lib_utils",
-      "confidence_score": 1.0
+      "target": "lib_utils"
     },
     {
       "relation": "imports",
@@ -5377,9 +5386,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "contains",
@@ -5387,9 +5396,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "ui_checkbox_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_checkbox"
     },
     {
       "relation": "contains",
@@ -5397,9 +5406,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "ui_checkbox_checkboxprops",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_checkboxprops"
     },
     {
       "relation": "imports_from",
@@ -5408,9 +5417,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports",
@@ -5419,9 +5428,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "ui_field_fieldsize",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsize"
     },
     {
       "relation": "imports",
@@ -5430,9 +5439,9 @@
       "source_file": "src/components/ui/checkbox.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_checkbox",
-      "target": "ui_field_usefieldcontrol",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldcontrol"
     },
     {
       "relation": "imports_from",
@@ -5441,9 +5450,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox"
     },
     {
       "relation": "calls",
@@ -5474,9 +5483,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_checkbox_checkbox",
-      "confidence_score": 1.0
+      "target": "ui_checkbox_checkbox"
     },
     {
       "relation": "imports_from",
@@ -5485,9 +5494,31 @@
       "source_file": "src/components/ui/field.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_test",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_field_test",
+      "target": "ui_field_field"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.test.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_field_test",
+      "target": "ui_field_fieldset"
     },
     {
       "relation": "imports",
@@ -5497,18 +5528,7 @@
       "source_location": "L3",
       "weight": 1.0,
       "source": "ui_field_test",
-      "target": "ui_field_field",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/field.test.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "ui_field_test",
-      "target": "ui_field_fieldset",
+      "target": "ui_field_focusfirstinvalid",
       "confidence_score": 1.0
     },
     {
@@ -5518,9 +5538,9 @@
       "source_file": "src/components/ui/field.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_test",
-      "target": "ui_input",
-      "confidence_score": 1.0
+      "target": "ui_input"
     },
     {
       "relation": "imports",
@@ -5529,9 +5549,9 @@
       "source_file": "src/components/ui/field.test.tsx",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_test",
-      "target": "ui_input_input",
-      "confidence_score": 1.0
+      "target": "ui_input_input"
     },
     {
       "relation": "imports_from",
@@ -5541,7 +5561,7 @@
       "source_location": "L5",
       "weight": 1.0,
       "source": "ui_field_test",
-      "target": "ui_select",
+      "target": "ui_radio_card",
       "confidence_score": 1.0
     },
     {
@@ -5552,8 +5572,41 @@
       "source_location": "L5",
       "weight": 1.0,
       "source": "ui_field_test",
-      "target": "ui_select_select",
+      "target": "ui_radio_card_radiocard",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.test.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_field_test",
+      "target": "ui_radio_card_radiocardgroup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.test.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_field_test",
+      "target": "ui_select"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.test.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_field_test",
+      "target": "ui_select_select"
     },
     {
       "relation": "imports_from",
@@ -5562,9 +5615,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "lib_utils",
-      "confidence_score": 1.0
+      "target": "lib_utils"
     },
     {
       "relation": "imports",
@@ -5573,9 +5626,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "contains",
@@ -5583,9 +5636,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_field",
-      "confidence_score": 1.0
+      "target": "ui_field_field"
     },
     {
       "relation": "contains",
@@ -5593,9 +5646,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldcontext",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldcontext"
     },
     {
       "relation": "contains",
@@ -5603,9 +5656,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldcontextvalue",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldcontextvalue"
     },
     {
       "relation": "contains",
@@ -5613,9 +5666,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldcontrolownprops",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldcontrolownprops"
     },
     {
       "relation": "contains",
@@ -5623,9 +5676,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L140",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fielderror",
-      "confidence_score": 1.0
+      "target": "ui_field_fielderror"
     },
     {
       "relation": "contains",
@@ -5633,9 +5686,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldhint",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldhint"
     },
     {
       "relation": "contains",
@@ -5643,9 +5696,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldlabel",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldlabel"
     },
     {
       "relation": "contains",
@@ -5653,9 +5706,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L182",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldmessagesprops",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldmessagesprops"
     },
     {
       "relation": "contains",
@@ -5663,9 +5716,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L196",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldprops",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldprops"
     },
     {
       "relation": "contains",
@@ -5673,9 +5726,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L259",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldset",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldset"
     },
     {
       "relation": "contains",
@@ -5683,9 +5736,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L250",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldsetprops",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsetprops"
     },
     {
       "relation": "contains",
@@ -5693,9 +5746,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldsize",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsize"
     },
     {
       "relation": "contains",
@@ -5703,8 +5756,18 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L159",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_fieldstatus",
+      "target": "ui_field_fieldstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/field.tsx",
+      "source_location": "L310",
+      "weight": 1.0,
+      "source": "ui_field",
+      "target": "ui_field_focusfirstinvalid",
       "confidence_score": 1.0
     },
     {
@@ -5713,9 +5776,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_labelsize",
-      "confidence_score": 1.0
+      "target": "ui_field_labelsize"
     },
     {
       "relation": "contains",
@@ -5723,9 +5786,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L92",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_requiredmark",
-      "confidence_score": 1.0
+      "target": "ui_field_requiredmark"
     },
     {
       "relation": "contains",
@@ -5733,9 +5796,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_usefieldcontrol",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldcontrol"
     },
     {
       "relation": "contains",
@@ -5743,9 +5806,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field",
-      "target": "ui_field_usefieldmessages",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldmessages"
     },
     {
       "relation": "imports_from",
@@ -5754,9 +5817,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports_from",
@@ -5765,9 +5828,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports_from",
@@ -5776,9 +5839,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports_from",
@@ -5787,9 +5850,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports_from",
@@ -5798,9 +5861,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports_from",
@@ -5809,9 +5872,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_field",
-      "confidence_score": 1.0
+      "target": "ui_field"
     },
     {
       "relation": "imports",
@@ -5820,9 +5883,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_field_fieldsize",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsize"
     },
     {
       "relation": "imports",
@@ -5831,9 +5894,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fieldsize",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsize"
     },
     {
       "relation": "imports",
@@ -5842,9 +5905,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_field_fieldsize",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldsize"
     },
     {
       "relation": "imports",
@@ -5853,9 +5916,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fieldcontext",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldcontext"
     },
     {
       "relation": "calls",
@@ -5864,9 +5927,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L56",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_usefieldcontrol",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "imports",
@@ -5875,9 +5938,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_field_usefieldcontrol",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldcontrol"
     },
     {
       "relation": "calls",
@@ -5886,9 +5949,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_input",
-      "target": "ui_field_usefieldcontrol",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldcontrol"
     },
     {
       "relation": "imports",
@@ -5897,9 +5960,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_field_usefieldcontrol",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldcontrol"
     },
     {
       "relation": "calls",
@@ -5919,9 +5982,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_field",
-      "target": "ui_field_usefieldmessages",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldmessages"
     },
     {
       "relation": "calls",
@@ -5930,9 +5993,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L271",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_fieldset",
-      "target": "ui_field_usefieldmessages",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldmessages"
     },
     {
       "relation": "calls",
@@ -5941,9 +6004,9 @@
       "source_file": "src/components/ui/field.tsx",
       "source_location": "L84",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_field_usefieldmessages",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "imports",
@@ -5952,9 +6015,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_usefieldmessages",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldmessages"
     },
     {
       "relation": "calls",
@@ -5963,9 +6026,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L45",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_radiocardgroup",
-      "target": "ui_field_usefieldmessages",
-      "confidence_score": 1.0
+      "target": "ui_field_usefieldmessages"
     },
     {
       "relation": "imports",
@@ -5974,9 +6037,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_requiredmark",
-      "confidence_score": 1.0
+      "target": "ui_field_requiredmark"
     },
     {
       "relation": "imports",
@@ -5985,9 +6048,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fieldhint",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldhint"
     },
     {
       "relation": "imports",
@@ -5996,9 +6059,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fielderror",
-      "confidence_score": 1.0
+      "target": "ui_field_fielderror"
     },
     {
       "relation": "imports",
@@ -6007,9 +6070,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fieldstatus",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldstatus"
     },
     {
       "relation": "imports",
@@ -6018,9 +6081,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_field_fieldmessagesprops",
-      "confidence_score": 1.0
+      "target": "ui_field_fieldmessagesprops"
     },
     {
       "relation": "imports",
@@ -6029,9 +6092,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_field_field",
-      "confidence_score": 1.0
+      "target": "ui_field_field"
     },
     {
       "relation": "imports",
@@ -6040,9 +6103,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_field_field",
-      "confidence_score": 1.0
+      "target": "ui_field_field"
     },
     {
       "relation": "imports",
@@ -6051,9 +6114,20 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_field_field",
-      "confidence_score": 1.0
+      "target": "ui_field_field"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_modulo_di_esempio_stories",
+      "target": "ui_field_fieldset"
     },
     {
       "relation": "imports",
@@ -6063,7 +6137,18 @@
       "source_location": "L6",
       "weight": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_field_fieldset",
+      "target": "ui_field_focusfirstinvalid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "ui_modulo_di_esempio_stories_moduloiscrizione",
+      "target": "ui_field_focusfirstinvalid",
       "confidence_score": 1.0
     },
     {
@@ -6073,9 +6158,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input",
-      "confidence_score": 1.0
+      "target": "ui_input"
     },
     {
       "relation": "imports",
@@ -6084,9 +6169,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_input",
-      "confidence_score": 1.0
+      "target": "ui_input_input"
     },
     {
       "relation": "contains",
@@ -6094,9 +6179,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L55",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_bordocampo",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_bordocampo"
     },
     {
       "relation": "contains",
@@ -6104,9 +6189,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -6114,9 +6199,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_default"
     },
     {
       "relation": "contains",
@@ -6124,9 +6209,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L36",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_disabilitato",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_disabilitato"
     },
     {
       "relation": "contains",
@@ -6134,9 +6219,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_errore"
     },
     {
       "relation": "contains",
@@ -6144,9 +6229,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_focus",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_focus"
     },
     {
       "relation": "contains",
@@ -6154,9 +6239,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_obbligatorio",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_obbligatorio"
     },
     {
       "relation": "contains",
@@ -6164,9 +6249,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_story"
     },
     {
       "relation": "contains",
@@ -6174,9 +6259,9 @@
       "source_file": "src/components/ui/input.stories.tsx",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_stories",
-      "target": "ui_input_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_input_stories_testo200"
     },
     {
       "relation": "contains",
@@ -6184,9 +6269,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_input_controlvariants",
-      "confidence_score": 1.0
+      "target": "ui_input_controlvariants"
     },
     {
       "relation": "contains",
@@ -6194,9 +6279,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_input_input",
-      "confidence_score": 1.0
+      "target": "ui_input_input"
     },
     {
       "relation": "contains",
@@ -6204,9 +6289,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input",
-      "target": "ui_input_inputprops",
-      "confidence_score": 1.0
+      "target": "ui_input_inputprops"
     },
     {
       "relation": "imports_from",
@@ -6215,9 +6300,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_input",
-      "confidence_score": 1.0
+      "target": "ui_input"
     },
     {
       "relation": "imports_from",
@@ -6226,9 +6311,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_input",
-      "confidence_score": 1.0
+      "target": "ui_input"
     },
     {
       "relation": "calls",
@@ -6237,9 +6322,9 @@
       "source_file": "src/components/ui/input.tsx",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_input_input",
-      "target": "ui_input_controlvariants",
-      "confidence_score": 1.0
+      "target": "ui_input_controlvariants"
     },
     {
       "relation": "imports",
@@ -6248,9 +6333,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_input_controlvariants",
-      "confidence_score": 1.0
+      "target": "ui_input_controlvariants"
     },
     {
       "relation": "calls",
@@ -6270,9 +6355,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_input_input",
-      "confidence_score": 1.0
+      "target": "ui_input_input"
     },
     {
       "relation": "contains",
@@ -6280,9 +6365,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_modulo_di_esempio_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_modulo_di_esempio_stories_default"
     },
     {
       "relation": "contains",
@@ -6290,9 +6375,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_modulo_di_esempio_stories_errors",
-      "confidence_score": 1.0
+      "target": "ui_modulo_di_esempio_stories_errors"
     },
     {
       "relation": "contains",
@@ -6300,9 +6385,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_modulo_di_esempio_stories_moduloiscrizione",
-      "confidence_score": 1.0
+      "target": "ui_modulo_di_esempio_stories_moduloiscrizione"
     },
     {
       "relation": "contains",
@@ -6310,9 +6395,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_modulo_di_esempio_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_modulo_di_esempio_stories_story"
     },
     {
       "relation": "imports_from",
@@ -6321,9 +6406,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_radio_card",
-      "confidence_score": 1.0
+      "target": "ui_radio_card"
     },
     {
       "relation": "imports",
@@ -6332,9 +6417,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_radio_card_radiocard",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocard"
     },
     {
       "relation": "imports",
@@ -6343,9 +6428,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_radio_card_radiocardgroup",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardgroup"
     },
     {
       "relation": "imports_from",
@@ -6354,9 +6439,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_select",
-      "confidence_score": 1.0
+      "target": "ui_select"
     },
     {
       "relation": "imports",
@@ -6365,9 +6450,9 @@
       "source_file": "src/components/ui/modulo-di-esempio.stories.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_modulo_di_esempio_stories",
-      "target": "ui_select_select",
-      "confidence_score": 1.0
+      "target": "ui_select_select"
     },
     {
       "relation": "imports_from",
@@ -6376,9 +6461,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card",
-      "confidence_score": 1.0
+      "target": "ui_radio_card"
     },
     {
       "relation": "imports",
@@ -6387,9 +6472,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_radiocard",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocard"
     },
     {
       "relation": "imports",
@@ -6398,9 +6483,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_radiocardgroup",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardgroup"
     },
     {
       "relation": "contains",
@@ -6408,9 +6493,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_bordocampo",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_bordocampo"
     },
     {
       "relation": "contains",
@@ -6418,9 +6503,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -6428,9 +6513,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_default"
     },
     {
       "relation": "contains",
@@ -6438,9 +6523,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_disabilitato",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_disabilitato"
     },
     {
       "relation": "contains",
@@ -6448,9 +6533,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_errore"
     },
     {
       "relation": "contains",
@@ -6458,9 +6543,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_focus",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_focus"
     },
     {
       "relation": "contains",
@@ -6468,9 +6553,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_story"
     },
     {
       "relation": "contains",
@@ -6478,9 +6563,9 @@
       "source_file": "src/components/ui/radio-card.stories.tsx",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_stories",
-      "target": "ui_radio_card_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_stories_testo200"
     },
     {
       "relation": "imports_from",
@@ -6489,9 +6574,9 @@
       "source_file": "src/components/ui/radio-card.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_test",
-      "target": "ui_radio_card",
-      "confidence_score": 1.0
+      "target": "ui_radio_card"
     },
     {
       "relation": "imports",
@@ -6500,9 +6585,9 @@
       "source_file": "src/components/ui/radio-card.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_test",
-      "target": "ui_radio_card_radiocard",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocard"
     },
     {
       "relation": "imports",
@@ -6511,9 +6596,9 @@
       "source_file": "src/components/ui/radio-card.test.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_test",
-      "target": "ui_radio_card_radiocardgroup",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardgroup"
     },
     {
       "relation": "contains",
@@ -6521,9 +6606,9 @@
       "source_file": "src/components/ui/radio-card.test.tsx",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card_test",
-      "target": "ui_radio_card_test_categoria",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_test_categoria"
     },
     {
       "relation": "contains",
@@ -6531,9 +6616,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L105",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_radio_card_radiocard",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocard"
     },
     {
       "relation": "contains",
@@ -6541,9 +6626,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_radio_card_radiocardgroup",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardgroup"
     },
     {
       "relation": "contains",
@@ -6551,9 +6636,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L21",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_radio_card_radiocardgroupprops",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardgroupprops"
     },
     {
       "relation": "contains",
@@ -6561,9 +6646,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L90",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_radio_card_radiocardprops",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardprops"
     },
     {
       "relation": "contains",
@@ -6571,9 +6656,9 @@
       "source_file": "src/components/ui/radio-card.tsx",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_radio_card",
-      "target": "ui_radio_card_radiocardsizecontext",
-      "confidence_score": 1.0
+      "target": "ui_radio_card_radiocardsizecontext"
     },
     {
       "relation": "imports_from",
@@ -6582,9 +6667,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select",
-      "confidence_score": 1.0
+      "target": "ui_select"
     },
     {
       "relation": "imports",
@@ -6593,9 +6678,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_select",
-      "confidence_score": 1.0
+      "target": "ui_select_select"
     },
     {
       "relation": "contains",
@@ -6603,9 +6688,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_bordocampo",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_bordocampo"
     },
     {
       "relation": "contains",
@@ -6613,9 +6698,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_caricamento",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_caricamento"
     },
     {
       "relation": "contains",
@@ -6623,9 +6708,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_default",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_default"
     },
     {
       "relation": "contains",
@@ -6633,9 +6718,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L41",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_disabilitato",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_disabilitato"
     },
     {
       "relation": "contains",
@@ -6643,9 +6728,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_errore",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_errore"
     },
     {
       "relation": "contains",
@@ -6653,9 +6738,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_focus",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_focus"
     },
     {
       "relation": "contains",
@@ -6663,9 +6748,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_story",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_story"
     },
     {
       "relation": "contains",
@@ -6673,9 +6758,9 @@
       "source_file": "src/components/ui/select.stories.tsx",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select_stories",
-      "target": "ui_select_stories_testo200",
-      "confidence_score": 1.0
+      "target": "ui_select_stories_testo200"
     },
     {
       "relation": "contains",
@@ -6683,9 +6768,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_select_select",
-      "confidence_score": 1.0
+      "target": "ui_select_select"
     },
     {
       "relation": "contains",
@@ -6693,9 +6778,9 @@
       "source_file": "src/components/ui/select.tsx",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_select",
-      "target": "ui_select_selectprops",
-      "confidence_score": 1.0
+      "target": "ui_select_selectprops"
     },
     {
       "relation": "contains",
@@ -8068,9 +8153,9 @@
       "source_file": "src/lib/utils.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "lib_utils",
-      "target": "lib_utils_mergeids",
-      "confidence_score": 1.0
+      "target": "lib_utils_mergeids"
     },
     {
       "relation": "contains",
@@ -8464,5 +8549,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2a5a9cf485a36326bcabf8f1d2ee1526f896b968"
+  "built_at_commit": "89a71059c81df12d582ece8747ea8e1550cf0436"
 }

@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "e2e/storybook-keyboard.spec.ts": {
-    "mtime": 1793088316.7529879,
-    "ast_hash": "9bc520aca2819cdf72afac3bd5b0c1f4",
+    "mtime": 1793088573.592706,
+    "ast_hash": "54eb39de8f2a1425ffa3eef7fa6d33f4",
     "semantic_hash": ""
   },
   "src/components/ui/badge.stories.tsx": {
@@ -270,13 +270,13 @@
     "semantic_hash": ""
   },
   "src/components/ui/field.test.tsx": {
-    "mtime": 1793048506.9344072,
-    "ast_hash": "fab5fd4bf64760c013e603990c070c96",
+    "mtime": 1793088573.592428,
+    "ast_hash": "bfc79502c2855a4931788ad3b258272f",
     "semantic_hash": ""
   },
   "src/components/ui/field.tsx": {
-    "mtime": 1793048506.9440835,
-    "ast_hash": "26a07d8cc9fedfcda4e40e515f129cad",
+    "mtime": 1793088556.3447528,
+    "ast_hash": "4734973d352096fd63c2de81d9cfe353",
     "semantic_hash": ""
   },
   "src/components/ui/input.stories.tsx": {
@@ -290,8 +290,8 @@
     "semantic_hash": ""
   },
   "src/components/ui/modulo-di-esempio.stories.tsx": {
-    "mtime": 1793048506.9540226,
-    "ast_hash": "ca0fddaa6f37567f91bc9829b1586da2",
+    "mtime": 1793088562.5934691,
+    "ast_hash": "25682c48f3050c8ea4a255f5d1beb018",
     "semantic_hash": ""
   },
   "src/components/ui/radio-card.stories.tsx": {

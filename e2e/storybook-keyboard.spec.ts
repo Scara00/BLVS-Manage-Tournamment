@@ -120,6 +120,18 @@ test.describe("Modulo di esempio, solo tastiera", () => {
     await expectNoA11yViolations(page, (b) => b.include("#storybook-root"));
   });
 
+  test("dopo un invio con errori il focus va al primo campo non valido", async ({
+    page,
+  }) => {
+    await page.keyboard.press("Tab");
+    await page.keyboard.type("Sabbia Mobile");
+    await page.keyboard.press("Enter");
+    // Nome is valid now, so focus jumps forward to Categoria.
+    await expect(
+      page.getByRole("combobox", { name: /Categoria/ }),
+    ).toBeFocused();
+  });
+
   test("bersagli di tocco di almeno 24×24 px", async ({ page }) => {
     await expectMinSize(page.getByRole("textbox"), 24);
     await expectMinSize(page.getByRole("combobox"), 24);

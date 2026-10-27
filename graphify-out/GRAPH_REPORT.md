@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-27)
 
 ## Corpus Check
-- 63 files · ~13,325 words
+- 63 files · ~13,675 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 374 nodes · 491 edges · 28 communities (21 shown, 7 thin omitted)
+- 375 nodes · 498 edges · 29 communities (22 shown, 7 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2a5a9cf4`
+- Built from commit: `89a71059`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,6 +41,7 @@
 - [[_COMMUNITY_Community 25|Community 25]]
 - [[_COMMUNITY_Community 26|Community 26]]
 - [[_COMMUNITY_Community 27|Community 27]]
+- [[_COMMUNITY_Community 28|Community 28]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `compilerOptions` - 16 edges
@@ -69,15 +70,15 @@
 ## Import Cycles
 - None detected.
 
-## Communities (28 total, 7 thin omitted)
+## Communities (29 total, 7 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
 Nodes (19): compilerOptions, allowJs, esModuleInterop, incremental, isolatedModules, jsx, lib, module (+11 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.08
-Nodes (26): devDependencies, @axe-core/playwright, eslint, eslint-config-next, eslint-config-prettier, eslint-plugin-storybook, http-server, jsdom (+18 more)
+Cohesion: 0.06
+Nodes (31): devDependencies, @axe-core/playwright, eslint, eslint-config-next, eslint-config-prettier, eslint-plugin-storybook, http-server, jsdom (+23 more)
 
 ### Community 2 - "Community 2"
 Cohesion: 0.15
@@ -88,8 +89,8 @@ Cohesion: 0.09
 Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent (+13 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.10
-Nodes (20): engines, node, name, private, scripts, build, build-storybook, ci (+12 more)
+Cohesion: 0.13
+Nodes (15): scripts, build, build-storybook, ci, dev, format, format:check, lint (+7 more)
 
 ### Community 5 - "Community 5"
 Cohesion: 0.22
@@ -128,8 +129,8 @@ Cohesion: 0.21
 Nodes (7): analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, StoryIndex, VIEWPORTS
 
 ### Community 18 - "Community 18"
-Cohesion: 0.07
-Nodes (44): mergeIds(), Button(), ButtonProps, buttonVariants, Checkbox(), CheckboxProps, Field(), FieldContext (+36 more)
+Cohesion: 0.09
+Nodes (37): mergeIds(), Button(), ButtonProps, buttonVariants, Checkbox(), CheckboxProps, Field(), FieldContext (+29 more)
 
 ### Community 21 - "Community 21"
 Cohesion: 0.16
@@ -147,6 +148,10 @@ Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story,
 Cohesion: 0.22
 Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story, Testo200
 
+### Community 28 - "Community 28"
+Cohesion: 0.20
+Nodes (9): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Obbligatorio, Story (+1 more)
+
 ## Knowledge Gaps
 - **223 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+218 more)
   These have ≤1 connection - possible missing edges or undocumented components.
@@ -155,17 +160,17 @@ Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story,
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `devDependencies` connect `Community 1` to `Community 4`?**
-  _High betweenness centrality (0.017) - this node is a cross-community bridge._
+- **Why does `scripts` connect `Community 4` to `Community 1`?**
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Why does `Badge()` connect `Community 21` to `Community 18`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
   _223 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.1 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0625 - nodes in this community are weakly interconnected._
 - **Should `Community 3` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `Community 4` be split into smaller, more focused modules?**
-  _Cohesion score 0.09523809523809523 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._

@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Field, Fieldset } from "./field";
+import { Field, Fieldset, focusFirstInvalid } from "./field";
 import { Input } from "./input";
+import { RadioCard, RadioCardGroup } from "./radio-card";
 import { Select } from "./select";
 
 describe("Field con Input", () => {
@@ -139,5 +140,47 @@ describe("Fieldset", () => {
     );
     expect(screen.getByRole("group", { name: /Preferenze/ })).toBeVisible();
     expect(screen.getByText("(obbligatorio)")).toBeVisible();
+  });
+});
+
+describe("focusFirstInvalid", () => {
+  it("porta il focus al primo controllo con errore", () => {
+    const { container } = render(
+      <form>
+        <Field label="Nome">
+          <Input />
+        </Field>
+        <Field label="Email" error="Inserisci un'email valida">
+          <Input />
+        </Field>
+        <Field label="Città" error="Inserisci la città">
+          <Input />
+        </Field>
+      </form>,
+    );
+    const email = screen.getByLabelText("Email");
+    expect(focusFirstInvalid(container)).toBe(email);
+    expect(email).toHaveFocus();
+  });
+
+  it("in un gruppo di radio mette il focus su una radio", () => {
+    const { container } = render(
+      <RadioCardGroup legend="Formula" error="Scegli una formula">
+        <RadioCard value="2x2" title="2 contro 2" />
+        <RadioCard value="4x4" title="4 contro 4" />
+      </RadioCardGroup>,
+    );
+    focusFirstInvalid(container);
+    expect(screen.getByRole("radio", { name: /2 contro 2/ })).toHaveFocus();
+  });
+
+  it("restituisce null se non ci sono errori", () => {
+    const { container } = render(
+      <Field label="Nome">
+        <Input />
+      </Field>,
+    );
+    expect(focusFirstInvalid(container)).toBeNull();
+    expect(document.body).toHaveFocus();
   });
 });
