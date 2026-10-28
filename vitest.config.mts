@@ -7,6 +7,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],
+    maxWorkers: 4,
     include: [
       "src/**/*.test.{ts,tsx}",
       // Pure worker logic shared with the Supabase Edge Functions (Deno).

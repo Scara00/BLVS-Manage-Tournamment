@@ -1,4 +1,4 @@
-import { color, font, radius, space } from "./tokens";
+import { color, container, font, radius, space } from "./tokens";
 
 /**
  * Naming rules that map each TS token to its CSS variables in globals.css.
@@ -67,6 +67,12 @@ export const themeLiterals: Record<string, string> = {
   ),
   ...Object.fromEntries(
     Object.entries(radius).map(([key, value]) => [`--radius-${key}`, value]),
+  ),
+  ...Object.fromEntries(
+    Object.entries(container).map(([key, value]) => [
+      `--container-${key}`,
+      value,
+    ]),
   ),
   ...Object.fromEntries(
     Object.entries(font.scale).flatMap(([step, { size, lineHeight }]) => [

@@ -106,6 +106,15 @@ export const space = {
   stack: { sm: "0.5rem", default: "1rem", lg: "2rem" },
 } as const;
 
+/**
+ * Widths of the page frame. `frame` is shared by the bars, the content
+ * column and the footer, so the content lines up with the logo; wide enough
+ * for the admin tables, capped so rows stay scannable on large monitors.
+ */
+export const container = {
+  frame: "100rem",
+} as const;
+
 export type ContrastKind = "score" | "text" | "graphic";
 
 export type ContrastPair = {

@@ -2,6 +2,7 @@ import { ArrowLeftIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { ReturnLink } from "@/components/privacy/return-link";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "./brand-mark";
 import { MAIN_CONTENT_ID, SkipLink } from "./skip-link";
 
 /**
@@ -23,7 +24,7 @@ export function MinimalShell({
     <>
       <SkipLink />
       <header className="bg-primary text-primary-foreground">
-        <div className="mx-auto flex min-h-(--spacing-space-8) w-full max-w-screen-2xl flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:px-inset-lg">
+        <div className="mx-auto flex min-h-(--spacing-space-8) w-full max-w-frame flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:px-inset-lg">
           {back ? (
             <ReturnLink
               className={cn(
@@ -35,13 +36,9 @@ export function MinimalShell({
               Indietro
             </ReturnLink>
           ) : null}
-          <p
-            className={cn(
-              "font-heading text-2xl font-bold tracking-tight",
-              back && "ml-auto",
-            )}
-          >
-            BLVS
+          <p className={cn("inline-flex", back && "ml-auto")}>
+            <BrandMark />
+            <span className="sr-only">BLVS</span>
           </p>
         </div>
       </header>

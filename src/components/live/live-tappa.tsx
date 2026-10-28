@@ -219,7 +219,7 @@ function MatchList({
     <ul
       ref={ref}
       data-testid={testId}
-      className="grid gap-stack md:grid-cols-2"
+      className="grid gap-stack md:grid-cols-2 2xl:grid-cols-3"
     >
       {matches.map((match) => (
         <MatchCard

@@ -31,7 +31,7 @@ async function DettaglioContent({ id }: { id: string }) {
 /** w-tappa: stage detail and «Prendi il posto N» (BLVS-24). */
 export default function TappaPage({ params }: PageProps<"/tappe/[id]">) {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7">
+    <div className="mx-auto flex w-full max-w-frame flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7">
       <Suspense fallback={<TappaLoading />}>
         {params.then(({ id }) => (
           <DettaglioContent id={decodeURIComponent(id)} />

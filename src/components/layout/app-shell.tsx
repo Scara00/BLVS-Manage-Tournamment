@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 import { AdminSidebar } from "./admin-sidebar";
 import { AppFooter } from "./app-footer";
 import { PlayerNav } from "./player-nav";
@@ -45,18 +46,24 @@ export function AppShell({
         label={isPlayer ? undefined : "Admin"}
         homeHref={isPlayer ? "/" : "/admin"}
         actions={topbarActions}
+        fullBleed={aside !== undefined}
       />
       <div className="flex flex-1 flex-col md:flex-row">
         {aside}
         <main
           id={MAIN_CONTENT_ID}
           tabIndex={-1}
-          className="flex min-w-0 flex-1 flex-col focus:outline-none"
+          className={cn(
+            "flex min-w-0 flex-1 flex-col focus:outline-none",
+            // Beside the sidebar the page column starts at it: no band
+            // between them on wide monitors.
+            aside !== undefined && "[--frame-margin:0]",
+          )}
         >
           {children}
         </main>
       </div>
-      <AppFooter />
+      <AppFooter fullBleed={aside !== undefined} />
     </>
   );
 }

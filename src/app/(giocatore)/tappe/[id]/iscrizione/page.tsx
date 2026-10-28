@@ -25,7 +25,7 @@ export default function IscrizionePage({
   params,
 }: PageProps<"/tappe/[id]/iscrizione">) {
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7">
+    <div className="mx-auto flex w-full max-w-frame flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7">
       <Suspense fallback={<TappaLoading what="dell'iscrizione" />}>
         {params.then(({ id }) => (
           <ConfermaContent id={decodeURIComponent(id)} />

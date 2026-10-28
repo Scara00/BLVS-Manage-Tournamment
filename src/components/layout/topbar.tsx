@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { BrandMark } from "./brand-mark";
 import { SignOutButton, type SignOutAction } from "./sign-out-button";
 import { TopbarHeight } from "./topbar-height";
 
@@ -15,6 +16,7 @@ export function Topbar({
   homeHref = "/",
   label,
   actions,
+  fullBleed = false,
 }: {
   /** Navigation rendered after the mark (see PlayerNav). */
   nav?: ReactNode;
@@ -26,16 +28,27 @@ export function Topbar({
   label?: string;
   /** Controls before «Esci», e.g. the admin «Cerca» (BLVS-55). */
   actions?: ReactNode;
+  /**
+   * Full width instead of the centred page frame: with a sidebar on the
+   * left edge, the logo lines up with it.
+   */
+  fullBleed?: boolean;
 }) {
   return (
     <header className="z-40 bg-primary text-primary-foreground md:sticky md:top-0">
       <TopbarHeight />
-      <div className="mx-auto flex min-h-(--spacing-space-8) w-full max-w-screen-2xl flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:flex-nowrap md:px-inset-lg">
+      <div
+        className={cn(
+          "mx-auto flex min-h-(--spacing-space-8) w-full flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:flex-nowrap md:px-inset-lg",
+          !fullBleed && "max-w-frame",
+        )}
+      >
         <Link
           href={homeHref}
           className="mr-auto inline-flex min-h-11 items-center gap-space-2 font-heading text-2xl font-bold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground md:mr-0"
         >
-          BLVS
+          <BrandMark />
+          <span className="sr-only">BLVS</span>
           {label ? (
             <span className="bg-tape px-space-2 py-space-1 text-xs font-semibold tracking-wide text-primary uppercase">
               {label}

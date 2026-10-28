@@ -210,8 +210,8 @@
     "semantic_hash": ""
   },
   "src/lib/design-tokens/css-vars.ts": {
-    "mtime": 1793047836.5823185,
-    "ast_hash": "95c8cb25ba2f1960ffe9cb305688466c",
+    "mtime": 1793209332.2070253,
+    "ast_hash": "b98faf715e5e08530ab57d9dc5615389",
     "semantic_hash": ""
   },
   "src/lib/fonts.ts": {
@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/page.tsx": {
-    "mtime": 1793197335.256443,
-    "ast_hash": "47e08dbea927c0c8ea8aa0246b86471d",
+    "mtime": 1793209332.2080073,
+    "ast_hash": "b5edcd8489808b9129615eee4347f358",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/page.tsx": {
@@ -375,8 +375,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/app-shell.tsx": {
-    "mtime": 1793202543.3675873,
-    "ast_hash": "c62ab5d61e61a14b7f166eefa30c77cc",
+    "mtime": 1793209564.2128747,
+    "ast_hash": "c116e167dfa6ed6c71a56d0d8a353796",
     "semantic_hash": ""
   },
   "src/components/layout/nav-items.ts": {
@@ -385,8 +385,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/page-container.tsx": {
-    "mtime": 1793089009.8111718,
-    "ast_hash": "7f930f0ba8c7871769a7c274701f0ec4",
+    "mtime": 1793209564.2126415,
+    "ast_hash": "7dd60ba91ba3c6b08c0804b4664f0fba",
     "semantic_hash": ""
   },
   "src/components/layout/player-nav.test.tsx": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/topbar.tsx": {
-    "mtime": 1793202543.367845,
-    "ast_hash": "9396a2296939566ee51fc8d604c66060",
+    "mtime": 1793209332.2083778,
+    "ast_hash": "ed01aeda350614402c7bb9c32e81800a",
     "semantic_hash": ""
   },
   "src/components/layout/use-nav-disclosure.ts": {
@@ -925,13 +925,13 @@
     "semantic_hash": ""
   },
   "src/components/layout/app-footer.tsx": {
-    "mtime": 1793090741.267108,
-    "ast_hash": "c2d2a67dd7350716c6265130bdda59d8",
+    "mtime": 1793209332.208562,
+    "ast_hash": "45b6c068da8f3124ad7ecb5544b54b77",
     "semantic_hash": ""
   },
   "src/components/layout/minimal-shell.tsx": {
-    "mtime": 1793094337.4592204,
-    "ast_hash": "04be8dae85848f209fce7098b8f3a7a1",
+    "mtime": 1793209332.2082887,
+    "ast_hash": "13fd8eacc7f70b2ebcae8f4083eba1c2",
     "semantic_hash": ""
   },
   "src/components/privacy/privacy-index.tsx": {
@@ -1100,8 +1100,8 @@
     "semantic_hash": ""
   },
   "src/components/live/live-views.tsx": {
-    "mtime": 1793175176.5711334,
-    "ast_hash": "954f8d1bb9749494587b8523382ce3b5",
+    "mtime": 1793209332.2088532,
+    "ast_hash": "fe6809866443d544491740a0ccee7e25",
     "semantic_hash": ""
   },
   "src/components/live/test-utils.ts": {
@@ -2555,13 +2555,13 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/[id]/iscrizione/page.tsx": {
-    "mtime": 1793197335.2590423,
-    "ast_hash": "75bcf57d6ad0066c923fad9c766deb1c",
+    "mtime": 1793209332.2082038,
+    "ast_hash": "e8514713ea7ef959e8bf9ac214e78d2d",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/[id]/page.tsx": {
-    "mtime": 1793197335.25916,
-    "ast_hash": "155471c5f354c0a5e40afe4a83e29a76",
+    "mtime": 1793209332.2081084,
+    "ast_hash": "03e940b640b4dc3354dbb3cd302a5db9",
     "semantic_hash": ""
   },
   "src/components/tappa/fixtures.ts": {
@@ -3995,8 +3995,8 @@
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.tsx": {
-    "mtime": 1793202543.368177,
-    "ast_hash": "c8b0304754ac3029a4d454a8d4823862",
+    "mtime": 1793209332.2089791,
+    "ast_hash": "1b7dd8132ea58cfa12c1c3cb28ea3648",
     "semantic_hash": ""
   },
   "src/lib/live/tappa-read.ts": {
@@ -5415,7 +5415,7 @@
     "semantic_hash": ""
   },
   "src/components/mie-iscrizioni/mie-iscrizioni.tsx": {
-    "mtime": 1793197335.2648282,
+    "mtime": 1793209648.4638107,
     "ast_hash": "d4e80f8ec898d0d91d8a35315892b798",
     "semantic_hash": ""
   },
@@ -5720,8 +5720,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1793208244.4139469,
-    "ast_hash": "a139b10c2674a13998bd9c15913e76c6",
+    "mtime": 1793208997.9530647,
+    "ast_hash": "be91d196e70748b0f4cc9969e21a731c",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {
@@ -5837,6 +5837,16 @@
   ".impeccable/config.json": {
     "mtime": 1793207919.0687711,
     "ast_hash": "c1547c72653088b61139821a38c23fc0",
+    "semantic_hash": ""
+  },
+  "src/components/layout/brand-mark.tsx": {
+    "mtime": 1793208909.578726,
+    "ast_hash": "e8d63cced178e18cf7dc82b746ed9989",
+    "semantic_hash": ""
+  },
+  "public/logo-blvs.png": {
+    "mtime": 1793208875.9348865,
+    "ast_hash": "7a2e8919049238af164e1d389caafcf5",
     "semantic_hash": ""
   }
 }

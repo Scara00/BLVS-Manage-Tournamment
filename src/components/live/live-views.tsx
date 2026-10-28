@@ -38,7 +38,7 @@ export function LiveMatches({ groupId }: { groupId?: string }) {
   }
 
   return (
-    <ul ref={ref} className="grid gap-stack md:grid-cols-2">
+    <ul ref={ref} className="grid gap-stack md:grid-cols-2 2xl:grid-cols-3">
       {matches.map((match) => (
         <li
           key={match.id}

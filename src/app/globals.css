@@ -28,6 +28,9 @@
   --spacing-stack: 1rem;
   --spacing-stack-lg: 2rem;
 
+  /* Page frame: bars, content column and footer share it (max-w-frame). */
+  --container-frame: 100rem;
+
   --radius-none: 0px;
   --radius-full: 9999px;
 

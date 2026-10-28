@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-/** Content column of a page inside AppShell, with its `h1`. */
+/**
+ * Content column of a page inside AppShell, with its `h1`: as wide as the
+ * page frame, centred, or against the sidebar when the shell sets
+ * `--frame-margin: 0`.
+ */
 export function PageContainer({
   title,
   eyebrow,
@@ -19,7 +23,7 @@ export function PageContainer({
   return (
     <div
       className={cn(
-        "mx-auto flex w-full max-w-6xl flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7",
+        "mx-[var(--frame-margin,auto)] flex w-full max-w-frame flex-col gap-stack-lg px-inset py-space-6 md:px-inset-lg md:py-space-7",
         className,
       )}
     >
