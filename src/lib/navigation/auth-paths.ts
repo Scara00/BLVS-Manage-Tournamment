@@ -8,6 +8,7 @@ import {
   RESET_PASSWORD_PATH,
 } from "@/lib/auth/password-reset/messages";
 import { SIGNUP_PATH } from "@/lib/auth/paths";
+import { REGOLE_PATH } from "@/lib/regole/paths";
 import { PRIVACY_PATH, RETURN_PARAM, safeReturnPath } from "./safe-return-path";
 
 /** Login page (w-login). */
@@ -30,10 +31,12 @@ export type LoginReason = "scaduta";
 /**
  * Pages a signed-out visitor may open; everything else needs a session.
  * Sign-up (with its email confirmation) and password reset come before
- * there is one; the general standing is public (BLVS-44).
+ * there is one; the general standing (BLVS-44) and the rules (BLVS-46)
+ * are public.
  */
 const PUBLIC_PATHS = [
   CLASSIFICA_PATH,
+  REGOLE_PATH,
   PRIVACY_PATH,
   LOGIN_PATH,
   SESSION_EXPIRED_PATH,
