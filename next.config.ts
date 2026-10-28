@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   experimental: {
     // forbidden() → app/forbidden.tsx with HTTP 403.
+    cpus: 6,
     authInterrupts: true,
   },
   turbopack: {
