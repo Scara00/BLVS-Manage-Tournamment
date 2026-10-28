@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/components/admin/elimina-tappa.tsx"
+        ],
+        "createdAt": "2026-10-28T17:18:39.068Z",
+        "reason": "Claude decided: project convention for destructive-dialog warnings; same border-s-4 border-error-fg bg-error-bg box as annulla-tappa.tsx:232 (avviso-iscritti) and 22 other notices in src"
+      }
+    ]
+  }
+}

@@ -14,25 +14,37 @@ import {
   type AdminCategoria,
   type AdminTappa,
 } from "@/lib/admin/tappe";
+import type { StatoTappa } from "@/lib/db/types";
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import type {
   AnnullaTappaAction,
   ArchiviaTappaAction,
 } from "@/lib/tappe/annullamento/state";
+import type { EliminaTappaAction } from "@/lib/tappe/eliminazione/state";
 import { cn } from "@/lib/utils";
 import { AnnullaTappa } from "./annulla-tappa";
 import { ArchiviaTappa } from "./archivia-tappa";
+import { EliminaTappa } from "./elimina-tappa";
 import { StatoTappaBadge } from "./stato-tappa-badge";
 
 /** Server actions of BLVS-22, passed down by the page (fakes in stories). */
 export type AzioniTappe = {
   annulla: AnnullaTappaAction;
   archivia: ArchiviaTappaAction;
+  /** Deletes the stage, in any state. */
+  elimina: EliminaTappaAction;
   /** Where «Accedi di nuovo» returns to after an expired session. */
   returnPath?: string;
 };
 
 const categoriaLabel = { M: "Maschile", F: "Femminile" } as const;
+
+/** Started or over: points in the overall standing (`tappa_in_classifica`). */
+const STATI_CON_RISULTATI: readonly StatoTappa[] = [
+  "in_corso",
+  "conclusa",
+  "archiviata",
+];
 
 function CategoriaCell({ categoria }: { categoria: AdminCategoria }) {
   const posti = contaPosti(categoria);
@@ -100,7 +112,10 @@ function StatoCell({ tappa }: { tappa: AdminTappa }) {
   );
 }
 
-/** Cancel and archive (BLVS-22). An archived stage only shows its state. */
+/**
+ * Cancel and archive (BLVS-22), then delete, offered in every state. An
+ * archived stage is otherwise read only.
+ */
 function AzioniCell({
   tappa,
   azioni,
@@ -133,6 +148,14 @@ function AzioniCell({
           Consultabile, non modificabile.
         </p>
       ) : null}
+      <EliminaTappa
+        tappaId={tappa.id}
+        nome={tappa.nome}
+        iscritti={iscrittiDaAvvisare(tappa)}
+        conRisultati={STATI_CON_RISULTATI.includes(tappa.stato)}
+        action={azioni.elimina}
+        returnPath={azioni.returnPath}
+      />
     </div>
   );
 }

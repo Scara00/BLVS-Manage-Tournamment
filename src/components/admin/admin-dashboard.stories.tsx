@@ -31,6 +31,7 @@ const signOut = async () => ({ error: null });
 const azioniFinte: AzioniTappe = {
   annulla: () => new Promise(() => {}),
   archivia: () => new Promise(() => {}),
+  elimina: () => new Promise(() => {}),
 };
 
 const initial = {

@@ -42,10 +42,28 @@ export async function pubblicaClassificaGenerale(
       tappa = data;
     }
     if (!tappa) return;
-    const change = cambio ?? `${tappa.nome}: punti aggiornati`;
+    await pubblicaClassificaStagione(
+      tappa.stagione,
+      cambio ?? `${tappa.nome}: punti aggiornati`,
+    );
+  } catch (error) {
+    console.error("[classifica generale] pubblicazione non riuscita", error);
+  }
+}
+
+/**
+ * Publishes the overall standing of one season, both categories, when no
+ * stage is left to read it from (a deleted stage). Never throws, like
+ * `pubblicaClassificaGenerale`.
+ */
+export async function pubblicaClassificaStagione(
+  stagione: number,
+  cambio: string,
+): Promise<void> {
+  try {
     for (const categoria of CATEGORIE) {
       publishOverallPlayerStandings(
-        await calcolaClassificaGenerale(categoria, tappa.stagione, change),
+        await calcolaClassificaGenerale(categoria, stagione, cambio),
       );
     }
   } catch (error) {

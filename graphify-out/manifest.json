@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "src/lib/supabase/server.ts": {
-    "mtime": 1793046036.041015,
-    "ast_hash": "3c82b886bdea102df54c87078fee2918",
+    "mtime": 1793208244.3824453,
+    "ast_hash": "ba13c802f8c0c5e1a4200750c2717ba4",
     "semantic_hash": ""
   },
   "src/lib/utils.ts": {
@@ -2000,8 +2000,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/page.tsx": {
-    "mtime": 1793101307.656372,
-    "ast_hash": "943d030e255ec55b95696802b9a00b42",
+    "mtime": 1793207544.4941022,
+    "ast_hash": "4c9fc1781673a25960c834bb9a175e12",
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/page.tsx": {
@@ -2015,8 +2015,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/page.tsx": {
-    "mtime": 1793101307.6571338,
-    "ast_hash": "05afed3d945225d67c8c3fdd40944443",
+    "mtime": 1793207544.49431,
+    "ast_hash": "537a51580f62c2f6aafb5e9a9e0c5386",
     "semantic_hash": ""
   },
   "src/app/api/cron/chiudi-iscrizioni/route.ts": {
@@ -2145,8 +2145,8 @@
     "semantic_hash": ""
   },
   "src/components/admin/admin-dashboard.stories.tsx": {
-    "mtime": 1793101307.669018,
-    "ast_hash": "1a9c20af4a02b26379ecfed533e34979",
+    "mtime": 1793207544.4952462,
+    "ast_hash": "a67b73cc3f757195cb2e0e8d8861b59f",
     "semantic_hash": ""
   },
   "src/components/admin/admin-tappe-loading.tsx": {
@@ -2160,8 +2160,8 @@
     "semantic_hash": ""
   },
   "src/components/admin/index.ts": {
-    "mtime": 1793101307.6706169,
-    "ast_hash": "79a4af150a16635417425a309f8a9c4a",
+    "mtime": 1793207544.4949687,
+    "ast_hash": "a021be66974efd3aacab87ac1dce1bab",
     "semantic_hash": ""
   },
   "src/components/admin/pending-scores-banner.stories.tsx": {
@@ -2195,8 +2195,8 @@
     "semantic_hash": ""
   },
   "src/components/admin/tappe-table.tsx": {
-    "mtime": 1793175176.5695786,
-    "ast_hash": "111c87d94623fc1501cd77d9279b909e",
+    "mtime": 1793207544.4947639,
+    "ast_hash": "d4204cd7d4f1a18e71267ed6e4d2d0ec",
     "semantic_hash": ""
   },
   "src/hooks/use-online.ts": {
@@ -4715,8 +4715,8 @@
     "semantic_hash": ""
   },
   "src/lib/classifica-generale/pubblica.ts": {
-    "mtime": 1793175176.571727,
-    "ast_hash": "fad3bfb3b8b074998d5a549edd79d8a5",
+    "mtime": 1793207487.8735852,
+    "ast_hash": "a14a22e2167d32af2727ea7ccc13a431",
     "semantic_hash": ""
   },
   "src/lib/classifica-generale/read.ts": {
@@ -5720,8 +5720,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1793205931.3119965,
-    "ast_hash": "beb61a7f10579f86040202544f4beaee",
+    "mtime": 1793208244.4139469,
+    "ast_hash": "a139b10c2674a13998bd9c15913e76c6",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {
@@ -5792,6 +5792,51 @@
   "tests/load/risultati/README.md": {
     "mtime": 1793202543.3757598,
     "ast_hash": "0b4bfecb521625cd34e539de084645e5",
+    "semantic_hash": ""
+  },
+  "src/components/admin/elimina-tappa.stories.tsx": {
+    "mtime": 1793207590.9901698,
+    "ast_hash": "3631e7e4ea1213b23f9c09516c4b7c6c",
+    "semantic_hash": ""
+  },
+  "src/components/admin/elimina-tappa.test.tsx": {
+    "mtime": 1793207622.3279996,
+    "ast_hash": "1d0d2c183b8de0d5fdf4e7bf03b31f13",
+    "semantic_hash": ""
+  },
+  "src/components/admin/elimina-tappa.tsx": {
+    "mtime": 1793207524.893399,
+    "ast_hash": "4e5363efcafb6b9764d927a6e0abf5c7",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/eliminazione/actions.test.ts": {
+    "mtime": 1793207598.1711912,
+    "ast_hash": "00ae49f567bc48aadce7086557fd8d12",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/eliminazione/actions.ts": {
+    "mtime": 1793207488.0494063,
+    "ast_hash": "e5ac2bfc33f0bfcf608417e7a1ac1bff",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/eliminazione/elimina-tappa.db.test.ts": {
+    "mtime": 1793207394.603105,
+    "ast_hash": "34d06916d965db3b31c6342a42824d67",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/eliminazione/state.ts": {
+    "mtime": 1793207487.9641132,
+    "ast_hash": "8d68afe22b3ac2159a48c54b5a3e523e",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261028560000_elimina_tappa.sql": {
+    "mtime": 1793207355.9205916,
+    "ast_hash": "8bbdca2bdcfa195745d2c35766e40741",
+    "semantic_hash": ""
+  },
+  ".impeccable/config.json": {
+    "mtime": 1793207919.0687711,
+    "ast_hash": "c1547c72653088b61139821a38c23fc0",
     "semantic_hash": ""
   }
 }
