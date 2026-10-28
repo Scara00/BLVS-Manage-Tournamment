@@ -234,16 +234,19 @@ function MatchList({
   );
 }
 
-function MatchCard({
+export function MatchCard({
   match,
   me,
   fase,
   mine,
+  reducedMotion,
 }: {
   match: LiveMatch;
   me: LiveMe;
   fase: FasiTabelloni[keyof FasiTabelloni];
   mine: boolean;
+  /** Overrides `prefers-reduced-motion` for the partial (stories, tests). */
+  reducedMotion?: boolean;
 }) {
   const { status, freshAt } = useLive();
   const state = match.state ?? "in_corso";
@@ -290,6 +293,7 @@ function MatchCard({
             away={teamName(match.players?.away, match.away)}
             offline={status === "offline" || status === "reconnecting"}
             freshAt={freshAt}
+            reducedMotion={reducedMotion}
           />
         ) : null}
         <p
@@ -316,7 +320,7 @@ function MatchCard({
   );
 }
 
-function MioGirone({
+export function MioGirone({
   tappaId,
   group,
   me,

@@ -15,6 +15,11 @@ export type LiveBarProps = {
   freshAt: string;
   /** Overrides `prefers-reduced-motion` (stories, tests). */
   reducedMotion?: boolean;
+  /**
+   * One short line («Live · 14:32»), for a header next to the greeting
+   * (w-home, BLVS-52). The full sentence stays for screen readers.
+   */
+  compact?: boolean;
   className?: string;
 };
 
@@ -36,6 +41,7 @@ export function LiveBar({
   updatedAt,
   freshAt,
   reducedMotion,
+  compact = false,
   className,
 }: LiveBarProps) {
   const still = useReducedMotion(reducedMotion);
@@ -46,8 +52,12 @@ export function LiveBar({
       aria-label="Stato degli aggiornamenti"
       data-slot="live-bar"
       data-status={status}
+      data-compact={compact ? "true" : undefined}
       className={cn(
-        "flex flex-wrap items-center gap-x-space-4 gap-y-space-2 border-s-4 p-inset-sm",
+        "flex flex-wrap items-center border-s-4",
+        compact
+          ? "gap-x-space-2 gap-y-space-1 px-space-3 py-space-2"
+          : "gap-x-space-4 gap-y-space-2 p-inset-sm",
         down
           ? "border-warning-fg bg-warning-bg text-warning-fg"
           : "border-tape bg-background",
@@ -66,9 +76,16 @@ export function LiveBar({
             />
             Live
           </p>
-          <p className="text-sm">
-            Ultimo aggiornamento alle <Time iso={updatedAt} />
-          </p>
+          {compact ? (
+            <p className="text-sm">
+              <span className="sr-only">Ultimo aggiornamento alle </span>
+              <Time iso={updatedAt} />
+            </p>
+          ) : (
+            <p className="text-sm">
+              Ultimo aggiornamento alle <Time iso={updatedAt} />
+            </p>
+          )}
         </>
       ) : null}
 
@@ -78,7 +95,9 @@ export function LiveBar({
             aria-hidden="true"
             className={cn("size-4 shrink-0", !still && "animate-spin")}
           />
-          Connessione agli aggiornamenti in corso…
+          {compact
+            ? "Connessione…"
+            : "Connessione agli aggiornamenti in corso…"}
         </p>
       ) : null}
 
@@ -95,7 +114,7 @@ export function LiveBar({
             )}
             Dati non aggiornati dalle <Time iso={freshAt} />
           </p>
-          <p className="text-sm">
+          <p className={cn("text-sm", compact && "sr-only")}>
             {status === "offline"
               ? "Sei offline: ci ricolleghiamo appena torna la rete."
               : "Riconnessione in corso…"}
@@ -107,13 +126,23 @@ export function LiveBar({
 }
 
 /** LiveBar fed by the surrounding LiveProvider. */
-export function LiveBarConnected({ className }: { className?: string }) {
+export function LiveBarConnected({
+  className,
+  compact,
+  reducedMotion,
+}: {
+  className?: string;
+  compact?: boolean;
+  reducedMotion?: boolean;
+}) {
   const { status, snapshot, freshAt } = useLive();
   return (
     <LiveBar
       status={status}
       updatedAt={snapshot.updatedAt}
       freshAt={freshAt}
+      compact={compact}
+      reducedMotion={reducedMotion}
       className={className}
     />
   );
