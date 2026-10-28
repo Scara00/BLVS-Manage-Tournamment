@@ -7,6 +7,7 @@ import type { PartecipazioneTappa, RisultatoTappa } from "./types";
 export type TotaleGiocatore = {
   utenteId: string;
   nome: string;
+  anonimo: boolean;
   punti: number;
   tappeGiocate: number;
   puntiProvvisori: boolean;
@@ -26,10 +27,11 @@ export function sommaClassifica(
   partecipazioni: readonly PartecipazioneTappa[],
 ): TotaleGiocatore[] {
   const perGiocatore = new Map<string, TotaleGiocatore>();
-  for (const { utenteId, nome, risultato } of partecipazioni) {
+  for (const { utenteId, nome, anonimo, risultato } of partecipazioni) {
     const totale = perGiocatore.get(utenteId) ?? {
       utenteId,
       nome,
+      anonimo,
       punti: 0,
       tappeGiocate: 0,
       puntiProvvisori: false,

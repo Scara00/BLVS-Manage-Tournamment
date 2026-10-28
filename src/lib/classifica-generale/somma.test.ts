@@ -12,7 +12,17 @@ const p = (
 ): PartecipazioneTappa => ({
   utenteId,
   nome: `Giocatore ${utenteId}`,
-  risultato: { tappaId, nome: tappaId, data, posizione, punti, provvisori },
+  anonimo: false,
+  risultato: {
+    tappaId,
+    nome: tappaId,
+    data,
+    posizione,
+    fase: posizione === null ? null : "gold",
+    posizioneDefinitiva: true,
+    punti,
+    provvisori,
+  },
 });
 
 describe("sommaClassifica", () => {

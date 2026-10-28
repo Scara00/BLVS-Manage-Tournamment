@@ -145,3 +145,38 @@ export async function readClassificaGenerale(params: {
 }
 
 export { idClassifica };
+
+export type VistaGiocatore = VistaClassificaGenerale & {
+  /** `utenti.id` of the player on the card. */
+  utenteId: string;
+};
+
+/**
+ * w-giocatore (BLVS-50): the overall standing the player is in, for the
+ * requested category and season. Without a category, the visitor's own
+ * is tried first, then the other one. Null when the player is not in it
+ * (unknown id, or no stage played that season): the page answers 404.
+ */
+export async function readSchedaGiocatore(
+  utenteId: string,
+  params: { categoria?: unknown; stagione?: unknown },
+): Promise<VistaGiocatore | null> {
+  await connection();
+  const richiesta = parseCategoria(params.categoria);
+  const candidate: (Categoria | undefined)[] = richiesta
+    ? [richiesta]
+    : [undefined, ...CATEGORIE];
+  for (const categoria of candidate) {
+    const vista = await readClassificaGenerale({
+      categoria,
+      stagione: params.stagione,
+    });
+    const standings = vista.sync.snapshot.overallStandings?.find(
+      (s) => s.id === idClassifica(vista.categoria, vista.stagione),
+    );
+    if (standings?.rows.some((r) => r.playerId === utenteId)) {
+      return { ...vista, utenteId };
+    }
+  }
+  return null;
+}

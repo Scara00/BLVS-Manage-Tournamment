@@ -15,6 +15,7 @@ function totale(
   return {
     utenteId: id,
     nome: id,
+    anonimo: false,
     punti: tappe.reduce((s, [, , punti]) => s + punti, 0),
     tappeGiocate: tappe.length,
     puntiProvvisori: false,
@@ -23,6 +24,8 @@ function totale(
       nome: data,
       data,
       posizione,
+      fase: posizione === null ? null : "gold",
+      posizioneDefinitiva: true,
       punti,
       provvisori: false,
     })),

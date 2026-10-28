@@ -22,7 +22,8 @@ const NOMI: Record<Categoria, readonly string[]> = {
     "Davide Colombo",
     "Simone Ricci",
     "Federico Marino",
-    "Alessandro Greco",
+    // Deleted account (BLVS-50): no name left, see DEMO_ANONIMI.
+    "",
     "Lorenzo Bruno-Gallo de Santis",
     "Giorgio Conti",
     "Paolo Mancini",
@@ -43,6 +44,12 @@ const NOMI: Record<Categoria, readonly string[]> = {
     "Anna Martinelli",
   ],
 };
+
+/**
+ * Players whose account was deleted (BLVS-50): the RPC returns them as
+ * «Giocatore anonimo» with `anonimo: true`, results kept.
+ */
+export const DEMO_ANONIMI: ReadonlySet<string> = new Set(["demo-u-m-08"]);
 
 /** `demo-u-m-01` … : player k (1-based) of a category. */
 export function demoUtente(categoria: Categoria, k: number): string {
@@ -256,14 +263,20 @@ export function getDemoDatiClassifica(
       ...board.silver.giocatori,
       ...board.fuori,
     ]) {
-      const [nome, ...cognome] = NOMI[categoria][k - 1].split(" ");
+      const utente = demoUtente(categoria, k);
+      const anonimo = DEMO_ANONIMI.has(utente);
+      // Like `nome_anonimo()`: the stored name of a deleted account.
+      const [nome, ...cognome] = (
+        anonimo ? "Giocatore anonimo" : NOMI[categoria][k - 1]
+      ).split(" ");
       dati.iscrizioni.push({
         id: iscrizione(k),
         tappa_id: tappa.id,
-        utente_id: demoUtente(categoria, k),
+        utente_id: utente,
         nome,
         cognome: cognome.join(" "),
         stato: "confermata",
+        anonimo,
       });
     }
   }

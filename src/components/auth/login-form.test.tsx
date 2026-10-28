@@ -185,6 +185,22 @@ describe("LoginForm", () => {
     );
     expect(readDraft("a")).toBeNull();
   });
+
+  it("dopo la cancellazione dell'account lo conferma ed elimina le bozze", () => {
+    saveDraft({
+      id: "b",
+      label: "Iscrizione",
+      path: "/tappe",
+      savedAt: "2026-10-27T10:00:00.000Z",
+      values: { nome: "Mario" },
+    });
+    params.current = new URLSearchParams({ motivo: "account_cancellato" });
+    render(<LoginForm signIn={noop} signOut={noopSignOut} />);
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Il tuo account è stato cancellato. Nome ed email non ci sono più; i risultati restano nelle classifiche come «Giocatore anonimo».",
+    );
+    expect(readDraft("b")).toBeNull();
+  });
 });
 
 describe("SessionExpired", () => {

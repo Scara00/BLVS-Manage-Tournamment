@@ -108,6 +108,11 @@ export const Uscita: Story = {
   args: { notice: { kind: "uscita", draftsCleared: 2 } },
 };
 
+/** After «Cancella l'account» (BLVS-50). */
+export const AccountCancellato: Story = {
+  args: { notice: { kind: "cancellato" } },
+};
+
 export const Success: Story = {
   args: { pending: true, redirectingTo: "Classifica" },
 };

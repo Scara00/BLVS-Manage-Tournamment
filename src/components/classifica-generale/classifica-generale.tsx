@@ -19,6 +19,7 @@ import {
   risultatiRicercaLabel,
 } from "@/lib/classifica-generale/ricerca";
 import { spiegaRegolaGenerale } from "@/lib/classifica-generale/spareggi";
+import { giocatoreHref } from "@/lib/classifica-generale/paths";
 import { regoleHref } from "@/lib/regole/paths";
 import { stagioneLabel } from "@/lib/classifica-generale/stagione";
 import type { Categoria } from "@/lib/db/types";
@@ -26,7 +27,11 @@ import type { OverallPlayerRow } from "@/lib/live/types";
 import { LaTuaPosizione } from "./la-tua-posizione";
 import { NomeGiocatore, PuntiGiocatore } from "./riga-giocatore";
 
-function colonne(me: string | null): ResponsiveTableColumn<OverallPlayerRow>[] {
+function colonne(
+  me: string | null,
+  categoria: Categoria,
+  stagione: number | null,
+): ResponsiveTableColumn<OverallPlayerRow>[] {
   return [
     {
       key: "position",
@@ -45,7 +50,13 @@ function colonne(me: string | null): ResponsiveTableColumn<OverallPlayerRow>[] {
       key: "name",
       header: "Giocatore",
       rowHeader: true,
-      render: (row) => <NomeGiocatore row={row} mio={row.playerId === me} />,
+      render: (row) => (
+        <NomeGiocatore
+          row={row}
+          mio={row.playerId === me}
+          href={giocatoreHref(row.playerId, categoria, stagione)}
+        />
+      ),
     },
     { key: "stages", header: "Tappe giocate", numeric: true, width: "18%" },
     {
@@ -129,7 +140,7 @@ export function ClassificaGenerale({
       <div ref={ref}>
         <ResponsiveTable
           caption={`${titoloClassifica(categoria)} · ${stagioneLabel(stagione)}`}
-          columns={colonne(me)}
+          columns={colonne(me, categoria, stagione)}
           rows={visibili}
           getRowKey={(row) => row.playerId}
           rowAttributes={(row) => ({
