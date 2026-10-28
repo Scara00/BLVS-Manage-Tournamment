@@ -90,6 +90,24 @@ export type OverallStandingRow = {
 };
 
 /** One player of the overall standing (BLVS-44, w-classifica). */
+/** One stage of a player in the overall standing (w-giocatore, BLVS-50). */
+export type OverallStageResult = {
+  stageId: string;
+  /** Stage name, e.g. «Tappa 1 · Jesolo». */
+  name: string;
+  /** `YYYY-MM-DD`, the stage's first day. */
+  date: string;
+  /** Gold or silver final; null when knocked out before the finals. */
+  phase: "gold" | "silver" | null;
+  /** Place in the stage standing; null when knocked out before the finals. */
+  position: number | null;
+  /** The place can no longer change. */
+  definitive: boolean;
+  points: number;
+  /** The stage's board is still open. */
+  provisional: boolean;
+};
+
 export type OverallPlayerRow = {
   /** `utenti.id`: the same player across stages. */
   playerId: string;
@@ -102,6 +120,10 @@ export type OverallPlayerRow = {
   provisional: boolean;
   /** Shares the position with another player. */
   tied: boolean;
+  /** Deleted account (BLVS-50): `name` is «Giocatore anonimo». */
+  anonymous?: boolean;
+  /** Stages played, newest first (w-giocatore). */
+  results?: readonly OverallStageResult[];
 };
 
 /** The overall standing of one category and season (BLVS-44). */

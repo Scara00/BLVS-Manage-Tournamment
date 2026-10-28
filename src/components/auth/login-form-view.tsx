@@ -23,6 +23,7 @@ import { useRetryCountdown } from "./use-retry-countdown";
 /** Why the user landed on the login page. */
 export type LoginNotice =
   | { kind: "uscita"; draftsCleared?: number }
+  | { kind: "cancellato" }
   | { kind: "scaduta"; destination: string }
   | null;
 
@@ -249,6 +250,23 @@ function RateLimitedText({ message }: { message: string }) {
 
 function Notice({ notice }: { notice: LoginNotice }): ReactNode {
   if (!notice) return null;
+  if (notice.kind === "cancellato")
+    return (
+      <div
+        role="status"
+        data-slot="login-notice"
+        className="flex items-start gap-space-2 border-l-4 border-success-fg bg-success-bg p-inset-sm text-success-fg"
+      >
+        <CheckCircle2Icon aria-hidden className="mt-0.5 size-5 shrink-0" />
+        <p>
+          <strong className="font-semibold">
+            Il tuo account è stato cancellato.
+          </strong>{" "}
+          Nome ed email non ci sono più; i risultati restano nelle classifiche
+          come «Giocatore anonimo».
+        </p>
+      </div>
+    );
   if (notice.kind === "uscita")
     return (
       <div
