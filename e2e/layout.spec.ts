@@ -217,6 +217,11 @@ test("admin: tour da tastiera e voce attiva", async ({ page }) => {
   ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.getByRole("link", { name: /^BLVS/ })).toBeFocused();
+  // BLVS-55: the command palette's «Cerca» comes before «Esci».
+  await page.keyboard.press("Tab");
+  await expect(
+    page.getByRole("button", { name: /^Cerca tappe, giocatori e partite/ }),
+  ).toBeFocused();
   await page.keyboard.press("Tab");
   await expect(page.getByRole("button", { name: "Esci" })).toBeFocused();
 
