@@ -19,3 +19,8 @@ export function liveTappaHref(id: string): string {
 export function liveTappaSnapshotUrl(id: string): string {
   return `/api/live/snapshot?tappa=${encodeURIComponent(id)}`;
 }
+
+/** The page of one group of a stage (w-girone, BLVS-47). */
+export function gironeTappaHref(id: string, gironeId: string): string {
+  return `${tappaHref(id)}/gironi/${encodeURIComponent(gironeId)}`;
+}

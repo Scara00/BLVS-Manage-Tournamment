@@ -6,10 +6,12 @@ import { demoDettaglioTappa } from "@/lib/demo/tappa-dettaglio";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 
 /**
- * w-tappa, w-iscrizione-ok and w-live: `/tappe/<id>`,
- * `/tappe/<id>/iscrizione` and `/tappe/<id>/live`.
+ * w-tappa, w-iscrizione-ok, w-live and w-girone: `/tappe/<id>`,
+ * `/tappe/<id>/iscrizione`, `/tappe/<id>/live` and
+ * `/tappe/<id>/gironi/<girone>`.
  */
-const PAGINA_TAPPA = /^\/tappe\/([^/]+)(?:\/iscrizione|\/live)?\/?$/;
+const PAGINA_TAPPA =
+  /^\/tappe\/([^/]+)(?:\/iscrizione|\/live|\/gironi\/[^/]+)?\/?$/;
 
 /** No route matches it, so the root `not-found.tsx` answers with HTTP 404. */
 export const TAPPA_NON_TROVATA_PATH = "/_tappa-non-trovata";

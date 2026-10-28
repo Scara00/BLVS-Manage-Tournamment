@@ -64,7 +64,12 @@ export type GroupStandingRow = {
   note?: string;
   played: number;
   won: number;
+  /** Points scored (PF). */
   points: number;
+  /** BLVS-47: points conceded (PS); optional for older publishers. */
+  against?: number;
+  /** BLVS-47: points scored minus conceded (Diff). */
+  diff?: number;
 };
 
 export type GroupStandings = {

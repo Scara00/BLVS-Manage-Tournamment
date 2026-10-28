@@ -31,15 +31,19 @@ import type {
   GroupStandings,
   LiveEvent,
   LiveMatch,
-  LivePlayer,
   LiveSync,
 } from "@/lib/live/types";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
-import { liveTappaHref, liveTappaSnapshotUrl } from "@/lib/tappe/paths";
+import {
+  gironeTappaHref,
+  liveTappaHref,
+  liveTappaSnapshotUrl,
+} from "@/lib/tappe/paths";
 import { cn } from "@/lib/utils";
 import { LiveAnnouncer } from "./live-announcer";
 import { LiveBarConnected } from "./live-bar";
 import { LiveProvider, useLive } from "./live-provider";
+import { setsLabel, STATO_PARTITA, Team, teamName } from "./match-parts";
 import { NotaAssenza } from "./nota-assenza";
 import { PunteggioParziale } from "./punteggio-parziale";
 import { liveRowAttributes, useLiveRowMotion } from "./use-live-row-motion";
@@ -106,13 +110,21 @@ export function LiveTappa({
             intervalloMs: intervalloAnnunciParzialeMs,
           }}
         />
-        <LiveTappaBody me={me} fasi={fasi} />
+        <LiveTappaBody tappaId={tappaId} me={me} fasi={fasi} />
       </div>
     </LiveProvider>
   );
 }
 
-function LiveTappaBody({ me, fasi }: { me: LiveMe; fasi: FasiTabelloni }) {
+function LiveTappaBody({
+  tappaId,
+  me,
+  fasi,
+}: {
+  tappaId: string;
+  me: LiveMe;
+  fasi: FasiTabelloni;
+}) {
   const { snapshot } = useLive();
   const vista = vistaLive(snapshot, me);
   const vuota = snapshot.matches.length === 0;
@@ -152,6 +164,7 @@ function LiveTappaBody({ me, fasi }: { me: LiveMe; fasi: FasiTabelloni }) {
 
       {vista.mioGirone ? (
         <MioGirone
+          tappaId={tappaId}
           group={vista.mioGirone}
           me={me}
           fase={vista.mioGirone.category && fasi[vista.mioGirone.category]}
@@ -221,52 +234,6 @@ function MatchList({
   );
 }
 
-const STATO: Record<NonNullable<LiveMatch["state"]>, string> = {
-  programmata: "Da giocare",
-  in_corso: "Live",
-  conclusa: "Finita",
-  annullata: "Annullata",
-};
-
-function setsLabel(match: LiveMatch) {
-  if (match.sets.length === 0) return "nessun punto ancora";
-  return match.sets
-    .map(([home, away], i) => `set ${i + 1} ${home} a ${away}`)
-    .join(", ");
-}
-
-function teamName(
-  players: readonly LivePlayer[] | undefined,
-  fallback: string,
-) {
-  return players && players.length > 0
-    ? players.map((p) => p.name).join(" e ")
-    : fallback;
-}
-
-function Team({
-  players,
-  fallback,
-  me,
-}: {
-  players: readonly LivePlayer[] | undefined;
-  fallback: string;
-  me: LiveMe;
-}) {
-  if (!players || players.length === 0) return <>{fallback}</>;
-  return (
-    <>
-      {players.map((p, i) => (
-        <span key={p.id}>
-          {i > 0 ? <span className="font-normal"> e </span> : null}
-          {p.name}
-          {p.id === me ? <span className="font-normal"> (tu)</span> : null}
-        </span>
-      ))}
-    </>
-  );
-}
-
 function MatchCard({
   match,
   me,
@@ -303,7 +270,7 @@ function MatchCard({
             </p>
           ) : (
             <p className="border border-current px-space-2 py-space-1 text-xs font-semibold tracking-wide uppercase">
-              {STATO[state]}
+              {STATO_PARTITA[state]}
             </p>
           )}
           <p className="text-sm [overflow-wrap:anywhere]">
@@ -350,10 +317,12 @@ function MatchCard({
 }
 
 function MioGirone({
+  tappaId,
   group,
   me,
   fase,
 }: {
+  tappaId: string;
   group: GroupStandings;
   me: LiveMe;
   fase: FasiTabelloni[keyof FasiTabelloni];
@@ -421,12 +390,31 @@ function MioGirone({
           emptyMessage="Nessun giocatore nel girone."
         />
       </div>
+      <p>
+        <Link
+          href={gironeTappaHref(tappaId, group.id)}
+          data-testid="live-mio-girone-link"
+          className={buttonVariants({
+            variant: "secondary",
+            className: "max-w-full",
+          })}
+        >
+          Apri il girone: classifica completa e partite
+        </Link>
+      </p>
     </section>
   );
 }
 
 /** Shown in place of the live data when the session has expired. */
-export function LiveTappaSessioneScaduta({ tappaId }: { tappaId: string }) {
+export function LiveTappaSessioneScaduta({
+  tappaId,
+  ritorno,
+}: {
+  tappaId: string;
+  /** Where to come back after signing in; defaults to w-live. */
+  ritorno?: string;
+}) {
   return (
     <section
       aria-labelledby="live-sessione-titolo"
@@ -441,7 +429,7 @@ export function LiveTappaSessioneScaduta({ tappaId }: { tappaId: string }) {
       </h2>
       <p>Accedi di nuovo per vedere la tua partita e il tuo girone.</p>
       <Link
-        href={sessionExpiredHref(liveTappaHref(tappaId))}
+        href={sessionExpiredHref(ritorno ?? liveTappaHref(tappaId))}
         className={buttonVariants({
           variant: "primary",
           className: "max-w-full",
