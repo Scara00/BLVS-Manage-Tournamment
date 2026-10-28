@@ -27,7 +27,7 @@ export const SIGNED_OUT_PARAM = "uscita";
 /** Query parameter on the login page saying why the user is there. */
 export const REASON_PARAM = "motivo";
 
-export type LoginReason = "scaduta" | "account_cancellato";
+export type LoginReason = "scaduta";
 
 /**
  * Pages a signed-out visitor may open; everything else needs a session.

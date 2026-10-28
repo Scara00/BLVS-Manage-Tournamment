@@ -9,10 +9,6 @@ import {
   type ProfiloAction,
   type ProfiloFormState,
 } from "@/lib/profilo/types";
-import {
-  CANCELLA_ACCOUNT_MESSAGES,
-  type CancellaAccountAction,
-} from "@/lib/account/types";
 import { ProfiloForm } from "./profilo-form";
 import { ProfiloLoading } from "./profilo-loading";
 import { ProfiloSessioneScaduta } from "./profilo-sessione-scaduta";
@@ -66,12 +62,6 @@ const rifiutaFinto: ProfiloAction = async () => ({
   fields: { nome: "Campo obbligatorio.", email: PROFILO_MESSAGES.emailTaken },
 });
 
-/** «Cancella l'account» answers like `cancella_account()` for an admin. */
-const cancellaFinto: CancellaAccountAction = async () => ({
-  status: "error",
-  message: CANCELLA_ACCOUNT_MESSAGES.accountAdmin,
-});
-
 /** Never settles: the form stays in its «saving» state. */
 const inAttesaPerSempre: ProfiloAction = () => new Promise(() => {});
 
@@ -121,7 +111,7 @@ function Schermata({
               />
             ) : null}
             {stato === "pronto" && !modifica ? (
-              <ProfiloView profilo={profilo} cancellaAccount={cancellaFinto} />
+              <ProfiloView profilo={profilo} />
             ) : null}
             {stato === "pronto" && modifica ? (
               <ProfiloForm

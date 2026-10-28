@@ -2,6 +2,7 @@
  * w-giocatore (BLVS-50): one player of the overall standing, stage by
  * stage. Pure: the card is a view on the same live row as w-classifica.
  */
+import { GIOCATORE_ANONIMO } from "@/lib/cancellazione/anonimo";
 import type { Categoria } from "@/lib/db/types";
 import type {
   LiveEvent,
@@ -13,10 +14,10 @@ import { puntiLabel, puntiProvvisoriLabel } from "./annuncio";
 
 /**
  * The name of a deleted account (R-79): the only thing shown, never a
- * personal datum. Mirrors `public.nome_anonimo()` (migration
- * 20261027460000), which stores it as nome «Giocatore», cognome «anonimo».
+ * personal datum. Same as `public.nome_anonimo()`, see
+ * `@/lib/cancellazione/anonimo`.
  */
-export const NOME_ANONIMO = "Giocatore anonimo";
+export const NOME_ANONIMO = GIOCATORE_ANONIMO;
 
 export type FaseTappaTesto = {
   /** «★» / «◆», always next to the word; null outside the finals. */

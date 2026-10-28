@@ -11,8 +11,6 @@ import {
   emailInAttesaMessage,
   type Profilo,
 } from "@/lib/profilo/types";
-import type { CancellaAccountAction } from "@/lib/account/types";
-import { CancellaAccount } from "./cancella-account";
 import { CATEGORIA_LABEL } from "./categoria";
 
 function Riga({ label, children }: { label: string; children: ReactNode }) {
@@ -29,17 +27,10 @@ function Riga({ label, children }: { label: string; children: ReactNode }) {
 }
 
 /**
- * w-profilo: the player's personal data, read only, with text badges, and
- * «Cancella l'account» (BLVS-50) when the action is given.
+ * w-profilo: the player's personal data, read only, with text badges. The
+ * account is deleted from w-impostazioni → w-elimina-account (BLVS-53).
  */
-export function ProfiloView({
-  profilo,
-  cancellaAccount,
-}: {
-  profilo: Profilo;
-  /** The `cancellaAccount` server action (a fake in Storybook). */
-  cancellaAccount?: CancellaAccountAction;
-}) {
+export function ProfiloView({ profilo }: { profilo: Profilo }) {
   const { statoCategoria } = profilo;
 
   return (
@@ -130,7 +121,6 @@ export function ProfiloView({
           Password, privacy e account
         </Link>
       </div>
-      {cancellaAccount ? <CancellaAccount action={cancellaAccount} /> : null}
     </div>
   );
 }

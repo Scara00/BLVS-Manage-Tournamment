@@ -223,17 +223,23 @@ describe("cancellaAccount", () => {
     expect(mocks.pubblica.mock.calls.map((c) => c[0])).toEqual(["t1", "t2"]);
   });
 
-  it("l'ultimo admin resta, con il motivo", async () => {
-    mocks.rpc.mockResolvedValue({
-      data: null,
-      error: { hint: "ultimo_admin", message: "x" },
-    });
-    await expect(cancella("ELIMINA")).resolves.toMatchObject({
-      status: "error",
-      message: M.ultimoAdmin,
-    });
-    expect(mocks.signOut).not.toHaveBeenCalled();
-  });
+  it.each([
+    ["account_admin", M.accountAdmin],
+    ["tappa_in_corso", M.tappaInCorso],
+  ])(
+    "rifiutata (%s): l'account resta, con il motivo",
+    async (hint, message) => {
+      mocks.rpc.mockResolvedValue({
+        data: null,
+        error: { code: "23514", hint, message: "x" },
+      });
+      await expect(cancella("ELIMINA")).resolves.toMatchObject({
+        status: "error",
+        message,
+      });
+      expect(mocks.signOut).not.toHaveBeenCalled();
+    },
+  );
 
   it("un errore del database non fa uscire", async () => {
     mocks.rpc.mockResolvedValue({ data: null, error: { message: "boom" } });

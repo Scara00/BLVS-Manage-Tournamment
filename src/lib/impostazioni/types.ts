@@ -84,8 +84,10 @@ export const IMPOSTAZIONI_MESSAGES = {
   passwordFallita: "Non siamo riusciti a cambiare la password. Riprova.",
   confermaMancante: `Scrivi ${PAROLA_CONFERMA} per confermare.`,
   confermaErrata: `Per confermare scrivi esattamente ${PAROLA_CONFERMA}.`,
-  ultimoAdmin:
-    "Sei l'unico admin: nomina un altro admin prima di cancellare l'account.",
+  accountAdmin:
+    "Un account dell'organizzazione non si cancella da qui: chiedi a un altro admin di toglierti il ruolo.",
+  tappaInCorso:
+    "Hai una tappa in corso: potrai cancellare l'account quando sarà finita.",
   cancellazioneFallita:
     "Non siamo riusciti a cancellare l'account. Non è cambiato nulla: riprova.",
 } as const;

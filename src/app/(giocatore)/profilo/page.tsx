@@ -6,7 +6,6 @@ import {
   ProfiloSessioneScaduta,
   ProfiloView,
 } from "@/components/profilo";
-import { cancellaAccount } from "@/lib/account/actions";
 import { getProfilo } from "@/lib/profilo/read";
 import { PROFILO_PATH } from "@/lib/profilo/types";
 
@@ -15,7 +14,7 @@ export const metadata: Metadata = { title: "Profilo" };
 async function ProfiloContent() {
   const profilo = await getProfilo();
   if (!profilo) return <ProfiloSessioneScaduta from={PROFILO_PATH} />;
-  return <ProfiloView profilo={profilo} cancellaAccount={cancellaAccount} />;
+  return <ProfiloView profilo={profilo} />;
 }
 
 export default function ProfiloPage() {

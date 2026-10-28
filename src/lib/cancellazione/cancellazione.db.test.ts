@@ -100,7 +100,11 @@ async function partita(
   return id;
 }
 
-/** A stage whose gold final the four players played in this order of points. */
+/**
+ * A stage whose gold final the four players played in this order of points;
+ * `concluso` closes its boards and the stage (an account is deleted only
+ * with no stage in progress).
+ */
 async function tappaGiocata(
   data: string,
   giocatori: string[],
@@ -125,6 +129,7 @@ async function tappaGiocata(
       "update tabelloni set concluso_il = now() where tappa_id = $1",
       [id],
     );
+    await db.query("update tappe set stato = 'conclusa' where id = $1", [id]);
   }
   return { id, iscrizioni };
 }
@@ -190,12 +195,11 @@ describe("cancella_account", () => {
     const [io] = giocatori;
     await tappaGiocata("2026-06-01", giocatori, true);
     // Second stage: «io» finishes 3rd.
-    await tappaGiocata("2026-07-01", [
-      giocatori[1],
-      giocatori[2],
-      io,
-      giocatori[3],
-    ]);
+    await tappaGiocata(
+      "2026-07-01",
+      [giocatori[1], giocatori[2], io, giocatori[3]],
+      true,
+    );
 
     const prima = await dati();
     const rigaPrima = classificaDaDati(prima, "M", 2026).righe.find(
@@ -231,7 +235,7 @@ describe("cancella_account", () => {
     for (const c of ["Uno", "Due", "Tre", "Quattro"])
       giocatori.push(await giocatore(c));
     const [io] = giocatori;
-    const { iscrizioni } = await tappaGiocata("2026-06-01", giocatori);
+    const { iscrizioni } = await tappaGiocata("2026-06-01", giocatori, true);
     const conta = async (sql: string) =>
       Number((await db.query<{ n: number }>(sql, [iscrizioni[0]])).rows[0].n);
     const risultati = () =>
@@ -361,23 +365,14 @@ describe("cancella_account", () => {
     expect(e.code).toBe("42501");
   });
 
-  it("l'ultimo admin non si cancella; con un altro admin sì", async () => {
-    expect((await errore(cancella(admin))).hint).toBe("ultimo_admin");
+  it("un admin non si cancella da qui, neanche con un altro admin", async () => {
     const altro = await createAuthUser(db, { email: "admin2@example.it" });
     await db.query("update utenti set ruolo = 'admin' where id = $1", [altro]);
-    await cancella(admin);
-    const { rows } = await db.query<{ ruolo: string }>(
-      "select ruolo from utenti where id = $1",
+    expect((await errore(cancella(admin))).hint).toBe("account_admin");
+    const { rows } = await db.query<{ anonimizzato_il: Date | null }>(
+      "select anonimizzato_il from utenti where id = $1",
       [admin],
     );
-    expect(rows[0].ruolo).toBe("giocatore");
-  });
-
-  it("eliminare un utente Auth non cancellato elimina ancora il profilo", async () => {
-    const io = await giocatore("Uno");
-    await db.query("delete from auth.users where id = $1", [io]);
-    expect(
-      (await db.query("select 1 from utenti where id = $1", [io])).rows,
-    ).toHaveLength(0);
+    expect(rows[0].anonimizzato_il).toBeNull();
   });
 });

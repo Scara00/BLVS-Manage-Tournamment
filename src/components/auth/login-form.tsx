@@ -38,8 +38,7 @@ function LoginFormFromParams({ signIn, signOut }: LoginFormProps) {
   const [, signOutAction] = useActionState(signOut, initialSignOutState);
   const returnTo = safeAfterLoginPath(params?.get(RETURN_PARAM));
   const reason = params?.get(REASON_PARAM);
-  const cancellato = reason === "account_cancellato";
-  const signedOut = params?.get(SIGNED_OUT_PARAM) === "1" || cancellato;
+  const signedOut = params?.get(SIGNED_OUT_PARAM) === "1";
   const [draftsCleared, setDraftsCleared] = useState(0);
 
   // «Esci» on a possibly shared device: local drafts go too.
@@ -48,13 +47,11 @@ function LoginFormFromParams({ signIn, signOut }: LoginFormProps) {
     if (signedOut) setDraftsCleared(clearDrafts());
   }, [signedOut]);
 
-  const notice: LoginNotice = cancellato
-    ? { kind: "cancellato" }
-    : signedOut
-      ? { kind: "uscita", draftsCleared }
-      : reason === "scaduta"
-        ? { kind: "scaduta", destination: describeReturnPath(returnTo) }
-        : null;
+  const notice: LoginNotice = signedOut
+    ? { kind: "uscita", draftsCleared }
+    : reason === "scaduta"
+      ? { kind: "scaduta", destination: describeReturnPath(returnTo) }
+      : null;
 
   return (
     <LoginFormView

@@ -1,8 +1,9 @@
 import "server-only";
 import { now } from "@/lib/time/server-time";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createSupabaseRelay, type LiveRelay } from "./relay";
-import { demoLiveSnapshot } from "./seed";
+import { demoLiveSnapshot, emptyLiveSnapshot } from "./seed";
 import {
   applyLiveEvent,
   type LiveEvent,
@@ -113,8 +114,9 @@ export function getLiveBus(): LiveBus {
   if (!globalForLive.__blvsLiveBus) {
     // No secret key (demo, e2e, unit tests): one instance, no relay.
     const secretKey = process.env.SUPABASE_SECRET_KEY || null;
+    const seed = readSupabaseEnv() ? emptyLiveSnapshot : demoLiveSnapshot;
     globalForLive.__blvsLiveBus = createLiveBus(
-      demoLiveSnapshot(now().toISOString()),
+      seed(now().toISOString()),
       LIVE_REPLAY_CAPACITY,
       secretKey ? createSupabaseRelay(getSupabaseAdmin(), secretKey) : null,
     );

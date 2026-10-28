@@ -12,6 +12,7 @@ import {
 } from "@/components/live";
 import { demoGroups } from "@/lib/demo/tournament";
 import { readLiveSync } from "@/lib/live/read";
+import { readSupabaseEnv } from "@/lib/supabase/env";
 
 export function generateStaticParams() {
   return demoGroups.map((group) => ({ id: group.id }));
@@ -57,7 +58,8 @@ export default async function GironePage({
   params,
 }: PageProps<"/gironi/[id]">) {
   const { id } = await params;
-  const group = findGroup(id);
+  // Demo groups only (CI, e2e): real ones are on /tappe/[id]/gironi/[gironeId].
+  const group = readSupabaseEnv() ? undefined : findGroup(id);
   if (!group) notFound();
 
   return (

@@ -1,124 +1,102 @@
--- BLVS-53 · Cancellazione dell'account (R-80).
+-- BLVS-53 · Cancellazione dell'account (R-80), sopra BLVS-50 (R-79).
 --
--- Il giocatore cancella il proprio account e i suoi dati personali spariscono:
--- nome e cognome diventano «Giocatore anonimo», l'email si cancella, l'utente
--- Auth (hash della password, identità, sessioni) e i consensi si eliminano.
--- I risultati restano: iscrizioni, gironi, partite e punteggi puntano ancora
--- allo stesso `utenti.id`, che da ora è un identificativo anonimo. Così la
--- classifica generale e quelle di tappa non cambiano (stesse posizioni, stessi
--- punti), cambia solo il nome mostrato.
---
--- Il segnaposto è scritto nel nome stesso (nome «Giocatore», cognome
--- «anonimo»): ogni lettore di nomi (RPC pubbliche, registro, admin) mostra
--- «Giocatore anonimo» senza modifiche. TS: `GIOCATORE_ANONIMO` in
+-- BLVS-50 (`20261027460000_giocatore_anonimo.sql`) ha già il segno
+-- `utenti.anonimizzato_il`, `anonimizza_utente()`, il segnaposto
+-- `nome_anonimo()` («Giocatore anonimo») e l'anonimizzazione quando si
+-- elimina l'utente Auth. Qui la cancellazione passa su w-elimina-account:
+--   - l'email si cancella (null) invece di diventare un indirizzo fittizio;
+--   - un account cancellato non è più admin e non si iscrive più a nessuna
+--     tappa, neanche da admin;
+--   - chi esce dai gironi di una tappa non iniziata alza `versione_gironi`,
+--     come ogni altra modifica dei gironi;
+--   - `cancella_account()` elimina anche l'utente Auth (hash della password,
+--     identità, sessioni) nella stessa transazione e ritorna le tappe da
+--     ripubblicare in live.
+-- Le regole restano quelle di BLVS-50: un admin non si cancella da qui
+-- (`account_admin`), un giocatore con una tappa in corso nemmeno
+-- (`tappa_in_corso`). I risultati restano sempre: iscrizioni, gironi, partite
+-- e punteggi puntano ancora allo stesso `utenti.id`, anche quando l'utente
+-- Auth si elimina dalla dashboard. TS: `GIOCATORE_ANONIMO` in
 -- src/lib/cancellazione/anonimo.ts (un test PGlite li confronta).
 
 -- ---------------------------------------------------------------------------
 -- utenti: l'email si può cancellare, ma solo su un account anonimizzato
 -- ---------------------------------------------------------------------------
 
-alter table public.utenti add column anonimizzato_il timestamptz;
-
 alter table public.utenti alter column email drop not null;
 alter table public.utenti add constraint utenti_email_presente
   check (email is not null or anonimizzato_il is not null);
 
--- L'utente applicativo non dipende più dalla riga Auth: un account cancellato
--- perde la riga in auth.users ma la sua riga anonima resta, con i risultati.
-alter table public.utenti drop constraint utenti_id_fkey;
+-- ---------------------------------------------------------------------------
+-- Anonimizzazione
+-- ---------------------------------------------------------------------------
 
--- Per tutti gli altri resta la cascata di prima (pulizia dei test, utenti
--- eliminati dalla console Auth).
-create function public.elimina_utente_da_auth()
-returns trigger
-language plpgsql
-security definer
-set search_path = ''
-as $$
-begin
-  delete from public.utenti
-  where id = old.id and anonimizzato_il is null;
-  return old;
-end;
-$$;
-
-create trigger on_auth_user_deleted
-after delete on auth.users
-for each row execute function public.elimina_utente_da_auth();
-
--- Solo `cancella_account()` (con la GUC transazionale
--- `blvs.cancellazione_account`) anonimizza: nessun client può segnare da sé
--- `anonimizzato_il` né cambiare la propria email o il ruolo.
-create or replace function public.proteggi_campi_utente()
-returns trigger
+/*
+ * Come in BLVS-50, più: email cancellata, ruolo giocatore e versione dei
+ * gironi alzata per i tabelloni da cui il giocatore esce. Idempotente:
+ * false quando l'account non esiste o è già anonimo.
+ */
+create or replace function public.anonimizza_utente(p_utente uuid)
+returns boolean
 language plpgsql
 security definer
 set search_path = ''
 as $$
 declare
-  attore uuid := (select auth.uid());
+  v_trovato boolean;
 begin
-  if attore is null
-     or current_setting('blvs.cancellazione_account', true) = 'on' then
-    return new;
+  perform set_config('blvs.anonimizzazione', 'on', true);
+
+  -- Iscrizioni attive delle tappe non ancora iniziate, ritirate come in
+  -- `admin_rimuovi_iscrizione()`: il posto torna libero, il giocatore esce
+  -- dal girone.
+  with attive as (
+    select i.id, i.tabellone_id
+    from public.iscrizioni i
+    join public.tappe t on t.id = i.tappa_id
+    where i.utente_id = p_utente
+      and i.stato in ('in_attesa', 'confermata')
+      and public.tappa_iscritti_modificabili(t.stato)
+    for update of i
+  ),
+  fuori as (
+    delete from public.girone_iscrizioni gi
+    using attive a
+    where gi.iscrizione_id = a.id
+    returning a.tabellone_id
+  ),
+  versione as (
+    update public.tabelloni tb
+    set versione_gironi = tb.versione_gironi + 1
+    where tb.id in (select tabellone_id from fuori)
+  )
+  update public.iscrizioni i
+  set stato = 'ritirata'
+  from attive a
+  where i.id = a.id;
+
+  delete from public.consensi where utente_id = p_utente;
+
+  update public.utenti u
+  set nome = a.nome,
+      cognome = a.cognome,
+      email = null,
+      ruolo = 'giocatore',
+      anonimizzato_il = now()
+  from public.nome_anonimo() a
+  where u.id = p_utente and u.anonimizzato_il is null;
+  v_trovato := found;
+
+  if v_trovato then
+    insert into public.registro (attore_id, azione, entita, entita_id, dati)
+    values (
+      (select auth.uid()), 'anonimizzazione', 'utenti', p_utente::text,
+      jsonb_build_object('anonimizzato', true)
+    );
   end if;
 
-  if new.anonimizzato_il is distinct from old.anonimizzato_il then
-    raise exception 'Un account si cancella solo dalle impostazioni'
-      using errcode = 'insufficient_privilege';
-  end if;
-
-  if old.anonimizzato_il is not null then
-    raise exception 'Account cancellato: i dati non si modificano più'
-      using errcode = 'insufficient_privilege', hint = 'account_cancellato';
-  end if;
-
-  if (new.ruolo, new.email) is distinct from (old.ruolo, old.email)
-     and not public.is_admin() then
-    raise exception 'Solo un admin può cambiare ruolo o email'
-      using errcode = 'insufficient_privilege';
-  end if;
-
-  if attore = old.id and old.ruolo = 'admin' and new.ruolo <> 'admin' then
-    raise exception 'Un admin non può togliersi il ruolo'
-      using errcode = 'insufficient_privilege';
-  end if;
-
-  return new;
-end;
-$$;
-
--- Il registro automatico copia la riga intera (email compresa): la
--- cancellazione non deve lasciarvi i dati che sta cancellando.
-drop trigger utenti_registro on public.utenti;
-create trigger utenti_registro
-after update of ruolo, categoria, email on public.utenti
-for each row
-when (new.anonimizzato_il is null)
-execute function public.scrivi_registro();
-
--- ---------------------------------------------------------------------------
--- consensi: in sola aggiunta, tranne per la cancellazione dell'account
--- ---------------------------------------------------------------------------
-
-create or replace function public.blocca_modifica_append_only()
-returns trigger
-language plpgsql
-set search_path = ''
-as $$
-begin
-  if tg_op = 'DELETE' and tg_table_name = 'consensi' then
-    -- Diritto all'oblio: cascata dall'utente eliminato, o `cancella_account()`.
-    if current_setting('blvs.cancellazione_account', true) = 'on'
-       or not exists (
-         select 1 from public.utenti
-         where id = (to_jsonb(old) ->> 'utente_id')::uuid
-       ) then
-      return old;
-    end if;
-  end if;
-  raise exception 'La tabella % è in sola aggiunta', tg_table_name
-    using errcode = 'insufficient_privilege';
+  perform set_config('blvs.anonimizzazione', 'off', true);
+  return v_trovato;
 end;
 $$;
 
@@ -152,29 +130,22 @@ for each row execute function public.blocca_iscrizione_anonimo();
 -- RPC
 -- ---------------------------------------------------------------------------
 
--- Segnaposto del nome: «Giocatore anonimo».
-create function public.nome_anonimo()
-returns table (nome text, cognome text)
-language sql
-immutable
-set search_path = ''
-as $$
-  select 'Giocatore'::text, 'anonimo'::text;
-$$;
-
 -- Cancella l'account di chi è connesso (mai di un altro: niente parametri).
 -- In una transazione:
--- 1. ritira le iscrizioni attive (in_attesa/confermata) delle tappe che non
---    sono ancora iniziate, come `admin_rimuovi_iscrizione` (il posto torna
---    libero, il giocatore esce dal girone);
--- 2. anonimizza `utenti` (nome, cognome, email; ruolo giocatore);
--- 3. elimina i consensi e la riga di auth.users (hash, identità, sessioni).
+-- 1. `anonimizza_utente()`: ritira le iscrizioni delle tappe non iniziate,
+--    cancella nome, cognome, email e consensi;
+-- 2. elimina la riga di auth.users (hash, identità, sessioni): il trigger
+--    `on_auth_user_deleted` trova l'account già anonimo e non fa altro.
 -- Iscrizioni, gironi, partite e punteggi delle tappe giocate restano.
 --
--- Errori: 42501 senza sessione; 23514 `gia_cancellato`; 23514
--- `ultimo_admin` se è l'unico admin rimasto.
+-- Errori: 42501 senza sessione; 23514 con hint `gia_cancellato`,
+-- `account_admin` (un account dell'organizzazione non si cancella da qui) o
+-- `tappa_in_corso` (un'iscrizione attiva in una tappa che si sta giocando:
+-- in corso, o iscrizioni chiuse con una fase già avviata).
 -- Ritorna `{tappe: [una tappa in classifica per stagione], ritirate: N}`:
 -- il server ripubblica in live la classifica generale di quelle stagioni.
+drop function public.cancella_account();
+
 create function public.cancella_account()
 returns jsonb
 language plpgsql
@@ -201,42 +172,30 @@ begin
     raise exception 'L''account è già stato cancellato'
       using errcode = 'check_violation', hint = 'gia_cancellato';
   end if;
-  if v_riga.ruolo = 'admin' and not exists (
-    select 1 from public.utenti
-    where ruolo = 'admin' and id <> v_utente and anonimizzato_il is null
-  ) then
-    raise exception 'Sei l''unico admin: nomina un altro admin prima di cancellare l''account'
-      using errcode = 'check_violation', hint = 'ultimo_admin';
+  if v_riga.ruolo = 'admin' then
+    raise exception 'Un account dell''organizzazione non si cancella da qui'
+      using errcode = 'check_violation', hint = 'account_admin';
   end if;
-
-  perform set_config('blvs.cancellazione_account', 'on', true);
-
-  -- 1. Iscrizioni attive delle tappe non ancora iniziate.
-  with attive as (
-    select i.id, i.tabellone_id
+  if exists (
+    select 1
     from public.iscrizioni i
     join public.tappe t on t.id = i.tappa_id
+    join public.tabelloni tb on tb.id = i.tabellone_id
     where i.utente_id = v_utente
       and i.stato in ('in_attesa', 'confermata')
-      and public.tappa_iscritti_modificabili(t.stato)
-    for update of i
-  ),
-  fuori as (
-    delete from public.girone_iscrizioni gi
-    using attive a
-    where gi.iscrizione_id = a.id
-    returning a.tabellone_id
-  ),
-  versione as (
-    update public.tabelloni tb
-    set versione_gironi = tb.versione_gironi + 1
-    where tb.id in (select tabellone_id from fuori)
-  )
-  update public.iscrizioni i
-  set stato = 'ritirata'
-  from attive a
-  where i.id = a.id;
-  get diagnostics v_ritirate = row_count;
+      and (t.stato = 'in_corso'
+        or (t.stato = 'iscrizioni_chiuse' and tb.fase_gioco is not null))
+  ) then
+    raise exception 'Hai una tappa in corso: potrai cancellare l''account quando sarà finita'
+      using errcode = 'check_violation', hint = 'tappa_in_corso';
+  end if;
+
+  select count(*) into v_ritirate
+  from public.iscrizioni i
+  join public.tappe t on t.id = i.tappa_id
+  where i.utente_id = v_utente
+    and i.stato in ('in_attesa', 'confermata')
+    and public.tappa_iscritti_modificabili(t.stato);
 
   -- Una tappa in classifica del giocatore per stagione: ripubblicarla in
   -- live aggiorna la classifica generale di quella stagione.
@@ -249,18 +208,7 @@ begin
     order by t.stagione, t.data_inizio desc
   ) x;
 
-  -- 2. Anonimizzazione.
-  update public.utenti u
-  set nome = n.nome,
-      cognome = n.cognome,
-      email = null,
-      ruolo = 'giocatore',
-      anonimizzato_il = now()
-  from public.nome_anonimo() n
-  where u.id = v_utente;
-
-  -- 3. Consensi e utente Auth (con hash, identità e sessioni).
-  delete from public.consensi where utente_id = v_utente;
+  perform public.anonimizza_utente(v_utente);
   delete from auth.users where id = v_utente;
 
   return jsonb_build_object('tappe', v_tappe, 'ritirate', v_ritirate);

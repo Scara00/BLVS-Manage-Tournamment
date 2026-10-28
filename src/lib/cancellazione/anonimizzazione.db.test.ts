@@ -102,7 +102,7 @@ function utente(id: string) {
     .query<{
       nome: string;
       cognome: string;
-      email: string;
+      email: string | null;
       anonimizzato_il: string | null;
     }>(
       "select nome, cognome, email, anonimizzato_il from utenti where id = $1",
@@ -142,7 +142,7 @@ describe("cancella_account", () => {
 
     const riga = await utente(id);
     expect(`${riga.nome} ${riga.cognome}`).toBe(NOME_ANONIMO);
-    expect(riga.email).toBe(`anonimo-${id}@anonimo.invalid`);
+    expect(riga.email).toBeNull();
     expect(riga.anonimizzato_il).not.toBeNull();
     const { rows } = await db.query<{ stato: string }>(
       "select stato from iscrizioni where id = $1",
@@ -200,13 +200,10 @@ describe("cancella_account", () => {
     expect((await utente(id)).anonimizzato_il).toBeNull();
   });
 
-  it("è idempotente e l'account cancellato non si modifica più", async () => {
+  it("una volta sola, e l'account cancellato non si modifica più", async () => {
     const id = await giocatore("Gialli");
     await cancella(id);
-    const { rows } = await cancella(id).then(
-      (r) => r as { rows: { ok: boolean }[] },
-    );
-    expect(rows[0].ok).toBe(false);
+    expect((await errore(cancella(id))).hint).toBe("gia_cancellato");
     const e = await errore(
       asRole(db, "authenticated", id, () =>
         db.query("update utenti set nome = 'Torno' where id = $1", [id]),

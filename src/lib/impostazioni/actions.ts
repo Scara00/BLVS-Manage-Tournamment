@@ -180,8 +180,11 @@ export async function cancellaAccount(
 
   const { data, error } = await user.supabase.rpc("cancella_account");
   if (error) {
-    if (error.hint === "ultimo_admin")
-      return { status: "error", message: M.ultimoAdmin, fields: {} };
+    // BLVS-50 rules: never an admin, never during a stage in progress.
+    if (error.hint === "account_admin")
+      return { status: "error", message: M.accountAdmin, fields: {} };
+    if (error.hint === "tappa_in_corso")
+      return { status: "error", message: M.tappaInCorso, fields: {} };
     if (error.hint === "gia_cancellato") {
       await user.supabase.auth.signOut({ scope: "local" });
       redirect(ACCOUNT_CANCELLATO_PATH);

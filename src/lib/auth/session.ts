@@ -41,7 +41,8 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     console.error("[auth] lettura del profilo non riuscita", profileError);
     return null;
   }
-  // A deleted account (BLVS-50) whose Auth login could not be removed.
+  // A deleted account (BLVS-50/53): its access token outlives the Auth user
+  // until it expires.
   if (!utente || utente.anonimizzato_il) return null;
 
   const { id, email, ruolo } = utente;

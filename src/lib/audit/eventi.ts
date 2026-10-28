@@ -14,7 +14,7 @@ export const TIPI_EVENTO_REGISTRO = [
   "rigenerazione_gironi",
   "cambio_categoria",
   "chiusura_tabellone",
-  // BLVS-37 (20261027400000_punteggio_parziale_evento.sql).
+  // BLVS-37 (20261027400050_punteggio_parziale_evento.sql).
   "punteggio_parziale",
   // BLVS-51 (20261027510000_annullamento_iscrizione_evento.sql).
   "annullamento_iscrizione",
