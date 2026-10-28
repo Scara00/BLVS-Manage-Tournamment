@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
@@ -7,9 +8,8 @@ import {
   LiveTappa,
   LiveTappaSessioneScaduta,
 } from "@/components/live";
-import Link from "next/link";
 import { readLiveTappa } from "@/lib/live/tappa-read";
-import { tabelloneTappaHref } from "@/lib/tappe/paths";
+import { classificaTappaHref, tabelloneTappaHref } from "@/lib/tappe/paths";
 
 export const metadata: Metadata = { title: "Live della tappa" };
 
@@ -42,6 +42,12 @@ async function LiveTappaContent({ id }: { id: string }) {
           className="font-heading font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
         >
           Gironi e fasi
+        </Link>
+        <Link
+          href={classificaTappaHref(live.tappa.id)}
+          className="font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
+        >
+          Classifica di tappa
         </Link>
       </div>
       <LiveTappa

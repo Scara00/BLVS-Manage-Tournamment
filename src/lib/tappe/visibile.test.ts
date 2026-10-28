@@ -11,6 +11,7 @@ describe("tappaDaPercorso", () => {
     ["/tappe/jesolo/tabellone", "jesolo"],
     ["/tappe/jesolo/gironi/g-1", "jesolo"],
     ["/tappe/jesolo/gironi", null],
+    ["/tappe/jesolo/classifica", "jesolo"],
     ["/tappe/a%20b", "a b"],
     ["/tappe", null],
     ["/tappe/rimini/altro", null],

@@ -10,6 +10,7 @@ import type {
   OverallStandings,
   PendingScores,
   PhaseStarted,
+  StageStandings,
 } from "./types";
 import type { StageBoard } from "@/lib/tabellone/types";
 
@@ -75,4 +76,9 @@ export function publishBoardClosed(board: BoardClosed): LiveEvent {
 /** Both boards of a stage after any change (w-tabellone, BLVS-48). */
 export function publishStageBoard(stage: StageBoard): LiveEvent {
   return getLiveBus().publish({ type: "stage-board", stage });
+}
+
+/** The stage standing of one board after a change (BLVS-49). */
+export function publishStageStandings(standings: StageStandings): LiveEvent {
+  return getLiveBus().publish({ type: "stage-standings", standings });
 }

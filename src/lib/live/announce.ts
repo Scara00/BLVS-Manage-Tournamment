@@ -35,6 +35,8 @@ export function announcementFor(event: LiveEvent): string {
       return `${event.board.label}: ${annuncioChiusura(event.board.stageConcluded)}`;
     case "stage-board":
       return `${event.stage.label}: ${event.stage.change ?? "gironi aggiornati"}`;
+    case "stage-standings":
+      return `Classifica di tappa aggiornata, ${event.standings.label}`;
   }
 }
 

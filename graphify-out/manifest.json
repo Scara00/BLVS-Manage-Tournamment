@@ -1045,8 +1045,8 @@
     "semantic_hash": ""
   },
   "src/app/api/live/snapshot/route.ts": {
-    "mtime": 1793185147.5841627,
-    "ast_hash": "a36bcd2a02218b5f7d5c833d1dc7f731",
+    "mtime": 1793185536.3204744,
+    "ast_hash": "d778e8a0caa75427a8ceec9c37575172",
     "semantic_hash": ""
   },
   "src/app/api/live/stream/route.test.ts": {
@@ -1070,8 +1070,8 @@
     "semantic_hash": ""
   },
   "src/components/live/live-announcer.tsx": {
-    "mtime": 1793185147.1875434,
-    "ast_hash": "b7ccb73ee0c90fe2b559c2b5e7b97f5c",
+    "mtime": 1793185336.5154657,
+    "ast_hash": "c6cfdadedb8b91e99ec15e7e89891b2c",
     "semantic_hash": ""
   },
   "src/components/live/live-bar.stories.tsx": {
@@ -1130,8 +1130,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/announce.ts": {
-    "mtime": 1793185147.585399,
-    "ast_hash": "7a29efb3a85ea5d96c288cff0f80ca7d",
+    "mtime": 1793185536.3189764,
+    "ast_hash": "6c62d74324f4f9560c10f23c46ec2b11",
     "semantic_hash": ""
   },
   "src/lib/live/bus.test.ts": {
@@ -1180,8 +1180,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/publish.ts": {
-    "mtime": 1793185147.58549,
-    "ast_hash": "c5f8c62b198eb8feb6c919d97a0b2347",
+    "mtime": 1793185536.3187299,
+    "ast_hash": "4051fa9f1e9c2fd5043e938e709b6c36",
     "semantic_hash": ""
   },
   "src/lib/live/read.ts": {
@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/types.ts": {
-    "mtime": 1793185182.879881,
-    "ast_hash": "9c0871ec56e59e967407b5d6358b8cbd",
+    "mtime": 1793185536.3184333,
+    "ast_hash": "db0486aa1e79122335f97c57a91a330a",
     "semantic_hash": ""
   },
   "e2e/mailpit.ts": {
@@ -2455,8 +2455,8 @@
     "semantic_hash": ""
   },
   "src/components/tappe/tappe-live-strip.tsx": {
-    "mtime": 1793185147.1951175,
-    "ast_hash": "5ac02f77addd7ff1c765f2276a9a7763",
+    "mtime": 1793185336.5158625,
+    "ast_hash": "d317fd5aab004274d83c2b1069037867",
     "semantic_hash": ""
   },
   "src/components/tappe/tappe-offline.tsx": {
@@ -2530,8 +2530,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/paths.ts": {
-    "mtime": 1793185244.4888928,
-    "ast_hash": "e1577bf5e2a17b24a712b8cb09c39237",
+    "mtime": 1793185536.3196445,
+    "ast_hash": "b43a96b5d45abb3f3f6110bde06cfdc3",
     "semantic_hash": ""
   },
   "src/lib/tappe/posti-tappe.db.test.ts": {
@@ -2595,8 +2595,8 @@
     "semantic_hash": ""
   },
   "src/components/tappa/tappa-dettaglio.tsx": {
-    "mtime": 1793185147.5850828,
-    "ast_hash": "7b1477c3226f1708cc3fae8bb8d4dbb7",
+    "mtime": 1793185536.3198724,
+    "ast_hash": "3b72d8ceb3f4d4aaec6a007fdc57110e",
     "semantic_hash": ""
   },
   "src/components/tappa/tappa-loading.tsx": {
@@ -2670,13 +2670,13 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/visibile.test.ts": {
-    "mtime": 1793185244.489084,
-    "ast_hash": "739cd0273e16de7c467c8f83d314c2be",
+    "mtime": 1793185536.319271,
+    "ast_hash": "afba79b1def74faf42d2ad67f49e7358",
     "semantic_hash": ""
   },
   "src/lib/tappe/visibile.ts": {
-    "mtime": 1793185244.489224,
-    "ast_hash": "f370a3149312fba8ef25287802dfcf06",
+    "mtime": 1793185536.3202672,
+    "ast_hash": "990ea41143d90fdb0d958e9d4c1ec3aa",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027324000_iscrizione_tappa.sql": {
@@ -3620,8 +3620,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/pubblica.ts": {
-    "mtime": 1793185147.5866868,
-    "ast_hash": "ff33aefcafe880ae985cd2814c25d347",
+    "mtime": 1793185336.518,
+    "ast_hash": "093ac80387b749e421c64a669044ddcd",
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/punteggio.test.ts": {
@@ -3985,8 +3985,8 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/[id]/live/page.tsx": {
-    "mtime": 1793185147.583903,
-    "ast_hash": "0653f2c13aab9f139c1dd1f56e758f96",
+    "mtime": 1793185596.7091808,
+    "ast_hash": "d016b71f16f8de3c6fed00f9d5e93213",
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.stories.tsx": {
@@ -4190,8 +4190,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/classifica/read.ts": {
-    "mtime": 1793185147.2254863,
-    "ast_hash": "eab7eaaa40bd5fa59f06b0d2e08f8827",
+    "mtime": 1793185336.5178413,
+    "ast_hash": "c8e6cf477550bc58a09c70b8f89f918e",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027400000_correzione_punteggio.sql": {
@@ -4250,8 +4250,8 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/parita/actions.ts": {
-    "mtime": 1793185147.5853047,
-    "ast_hash": "39ada3e9eb2c3709dcc3ab636791145e",
+    "mtime": 1793185536.3194852,
+    "ast_hash": "d4e499d65e411c47ffe19ebf5028bbe1",
     "semantic_hash": ""
   },
   "src/lib/gironi/parita/dati.ts": {
@@ -4715,8 +4715,8 @@
     "semantic_hash": ""
   },
   "src/lib/classifica-generale/dati.ts": {
-    "mtime": 1793185147.2040048,
-    "ast_hash": "c21897fbcf3e098418d28bcd240150f9",
+    "mtime": 1793185336.5161023,
+    "ast_hash": "b55a9fcc900bf6633bdb9fd94325b996",
     "semantic_hash": ""
   },
   "src/lib/classifica-generale/index.ts": {
@@ -5057,6 +5057,76 @@
   "src/lib/punteggi/format.test.ts": {
     "mtime": 1793185182.8799615,
     "ast_hash": "6cd2a76bde0ccfa42a33ae6edea5c238",
+    "semantic_hash": ""
+  },
+  "e2e/classifica-tappa.spec.ts": {
+    "mtime": 1793185336.5042918,
+    "ast_hash": "c9ea2de6d5093e4d7e10eb6208ed0b2c",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/tappe/[id]/classifica/page.tsx": {
+    "mtime": 1793185336.511725,
+    "ast_hash": "4617b913a63b6917094f434890af8cbc",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/classifica-tappa-live.tsx": {
+    "mtime": 1793185336.5127509,
+    "ast_hash": "a3ae5c3eabaa2683cd692aba4d637566",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/classifica-tappa.stories.tsx": {
+    "mtime": 1793185336.5138261,
+    "ast_hash": "e8c36d03193a99ad7529b4dde2628293",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/classifica-tappa.test.tsx": {
+    "mtime": 1793185336.5140548,
+    "ast_hash": "63c248a067fdfb09519573f18ae78595",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/classifica-tappa.tsx": {
+    "mtime": 1793185336.514247,
+    "ast_hash": "2283539042be4bef97cfd9b86d0beffa",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/fixtures.ts": {
+    "mtime": 1793185336.5143976,
+    "ast_hash": "8874f7aacf81c33625cf836f9a5bc53a",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/index.ts": {
+    "mtime": 1793185336.514586,
+    "ast_hash": "b7f10597ad3bb3a36f3f3afcc0d63f33",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/la-tua-tappa.tsx": {
+    "mtime": 1793185336.514748,
+    "ast_hash": "e8a3a5949881c909c0c8179d627cc661",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-tappa/scelta-categoria.tsx": {
+    "mtime": 1793185336.5149186,
+    "ast_hash": "0fe124bd016709bbaa02128952e45d1e",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/classifica/live.test.ts": {
+    "mtime": 1793185336.5169842,
+    "ast_hash": "f16fe507c7b2e7c5fce21d951a942f09",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/classifica/live.ts": {
+    "mtime": 1793185336.517229,
+    "ast_hash": "58cd224f7395337325417920ec00045f",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/classifica/pubblica.test.ts": {
+    "mtime": 1793185336.5173802,
+    "ast_hash": "433ff43322613caea26132c396cc5984",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/classifica/pubblica.ts": {
+    "mtime": 1793185336.51755,
+    "ast_hash": "d0e99255439c308049df288645d7e2d9",
     "semantic_hash": ""
   }
 }
