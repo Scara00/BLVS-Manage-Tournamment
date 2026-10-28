@@ -1,4 +1,5 @@
 import type { Categoria } from "@/lib/db/types";
+import type { StageBoard } from "@/lib/tabellone/types";
 import type { PartitaLive } from "@/lib/tappe/live-admin/types";
 
 /**
@@ -64,7 +65,12 @@ export type GroupStandingRow = {
   note?: string;
   played: number;
   won: number;
+  /** Points scored (PF). */
   points: number;
+  /** BLVS-47: points conceded (PS); optional for older publishers. */
+  against?: number;
+  /** BLVS-47: points scored minus conceded (Diff). */
+  diff?: number;
 };
 
 export type GroupStandings = {
@@ -180,6 +186,42 @@ export type BoardClosed = {
   points: readonly BoardClosedPoints[];
 };
 
+/** One player of a stage standing (BLVS-49, w-classifica-tappa). */
+export type StageStandingRow = {
+  /** Registration id (`iscrizioni.id`). */
+  playerId: string;
+  name: string;
+  /** The final the player is in; null while unknown. */
+  phase: "gold" | "silver" | null;
+  /** Place in the category standing; tied players share it. */
+  position: number;
+  /** Place inside the final, which sets the points. */
+  phasePosition: number;
+  /** Points of that place; null while the final's phase is unknown. */
+  points: number | null;
+  /** The place can no longer change. */
+  definitive: boolean;
+  /** In a perfect tie the admin has not resolved yet. */
+  toResolve: boolean;
+  withdrawn: boolean;
+};
+
+/** The stage standing of one board, gold final then silver (BLVS-49). */
+export type StageStandings = {
+  /** `<stage id>:<category>`, one per board. */
+  id: string;
+  stageId: string;
+  category: Categoria;
+  /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
+  label: string;
+  state: "in_attesa" | "in_corso" | "definitiva" | "conclusa";
+  /** True until the board is closed (BLVS-43). */
+  provisional: boolean;
+  rows: readonly StageStandingRow[];
+  /** What changed, said once by the announcer (e.g. «punti definitivi»). */
+  change?: string | null;
+};
+
 export type LiveSnapshot = {
   /** Sequence number of the last event folded into this snapshot. */
   seq: number;
@@ -198,6 +240,10 @@ export type LiveSnapshot = {
   boards?: readonly BoardMatches[];
   /** Boards an admin concluded; absent in snapshots from before BLVS-43. */
   closed?: readonly BoardClosed[];
+  /** BLVS-48: both boards of a stage for w-tabellone, one per stage. */
+  stageBoards?: readonly StageBoard[];
+  /** Per board; absent in snapshots from before BLVS-49. */
+  stageStandings?: readonly StageStandings[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -215,7 +261,9 @@ export type LiveEventPayload =
   | { type: "pending-scores"; stage: PendingScores }
   | { type: "phase-started"; phase: PhaseStarted }
   | { type: "board-matches"; board: BoardMatches }
-  | { type: "board-closed"; board: BoardClosed };
+  | { type: "board-closed"; board: BoardClosed }
+  | { type: "stage-board"; stage: StageBoard }
+  | { type: "stage-standings"; standings: StageStandings };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -232,6 +280,8 @@ export const LIVE_EVENT_TYPES = [
   "phase-started",
   "board-matches",
   "board-closed",
+  "stage-board",
+  "stage-standings",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -270,5 +320,15 @@ export function applyLiveEvent(
       return { ...base, boards: upsert(snapshot.boards ?? [], event.board) };
     case "board-closed":
       return { ...base, closed: upsert(snapshot.closed ?? [], event.board) };
+    case "stage-board":
+      return {
+        ...base,
+        stageBoards: upsert(snapshot.stageBoards ?? [], event.stage),
+      };
+    case "stage-standings":
+      return {
+        ...base,
+        stageStandings: upsert(snapshot.stageStandings ?? [], event.standings),
+      };
   }
 }

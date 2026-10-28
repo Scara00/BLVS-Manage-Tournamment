@@ -12,6 +12,7 @@ export const playerPrimaryNav: readonly NavItem[] = [
   { href: "/tappe", label: "Tappe" },
   { href: "/live", label: "Live" },
   { href: "/classifica", label: "Classifica" },
+  { href: "/regole", label: "Regole" },
 ];
 
 /** Secondary player links, behind the mobile «Menu» disclosure. */

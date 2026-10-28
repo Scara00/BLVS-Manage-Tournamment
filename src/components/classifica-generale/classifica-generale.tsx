@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useRef, useState } from "react";
 import {
   ResponsiveTable,
@@ -18,6 +19,7 @@ import {
   risultatiRicercaLabel,
 } from "@/lib/classifica-generale/ricerca";
 import { spiegaRegolaGenerale } from "@/lib/classifica-generale/spareggi";
+import { regoleHref } from "@/lib/regole/paths";
 import { stagioneLabel } from "@/lib/classifica-generale/stagione";
 import type { Categoria } from "@/lib/db/types";
 import type { OverallPlayerRow } from "@/lib/live/types";
@@ -153,6 +155,14 @@ export function ClassificaGenerale({
             <li key={testo}>{testo}</li>
           ))}
         </ol>
+        <p className="mt-space-3">
+          <Link
+            href={regoleHref("spareggiGenerale")}
+            className="font-semibold underline decoration-2 underline-offset-4 focus-ring"
+          >
+            Tutte le regole e i punti di tappa
+          </Link>
+        </p>
       </details>
     </div>
   );

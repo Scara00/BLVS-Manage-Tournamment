@@ -15,6 +15,7 @@ describe("requiresSession", () => {
 
   it.each([
     "/classifica",
+    "/regole",
     "/accesso",
     "/sessione-scaduta",
     "/privacy",
@@ -77,6 +78,7 @@ describe("link di accesso", () => {
 describe("describeReturnPath", () => {
   it.each([
     ["/classifica", "Classifica"],
+    ["/regole", "Regole"],
     ["/", "Home"],
     ["/admin", "Admin · Dashboard"],
     ["/admin/tappe", "Admin · Tappe"],

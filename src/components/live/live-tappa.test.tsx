@@ -109,6 +109,10 @@ describe("LiveTappa", () => {
     });
     expect(within(girone).getAllByText("Tu").length).toBeGreaterThan(0);
     expect(within(girone).getAllByText("Gold").length).toBeGreaterThan(0);
+    // BLVS-47: the group card leads to w-girone.
+    expect(
+      within(girone).getByRole("link", { name: /^Apri il girone/ }),
+    ).toHaveAttribute("href", "/tappe/t/gironi/g1");
 
     const inCampo = screen.getByTestId("live-in-campo");
     expect(within(inCampo).getByText("Silver")).toBeInTheDocument();
