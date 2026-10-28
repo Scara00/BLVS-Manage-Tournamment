@@ -53,7 +53,9 @@ function conStati(
 const base = {
   tappa: { id: "jesolo", nome: "Tappa 1 · Jesolo", stato: "in_corso" },
   categoria: "M",
+  tabelloneId: "jesolo:M",
   faseGioco: "gironi_iniziali",
+  conclusoIl: null,
   lettoIl: "2026-06-14T09:30:00.000Z",
 } as const satisfies Omit<TabelloneLive, "partite">;
 
@@ -83,6 +85,45 @@ export const nonAvviata: TabelloneLive = {
   tappa: { ...base.tappa, stato: "iscrizioni_chiuse" },
   faseGioco: null,
   partite: [],
+};
+
+/** BLVS-43: the gold and silver finals, every match concluded. */
+function finali(): PartitaLive[] {
+  return (["finale_gold", "finale_silver"] as const).flatMap((fase, g) =>
+    ROTAZIONE.map(([a1, a2, b1, b2], t): PartitaLive => {
+      const cognomi = COGNOMI[g];
+      return {
+        id: `${fase}-t${t + 1}`,
+        fase: "finale",
+        gironeId: fase,
+        gironeNome: fase === "finale_gold" ? "Finale gold" : "Finale silver",
+        gironeFase: fase,
+        gironePosizione: g + 1,
+        turno: t + 1,
+        campo: `Campo ${g + 1}`,
+        programmataIl: null,
+        stato: "conclusa",
+        squadraA: [giocatore(cognomi[a1]), giocatore(cognomi[a2])],
+        squadraB: [giocatore(cognomi[b1]), giocatore(cognomi[b2])],
+        sets: [{ a: 21, b: 10 + 2 * t }],
+        versione: 2,
+      };
+    }),
+  );
+}
+
+/** Both finals played: «Concludi tabellone» is offered. */
+export const finaliConcluse: TabelloneLive = {
+  ...base,
+  faseGioco: "finali",
+  partite: finali(),
+};
+
+/** The board is concluded: phase «Conclusa», points final. */
+export const tabelloneConcluso: TabelloneLive = {
+  ...finaliConcluse,
+  tappa: { ...base.tappa, stato: "conclusa" },
+  conclusoIl: "2026-06-14T18:30:00.000Z",
 };
 
 export const liveSync: LiveSync = {

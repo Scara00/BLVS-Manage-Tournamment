@@ -7,13 +7,34 @@ import type { AzionePartitaState } from "@/lib/tappe/live-admin/state";
 import type { TabelloneLive } from "@/lib/tappe/live-admin/types";
 import { AdminLive } from "./admin-live";
 import { AdminLiveLoading } from "./admin-live-loading";
+import { finaliDaPartite } from "@/lib/tappe/chiusura/regole";
+import type { ConcludiTabelloneAction } from "@/lib/tappe/chiusura/state";
+import { classificaTappa } from "@/lib/tappe/classifica/classifica";
 import {
   appenaAvviata,
   azioneFinta,
+  finaliConcluse,
   inGara,
   liveSync,
   nonAvviata,
+  tabelloneConcluso,
 } from "./stories-data";
+
+const concludiFinto: ConcludiTabelloneAction = async (prev) => {
+  await new Promise((r) => setTimeout(r, 400));
+  return {
+    status: "success",
+    message: "Tabellone maschile concluso: i punti sono definitivi.",
+    tappaConclusa: false,
+    at: prev.status === "idle" ? 1 : prev.at + 1,
+  };
+};
+
+const classificaDi = (view: TabelloneLive) =>
+  classificaTappa({
+    finali: finaliDaPartite(view.partite),
+    concluso: view.conclusoIl !== null,
+  });
 
 const signOut = async () => ({ error: null });
 
@@ -57,6 +78,10 @@ function Schermata({
                   punteggio={azioneFinta}
                   offline={offline}
                   initialState={initialState}
+                  chiusura={concludiFinto}
+                  classifica={
+                    view.faseGioco === "finali" ? classificaDi(view) : undefined
+                  }
                 />
               </div>
             </LiveProvider>
@@ -109,5 +134,11 @@ export const SessionExpired: Story = {
     },
   },
 };
+
+/** BLVS-43: both finals played, «Concludi tabellone» and provisional points. */
+export const FinaliConcluse: Story = { args: { view: finaliConcluse } };
+
+/** BLVS-43: the board is concluded, phase «Conclusa», points final. */
+export const Conclusa: Story = { args: { view: tabelloneConcluso } };
 
 export const Testo200: Story = { parameters: { text200: true } };

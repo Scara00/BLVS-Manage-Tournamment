@@ -179,5 +179,7 @@ export function eventoDellaTappa(event: LiveEvent, stageId: string): boolean {
   if (event.type === "group-standings") return event.group.stageId === stageId;
   // A new game phase of this stage (BLVS-39: gold/silver groups, finals).
   if (event.type === "phase-started") return event.phase.stageId === stageId;
+  // A board concluded (BLVS-43): the points are final.
+  if (event.type === "board-closed") return event.board.stageId === stageId;
   return false;
 }

@@ -415,3 +415,36 @@ export function getDemoFaseTabellone(
     gironi: board.gironi.map(copiaGirone),
   };
 }
+
+/**
+ * BLVS-43 e2e: a stage in progress whose M and F boards are both in the
+ * finals (a gold and a silver final of 4 each), all to play. Returns the
+ * stage id; the matches are made by w-admin-live's demo store.
+ */
+export function creaDemoTappaFinali(): string {
+  const id = `e2e-${crypto.randomUUID()}`;
+  aggiungiDemoTappa(id, {
+    stato: "in_corso",
+    chiudonoIl: "2099-07-20T21:59:00Z",
+    nome: `Tappa finali ${id.slice(4, 10)}`,
+    confermate: { M: 8, F: 8 },
+  });
+  for (const categoria of ["M", "F"] as const) {
+    const { gironi } = componi(id, categoria, [4, 4]);
+    store().set(chiave(id, categoria), {
+      faseGioco: "finali",
+      precedenti: [],
+      nonAssegnati: [],
+      gironi: gironi.map((g, i) => {
+        const fase: FaseGirone = i === 0 ? "finale_gold" : "finale_silver";
+        return {
+          ...g,
+          id: `${id}-${categoria}-${fase}`,
+          nome: i === 0 ? "Finale gold" : "Finale silver",
+          fase,
+        };
+      }),
+    });
+  }
+  return id;
+}

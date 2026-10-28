@@ -4,7 +4,8 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, StatoIscrizione } from "@/lib/db/types";
+import type { Categoria, FaseGioco, StatoIscrizione } from "@/lib/db/types";
+import { getDemoConclusoIl } from "@/lib/demo/admin-live";
 import {
   chiudiDemoScadute,
   getDemoTappaGestione,
@@ -60,6 +61,8 @@ export async function readTappeAdmin(): Promise<TappaAdminItem[]> {
 type TabelloneDb = {
   id: string;
   categoria: Categoria;
+  fase_gioco: FaseGioco | null;
+  concluso_il: string | null;
   iscrizioni: { stato: StatoIscrizione }[];
   partite: { fase: string }[];
 };
@@ -71,7 +74,7 @@ async function readFromDb(
   const { data, error } = await supabase
     .from("tappe")
     .select(
-      `${TAPPA_GESTIONE_COLUMNS}, tabelloni (id, categoria, iscrizioni (stato), partite (fase))`,
+      `${TAPPA_GESTIONE_COLUMNS}, tabelloni (id, categoria, fase_gioco, concluso_il, iscrizioni (stato), partite (fase))`,
     )
     .eq("id", id)
     .maybeSingle();
@@ -88,6 +91,8 @@ async function readFromDb(
       confermate: t.iscrizioni.filter((i) => i.stato === "confermata").length,
       inAttesa: t.iscrizioni.filter((i) => i.stato === "in_attesa").length,
       fasiPartite: t.partite.map((p) => p.fase),
+      faseGioco: t.fase_gioco,
+      conclusoIl: t.concluso_il,
     })),
   };
 }
@@ -106,7 +111,12 @@ export async function readGestioneTappa(
     chiudiDemoScadute(at);
     const tappa = getDemoTappaGestione(id);
     if (!tappa) notFound();
-    return toGestioneTappaView(tappa.row, tappa.tabelloni, at);
+    // BLVS-43: the boards closed on w-admin-live's demo store.
+    const tabelloni = tappa.tabelloni.map((t) => ({
+      ...t,
+      conclusoIl: getDemoConclusoIl(id, t.categoria),
+    }));
+    return toGestioneTappaView(tappa.row, tabelloni, at);
   }
 
   if (!isUuid(id)) notFound();

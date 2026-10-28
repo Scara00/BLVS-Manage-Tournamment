@@ -416,7 +416,11 @@ export function InserimentoPunteggio({
 
   const salvato = state.status === "success" ? state : null;
   const errore = state.status === "error" ? state : null;
-  const giocabile = tappa.stato === "in_corso" && partita.stato !== "annullata";
+  // BLVS-43: a concluded stage still takes a confirmed correction of a
+  // concluded match (the server asks for it with only «Mantieni»).
+  const giocabile =
+    (tappa.stato === "in_corso" && partita.stato !== "annullata") ||
+    (tappa.stato === "conclusa" && partita.stato === "conclusa");
   // The score the admin knows to be saved: the page's, or the one kept in
   // the conflict dialog while the page still shows the older one.
   const nota =

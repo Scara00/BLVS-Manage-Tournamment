@@ -1,11 +1,13 @@
 import "server-only";
 import { getLiveBus } from "./bus";
 import type {
+  BoardClosed,
   BoardMatches,
   GroupStandings,
   LiveEvent,
   LiveMatch,
   OverallStandingRow,
+  OverallStandings,
   PendingScores,
   PhaseStarted,
 } from "./types";
@@ -30,6 +32,25 @@ export function publishOverallStandings(
   return getLiveBus().publish({ type: "overall-standings", rows });
 }
 
+/**
+ * The overall standing of one category and season (BLVS-44). `rows`
+ * mirrors it in the old pair shape for pre-BLVS-44 readers.
+ */
+export function publishOverallPlayerStandings(
+  standings: OverallStandings,
+): LiveEvent {
+  return getLiveBus().publish({
+    type: "overall-standings",
+    rows: standings.rows.map((r) => ({
+      position: r.position,
+      pair: r.name,
+      stages: r.stages,
+      points: r.points,
+    })),
+    standings,
+  });
+}
+
 /** New count of results to enter for a stage (admin dashboard banner). */
 export function publishPendingScores(stage: PendingScores): LiveEvent {
   return getLiveBus().publish({ type: "pending-scores", stage });
@@ -43,4 +64,9 @@ export function publishPhaseStarted(phase: PhaseStarted): LiveEvent {
 /** An admin changed a match of a board: its whole list (BLVS-31). */
 export function publishBoardMatches(board: BoardMatches): LiveEvent {
   return getLiveBus().publish({ type: "board-matches", board });
+}
+
+/** A board was concluded (BLVS-43): its points are final. */
+export function publishBoardClosed(board: BoardClosed): LiveEvent {
+  return getLiveBus().publish({ type: "board-closed", board });
 }

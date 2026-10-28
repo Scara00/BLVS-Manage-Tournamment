@@ -98,6 +98,7 @@ describe("toGestioneTappaView", () => {
         iscritti: 5,
         inAttesa: 0,
         fase: "Raccolta iscrizioni",
+        concluso: false,
       },
       {
         categoria: "F",
@@ -105,6 +106,7 @@ describe("toGestioneTappaView", () => {
         iscritti: 2,
         inAttesa: 1,
         fase: "Raccolta iscrizioni",
+        concluso: false,
       },
     ]);
   });

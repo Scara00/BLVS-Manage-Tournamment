@@ -8,10 +8,15 @@ export const SCELTE_IMPATTO: readonly SceltaImpatto[] = [
   "rigenera",
 ];
 
-/** A match of the board's next phase (BLVS-39), as the dialog shows it. */
+/**
+ * A match of the board's next phase (BLVS-39), as the dialog shows it:
+ * a gold/silver group match (`fase` gironi) or a final.
+ */
 export type PartitaFaseSuccessiva = {
   id: string;
-  fase: "eliminazione" | "finale";
+  fase: "gironi" | "eliminazione" | "finale";
+  /** The group's name («Gold A», «Finale gold»); absent without a group. */
+  girone?: string | null;
   turno: number;
   stato: StatoPartita;
   sets: SetPunteggio[];
@@ -27,4 +32,9 @@ export type PartitaFaseSuccessiva = {
 export type ImpattoFase = {
   partite: PartitaFaseSuccessiva[];
   punteggiPersi: number;
+  /**
+   * BLVS-43: the board is concluded. Only «Mantieni» is allowed, with an
+   * explicit confirmation; the stage points do not change.
+   */
+  tabelloneConcluso?: boolean;
 };

@@ -223,6 +223,17 @@ export function segnaFaseAvviataDemo(
 }
 
 /**
+ * Both boards were concluded (BLVS-43, like `concludi_tabellone`): a
+ * stage in progress moves to `conclusa`.
+ */
+export function segnaTappaConclusaDemo(id: string): DemoEsito {
+  const tappa = store().get(id);
+  if (!tappa) return "nonTrovata";
+  if (tappa.row.stato === "in_corso") tappa.row.stato = "conclusa";
+  return "ok";
+}
+
+/**
  * Adds a stage for one e2e test, so parallel projects never share it.
  * Only reachable through the demo-only route `POST /api/demo/tappe`.
  */

@@ -1,5 +1,5 @@
 import { partiteDaInserireLabel } from "@/lib/admin/tappe";
-import { annuncioFase } from "@/lib/gironi/fasi/fase";
+import { annuncioChiusura, annuncioFase } from "@/lib/gironi/fasi/fase";
 import type { LiveStatus } from "./client/live-connection";
 import { formatLiveTime } from "./format";
 import type { LiveEvent } from "./types";
@@ -31,6 +31,8 @@ export function announcementFor(event: LiveEvent): string {
     }
     case "board-matches":
       return `${event.board.label}: ${event.board.change ?? "partite aggiornate"}`;
+    case "board-closed":
+      return `${event.board.label}: ${annuncioChiusura(event.board.stageConcluded)}`;
   }
 }
 

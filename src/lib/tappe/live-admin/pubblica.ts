@@ -1,5 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { pubblicaClassificaGenerale } from "@/lib/classifica-generale/pubblica";
 import { CATEGORIE, type Categoria } from "@/lib/db/types";
 import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { publishBoardMatches, publishPendingScores } from "@/lib/live/publish";
@@ -25,9 +26,10 @@ function leggi(
 /**
  * After a match changed: sends the board's matches to every open
  * w-admin-live (`board-matches`) and the stage's new count of results to
- * enter to the dashboard banner (`pending-scores`, BLVS-17). It re-reads
- * both boards, so the events carry what is saved. A failure is logged and
- * never undoes the write.
+ * enter to the dashboard banner (`pending-scores`, BLVS-17), then the
+ * overall standing of the stage's season to w-classifica (BLVS-44). It
+ * re-reads both boards, so the events carry what is saved. A failure is
+ * logged and never undoes the write.
  */
 export async function pubblicaTabellone(
   sorgente: Sorgente,
@@ -58,6 +60,7 @@ export async function pubblicaTabellone(
         .flatMap((t) => t?.partite ?? [])
         .filter((p) => isDaInserire(p, adesso)).length,
     });
+    await pubblicaClassificaGenerale(tappaId);
   } catch (error) {
     console.error("[admin-live] aggiornamento live non inviato", error);
   }

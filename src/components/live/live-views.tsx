@@ -11,6 +11,7 @@ import type {
   OverallStandingRow,
 } from "@/lib/live/types";
 import { useLive } from "./live-provider";
+import { NotaAssenza } from "./nota-assenza";
 import { liveRowAttributes, useLiveRowMotion } from "./use-live-row-motion";
 
 function setsLabel(match: LiveMatch) {
@@ -109,7 +110,20 @@ const groupColumns: ResponsiveTableColumn<GroupStandingRow>[] = [
     align: "start",
     width: "16%",
   },
-  { key: "pair", header: "Coppia", rowHeader: true },
+  {
+    key: "pair",
+    header: "Coppia",
+    rowHeader: true,
+    render: (row) =>
+      row.note ? (
+        <span className="inline-flex flex-wrap items-center gap-space-2 [overflow-wrap:anywhere]">
+          {row.pair}
+          <NotaAssenza nota={row.note} />
+        </span>
+      ) : (
+        row.pair
+      ),
+  },
   { key: "played", header: "Giocate", numeric: true, width: "14%" },
   { key: "won", header: "Vinte", numeric: true, width: "14%" },
   { key: "points", header: "Punti", numeric: true, width: "14%" },

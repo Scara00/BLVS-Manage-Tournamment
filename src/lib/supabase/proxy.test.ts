@@ -131,13 +131,13 @@ describe("updateSession", () => {
     const updateSession = await loadUpdateSession();
 
     const res = await updateSession(
-      new NextRequest("https://localhost/classifica", {
+      new NextRequest("https://localhost/tappe", {
         headers: { cookie: "sb-ref-auth-token=scaduto" },
       }),
     );
     expect(res.status).toBe(307);
     expect(res.headers.get("location")).toBe(
-      "https://localhost/sessione-scaduta?da=%2Fclassifica",
+      "https://localhost/sessione-scaduta?da=%2Ftappe",
     );
     expect(res.cookies.get("sb-ref-auth-token")?.value).toBe("");
     expect(res.headers.get("cache-control")).toBe("private, no-store");
@@ -162,6 +162,7 @@ describe("updateSession", () => {
     "/accesso",
     "/sessione-scaduta?da=/live",
     "/privacy",
+    "/classifica",
     "/anteprima/503",
   ])("senza sessione %s resta raggiungibile", async (path) => {
     createServerClient.mockReturnValue({ auth: { getClaims } });

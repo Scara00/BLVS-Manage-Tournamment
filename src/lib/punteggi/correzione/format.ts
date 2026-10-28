@@ -11,13 +11,14 @@ export {
 } from "@/lib/gironi/rigenera/format";
 
 export const FASE_LABEL: Record<PartitaFaseSuccessiva["fase"], string> = {
+  gironi: "Girone",
   eliminazione: "Eliminazione",
   finale: "Finale",
 };
 
-/** «Finale · turno 1». */
+/** «Gold A · turno 1», or «Finale · turno 1» for a match without a group. */
 export function descriviPartitaSuccessiva(p: PartitaFaseSuccessiva): string {
-  return `${FASE_LABEL[p.fase]} · turno ${p.turno}`;
+  return `${p.girone || FASE_LABEL[p.fase]} · turno ${p.turno}`;
 }
 
 /** The dialog's lead: what exists and what «Rigenera» would lose. */
@@ -59,6 +60,8 @@ export type PartitaSuccessivaRow = {
   sets: unknown;
   squadra_a: string[] | null;
   squadra_b: string[] | null;
+  /** BLVS-42: the group's name (gold/silver groups and finals). */
+  girone?: string | null;
 };
 
 function sets(value: unknown): SetPunteggio[] {
@@ -78,7 +81,8 @@ export function toImpattoFase(
 ): ImpattoFase {
   const partite = rows.map((r): PartitaFaseSuccessiva => ({
     id: r.partita_id,
-    fase: r.fase === "eliminazione" ? "eliminazione" : "finale",
+    fase: r.fase === "eliminazione" || r.fase === "gironi" ? r.fase : "finale",
+    girone: r.girone ?? null,
     turno: r.turno,
     stato: r.stato,
     sets: sets(r.sets),

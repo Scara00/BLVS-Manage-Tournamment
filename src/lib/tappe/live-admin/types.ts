@@ -39,7 +39,11 @@ export type PartitaLive = {
 export type TabelloneLive = {
   tappa: { id: string; nome: string; stato: StatoTappa };
   categoria: Categoria;
+  /** `tabelloni.id` (`<stage>:<M|F>` in the demo). */
+  tabelloneId: string;
   faseGioco: FaseGioco | null;
+  /** BLVS-43: when the board was concluded; its points are then final. */
+  conclusoIl: string | null;
   partite: PartitaLive[];
   /** ISO time the matches were read: the newer of this and a live event wins. */
   lettoIl: string;

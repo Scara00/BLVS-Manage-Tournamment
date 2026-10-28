@@ -26,6 +26,7 @@ import {
   creaDemoAvvioFase,
   getDemoGironiGiocati,
 } from "./avvio-fase";
+import { getDemoConclusoIl } from "./admin-live";
 import { getDemoTappaGestione } from "./gestione-tappe";
 import { getDemoDecisioni } from "./spareggi";
 
@@ -183,7 +184,12 @@ export function faseSuccessivaDemo(
   const partite = store().successive.get(
     chiaveBoard(tappaId, partita.categoria),
   );
-  return partite && partite.length > 0 ? impattoDi(partite) : null;
+  if (!partite || partite.length === 0) return null;
+  const tabelloneConcluso =
+    getDemoConclusoIl(tappaId, partita.categoria) !== null;
+  return tabelloneConcluso
+    ? { ...impattoDi(partite), tabelloneConcluso }
+    : impattoDi(partite);
 }
 
 /** e2e/Storybook: sets the next phase of a demo board. */
@@ -219,8 +225,17 @@ export function salvaPunteggioDemo(
     if (scelta === "rigenera" && impatto.punteggiPersi > 0 && !conferma) {
       return { status: "confermaRichiesta", impatto };
     }
+    // BLVS-43: a concluded board keeps its finals, after a confirmation.
+    if (impatto.tabelloneConcluso && (scelta === "rigenera" || !conferma)) {
+      return { status: "impatto", impatto };
+    }
   }
-  if (elenco.tappa.stato !== "in_corso" || partita.stato === "annullata") {
+  const concluso = impatto?.tabelloneConcluso === true;
+  if (
+    (elenco.tappa.stato !== "in_corso" &&
+      !(concluso && elenco.tappa.stato === "conclusa")) ||
+    partita.stato === "annullata"
+  ) {
     return { status: "nonGiocabile" };
   }
   const codice = codiceErrore(punti.a, punti.b);
@@ -467,4 +482,20 @@ export function creaDemoPartitaInCorso(): { id: string; partitaId: string } {
   const partitaId = getDemoPunteggi(id)!.partite[0].id;
   iniziaPartitaDemo(partitaId);
   return { id, partitaId };
+}
+
+/** BLVS-42: a demo match voided by a withdrawal (see `annullaPartitaDemo`). */
+export function annullaPartitaPunteggiDemo(partitaId: string) {
+  const prima = statoDi(partitaId);
+  store().punteggi.set(partitaId, {
+    sets: [],
+    stato: "annullata",
+    versione: prima.sets.length > 0 ? prima.versione + 1 : prima.versione,
+  });
+  store().parziali.delete(partitaId);
+}
+
+/** BLVS-42: «Rigenera» after a withdrawal drops the demo next phase. */
+export function eliminaFaseSuccessivaDemo(tappaId: string, categoria: string) {
+  store().successive.delete(chiaveBoard(tappaId, categoria));
 }

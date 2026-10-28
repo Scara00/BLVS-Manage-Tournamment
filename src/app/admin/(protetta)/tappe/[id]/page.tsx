@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { StagioneTappa } from "@/components/admin-stagione";
 import { GestioneTappa, GestioneTappaLoading } from "@/components/admin-tappa";
 import { PageContainer } from "@/components/layout/page-container";
 import { aggiornaScadenzaTappa, cambiaStatoTappa } from "@/lib/tappe/actions";
+import { archiviaTappa } from "@/lib/tappe/annullamento/actions";
 import { readGestioneTappa } from "@/lib/tappe/gestione";
+import { impostaStagioneTappa } from "@/lib/tappe/stagione/actions";
+import { readStagioneTappa } from "@/lib/tappe/stagione/read";
 
 export const metadata: Metadata = { title: "Gestione tappa · Amministrazione" };
 
@@ -17,13 +21,27 @@ export function generateStaticParams() {
 }
 
 async function GestioneContent({ id }: { id: string }) {
-  const tappa = await readGestioneTappa(id);
+  const [tappa, stagione] = await Promise.all([
+    readGestioneTappa(id),
+    readStagioneTappa(id),
+  ]);
   return (
-    <GestioneTappa
-      tappa={tappa}
-      cambiaStato={cambiaStatoTappa}
-      aggiornaScadenza={aggiornaScadenzaTappa}
-    />
+    <div className="flex flex-col gap-stack-lg">
+      <GestioneTappa
+        tappa={tappa}
+        cambiaStato={cambiaStatoTappa}
+        aggiornaScadenza={aggiornaScadenzaTappa}
+        archivia={archiviaTappa}
+      />
+      {stagione ? (
+        <StagioneTappa
+          tappaId={tappa.id}
+          stagione={stagione.stagione}
+          modificabile={stagione.modificabile}
+          action={impostaStagioneTappa}
+        />
+      ) : null}
+    </div>
   );
 }
 
