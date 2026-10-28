@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/types.ts": {
-    "mtime": 1793185147.5856168,
-    "ast_hash": "c27d0ddf6fe07f8643b1ad4e321123b8",
+    "mtime": 1793185182.879881,
+    "ast_hash": "9c0871ec56e59e967407b5d6358b8cbd",
     "semantic_hash": ""
   },
   "e2e/mailpit.ts": {
@@ -2530,8 +2530,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/paths.ts": {
-    "mtime": 1793185147.5867684,
-    "ast_hash": "9df3c2fef911fea27e38fb4774e253b4",
+    "mtime": 1793185244.4888928,
+    "ast_hash": "e1577bf5e2a17b24a712b8cb09c39237",
     "semantic_hash": ""
   },
   "src/lib/tappe/posti-tappe.db.test.ts": {
@@ -2670,13 +2670,13 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/visibile.test.ts": {
-    "mtime": 1793185147.586858,
-    "ast_hash": "768c3b24649bc7ffa6edf549f0f7cdc3",
+    "mtime": 1793185244.489084,
+    "ast_hash": "739cd0273e16de7c467c8f83d314c2be",
     "semantic_hash": ""
   },
   "src/lib/tappe/visibile.ts": {
-    "mtime": 1793185147.586953,
-    "ast_hash": "0ce9a8bf9cf170040f6f8a2042dce001",
+    "mtime": 1793185244.489224,
+    "ast_hash": "f370a3149312fba8ef25287802dfcf06",
     "semantic_hash": ""
   },
   "supabase/migrations/20261027324000_iscrizione_tappa.sql": {
@@ -3885,8 +3885,8 @@
     "semantic_hash": ""
   },
   "src/lib/punteggi/format.ts": {
-    "mtime": 1793185147.2193897,
-    "ast_hash": "43817ce01b8cb74a225990084a7d0e8d",
+    "mtime": 1793185182.8801847,
+    "ast_hash": "8871b1dc08737b0e1fa101403b081181",
     "semantic_hash": ""
   },
   "src/lib/punteggi/paths.ts": {
@@ -3995,13 +3995,13 @@
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.test.tsx": {
-    "mtime": 1793185147.1882179,
-    "ast_hash": "82c27e87290b16d81029532b32e81837",
+    "mtime": 1793185182.879266,
+    "ast_hash": "d77e472b57508312af472a456701c099",
     "semantic_hash": ""
   },
   "src/components/live/live-tappa.tsx": {
-    "mtime": 1793185147.1883345,
-    "ast_hash": "10a57fa778a6404d8cad2b3bb3d8e8a6",
+    "mtime": 1793185182.8794138,
+    "ast_hash": "8f921b831736902de894ac8fafe5d92a",
     "semantic_hash": ""
   },
   "src/lib/live/tappa-read.ts": {
@@ -4825,7 +4825,7 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/regole/page.tsx": {
-    "mtime": 1793185147.36308,
+    "mtime": 1793185244.4509478,
     "ast_hash": "aaec74726ff542661290095bd1994bc8",
     "semantic_hash": ""
   },
@@ -4855,7 +4855,7 @@
     "semantic_hash": ""
   },
   "src/lib/regole/paths.ts": {
-    "mtime": 1793185147.3642583,
+    "mtime": 1793185244.451046,
     "ast_hash": "73809b83003ff649d6efc1f554d654b6",
     "semantic_hash": ""
   },
@@ -4982,6 +4982,81 @@
   "supabase/migrations/20261027450000_tabellone_giocatore.sql": {
     "mtime": 1793185147.587052,
     "ast_hash": "49171c4b8952136284bafea7cfbd0480",
+    "semantic_hash": ""
+  },
+  "e2e/girone.spec.ts": {
+    "mtime": 1793185264.164081,
+    "ast_hash": "e66275d493e5770049ff861bd86a919a",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx": {
+    "mtime": 1793185182.8784325,
+    "ast_hash": "15ced54dfbef7d850391f99dea314dc1",
+    "semantic_hash": ""
+  },
+  "src/components/girone/classifica-girone.test.tsx": {
+    "mtime": 1793185182.878588,
+    "ast_hash": "be7c992d9f9c71a89cef9e4bcc303791",
+    "semantic_hash": ""
+  },
+  "src/components/girone/classifica-girone.tsx": {
+    "mtime": 1793185182.8786767,
+    "ast_hash": "45e6d187011c676d1b30e90c2fbf2dad",
+    "semantic_hash": ""
+  },
+  "src/components/girone/criteri-spareggio.tsx": {
+    "mtime": 1793185264.159525,
+    "ast_hash": "f0f6eb227704f2da9f9c7cf499a90b9e",
+    "semantic_hash": ""
+  },
+  "src/components/girone/index.ts": {
+    "mtime": 1793185182.8787801,
+    "ast_hash": "9944626b1bcad0edb591e27c31ed59fb",
+    "semantic_hash": ""
+  },
+  "src/components/girone/live-girone.stories.tsx": {
+    "mtime": 1793185182.878874,
+    "ast_hash": "6b5fa30854bc6d7b69e7ee52e8921e4c",
+    "semantic_hash": ""
+  },
+  "src/components/girone/live-girone.test.tsx": {
+    "mtime": 1793185264.161363,
+    "ast_hash": "7c8e291e6014df1fa969eddb2c5aba4d",
+    "semantic_hash": ""
+  },
+  "src/components/girone/live-girone.tsx": {
+    "mtime": 1793185182.8790514,
+    "ast_hash": "a3f2fc62cf5f7f640253e7d66c6963e9",
+    "semantic_hash": ""
+  },
+  "src/components/girone/partite-girone.tsx": {
+    "mtime": 1793185182.8791366,
+    "ast_hash": "14062b9b55a3876f25c00a4b117e759a",
+    "semantic_hash": ""
+  },
+  "src/components/live/match-parts.tsx": {
+    "mtime": 1793185182.8794694,
+    "ast_hash": "e714fd714d5269efbf91dbfba69a5390",
+    "semantic_hash": ""
+  },
+  "src/lib/live/girone-read.ts": {
+    "mtime": 1793185182.8795307,
+    "ast_hash": "a2048c17f37d8cf48102370a5445a8f8",
+    "semantic_hash": ""
+  },
+  "src/lib/live/girone.test.ts": {
+    "mtime": 1793185182.8796265,
+    "ast_hash": "30444f7ac686c7f72655a1d1b5b9f587",
+    "semantic_hash": ""
+  },
+  "src/lib/live/girone.ts": {
+    "mtime": 1793185182.8797197,
+    "ast_hash": "6c420b8beab45cdf943658e960a6d80d",
+    "semantic_hash": ""
+  },
+  "src/lib/punteggi/format.test.ts": {
+    "mtime": 1793185182.8799615,
+    "ast_hash": "6cd2a76bde0ccfa42a33ae6edea5c238",
     "semantic_hash": ""
   }
 }

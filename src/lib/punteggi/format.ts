@@ -136,6 +136,8 @@ export function toGroupStandings(
       played: r.giocate,
       won: r.vinte,
       points: r.puntiFatti,
+      against: r.puntiSubiti,
+      diff: r.differenza,
     })),
   };
 }

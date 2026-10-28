@@ -34,3 +34,8 @@ export function tabelloneSnapshotUrl(id: string): string {
 export function gironeAncora(gironeId: string): string {
   return `girone-${gironeId}`;
 }
+
+/** The page of one group of a stage (w-girone, BLVS-47). */
+export function gironeTappaHref(id: string, gironeId: string): string {
+  return `${tappaHref(id)}/gironi/${encodeURIComponent(gironeId)}`;
+}
