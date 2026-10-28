@@ -72,7 +72,11 @@ export function SceltaStagione({
       className="flex flex-wrap items-end gap-space-3"
     >
       <input type="hidden" name="categoria" value={categoria} />
-      <Field label="Stagione" className="w-auto min-w-48">
+      <Field
+        label="Stagione"
+        // Never wider than the page: 12rem is 384 px with 200% text.
+        className="w-auto max-w-full min-w-[min(12rem,100%)]"
+      >
         <Select name="stagione" defaultValue={String(stagione)}>
           {stagioni.map((s) => (
             <option key={s} value={s}>

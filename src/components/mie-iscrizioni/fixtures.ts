@@ -112,6 +112,7 @@ const RIGHE: RigaGenerale[] = [
     tappeGiocate: 2,
     puntiProvvisori: false,
     pariMerito: false,
+    anonimo: false,
     tappe: [],
   },
   {
@@ -122,6 +123,7 @@ const RIGHE: RigaGenerale[] = [
     tappeGiocate: 2,
     puntiProvvisori: true,
     pariMerito: false,
+    anonimo: false,
     tappe: [],
   },
 ];

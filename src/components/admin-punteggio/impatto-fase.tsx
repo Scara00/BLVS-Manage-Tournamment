@@ -282,6 +282,7 @@ export function ImpattoFase({
                     error={erroreLocale ?? undefined}
                   >
                     <Checkbox
+                      size="campo"
                       label={etichettaConferma(persi)}
                       checked={spuntata}
                       onCheckedChange={(checked) => {
@@ -305,12 +306,17 @@ export function ImpattoFase({
             ) : null}
           </AlertDialogBody>
           <AlertDialogFooter>
-            <AlertDialogCancel className="max-w-full" disabled={pending}>
+            <AlertDialogCancel
+              size="campo"
+              className="max-w-full"
+              disabled={pending}
+            >
               Annulla
             </AlertDialogCancel>
             <Button
               type="button"
               variant="secondary"
+              size="campo"
               className="max-w-full"
               loading={pending && inCorso === "mantieni"}
               disabled={!online || (pending && inCorso !== "mantieni")}
@@ -326,6 +332,7 @@ export function ImpattoFase({
               <Button
                 type="submit"
                 variant="destructive"
+                size="campo"
                 className="max-w-full"
                 loading={pending && inCorso === "rigenera"}
                 disabled={!online || (pending && inCorso !== "rigenera")}

@@ -491,13 +491,16 @@ export function ParitaDialog({
         </DialogBody>
         <DialogFooter>
           <DialogClose
-            render={<Button variant="secondary" className="max-w-full" />}
+            render={
+              <Button variant="secondary" size="campo" className="max-w-full" />
+            }
             disabled={pending}
           >
             Annulla
           </DialogClose>
           <Button
             variant="primary"
+            size="campo"
             className="max-w-full"
             onClick={onConfermaOrdine}
             disabled={!online}
@@ -546,10 +549,11 @@ export function ParitaDialog({
               </ol>
             </AlertDialogBody>
             <AlertDialogFooter>
-              <AlertDialogCancel className="max-w-full">
+              <AlertDialogCancel size="campo" className="max-w-full">
                 Torna all&apos;ordine
               </AlertDialogCancel>
               <AlertDialogAction
+                size="campo"
                 className="max-w-full"
                 loading={pending}
                 loadingText="Salvataggio…"
