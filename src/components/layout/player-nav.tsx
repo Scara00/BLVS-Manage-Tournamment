@@ -79,8 +79,13 @@ export function PlayerNav({
         <ul className="hidden md:ml-auto md:flex md:gap-x-space-2">
           {secondary
             .filter((item) => item.desktop)
-            .map((item) => (
-              <li key={item.href}>
+            .map(({ icon: Icon = UserIcon, ...item }) => (
+              <li
+                key={item.href}
+                className={
+                  item.desktop === "lg" ? "hidden lg:block" : undefined
+                }
+              >
                 <Link
                   href={item.href}
                   aria-current={
@@ -94,7 +99,7 @@ export function PlayerNav({
                   )}
                 >
                   {/* Icon only between md and lg: the bar does not wrap. */}
-                  <UserIcon aria-hidden className="size-5 shrink-0 lg:hidden" />
+                  <Icon aria-hidden className="size-5 shrink-0 lg:hidden" />
                   <span className="sr-only lg:not-sr-only">{item.label}</span>
                 </Link>
               </li>

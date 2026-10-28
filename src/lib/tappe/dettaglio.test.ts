@@ -80,7 +80,7 @@ describe("toTappaDettaglio", () => {
   it("già iscritto", () => {
     const view = toTappaDettaglio(ROW, BOARDS, {
       categoria: "M",
-      iscrizione: { posto: 4, stato: "in_attesa", categoria: "M" },
+      iscrizione: { id: "i1", posto: 4, stato: "in_attesa", categoria: "M" },
       at: AT,
     });
     expect(view.motivo).toBe("gia_iscritto");
@@ -104,18 +104,22 @@ describe("toTappaDettaglio", () => {
 describe("toIscrizioneConfermata", () => {
   it("annulla entro: la scadenza dedicata o, se manca, quella delle iscrizioni", () => {
     const iscr = {
+      id: "i1",
       posto: 12,
       stato: "in_attesa" as const,
       categoria: "M" as const,
     };
-    expect(toIscrizioneConfermata(ROW, iscr).annullaEntro).toMatch(/19 giugno/);
+    expect(toIscrizioneConfermata(ROW, iscr, AT).annullaEntro).toMatch(
+      /19 giugno/,
+    );
     expect(
       toIscrizioneConfermata(
         { ...ROW, annullabile_fino_al: "2027-06-21T21:59:00Z" },
         iscr,
+        AT,
       ).annullaEntro,
     ).toMatch(/21 giugno/);
-    expect(toIscrizioneConfermata(ROW, iscr)).toMatchObject({
+    expect(toIscrizioneConfermata(ROW, iscr, AT)).toMatchObject({
       posto: 12,
       luogo: "Rimini, Bagno 26",
       ritrovo: "Bagno 26",

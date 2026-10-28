@@ -10,6 +10,8 @@ export {
 export {
   LiveTappa,
   LiveTappaSessioneScaduta,
+  MatchCard,
+  MioGirone,
   type LiveTappaProps,
 } from "./live-tappa";
 export { NotaAssenza } from "./nota-assenza";

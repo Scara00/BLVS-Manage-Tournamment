@@ -16,6 +16,8 @@ export const TIPI_EVENTO_REGISTRO = [
   "chiusura_tabellone",
   // BLVS-37 (20261027400000_punteggio_parziale_evento.sql).
   "punteggio_parziale",
+  // BLVS-51 (20261027510000_annullamento_iscrizione_evento.sql).
+  "annullamento_iscrizione",
 ] as const;
 
 export type TipoEventoRegistro = (typeof TIPI_EVENTO_REGISTRO)[number];
@@ -32,4 +34,5 @@ export const ETICHETTE_EVENTO_REGISTRO: Record<TipoEventoRegistro, string> = {
   cambio_categoria: "Cambio di categoria",
   chiusura_tabellone: "Chiusura del tabellone",
   punteggio_parziale: "Punteggio parziale",
+  annullamento_iscrizione: "Annullamento iscrizione",
 };

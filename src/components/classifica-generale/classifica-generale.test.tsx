@@ -109,6 +109,16 @@ describe("ClassificaGenerale", () => {
     );
   });
 
+  it("il nome apre la scheda del giocatore", async () => {
+    await renderClassifica();
+    expect(
+      within(tabella()).getByRole("link", { name: "Marco Bianchi" }),
+    ).toHaveAttribute(
+      "href",
+      "/classifica/giocatore/u2?categoria=M&stagione=2026",
+    );
+  });
+
   it("«La tua posizione» con posizione, punti provvisori a testo e tappe", async () => {
     await renderClassifica();
     const mia = screen.getByRole("region", { name: /La tua posizione/ });

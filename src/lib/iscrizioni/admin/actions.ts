@@ -206,7 +206,9 @@ export async function cercaGiocatori(
     let ricerca = sessione.supabase
       .from("utenti")
       .select("id, nome, cognome, email, categoria")
-      .eq("ruolo", "giocatore");
+      .eq("ruolo", "giocatore")
+      // A deleted account (BLVS-53) can no longer be registered.
+      .is("anonimizzato_il", null);
     for (const filtro of filtriRicerca(parole)) ricerca = ricerca.or(filtro);
     const { data, error } = await ricerca
       .order("cognome")

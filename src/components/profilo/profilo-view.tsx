@@ -4,12 +4,15 @@ import type { ReactNode } from "react";
 import { CategoryLabel, Tape } from "@/components/scoreboard";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { IMPOSTAZIONI_PATH } from "@/lib/impostazioni/types";
 import {
   PROFILO_MESSAGES,
   PROFILO_MODIFICA_PATH,
   emailInAttesaMessage,
   type Profilo,
 } from "@/lib/profilo/types";
+import type { CancellaAccountAction } from "@/lib/account/types";
+import { CancellaAccount } from "./cancella-account";
 import { CATEGORIA_LABEL } from "./categoria";
 
 function Riga({ label, children }: { label: string; children: ReactNode }) {
@@ -25,8 +28,18 @@ function Riga({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-/** w-profilo: the player's personal data, read only, with text badges. */
-export function ProfiloView({ profilo }: { profilo: Profilo }) {
+/**
+ * w-profilo: the player's personal data, read only, with text badges, and
+ * «Cancella l'account» (BLVS-50) when the action is given.
+ */
+export function ProfiloView({
+  profilo,
+  cancellaAccount,
+}: {
+  profilo: Profilo;
+  /** The `cancellaAccount` server action (a fake in Storybook). */
+  cancellaAccount?: CancellaAccountAction;
+}) {
   const { statoCategoria } = profilo;
 
   return (
@@ -100,11 +113,18 @@ export function ProfiloView({ profilo }: { profilo: Profilo }) {
           </Riga>
         </dl>
       </section>
-      <div>
+      <div className="flex flex-wrap gap-space-3">
         <Link href={PROFILO_MODIFICA_PATH} className={buttonVariants()}>
           Modifica dati
         </Link>
+        <Link
+          href={IMPOSTAZIONI_PATH}
+          className={buttonVariants({ variant: "secondary" })}
+        >
+          Password, privacy e account
+        </Link>
       </div>
+      {cancellaAccount ? <CancellaAccount action={cancellaAccount} /> : null}
     </div>
   );
 }

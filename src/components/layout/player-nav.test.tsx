@@ -50,6 +50,16 @@ describe("PlayerNav", () => {
     for (const link of links) expect(link).toHaveAttribute("href", "/profilo");
   });
 
+  it("«Impostazioni» è solo nel menu", () => {
+    render(<PlayerNav signOut={signOut} />);
+    const links = screen.getAllByRole("link", {
+      name: "Impostazioni",
+      hidden: true,
+    });
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute("href", "/impostazioni");
+  });
+
   it("apre e chiude il menu aggiornando aria-expanded", () => {
     render(<PlayerNav signOut={signOut} />);
     expect(menuButton()).toHaveAttribute("aria-expanded", "false");

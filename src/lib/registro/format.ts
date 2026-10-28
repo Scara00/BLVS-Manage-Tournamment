@@ -28,6 +28,7 @@ const TIPO_VOCE: Record<TipoEventoRegistro, { label: string; badge: boolean }> =
     cambio_categoria: { label: "Cambio di categoria", badge: false },
     chiusura_tabellone: { label: "Chiusura del tabellone", badge: false },
     punteggio_parziale: { label: "Parziale", badge: false },
+    annullamento_iscrizione: { label: "Iscrizione annullata", badge: false },
   };
 
 export function tipoVoce(tipo: TipoEventoRegistro): TipoVoceView {
@@ -237,6 +238,23 @@ export function riepilogoValori(
       return ritiroTesto(tipo, prima, dopo);
     case "punteggio_parziale":
       return { prima: parzialeTesto(prima), dopo: parzialeTesto(dopo) };
+    case "annullamento_iscrizione": {
+      // BLVS-51: prima/dopo = {stato, posto, categoria, tappa_id}.
+      const p = oggetto(prima);
+      const posto = numero(p?.posto);
+      const categoria = p?.categoria;
+      return {
+        prima: [
+          posto === null ? "Iscritto" : `Posto ${posto}`,
+          categoria === "M" || categoria === "F"
+            ? categoriaTesto(categoria)
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · "),
+        dopo: "Annullata dal giocatore · posto libero",
+      };
+    }
     case "chiusura_tabellone": {
       // BLVS-43: dopo = {tappa_id, categoria, concluso_il, punti[]}.
       const d = oggetto(dopo);

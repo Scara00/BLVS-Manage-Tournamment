@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { nomeGiocatore } from "@/lib/classifica-generale/giocatore";
 import type { OverallPlayerRow } from "@/lib/live/types";
 
 /** «TU» on color.primary; the screen reader hears «sei tu». */
@@ -20,16 +22,30 @@ export function PuntiProvvisori() {
   );
 }
 
+/** The player's name; with `href`, a link to their card (w-giocatore). */
 export function NomeGiocatore({
   row,
   mio,
+  href,
 }: {
   row: OverallPlayerRow;
   mio: boolean;
+  href?: string;
 }) {
+  const nome = nomeGiocatore(row);
   return (
     <span className="inline-flex flex-wrap items-center gap-x-space-2 gap-y-space-1">
-      <span>{row.name}</span>
+      {href ? (
+        <Link
+          href={href}
+          className="underline decoration-2 underline-offset-4 focus-ring"
+          data-testid="link-giocatore"
+        >
+          {nome}
+        </Link>
+      ) : (
+        <span>{nome}</span>
+      )}
       {mio ? <BadgeTu /> : null}
       {row.tied ? (
         <span className="font-sans text-sm font-normal">(pari merito)</span>

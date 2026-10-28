@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { TappaDettaglioView, TappaLoading } from "@/components/tappa";
 import { prendiPosto } from "@/lib/iscrizioni/actions";
+import { annullaIscrizione } from "@/lib/iscrizioni/annullamento/actions";
 import { readTappaDettaglio } from "@/lib/tappe/dettaglio-read";
 
 export const metadata: Metadata = { title: "Dettaglio tappa" };
@@ -18,7 +19,13 @@ export function generateStaticParams() {
 
 async function DettaglioContent({ id }: { id: string }) {
   const tappa = await readTappaDettaglio(id);
-  return <TappaDettaglioView tappa={tappa} action={prendiPosto} />;
+  return (
+    <TappaDettaglioView
+      tappa={tappa}
+      action={prendiPosto}
+      annulla={annullaIscrizione}
+    />
+  );
 }
 
 /** w-tappa: stage detail and «Prendi il posto N» (BLVS-24). */

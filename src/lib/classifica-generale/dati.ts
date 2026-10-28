@@ -15,6 +15,7 @@ import {
   toFinaliTappa,
   type ClassificaTappa,
 } from "@/lib/tappe/classifica";
+import { NOME_ANONIMO } from "./giocatore";
 import { sommaClassifica } from "./somma";
 import {
   ordinaClassifica,
@@ -43,6 +44,8 @@ export type DatiClassificaGenerale = {
     nome: string;
     cognome: string;
     stato: StatoIscrizione;
+    /** Deleted account (BLVS-50); missing in older demo rows = false. */
+    anonimo?: boolean;
   }[];
 };
 
@@ -55,7 +58,12 @@ export const DATI_VUOTI: DatiClassificaGenerale = {
   iscrizioni: [],
 };
 
-function nomeCompleto(i: { nome: string; cognome: string }, id: string) {
+/** The name shown: never a personal name for a deleted account (R-79). */
+function nomeCompleto(
+  i: { nome: string; cognome: string; anonimo?: boolean },
+  id: string,
+) {
+  if (i.anonimo) return NOME_ANONIMO;
   return `${i.nome} ${i.cognome}`.trim() || id;
 }
 
@@ -84,7 +92,9 @@ export function classificaTappaDaDati(
     iscrizioni: iscrizioni.map((i) => ({
       id: i.id,
       stato: i.stato,
-      utente: { nome: i.nome, cognome: i.cognome },
+      utente: i.anonimo
+        ? { nome: NOME_ANONIMO, cognome: "" }
+        : { nome: i.nome, cognome: i.cognome },
     })),
     decisioni: dati.decisioni.filter((d) => idGironi.has(d.girone_id)),
   });
@@ -106,11 +116,14 @@ export function partecipazioni(
       return {
         utenteId: i.utente_id,
         nome: nomeCompleto(i, i.utente_id),
+        anonimo: i.anonimo ?? false,
         risultato: {
           tappaId: tappa.id,
           nome: tappa.nome,
           data: tappa.data_inizio,
           posizione: riga?.posizione ?? null,
+          fase: riga?.fase ?? null,
+          posizioneDefinitiva: riga?.posizioneDefinitiva ?? true,
           punti: riga?.punti ?? 0,
           provvisori: !tappa.concluso,
         },
@@ -159,6 +172,17 @@ export function toOverallStandings(
       stages: r.tappeGiocate,
       provisional: r.puntiProvvisori,
       tied: r.pariMerito,
+      ...(r.anonimo ? { anonymous: true } : {}),
+      results: r.tappe.map((t) => ({
+        stageId: t.tappaId,
+        name: t.nome,
+        date: t.data,
+        phase: t.fase,
+        position: t.posizione,
+        definitive: t.posizioneDefinitiva,
+        points: t.punti,
+        provisional: t.provvisori,
+      })),
     })),
   };
 }

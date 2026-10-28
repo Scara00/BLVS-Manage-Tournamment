@@ -24,7 +24,8 @@ type IscrizioneDb = {
   stato: StatoIscrizione;
   created_at: string;
   tabellone_id: string;
-  utenti: { nome: string; cognome: string; email: string } | null;
+  /** `email` is null on a deleted account (BLVS-53). */
+  utenti: { nome: string; cognome: string; email: string | null } | null;
 };
 
 async function readFromDb(
@@ -70,7 +71,7 @@ async function readFromDb(
         categoria: cat,
         nome: i.utenti.nome,
         cognome: i.utenti.cognome,
-        email: i.utenti.email,
+        email: i.utenti.email ?? "",
       },
     ];
   });

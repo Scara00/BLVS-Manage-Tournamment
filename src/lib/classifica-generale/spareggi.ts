@@ -153,6 +153,7 @@ export function ordinaClassifica(
   return ordinati.map((t, i) => ({
     utenteId: t.utenteId,
     nome: t.nome,
+    anonimo: t.anonimo,
     posizione: posizioni[i],
     punti: t.punti,
     tappeGiocate: t.tappeGiocate,

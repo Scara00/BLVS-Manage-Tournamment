@@ -43,3 +43,12 @@ export const Testo200: Story = {
   args: { status: "offline" },
   parameters: { text200: true },
 };
+
+/** BLVS-52: the one-line bar next to the greeting on w-home. */
+export const Compatta: Story = {
+  args: { compact: true },
+};
+
+export const CompattaOffline: Story = {
+  args: { compact: true, status: "offline" },
+};

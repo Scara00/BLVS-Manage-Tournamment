@@ -69,11 +69,14 @@ export type FasePartita = (typeof FASI_PARTITA)[number];
 
 export type Utente = {
   id: string;
-  email: string;
+  /** Null only on a deleted account (BLVS-53, `anonimizzato_il` set). */
+  email: string | null;
   ruolo: Ruolo;
   categoria: Categoria | null;
   nome: string;
   cognome: string;
+  /** Set when the player deleted the account: name «Giocatore anonimo». */
+  anonimizzato_il: string | null;
   created_at: string;
   updated_at: string;
 };

@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { Categoria, FaseTabellone } from "@/lib/db/types";
 
 /** One stage of a player in the overall standing. */
 export type RisultatoTappa = {
@@ -9,6 +9,10 @@ export type RisultatoTappa = {
   data: string;
   /** Place in the stage standing (BLVS-40), null when knocked out before the finals. */
   posizione: number | null;
+  /** Gold or silver final; null when knocked out before the finals. */
+  fase: FaseTabellone | null;
+  /** The place can no longer change (BLVS-40 `posizioneDefinitiva`). */
+  posizioneDefinitiva: boolean;
   /** Points earned; 0 when knocked out before the finals. */
   punti: number;
   /** The board is still open (`tabelloni.concluso_il` unset). */
@@ -19,12 +23,16 @@ export type RisultatoTappa = {
 export type PartecipazioneTappa = {
   utenteId: string;
   nome: string;
+  /** Deleted account (BLVS-50): `nome` is «Giocatore anonimo». */
+  anonimo: boolean;
   risultato: RisultatoTappa;
 };
 
 export type RigaGenerale = {
   utenteId: string;
   nome: string;
+  /** Deleted account (BLVS-50): `nome` is «Giocatore anonimo». */
+  anonimo: boolean;
   /** 1-based; players still level after every criterion share it. */
   posizione: number;
   punti: number;

@@ -28,15 +28,22 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
 
   const { data: utente, error: profileError } = await supabase
     .from("utenti")
-    .select("id, email, ruolo")
+    .select("id, email, ruolo, anonimizzato_il")
     .eq("id", sub)
-    .maybeSingle<{ id: string; email: string; ruolo: Ruolo }>();
+    .maybeSingle<{
+      id: string;
+      email: string;
+      ruolo: Ruolo;
+      anonimizzato_il: string | null;
+    }>();
 
   if (profileError) {
     console.error("[auth] lettura del profilo non riuscita", profileError);
     return null;
   }
-  if (!utente) return null;
+  // A deleted account (BLVS-50) whose Auth login could not be removed.
+  if (!utente || utente.anonimizzato_il) return null;
 
-  return { ...utente, supabase };
+  const { id, email, ruolo } = utente;
+  return { id, email, ruolo, supabase };
 }

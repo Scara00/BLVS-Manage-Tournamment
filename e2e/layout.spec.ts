@@ -5,7 +5,7 @@ const PAGES = [
   {
     path: "/",
     title: "BLVS – Manage Tournament",
-    h1: "BLVS – Manage Tournament",
+    h1: "Ciao, Luca",
   },
   { path: "/tappe", title: "Tappe · BLVS", h1: "Tappe" },
   { path: "/classifica", title: "Classifica · BLVS", h1: "Classifica" },
@@ -146,6 +146,10 @@ test("giocatore: tour da tastiera completo", async ({ page }) => {
     "page",
   );
   if (isDesktop(page)) {
+    await page.keyboard.press("Tab");
+    await expect(
+      page.getByRole("link", { name: "Le mie iscrizioni", exact: true }),
+    ).toBeFocused();
     await page.keyboard.press("Tab");
     await expect(
       page.getByRole("link", { name: "Profilo", exact: true }),

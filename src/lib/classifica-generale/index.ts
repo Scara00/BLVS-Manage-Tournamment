@@ -1,5 +1,7 @@
 export * from "./annuncio";
 export * from "./dati";
+export * from "./giocatore";
+export * from "./paths";
 export * from "./ricerca";
 export * from "./somma";
 export * from "./spareggi";

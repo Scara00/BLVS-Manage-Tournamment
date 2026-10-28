@@ -52,7 +52,12 @@ async function leggiTappa(id: string): Promise<Lettura> {
       tabelloni: demoTabelloniTappa(id, posto ? 1 : 0),
       categoria: demoTappeGiocatore.categoria,
       iscrizione: posto
-        ? { posto, stato: "in_attesa", categoria: demoTappeGiocatore.categoria }
+        ? {
+            id,
+            posto,
+            stato: "in_attesa",
+            categoria: demoTappeGiocatore.categoria,
+          }
         : null,
     };
   }
@@ -82,23 +87,29 @@ async function leggiTappa(id: string): Promise<Lettura> {
       readProfiloRow(user.supabase, user.id),
       user.supabase
         .from("iscrizioni")
-        .select("posto, stato, tabelloni (categoria)")
+        .select(
+          "id, posto, stato, tabelloni (categoria), girone_iscrizioni (girone_id)",
+        )
         .eq("tappa_id", id)
         .eq("utente_id", user.id)
         .maybeSingle<{
+          id: string;
           posto: number | null;
           stato: StatoIscrizione;
           tabelloni: { categoria: Categoria } | null;
+          girone_iscrizioni: { girone_id: string }[] | null;
         }>(),
     ]);
     if (propria.error) throw new Error(`iscrizioni: ${propria.error.message}`);
     categoria = profilo.categoria;
     if (propria.data) {
       iscrizione = {
+        id: propria.data.id,
         posto: propria.data.posto,
         stato: propria.data.stato,
         categoria:
           propria.data.tabelloni?.categoria ?? profilo.categoria ?? "M",
+        inGirone: (propria.data.girone_iscrizioni?.length ?? 0) > 0,
       };
     }
   }
@@ -131,6 +142,7 @@ export async function readIscrizioneConfermata(
   id: string,
 ): Promise<IscrizioneConfermata> {
   const { row, iscrizione } = await leggiTappa(id);
-  if (!iscrizione || !iscrizioneAttiva(iscrizione)) redirect(tappaHref(id));
-  return toIscrizioneConfermata(row, iscrizione);
+  if (!iscrizioneAttiva(iscrizione)) redirect(tappaHref(id));
+  await connection();
+  return toIscrizioneConfermata(row, iscrizione, now());
 }
