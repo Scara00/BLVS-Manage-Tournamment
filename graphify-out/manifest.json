@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
-    "mtime": 1793174842.1208982,
-    "ast_hash": "c7513ad2818df82a883f62eb19b0340f",
+    "mtime": 1793175121.4348624,
+    "ast_hash": "844c205200f6418db9a3be6b892fe4b4",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.ts": {
@@ -325,8 +325,8 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/classifica/page.tsx": {
-    "mtime": 1793174842.0547907,
-    "ast_hash": "3c318e0aee3f2c39cd9633f1bf903c00",
+    "mtime": 1793175121.4290042,
+    "ast_hash": "3b48bd935ee9a9f45c6314fe3e091d87",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/layout.tsx": {
@@ -760,8 +760,8 @@
     "semantic_hash": ""
   },
   "src/lib/db/types.ts": {
-    "mtime": 1793174842.0963278,
-    "ast_hash": "667cb92d24698cd3e4c9bed04857bb2e",
+    "mtime": 1793175121.433781,
+    "ast_hash": "833d7f1135620ebac59f6f4fe01c3b95",
     "semantic_hash": ""
   },
   "src/lib/supabase/admin.ts": {
@@ -1045,8 +1045,8 @@
     "semantic_hash": ""
   },
   "src/app/api/live/snapshot/route.ts": {
-    "mtime": 1793174842.063821,
-    "ast_hash": "d2aff9da7d86ac4a4b8b90e2b39d3b89",
+    "mtime": 1793175121.4294448,
+    "ast_hash": "ab383bc0023d5bbbee4abf69d89c1c7b",
     "semantic_hash": ""
   },
   "src/app/api/live/stream/route.test.ts": {
@@ -1180,8 +1180,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/publish.ts": {
-    "mtime": 1793174842.6150973,
-    "ast_hash": "49d92517115b4f43620d9fa72aadc11b",
+    "mtime": 1793175121.4343443,
+    "ast_hash": "02f1635ee391fc37f276fd68e7ebc2e4",
     "semantic_hash": ""
   },
   "src/lib/live/read.ts": {
@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "src/lib/live/types.ts": {
-    "mtime": 1793174842.6153426,
-    "ast_hash": "ea6b2d78c5b6b5c58f17307111c805d8",
+    "mtime": 1793175121.4345298,
+    "ast_hash": "1e2db5f1457d4e01d95997cf13c6351e",
     "semantic_hash": ""
   },
   "e2e/mailpit.ts": {
@@ -1720,13 +1720,13 @@
     "semantic_hash": ""
   },
   "src/lib/navigation/auth-paths.test.ts": {
-    "mtime": 1793174842.1096268,
-    "ast_hash": "cd1dc75acf750a648bd281dc02fa4cdf",
+    "mtime": 1793175121.4346325,
+    "ast_hash": "4d2a42e904a9335cdf9a1071f7fbb9c8",
     "semantic_hash": ""
   },
   "src/lib/navigation/auth-paths.ts": {
-    "mtime": 1793174842.1097002,
-    "ast_hash": "fce3e68e50b18c99e26246ab1793e2c9",
+    "mtime": 1793175121.434735,
+    "ast_hash": "915e3cff95f9f26ff2baca0d6a6e4978",
     "semantic_hash": ""
   },
   "e2e/profilo.spec.ts": {
@@ -2010,8 +2010,8 @@
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/page.tsx": {
-    "mtime": 1793174842.6117563,
-    "ast_hash": "c8d0dfc9fa31b1ade70e8edab353031a",
+    "mtime": 1793175155.5559745,
+    "ast_hash": "cb40a0c97b0d216d57d244f9cc845ad8",
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/nuova/page.tsx": {
@@ -3620,8 +3620,8 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/pubblica.ts": {
-    "mtime": 1793174842.125157,
-    "ast_hash": "c0f30721a90167046f9ed6b850df66a9",
+    "mtime": 1793175121.4349642,
+    "ast_hash": "cb0de84e465888dd52b7b9d6c18b54da",
     "semantic_hash": ""
   },
   "src/lib/tappe/live-admin/punteggio.test.ts": {
@@ -4250,8 +4250,8 @@
     "semantic_hash": ""
   },
   "src/lib/gironi/parita/actions.ts": {
-    "mtime": 1793174842.1045043,
-    "ast_hash": "860da17b4ec2251e67737616fe48e68f",
+    "mtime": 1793175121.4340215,
+    "ast_hash": "f1d59ac513571808d2461cc3f131a1c2",
     "semantic_hash": ""
   },
   "src/lib/gironi/parita/dati.ts": {
@@ -4627,6 +4627,196 @@
   "supabase/migrations/20261027422000_correzione_tabellone_concluso.sql": {
     "mtime": 1793174952.6162844,
     "ast_hash": "f8842a8c6b47f0bb9a8b43b44f34774e",
+    "semantic_hash": ""
+  },
+  "e2e/classifica-generale.spec.ts": {
+    "mtime": 1793175121.418587,
+    "ast_hash": "92e93bd894ff397d315d6eff0c1c0659",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/classifica-generale/route.ts": {
+    "mtime": 1793175121.4292636,
+    "ast_hash": "e37b01de9fab36789e3bf7459ccd462c",
+    "semantic_hash": ""
+  },
+  "src/components/admin-stagione/index.ts": {
+    "mtime": 1793175121.4296024,
+    "ast_hash": "1289a2ead64ee4fa74d536cfe11551b2",
+    "semantic_hash": ""
+  },
+  "src/components/admin-stagione/stagione-tappa.stories.tsx": {
+    "mtime": 1793175121.4296672,
+    "ast_hash": "9652fab740dbb509c267d07e0a9da2ae",
+    "semantic_hash": ""
+  },
+  "src/components/admin-stagione/stagione-tappa.tsx": {
+    "mtime": 1793175121.4297295,
+    "ast_hash": "9c749f10ea2f37c5f7814b91023e6d9c",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/classifica-generale-live.tsx": {
+    "mtime": 1793175121.4298213,
+    "ast_hash": "1aa72a7e470e3d99ac7dc46e1c3347db",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/classifica-generale.stories.tsx": {
+    "mtime": 1793175121.4298866,
+    "ast_hash": "a4a6bb403cad90d6eed7b78b502910e2",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/classifica-generale.test.tsx": {
+    "mtime": 1793175121.4299636,
+    "ast_hash": "51bd0f563fda3b93e5a1a23c6c45621d",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/classifica-generale.tsx": {
+    "mtime": 1793175121.4300296,
+    "ast_hash": "2c90c8f02561c22e64eeabdd0aacda6e",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/filtri.tsx": {
+    "mtime": 1793175121.4300926,
+    "ast_hash": "66c95e58396b31e57a6b26ee434f6751",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/index.ts": {
+    "mtime": 1793175121.4301567,
+    "ast_hash": "eb16be13c4ff3668cd845950f15c4de3",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/la-tua-posizione.tsx": {
+    "mtime": 1793175121.432229,
+    "ast_hash": "e7b0ac063a4a88181e36a06f17ded592",
+    "semantic_hash": ""
+  },
+  "src/components/classifica-generale/riga-giocatore.tsx": {
+    "mtime": 1793175121.432327,
+    "ast_hash": "e4f5f4805409ca1490a06f6e91cfc1c9",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/annuncio.test.ts": {
+    "mtime": 1793175121.4324455,
+    "ast_hash": "99b524fcd5ec63a1af300ee7f5f99017",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/annuncio.ts": {
+    "mtime": 1793175121.4325044,
+    "ast_hash": "fbeebae7513214eddf4f4b803eee26f6",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/classifica-generale.db.test.ts": {
+    "mtime": 1793175121.4326134,
+    "ast_hash": "43e85e6f359c635dcd27943bf2a4d8e9",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/dati.test.ts": {
+    "mtime": 1793175121.432682,
+    "ast_hash": "7993e6a5079c785b48056872626c89b0",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/dati.ts": {
+    "mtime": 1793175121.432756,
+    "ast_hash": "c21897fbcf3e098418d28bcd240150f9",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/index.ts": {
+    "mtime": 1793175121.4328177,
+    "ast_hash": "eb72b7d91940ce4618909d96798a968e",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/pubblica.ts": {
+    "mtime": 1793175121.432875,
+    "ast_hash": "fad3bfb3b8b074998d5a549edd79d8a5",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/read.ts": {
+    "mtime": 1793175121.432934,
+    "ast_hash": "e5d2a90ec1a6590dd247c21ccfb35e46",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/ricerca.test.ts": {
+    "mtime": 1793175121.4329894,
+    "ast_hash": "f5b1521c2101a7a109cef01a6904fb1c",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/ricerca.ts": {
+    "mtime": 1793175121.4330547,
+    "ast_hash": "9dc8b5a2e6dd08e6c75c7758d0e92d8c",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/somma.test.ts": {
+    "mtime": 1793175121.4331203,
+    "ast_hash": "788273b75deea3efe6fdfe497b0351e0",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/somma.ts": {
+    "mtime": 1793175121.433171,
+    "ast_hash": "757559bac6d60a044f80da2d0355eebf",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/spareggi.test.ts": {
+    "mtime": 1793175121.4332423,
+    "ast_hash": "573f4a5e037ba16101bc4c2ee3395c6e",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/spareggi.ts": {
+    "mtime": 1793175121.433305,
+    "ast_hash": "bc4fa5491cbe804a55f9df3502118d85",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/stagione.test.ts": {
+    "mtime": 1793175121.4334278,
+    "ast_hash": "c8a4c1e186f4cc735d6f19e4d521a5ce",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/stagione.ts": {
+    "mtime": 1793175121.433486,
+    "ast_hash": "66e840625fdda9d157b1064259696864",
+    "semantic_hash": ""
+  },
+  "src/lib/classifica-generale/types.ts": {
+    "mtime": 1793175121.433543,
+    "ast_hash": "92e52299123a5ddbc5c59e3f84734b15",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/classifica-generale.ts": {
+    "mtime": 1793175121.4339147,
+    "ast_hash": "1675b316dbfb801dd6784a99b53faf1f",
+    "semantic_hash": ""
+  },
+  "src/lib/live/overall-standings.test.ts": {
+    "mtime": 1793175121.4341164,
+    "ast_hash": "49a97eada7a12b01426c56de2a11f8c7",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stagione/actions.test.ts": {
+    "mtime": 1793175121.4350693,
+    "ast_hash": "e558fef65ed6f4d403480a859ae71ce5",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stagione/actions.ts": {
+    "mtime": 1793175121.43514,
+    "ast_hash": "90254e7fd5af116efa6699cbcbb7be54",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stagione/demo.ts": {
+    "mtime": 1793175121.4352098,
+    "ast_hash": "8e3382258c03272c2555bf78b5a7716a",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stagione/read.ts": {
+    "mtime": 1793175121.43528,
+    "ast_hash": "ed954bab446a998208db97bb9df182d1",
+    "semantic_hash": ""
+  },
+  "src/lib/tappe/stagione/types.ts": {
+    "mtime": 1793175121.4353495,
+    "ast_hash": "358441497a339465e1552db467f87b63",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027440000_classifica_generale.sql": {
+    "mtime": 1793175121.435456,
+    "ast_hash": "142f5794575da6aab9d9d41a7dd29591",
     "semantic_hash": ""
   }
 }

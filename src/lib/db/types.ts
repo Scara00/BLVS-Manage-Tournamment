@@ -93,6 +93,8 @@ export type Tappa = {
   chiusura_automatica: boolean;
   /** Grows by 1 on every update (trigger `tappe_versione`). */
   versione: number;
+  /** Season of the overall standing (BLVS-44); defaults to the year of `data_inizio`. */
+  stagione: number;
   /** Meeting point shown to registered players (BLVS-24). */
   ritrovo: string | null;
   ritrovo_alle: string | null;

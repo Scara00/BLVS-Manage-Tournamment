@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
+import { pubblicaClassificaGenerale } from "@/lib/classifica-generale/pubblica";
 import { risolviParitaDemo } from "@/lib/demo/parita";
 import {
   classificaGirone,
@@ -77,9 +78,13 @@ function successo(
   return { status: "success", message, firma, at };
 }
 
-/** The live pages get the group's new standing at once. */
-function pubblica(dati: DatiParitaGirone | undefined) {
+/**
+ * The live pages get the group's new standing at once, and w-classifica
+ * the overall one: a decided tie in a final moves stage points (BLVS-44).
+ */
+async function pubblica(dati: DatiParitaGirone | undefined) {
   if (!dati) return;
+  await pubblicaClassificaGenerale(dati.tappaId);
   try {
     const classifica = classificaGirone(
       dati.giocatori.map((g) => g.iscrizioneId),
@@ -145,7 +150,7 @@ export async function risolviParita(
       }
     }
     refresh();
-    pubblica(esito.dati);
+    await pubblica(esito.dati);
     return successo(esito.dati, firma, at);
   }
 
@@ -183,7 +188,7 @@ export async function risolviParita(
     const dati = (
       await leggiDatiParitaTabellone(supabase, tappaId, categoria)
     )?.find((g) => g.gironeId === gironeId);
-    pubblica(dati);
+    await pubblica(dati);
     return successo(dati, firma, at);
   } catch (error) {
     console.error("[gironi] decisione della parità non salvata", error);

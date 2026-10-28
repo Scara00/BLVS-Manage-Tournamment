@@ -13,6 +13,9 @@ import { PRIVACY_PATH, RETURN_PARAM, safeReturnPath } from "./safe-return-path";
 /** Login page (w-login). */
 export const LOGIN_PATH = "/accesso";
 
+/** General standing (w-classifica): public, names and points only (BLVS-44). */
+export const CLASSIFICA_PATH = "/classifica";
+
 /** Expired session page (w-sessione-scaduta). */
 export const SESSION_EXPIRED_PATH = "/sessione-scaduta";
 
@@ -27,9 +30,10 @@ export type LoginReason = "scaduta";
 /**
  * Pages a signed-out visitor may open; everything else needs a session.
  * Sign-up (with its email confirmation) and password reset come before
- * there is one.
+ * there is one; the general standing is public (BLVS-44).
  */
 const PUBLIC_PATHS = [
+  CLASSIFICA_PATH,
   PRIVACY_PATH,
   LOGIN_PATH,
   SESSION_EXPIRED_PATH,
