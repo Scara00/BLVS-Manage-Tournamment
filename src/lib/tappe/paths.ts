@@ -19,3 +19,18 @@ export function liveTappaHref(id: string): string {
 export function liveTappaSnapshotUrl(id: string): string {
   return `/api/live/snapshot?tappa=${encodeURIComponent(id)}`;
 }
+
+/** The player's groups and phases of a stage (w-tabellone, BLVS-48). */
+export function tabelloneTappaHref(id: string): string {
+  return `${tappaHref(id)}/tabellone`;
+}
+
+/** The live resync of w-tabellone (both boards of one stage). */
+export function tabelloneSnapshotUrl(id: string): string {
+  return `/api/live/snapshot?gironi=${encodeURIComponent(id)}`;
+}
+
+/** The anchor of one group's card on w-tabellone. */
+export function gironeAncora(gironeId: string): string {
+  return `girone-${gironeId}`;
+}

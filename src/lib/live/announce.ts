@@ -33,6 +33,8 @@ export function announcementFor(event: LiveEvent): string {
       return `${event.board.label}: ${event.board.change ?? "partite aggiornate"}`;
     case "board-closed":
       return `${event.board.label}: ${annuncioChiusura(event.board.stageConcluded)}`;
+    case "stage-board":
+      return `${event.stage.label}: ${event.stage.change ?? "gironi aggiornati"}`;
   }
 }
 

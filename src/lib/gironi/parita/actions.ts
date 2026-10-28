@@ -5,6 +5,7 @@ import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
 import { pubblicaClassificaGenerale } from "@/lib/classifica-generale/pubblica";
+import { pubblicaGironiTappa } from "@/lib/tabellone/pubblica";
 import { risolviParitaDemo } from "@/lib/demo/parita";
 import {
   classificaGirone,
@@ -85,6 +86,7 @@ function successo(
 async function pubblica(dati: DatiParitaGirone | undefined) {
   if (!dati) return;
   await pubblicaClassificaGenerale(dati.tappaId);
+  await pubblicaGironiTappa(dati.tappaId, `${dati.gironeNome}: parità decisa`);
   try {
     const classifica = classificaGirone(
       dati.giocatori.map((g) => g.iscrizioneId),

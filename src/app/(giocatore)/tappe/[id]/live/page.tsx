@@ -7,7 +7,9 @@ import {
   LiveTappa,
   LiveTappaSessioneScaduta,
 } from "@/components/live";
+import Link from "next/link";
 import { readLiveTappa } from "@/lib/live/tappa-read";
+import { tabelloneTappaHref } from "@/lib/tappe/paths";
 
 export const metadata: Metadata = { title: "Live della tappa" };
 
@@ -28,12 +30,20 @@ async function LiveTappaContent({ id }: { id: string }) {
   }
   return (
     <>
-      <p
-        className="font-heading text-lg font-semibold"
-        data-testid="live-tappa-nome"
-      >
-        {live.tappa.nome}
-      </p>
+      <div className="flex flex-wrap items-baseline justify-between gap-space-3">
+        <p
+          className="font-heading text-lg font-semibold"
+          data-testid="live-tappa-nome"
+        >
+          {live.tappa.nome}
+        </p>
+        <Link
+          href={tabelloneTappaHref(live.tappa.id)}
+          className="font-heading font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
+        >
+          Gironi e fasi
+        </Link>
+      </div>
       <LiveTappa
         tappaId={live.tappa.id}
         initial={live.sync}

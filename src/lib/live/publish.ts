@@ -11,6 +11,7 @@ import type {
   PendingScores,
   PhaseStarted,
 } from "./types";
+import type { StageBoard } from "@/lib/tabellone/types";
 
 /*
  * Entry points for "a change was saved". Call them right after the write
@@ -69,4 +70,9 @@ export function publishBoardMatches(board: BoardMatches): LiveEvent {
 /** A board was concluded (BLVS-43): its points are final. */
 export function publishBoardClosed(board: BoardClosed): LiveEvent {
   return getLiveBus().publish({ type: "board-closed", board });
+}
+
+/** Both boards of a stage after any change (w-tabellone, BLVS-48). */
+export function publishStageBoard(stage: StageBoard): LiveEvent {
+  return getLiveBus().publish({ type: "stage-board", stage });
 }

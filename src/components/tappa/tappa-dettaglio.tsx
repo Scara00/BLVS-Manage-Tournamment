@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { Tape } from "@/components/scoreboard";
 import { StatoTappaBadge } from "@/components/tappe/stato-tappa-badge";
 import type { TabelloneDettaglio, TappaDettaglio } from "@/lib/tappe/dettaglio";
 import { FASE_LABEL } from "@/lib/tappe/format";
+import { tabelloneTappaHref } from "@/lib/tappe/paths";
 import { cn } from "@/lib/utils";
 import { PrendiPostoForm, type PrendiPostoAction } from "./prendi-posto-form";
 
@@ -98,6 +100,16 @@ export function TappaDettaglioView({
           <StatoTappaBadge stato={tappa.stato} />
           {tappa.fase ? (
             <span className="font-medium">Fase: {FASE_LABEL[tappa.fase]}</span>
+          ) : null}
+          {tappa.stato === "in_corso" ||
+          tappa.stato === "conclusa" ||
+          tappa.stato === "archiviata" ? (
+            <Link
+              href={tabelloneTappaHref(tappa.id)}
+              className="font-heading font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
+            >
+              Gironi e fasi
+            </Link>
           ) : null}
         </div>
         <dl className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,14rem),1fr))] gap-space-4">

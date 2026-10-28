@@ -1,4 +1,5 @@
 import type { Categoria } from "@/lib/db/types";
+import type { StageBoard } from "@/lib/tabellone/types";
 import type { PartitaLive } from "@/lib/tappe/live-admin/types";
 
 /**
@@ -198,6 +199,8 @@ export type LiveSnapshot = {
   boards?: readonly BoardMatches[];
   /** Boards an admin concluded; absent in snapshots from before BLVS-43. */
   closed?: readonly BoardClosed[];
+  /** BLVS-48: both boards of a stage for w-tabellone, one per stage. */
+  stageBoards?: readonly StageBoard[];
 };
 
 /** Snapshot plus the server time it was read: the client's resync payload. */
@@ -215,7 +218,8 @@ export type LiveEventPayload =
   | { type: "pending-scores"; stage: PendingScores }
   | { type: "phase-started"; phase: PhaseStarted }
   | { type: "board-matches"; board: BoardMatches }
-  | { type: "board-closed"; board: BoardClosed };
+  | { type: "board-closed"; board: BoardClosed }
+  | { type: "stage-board"; stage: StageBoard };
 
 export type LiveEvent = LiveEventPayload & {
   /** Monotonic per server: the SSE `id`, used for dedupe and replay. */
@@ -232,6 +236,7 @@ export const LIVE_EVENT_TYPES = [
   "phase-started",
   "board-matches",
   "board-closed",
+  "stage-board",
 ] as const satisfies readonly LiveEvent["type"][];
 
 function upsert<T extends { id: string }>(list: readonly T[], item: T): T[] {
@@ -270,5 +275,10 @@ export function applyLiveEvent(
       return { ...base, boards: upsert(snapshot.boards ?? [], event.board) };
     case "board-closed":
       return { ...base, closed: upsert(snapshot.closed ?? [], event.board) };
+    case "stage-board":
+      return {
+        ...base,
+        stageBoards: upsert(snapshot.stageBoards ?? [], event.stage),
+      };
   }
 }
