@@ -21,6 +21,7 @@ import {
 } from "@/lib/live/publish";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
+import { leggiNoteAssenze } from "@/lib/ritiri/read";
 import { pubblicaTabellone } from "@/lib/tappe/live-admin/pubblica";
 import type { PunteggioUfficiale } from "./conflitto/rileva";
 import {
@@ -338,6 +339,8 @@ async function pubblica(
           classifica,
           nomiGiocatori(delGirone),
           { stageId: tappaId, category: partita.categoria },
+          // BLVS-42: a withdrawal stays visible as text after any save.
+          await leggiNoteAssenze(supabase, tappaId, partita.categoria),
         ),
       );
     }

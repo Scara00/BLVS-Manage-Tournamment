@@ -57,6 +57,11 @@ export type GroupStandingRow = {
   pair: string;
   /** Registration id of the player (King/Queen standings, BLVS-36). */
   playerId?: string;
+  /**
+   * BLVS-42: a withdrawal or absence, as text («Ritirato», «Assente in 1
+   * partita»); the matches it voided no longer count.
+   */
+  note?: string;
   played: number;
   won: number;
   points: number;

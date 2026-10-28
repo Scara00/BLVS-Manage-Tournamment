@@ -114,6 +114,59 @@ function parzialeTesto(valore: ValoreRegistro | null | undefined): string {
   return a === null || b === null ? VUOTO : `${a}-${b}`;
 }
 
+/**
+ * BLVS-42: `{giocatore, partite: [{girone, turno, sets, stato}]}` →
+ * «Rossi Luca · Girone A t1 21–18, Girone A t2 da giocare» before and
+ * «Girone A t1 annullata, …» after. Older shapes fall back to plain text.
+ */
+function ritiroTesto(
+  tipo: "ritiro" | "assenza",
+  prima: ValoreRegistro | null,
+  dopo: ValoreRegistro | null,
+): { prima: string; dopo: string } {
+  const elenco = (valore: ValoreRegistro | null) => {
+    const partite = oggetto(valore)?.partite;
+    if (!Array.isArray(partite)) return null;
+    return partite
+      .map((voce) => {
+        const p = oggetto(voce);
+        const dove = [
+          typeof p?.girone === "string" ? p.girone : null,
+          numero(p?.turno) === null ? null : `t${numero(p?.turno)}`,
+        ]
+          .filter(Boolean)
+          .join(" ");
+        const esito =
+          p?.stato === "annullata"
+            ? "annullata"
+            : setsDi(p)?.length
+              ? setsTesto(p)
+              : "da giocare";
+        return [dove, esito].filter(Boolean).join(" ");
+      })
+      .join(", ");
+  };
+  const giocatore = oggetto(dopo)?.giocatore ?? oggetto(prima)?.giocatore;
+  const primaTesto = elenco(prima);
+  const dopoTesto = elenco(dopo);
+  return {
+    prima:
+      primaTesto === null
+        ? testoLibero(prima)
+        : [typeof giocatore === "string" ? giocatore : null, primaTesto]
+            .filter(Boolean)
+            .join(" · ") || VUOTO,
+    dopo:
+      dopoTesto === null
+        ? dopo === null
+          ? tipo === "ritiro"
+            ? "Ritirato"
+            : "Assente"
+          : testoLibero(dopo)
+        : dopoTesto || VUOTO,
+  };
+}
+
 function ordineTesto(valore: ValoreRegistro | null | undefined): string {
   const ordine = oggetto(valore)?.ordine;
   if (!Array.isArray(ordine) || ordine.length === 0) return VUOTO;
@@ -134,7 +187,14 @@ export function riepilogoValori(
   switch (tipo) {
     case "inserimento_punteggio":
     case "correzione_punteggio":
-      return { prima: setsTesto(prima), dopo: setsTesto(dopo) };
+      return {
+        prima: setsTesto(prima),
+        // BLVS-42: a withdrawal voids a match with a score.
+        dopo:
+          oggetto(dopo)?.stato === "annullata" && !setsDi(dopo)?.length
+            ? "Partita annullata"
+            : setsTesto(dopo),
+      };
     case "annullamento_punteggio":
       return { prima: setsTesto(prima), dopo: "Annullato" };
     case "rigenerazione_gironi": {
@@ -173,15 +233,8 @@ export function riepilogoValori(
         dopo: categoriaTesto(oggetto(dopo)?.categoria ?? dopo ?? undefined),
       };
     case "ritiro":
-      return {
-        prima: testoLibero(prima),
-        dopo: dopo === null ? "Ritirato" : testoLibero(dopo),
-      };
     case "assenza":
-      return {
-        prima: testoLibero(prima),
-        dopo: dopo === null ? "Assente" : testoLibero(dopo),
-      };
+      return ritiroTesto(tipo, prima, dopo);
     case "punteggio_parziale":
       return { prima: parzialeTesto(prima), dopo: parzialeTesto(dopo) };
     case "chiusura_tabellone":

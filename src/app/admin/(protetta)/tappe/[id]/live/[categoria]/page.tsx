@@ -12,6 +12,8 @@ import {
 import { risolviParita } from "@/lib/gironi/parita/actions";
 import { readParitaTabellone } from "@/lib/gironi/parita/read";
 import { readLiveSync } from "@/lib/live/read";
+import { registraRitiro } from "@/lib/ritiri/actions";
+import { readAssenzeTabellone } from "@/lib/ritiri/read";
 import { parseCategoriaSegmento } from "@/lib/tappe/avvio/paths";
 import {
   aggiornaPartita,
@@ -39,7 +41,11 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
   ]);
   // After the admin check of readAdminLive. BLVS-38: a finished group with
   // a perfect tie shows it under its name.
-  const parita = await readParitaTabellone(view.tappa.id, categoria);
+  const [parita, assenze] = await Promise.all([
+    readParitaTabellone(view.tappa.id, categoria),
+    // BLVS-42: withdrawals and absences shown under each group.
+    readAssenzeTabellone(view.tappa.id, categoria),
+  ]);
   const extraGironi = Object.fromEntries(
     parita
       .filter((g) => g.parita.length > 0)
@@ -66,6 +72,7 @@ async function LiveContent({ id, segmento }: { id: string; segmento: string }) {
           azione={aggiornaPartita}
           punteggio={salvaPunteggio}
           extraGironi={extraGironi}
+          ritiro={{ action: registraRitiro, assenze }}
         />
       </div>
     </LiveProvider>

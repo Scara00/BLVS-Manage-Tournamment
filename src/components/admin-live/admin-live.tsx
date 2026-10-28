@@ -16,6 +16,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { RitiroGirone } from "@/components/admin-ritiro";
 import { useLive } from "@/components/live";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
@@ -28,6 +29,7 @@ import {
   CATEGORIA_NOME,
   CATEGORIA_SEGMENTO,
 } from "@/lib/tappe/avvio/paths";
+import type { AssenzaRegistrata, RitiroAction } from "@/lib/ritiri/types";
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import {
   avanzamentoFase,
@@ -71,6 +73,14 @@ type AdminLiveProps = {
    * «Parità da risolvere» signal and its dialog).
    */
   extraGironi?: Readonly<Record<string, ReactNode>>;
+  /**
+   * BLVS-42: «Ritiro o assenza» under each group while the stage is in
+   * progress, with the absences already recorded on the board.
+   */
+  ritiro?: {
+    action: RitiroAction;
+    assenze: readonly AssenzaRegistrata[];
+  };
 };
 
 const OFFLINE_ID = "admin-live-offline";
@@ -161,6 +171,7 @@ export function AdminLive({
   offline: forceOffline,
   initialState = initialAzionePartitaState,
   extraGironi,
+  ritiro,
 }: AdminLiveProps) {
   const online = useOnline(
     forceOffline === undefined ? undefined : !forceOffline,
@@ -202,6 +213,11 @@ export function AdminLive({
   }, [esito]);
 
   const onEsitoDialog = useCallback((s: AzionePartitaState) => setEsito(s), []);
+  const onEsitoRitiro = useCallback(
+    ({ message, at }: { message: string; at: number }) =>
+      setEsito({ status: "success", partitaId: "", message, at }),
+    [],
+  );
 
   const onOperazione = useCallback(
     (formData: FormData) => {
@@ -406,6 +422,22 @@ export function AdminLive({
                     </div>
                   ) : null}
                   {g.id ? extraGironi?.[g.id] : null}
+                  {g.id &&
+                  g.nome &&
+                  ritiro &&
+                  view.tappa.stato === "in_corso" ? (
+                    <RitiroGirone
+                      tappaId={view.tappa.id}
+                      categoria={view.categoria}
+                      girone={{ id: g.id, nome: g.nome }}
+                      partite={g.partite}
+                      assenze={ritiro.assenze}
+                      action={ritiro.action}
+                      online={online}
+                      describedBy={disabled ? OFFLINE_ID : undefined}
+                      onEsito={onEsitoRitiro}
+                    />
+                  ) : null}
                   <ol className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-stack">
                     {g.partite.map((p) => (
                       <li key={p.id}>{voce(p)}</li>

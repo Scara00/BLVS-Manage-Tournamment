@@ -48,6 +48,23 @@ type ImpattoFaseProps = {
   inCorso?: SceltaImpatto | null;
   onScegli: (scelta: SceltaImpatto, conferma: boolean) => void;
   finalFocus?: ComponentProps<typeof AlertDialogContent>["finalFocus"];
+  /** BLVS-42: the texts naming the change (a correction by default). */
+  testi?: TestiImpatto;
+};
+
+export type TestiImpatto = {
+  /** After the summary in the description. */
+  scelta: string;
+  mantieni: string;
+  rigenera: string;
+};
+
+const TESTI_CORREZIONE: TestiImpatto = {
+  scelta: "Scegli se mantenerla com'è o rigenerarla dalla classifica corretta.",
+  mantieni:
+    "La fase successiva resta com'è, con i suoi punteggi. Il registro annota che è stata mantenuta dopo la correzione.",
+  rigenera:
+    "Le partite della fase successiva vengono eliminate e si generano di nuovo dalla classifica corretta.",
 };
 
 function descrizione(p: PartitaFaseSuccessiva) {
@@ -113,6 +130,7 @@ export function ImpattoFase({
   inCorso = null,
   onScegli,
   finalFocus,
+  testi = TESTI_CORREZIONE,
 }: ImpattoFaseProps) {
   const ids = useId();
   const formRef = useRef<HTMLFormElement>(null);
@@ -185,8 +203,7 @@ export function ImpattoFase({
               La fase successiva è già generata
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {riepilogoImpatto(impatto)} Scegli se mantenerla com&apos;è o
-              rigenerarla dalla classifica corretta.
+              {riepilogoImpatto(impatto)} {testi.scelta}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogBody className="flex flex-col gap-stack-sm">
@@ -221,10 +238,7 @@ export function ImpattoFase({
               <h3 id={`${ids}-mantieni`} className="font-heading font-semibold">
                 Mantieni
               </h3>
-              <p>
-                La fase successiva resta com&apos;è, con i suoi punteggi. Il
-                registro annota che è stata mantenuta dopo la correzione.
-              </p>
+              <p>{testi.mantieni}</p>
             </section>
 
             <section
@@ -235,10 +249,7 @@ export function ImpattoFase({
               <h3 id={`${ids}-rigenera`} className="font-heading font-semibold">
                 Rigenera
               </h3>
-              <p>
-                Le partite della fase successiva vengono eliminate e si generano
-                di nuovo dalla classifica corretta.
-              </p>
+              <p>{testi.rigenera}</p>
               <p className="flex items-start gap-space-2 font-semibold text-error-fg">
                 <AlertCircleIcon aria-hidden className="mt-1 size-4 shrink-0" />
                 <span data-testid="punteggi-persi">{avvisoPerdita(persi)}</span>

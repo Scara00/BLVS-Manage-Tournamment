@@ -178,3 +178,22 @@ export function salvaPunteggioDemo(
   if (concludi) partita.stato = "conclusa";
   return { ok: true, partita: copia(partita) };
 }
+
+/**
+ * BLVS-42: a demo match voided by a withdrawal, like
+ * `registra_ritiro_assenza` with the «annulla» rule: a saved score is
+ * dropped and its version moves on.
+ */
+export function annullaPartitaDemo(
+  tappaId: string,
+  categoria: Categoria,
+  partitaId: string,
+): PartitaLive | null {
+  const trovata = trova(tappaId, categoria, partitaId);
+  if ("esito" in trovata) return null;
+  const { partita } = trovata;
+  if (partita.sets.length > 0) partita.versione += 1;
+  partita.sets = [];
+  partita.stato = "annullata";
+  return copia(partita);
+}
