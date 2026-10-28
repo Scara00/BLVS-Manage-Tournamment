@@ -6,6 +6,7 @@ import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { publishBoardMatches, publishPendingScores } from "@/lib/live/publish";
 import { now } from "@/lib/time/server-time";
 import { CATEGORIA_NOME } from "@/lib/tappe/avvio/paths";
+import { pubblicaClassificaTappa } from "@/lib/tappe/classifica/pubblica";
 import { leggiDovePartita, leggiTabelloneLive } from "./dati";
 import { isDaInserire } from "./format";
 import { chiaveTabellone, type TabelloneLive } from "./types";
@@ -27,7 +28,8 @@ function leggi(
  * After a match changed: sends the board's matches to every open
  * w-admin-live (`board-matches`) and the stage's new count of results to
  * enter to the dashboard banner (`pending-scores`, BLVS-17), then the
- * overall standing of the stage's season to w-classifica (BLVS-44). It
+ * board's stage standing to w-classifica-tappa (BLVS-49) and the overall
+ * standing of the stage's season to w-classifica (BLVS-44). It
  * re-reads both boards, so the events carry what is saved. A failure is
  * logged and never undoes the write.
  */
@@ -60,6 +62,7 @@ export async function pubblicaTabellone(
         .flatMap((t) => t?.partite ?? [])
         .filter((p) => isDaInserire(p, adesso)).length,
     });
+    await pubblicaClassificaTappa(tappaId, categoria);
     await pubblicaClassificaGenerale(tappaId);
   } catch (error) {
     console.error("[admin-live] aggiornamento live non inviato", error);

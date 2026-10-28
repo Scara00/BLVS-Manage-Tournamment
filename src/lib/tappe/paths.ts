@@ -19,3 +19,20 @@ export function liveTappaHref(id: string): string {
 export function liveTappaSnapshotUrl(id: string): string {
   return `/api/live/snapshot?tappa=${encodeURIComponent(id)}`;
 }
+
+/**
+ * The stage standing of a stage (w-classifica-tappa, BLVS-49), for one
+ * category; without one the page picks the player's own.
+ */
+export function classificaTappaHref(id: string, categoria?: "M" | "F"): string {
+  const base = `${tappaHref(id)}/classifica`;
+  return categoria ? `${base}?categoria=${categoria}` : base;
+}
+
+/** The live resync of one board's stage standing. */
+export function classificaTappaSnapshotUrl(
+  id: string,
+  categoria: "M" | "F",
+): string {
+  return `/api/live/snapshot?classificaTappa=${encodeURIComponent(`${id}:${categoria}`)}`;
+}

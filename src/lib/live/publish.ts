@@ -10,6 +10,7 @@ import type {
   OverallStandings,
   PendingScores,
   PhaseStarted,
+  StageStandings,
 } from "./types";
 
 /*
@@ -69,4 +70,9 @@ export function publishBoardMatches(board: BoardMatches): LiveEvent {
 /** A board was concluded (BLVS-43): its points are final. */
 export function publishBoardClosed(board: BoardClosed): LiveEvent {
   return getLiveBus().publish({ type: "board-closed", board });
+}
+
+/** The stage standing of one board after a change (BLVS-49). */
+export function publishStageStandings(standings: StageStandings): LiveEvent {
+  return getLiveBus().publish({ type: "stage-standings", standings });
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PageContainer } from "@/components/layout/page-container";
@@ -8,6 +9,7 @@ import {
   LiveTappaSessioneScaduta,
 } from "@/components/live";
 import { readLiveTappa } from "@/lib/live/tappa-read";
+import { classificaTappaHref } from "@/lib/tappe/paths";
 
 export const metadata: Metadata = { title: "Live della tappa" };
 
@@ -34,6 +36,12 @@ async function LiveTappaContent({ id }: { id: string }) {
       >
         {live.tappa.nome}
       </p>
+      <Link
+        href={classificaTappaHref(live.tappa.id)}
+        className="inline-flex min-h-12 items-center self-start font-semibold underline decoration-2 underline-offset-4 focus-ring"
+      >
+        Classifica di tappa
+      </Link>
       <LiveTappa
         tappaId={live.tappa.id}
         initial={live.sync}

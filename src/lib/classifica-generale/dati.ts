@@ -10,7 +10,11 @@ import type {
   PartitaGironeRow,
 } from "@/lib/gironi/classifica";
 import type { OverallStandings } from "@/lib/live/types";
-import { classificaTappa, toFinaliTappa } from "@/lib/tappe/classifica";
+import {
+  classificaTappa,
+  toFinaliTappa,
+  type ClassificaTappa,
+} from "@/lib/tappe/classifica";
 import { sommaClassifica } from "./somma";
 import {
   ordinaClassifica,
@@ -55,28 +59,47 @@ function nomeCompleto(i: { nome: string; cognome: string }, id: string) {
   return `${i.nome} ${i.cognome}`.trim() || id;
 }
 
+/**
+ * The stage standing of one stage of `dati` (BLVS-40), with the stage's
+ * registrations as the RPC returns them (names, `utenti.id`). Shared with
+ * w-classifica-tappa (BLVS-49), so both read the same rows.
+ */
+export function classificaTappaDaDati(
+  dati: DatiClassificaGenerale,
+  tappaId: string,
+): {
+  classifica: ClassificaTappa;
+  iscrizioni: DatiClassificaGenerale["iscrizioni"];
+} {
+  const tappa = dati.tappe.find((t) => t.id === tappaId);
+  const gironi = dati.gironi.filter((g) => g.tappa_id === tappaId);
+  const idGironi = new Set(gironi.map((g) => g.id));
+  const iscrizioni = dati.iscrizioni.filter((i) => i.tappa_id === tappaId);
+  const finali = toFinaliTappa({
+    gironi,
+    membri: dati.membri.filter((m) => idGironi.has(m.girone_id)),
+    partite: dati.partite.filter(
+      (p) => p.girone_id !== null && idGironi.has(p.girone_id),
+    ),
+    iscrizioni: iscrizioni.map((i) => ({
+      id: i.id,
+      stato: i.stato,
+      utente: { nome: i.nome, cognome: i.cognome },
+    })),
+    decisioni: dati.decisioni.filter((d) => idGironi.has(d.girone_id)),
+  });
+  return {
+    classifica: classificaTappa({ finali, concluso: tappa?.concluso ?? false }),
+    iscrizioni,
+  };
+}
+
 /** Every player's result in every stage of `dati`. */
 export function partecipazioni(
   dati: DatiClassificaGenerale,
 ): PartecipazioneTappa[] {
   return dati.tappe.flatMap((tappa) => {
-    const gironi = dati.gironi.filter((g) => g.tappa_id === tappa.id);
-    const idGironi = new Set(gironi.map((g) => g.id));
-    const iscrizioni = dati.iscrizioni.filter((i) => i.tappa_id === tappa.id);
-    const finali = toFinaliTappa({
-      gironi,
-      membri: dati.membri.filter((m) => idGironi.has(m.girone_id)),
-      partite: dati.partite.filter(
-        (p) => p.girone_id !== null && idGironi.has(p.girone_id),
-      ),
-      iscrizioni: iscrizioni.map((i) => ({
-        id: i.id,
-        stato: i.stato,
-        utente: { nome: i.nome, cognome: i.cognome },
-      })),
-      decisioni: dati.decisioni.filter((d) => idGironi.has(d.girone_id)),
-    });
-    const classifica = classificaTappa({ finali, concluso: tappa.concluso });
+    const { classifica, iscrizioni } = classificaTappaDaDati(dati, tappa.id);
     const righe = new Map(classifica.righe.map((r) => [r.iscrizioneId, r]));
     return iscrizioni.map((i) => {
       const riga = righe.get(i.id);

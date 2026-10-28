@@ -1,11 +1,27 @@
+import Link from "next/link";
 import { Tape } from "@/components/scoreboard";
 import { StatoTappaBadge } from "@/components/tappe/stato-tappa-badge";
 import type { TabelloneDettaglio, TappaDettaglio } from "@/lib/tappe/dettaglio";
 import { FASE_LABEL } from "@/lib/tappe/format";
+import { classificaTappaHref } from "@/lib/tappe/paths";
 import { cn } from "@/lib/utils";
 import { PrendiPostoForm, type PrendiPostoAction } from "./prendi-posto-form";
 
-function Tabellone({ tabellone }: { tabellone: TabelloneDettaglio }) {
+/** Stages whose boards have a stage standing to show (BLVS-49). */
+const CON_CLASSIFICA: readonly TappaDettaglio["stato"][] = [
+  "in_corso",
+  "conclusa",
+  "archiviata",
+];
+
+function Tabellone({
+  tabellone,
+  classificaHref,
+}: {
+  tabellone: TabelloneDettaglio;
+  /** w-classifica-tappa of this board, once the stage has started. */
+  classificaHref?: string;
+}) {
   const titleId = `tabellone-${tabellone.categoria}`;
   return (
     <section
@@ -45,6 +61,15 @@ function Tabellone({ tabellone }: { tabellone: TabelloneDettaglio }) {
           </div>
         ) : null}
       </dl>
+      {classificaHref ? (
+        <Link
+          href={classificaHref}
+          className="inline-flex min-h-12 items-center self-start font-semibold underline decoration-2 underline-offset-4 focus-ring"
+        >
+          Classifica di tappa
+          <span className="sr-only"> · {tabellone.label}</span>
+        </Link>
+      ) : null}
     </section>
   );
 }
@@ -162,7 +187,15 @@ export function TappaDettaglioView({
         </h2>
         <div className="grid gap-stack md:grid-cols-2">
           {tappa.tabelloni.map((t) => (
-            <Tabellone key={t.categoria} tabellone={t} />
+            <Tabellone
+              key={t.categoria}
+              tabellone={t}
+              classificaHref={
+                CON_CLASSIFICA.includes(tappa.stato)
+                  ? classificaTappaHref(tappa.id, t.categoria)
+                  : undefined
+              }
+            />
           ))}
         </div>
       </section>

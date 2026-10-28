@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Tape } from "@/components/scoreboard";
 import { FASE_LABEL, type TappaGiocatore } from "@/lib/tappe/format";
-import { liveTappaHref } from "@/lib/tappe/paths";
+import { classificaTappaHref, liveTappaHref } from "@/lib/tappe/paths";
 
 /**
  * Shown at the top of the list while a stage is being played: which one,
@@ -33,6 +33,12 @@ export function TappeLiveStrip({ tappa }: { tappa: TappaGiocatore }) {
           className="inline-flex min-h-10 max-w-full items-center bg-tape px-space-4 font-heading font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
         >
           Segui il live
+        </Link>
+        <Link
+          href={classificaTappaHref(tappa.id)}
+          className="inline-flex min-h-10 max-w-full items-center px-space-2 font-heading font-semibold underline decoration-2 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-foreground"
+        >
+          Classifica di tappa
         </Link>
       </div>
     </section>
