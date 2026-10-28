@@ -92,6 +92,12 @@ export function toFinaliTappa(dati: DatiFinali): FinaleTappa[] {
   });
 }
 
+/** The finals of a board and whether it is closed (`concluso_il` set). */
+export type FinaliTabellone = {
+  finali: FinaleTappa[];
+  concluso: boolean;
+};
+
 /**
  * The stage standing of `categoria` in `tappaId`, recomputed from the
  * matches on every call; null when the stage has no such board.
@@ -101,6 +107,19 @@ export async function leggiClassificaTappa(
   tappaId: string,
   categoria: Categoria,
 ): Promise<ClassificaTappa | null> {
+  const dati = await leggiFinaliTappa(supabase, tappaId, categoria);
+  return dati ? classificaTappa(dati) : null;
+}
+
+/**
+ * The final groups of a board as `classificaTappa` takes them (BLVS-43
+ * also recomputes them with a corrected score); null without the board.
+ */
+export async function leggiFinaliTappa(
+  supabase: SupabaseClient,
+  tappaId: string,
+  categoria: Categoria,
+): Promise<FinaliTabellone | null> {
   const tabellone = await supabase
     .from("tabelloni")
     .select("id, concluso_il")
@@ -124,7 +143,7 @@ export async function leggiClassificaTappa(
   );
   const idFinali = finali.map((g) => g.id);
   const concluso = board.concluso_il !== null;
-  if (idFinali.length === 0) return classificaTappa({ finali: [], concluso });
+  if (idFinali.length === 0) return { finali: [], concluso };
 
   const [membri, partite, decisioni] = await Promise.all([
     supabase
@@ -163,7 +182,7 @@ export async function leggiClassificaTappa(
     throw new Error(`classifica tappa: ${iscrizioni.error.message}`);
   }
 
-  return classificaTappa({
+  return {
     finali: toFinaliTappa({
       gironi: finali,
       membri: righeMembri,
@@ -172,5 +191,5 @@ export async function leggiClassificaTappa(
       decisioni: decisioni.data as DatiFinali["decisioni"],
     }),
     concluso,
-  });
+  };
 }

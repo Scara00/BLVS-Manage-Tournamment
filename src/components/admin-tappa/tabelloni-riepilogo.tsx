@@ -3,6 +3,7 @@ import {
   type ResponsiveTableColumn,
 } from "@/components/responsive-table/responsive-table";
 import Link from "next/link";
+import { FaseConclusaBadge } from "@/components/admin-chiusura/fase-conclusa-badge";
 import { gironiEditorPath } from "@/lib/gironi/editor/types";
 import type { TabelloneView } from "@/lib/tappe/gestione-format";
 
@@ -15,7 +16,12 @@ const columns: ResponsiveTableColumn<TabelloneView>[] = [
     width: "20%",
   },
   { key: "inAttesa", header: "In attesa", numeric: true, width: "20%" },
-  { key: "fase", header: "Fase" },
+  {
+    key: "fase",
+    header: "Fase",
+    // BLVS-43: a concluded board reads «Conclusa», as text on the badge.
+    render: (row) => (row.concluso ? <FaseConclusaBadge /> : row.fase),
+  },
 ];
 
 /** «Gironi» column: the groups editor of the board (BLVS-28). */

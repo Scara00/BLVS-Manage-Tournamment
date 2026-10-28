@@ -1,6 +1,7 @@
 import "server-only";
 import { getLiveBus } from "./bus";
 import type {
+  BoardClosed,
   BoardMatches,
   GroupStandings,
   LiveEvent,
@@ -43,4 +44,9 @@ export function publishPhaseStarted(phase: PhaseStarted): LiveEvent {
 /** An admin changed a match of a board: its whole list (BLVS-31). */
 export function publishBoardMatches(board: BoardMatches): LiveEvent {
   return getLiveBus().publish({ type: "board-matches", board });
+}
+
+/** A board was concluded (BLVS-43): its points are final. */
+export function publishBoardClosed(board: BoardClosed): LiveEvent {
+  return getLiveBus().publish({ type: "board-closed", board });
 }

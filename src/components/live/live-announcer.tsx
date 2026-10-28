@@ -29,6 +29,7 @@ function eventGroupId(event: LiveEvent): string | undefined {
   if (event.type === "score") return event.match.groupId;
   if (event.type === "group-standings") return event.group.id;
   if (event.type === "board-matches") return event.board.id;
+  if (event.type === "board-closed") return event.board.id;
   return undefined;
 }
 

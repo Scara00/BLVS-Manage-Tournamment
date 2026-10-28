@@ -1,3 +1,4 @@
+import { FaseConclusaBadge } from "@/components/admin-chiusura/fase-conclusa-badge";
 import Link from "next/link";
 import {
   ResponsiveTable,
@@ -48,6 +49,10 @@ function CategoriaCell({ categoria }: { categoria: AdminCategoria }) {
       ) : (
         <span className="text-sm text-muted-foreground">Fase da definire</span>
       )}
+      {/* BLVS-43: results closed, said as text. */}
+      {categoria.concluso ? (
+        <FaseConclusaBadge className="max-w-full flex-wrap" />
+      ) : null}
       <span className="font-mono text-lg font-semibold tabular-nums">
         <span aria-hidden="true">
           {posti.iscritti}/{posti.posti}

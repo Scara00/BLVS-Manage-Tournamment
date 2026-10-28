@@ -27,6 +27,8 @@ import { ScadenzaForm } from "./scadenza-form";
 import { ScadenzaIscrizioni } from "./scadenza-iscrizioni";
 import { StatoTappaBadge } from "./stato-badge";
 import { StatoFlusso } from "./stato-flusso";
+import { ArchiviaTappa } from "@/components/admin/archivia-tappa";
+import type { ArchiviaTappaAction } from "@/lib/tappe/annullamento/state";
 import { TabelloniRiepilogo } from "./tabelloni-riepilogo";
 
 export const ADMIN_TAPPE_PATH = "/admin/tappe";
@@ -36,6 +38,11 @@ type GestioneTappaProps = {
   /** Server actions, passed in by the page (fakes in Storybook). */
   cambiaStato: CambioStatoAction;
   aggiornaScadenza: ScadenzaAction;
+  /**
+   * BLVS-43: «Archivia» (w-admin-annulla-tappa), enabled once both boards
+   * are concluded or the stage is cancelled.
+   */
+  archivia?: ArchiviaTappaAction;
   /** Storybook: open the confirmation, force offline, starting state. */
   dialogAperto?: boolean;
   offline?: boolean;
@@ -73,6 +80,7 @@ export function GestioneTappa({
   tappa,
   cambiaStato,
   aggiornaScadenza,
+  archivia,
   dialogAperto,
   offline,
   statoIniziale,
@@ -166,6 +174,24 @@ export function GestioneTappa({
       </Sezione>
 
       <TabelloniRiepilogo tappaId={tappa.id} tabelloni={tappa.tabelloni} />
+
+      {archivia &&
+      (tappa.stato === "in_corso" ||
+        tappa.stato === "conclusa" ||
+        tappa.stato === "annullata") ? (
+        <ArchiviaTappa
+          tappaId={tappa.id}
+          nome={tappa.nome}
+          archiviabile={
+            tappa.stato === "annullata" ||
+            (tappa.tabelloni.length > 0 &&
+              tappa.tabelloni.every((t) => t.concluso))
+          }
+          archiviata={false}
+          action={archivia}
+          offline={offline}
+        />
+      ) : null}
 
       <AvvioFaseLinks
         tappaId={tappa.id}

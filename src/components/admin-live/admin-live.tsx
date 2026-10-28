@@ -17,6 +17,11 @@ import {
   type ReactNode,
 } from "react";
 import { RitiroGirone } from "@/components/admin-ritiro";
+import {
+  ConcludiTabellone,
+  FaseConclusaBadge,
+  PuntiTappa,
+} from "@/components/admin-chiusura";
 import { useLive } from "@/components/live";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
@@ -30,6 +35,10 @@ import {
   CATEGORIA_SEGMENTO,
 } from "@/lib/tappe/avvio/paths";
 import type { AssenzaRegistrata, RitiroAction } from "@/lib/ritiri/types";
+import { FASE_TABELLONE_LABEL, faseDelTabellone } from "@/lib/gironi/fasi/fase";
+import { finaliConcluse } from "@/lib/tappe/chiusura/regole";
+import type { ConcludiTabelloneAction } from "@/lib/tappe/chiusura/state";
+import type { ClassificaTappa } from "@/lib/tappe/classifica/classifica";
 import { gestioneTappaPath } from "@/lib/tappe/gestione-state";
 import {
   avanzamentoFase,
@@ -81,6 +90,10 @@ type AdminLiveProps = {
     action: RitiroAction;
     assenze: readonly AssenzaRegistrata[];
   };
+  /** BLVS-43: `concludiTabellone`; without it the closing is not offered. */
+  chiusura?: ConcludiTabelloneAction;
+  /** BLVS-40/43: the board's stage points; undefined hides the section. */
+  classifica?: ClassificaTappa | null;
 };
 
 const OFFLINE_ID = "admin-live-offline";
@@ -172,6 +185,8 @@ export function AdminLive({
   initialState = initialAzionePartitaState,
   extraGironi,
   ritiro,
+  chiusura,
+  classifica,
 }: AdminLiveProps) {
   const online = useOnline(
     forceOffline === undefined ? undefined : !forceOffline,
@@ -323,13 +338,28 @@ export function AdminLive({
       <AvanzamentoFase
         avanzamento={avanzamento}
         faseLabel={
-          view.faseGioco && (fase === "gironi" || fase === "finale")
-            ? FASE_GIOCO_LABEL[view.faseGioco]
-            : fase
-              ? FASE_PARTITA_LABEL[fase]
-              : "—"
+          view.conclusoIl !== null
+            ? FASE_TABELLONE_LABEL.conclusa
+            : view.faseGioco && (fase === "gironi" || fase === "finale")
+              ? FASE_GIOCO_LABEL[view.faseGioco]
+              : fase
+                ? FASE_PARTITA_LABEL[fase]
+                : "—"
         }
       />
+
+      {chiusura && finaliConcluse(view.faseGioco, partite) ? (
+        <ConcludiTabellone
+          tappaId={view.tappa.id}
+          tappaNome={view.tappa.nome}
+          categoria={view.categoria}
+          action={chiusura}
+          concluso={view.conclusoIl !== null}
+          offline={forceOffline}
+        />
+      ) : null}
+
+      {classifica !== undefined ? <PuntiTappa classifica={classifica} /> : null}
 
       <div className="flex flex-col gap-space-2">
         <div role="alert" data-testid="admin-live-errore">
@@ -477,8 +507,28 @@ function Intestazione({ view }: { view: TabelloneLive }) {
         <p className="font-heading font-semibold">
           Tabellone {CATEGORIA_NOME[view.categoria]}
         </p>
+        <FaseTabellone view={view} />
       </div>
       <SceltaTabellone view={view} />
     </section>
+  );
+}
+
+/** The board's phase as text; «Conclusa» once closed (BLVS-43). */
+function FaseTabellone({ view }: { view: TabelloneLive }) {
+  const fase = faseDelTabellone(view.faseGioco, view.conclusoIl);
+  if (!fase) return null;
+  return (
+    <p
+      className="flex flex-wrap items-center gap-space-2"
+      data-testid="fase-tabellone"
+    >
+      <span>Fase del tabellone:{" "}</span>
+      {fase === "conclusa" ? (
+        <FaseConclusaBadge />
+      ) : (
+        <span className="font-semibold">{FASE_TABELLONE_LABEL[fase]}</span>
+      )}
+    </p>
   );
 }

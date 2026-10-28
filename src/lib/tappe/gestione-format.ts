@@ -1,4 +1,5 @@
-import type { Categoria, StatoTappa, Tappa } from "@/lib/db/types";
+import type { Categoria, FaseGioco, StatoTappa, Tappa } from "@/lib/db/types";
+import { FASE_TABELLONE_LABEL, faseDelTabellone } from "@/lib/gironi/fasi/fase";
 import { formatPeriodoTappa, STATO_TAPPA_LABEL } from "./format";
 import {
   confrontoOraDopo,
@@ -42,6 +43,10 @@ export type TabelloneRow = {
   inAttesa: number;
   /** `partite.fase` of every match of the board. */
   fasiPartite: readonly string[];
+  /** `tabelloni.fase_gioco` (BLVS-29/39), when known. */
+  faseGioco?: FaseGioco | null;
+  /** BLVS-43: when the board was concluded. */
+  conclusoIl?: string | null;
 };
 
 export type PassoFlusso = {
@@ -77,6 +82,8 @@ export type TabelloneView = {
   iscritti: number;
   inAttesa: number;
   fase: string;
+  /** BLVS-43: results closed, the phase reads «Conclusa». */
+  concluso: boolean;
 };
 
 export type GestioneTappaView = {
@@ -120,11 +127,20 @@ const FASE_DA_STATO: Record<StatoTappa, string> = {
   archiviata: "Archiviato",
 };
 
-/** Phase of a board: its most advanced match phase, else from the stage. */
+/**
+ * Phase of a board: «Conclusa» once closed (BLVS-43), else its most
+ * advanced match phase, else from the stage.
+ */
 export function faseTabellone(
   stato: StatoTappa,
   fasiPartite: readonly string[],
+  gioco: { faseGioco?: FaseGioco | null; conclusoIl?: string | null } = {},
 ): string {
+  const fase = faseDelTabellone(
+    gioco.faseGioco ?? null,
+    gioco.conclusoIl ?? null,
+  );
+  if (fase === "conclusa") return FASE_TABELLONE_LABEL.conclusa;
   if (stato === "conclusa" || stato === "annullata")
     return FASE_DA_STATO[stato];
   const piuAvanti = fasiPartite
@@ -289,7 +305,8 @@ export function toGestioneTappaView(
         categoriaLabel: CATEGORIA_TABELLONE[t.categoria],
         iscritti: t.confermate,
         inAttesa: t.inAttesa,
-        fase: faseTabellone(row.stato, t.fasiPartite),
+        fase: faseTabellone(row.stato, t.fasiPartite, t),
+        concluso: Boolean(t.conclusoIl),
       })),
   };
 }

@@ -237,11 +237,25 @@ export function riepilogoValori(
       return ritiroTesto(tipo, prima, dopo);
     case "punteggio_parziale":
       return { prima: parzialeTesto(prima), dopo: parzialeTesto(dopo) };
-    case "chiusura_tabellone":
+    case "chiusura_tabellone": {
+      // BLVS-43: dopo = {tappa_id, categoria, concluso_il, punti[]}.
+      const d = oggetto(dopo);
+      const categoria = d?.categoria;
+      const punti = Array.isArray(d?.punti) ? d.punti.length : null;
       return {
-        prima: prima === null ? "Aperto" : testoLibero(prima),
-        dopo: dopo === null ? "Concluso" : testoLibero(dopo),
+        prima: "Aperto",
+        dopo: [
+          categoria === "M" || categoria === "F"
+            ? `Concluso · ${categoriaTesto(categoria)}`
+            : "Concluso",
+          punti
+            ? `punti definitivi per ${plurale(punti, "giocatore", "giocatori")}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · "),
       };
+    }
     default:
       return { prima: testoLibero(prima), dopo: testoLibero(dopo) };
   }

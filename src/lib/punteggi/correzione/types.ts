@@ -32,4 +32,9 @@ export type PartitaFaseSuccessiva = {
 export type ImpattoFase = {
   partite: PartitaFaseSuccessiva[];
   punteggiPersi: number;
+  /**
+   * BLVS-43: the board is concluded. Only «Mantieni» is allowed, with an
+   * explicit confirmation; the stage points do not change.
+   */
+  tabelloneConcluso?: boolean;
 };

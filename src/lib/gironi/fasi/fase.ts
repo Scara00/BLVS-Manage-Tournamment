@@ -86,3 +86,30 @@ export function annuncioFase(fase: FaseGioco, partite: number): string {
       return `generate le finali, ${n} da giocare`;
   }
 }
+
+/**
+ * The phase of a board as admins read it (BLVS-43): its game phase, or
+ * «Conclusa» once it is closed. Derived, never stored: `fase_gioco` stays
+ * 'finali' and `tabelloni.concluso_il` is set.
+ */
+export type FaseDelTabellone = FaseGioco | "conclusa";
+
+export const FASE_TABELLONE_LABEL: Record<FaseDelTabellone, string> = {
+  ...FASE_GIOCO_LABEL,
+  conclusa: "Conclusa",
+};
+
+export function faseDelTabellone(
+  faseGioco: FaseGioco | null,
+  conclusoIl: string | null,
+): FaseDelTabellone | null {
+  if (conclusoIl !== null) return "conclusa";
+  return faseGioco;
+}
+
+/** Spoken when a board is concluded (live channel). */
+export function annuncioChiusura(tappaConclusa: boolean): string {
+  return tappaConclusa
+    ? "tabellone concluso, punti definitivi. La tappa è conclusa"
+    : "tabellone concluso, punti definitivi";
+}
