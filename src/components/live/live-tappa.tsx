@@ -400,6 +400,7 @@ export function MioGirone({
           data-testid="live-mio-girone-link"
           className={buttonVariants({
             variant: "secondary",
+            size: "campo",
             className: "max-w-full",
           })}
         >

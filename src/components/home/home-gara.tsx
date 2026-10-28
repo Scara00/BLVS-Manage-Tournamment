@@ -109,6 +109,7 @@ export function HomeGara({
             href={liveTappaHref(tappaId)}
             className={buttonVariants({
               variant: "primary",
+              size: "campo",
               className: "max-w-full",
             })}
           >
@@ -305,13 +306,13 @@ function LaTuaPosizioneOggi({
       <p className="flex flex-wrap gap-x-space-5 gap-y-space-2">
         <Link
           href={classificaTappaHref(tappaId)}
-          className="font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
+          className="inline-flex min-h-12 items-center font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
         >
           Classifica di tappa
         </Link>
         <Link
           href={CLASSIFICA_PATH}
-          className="font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
+          className="inline-flex min-h-12 items-center font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
         >
           Classifica generale
         </Link>

@@ -95,7 +95,8 @@ function DialogContent({
             render={
               <Button
                 variant="secondary"
-                size="icon"
+                // 48 px: dialogs also open courtside (score entry, ties).
+                size="icon-campo"
                 className="absolute top-space-2 right-space-2 rounded-none border-transparent sm:top-space-3 sm:right-space-3"
               />
             }

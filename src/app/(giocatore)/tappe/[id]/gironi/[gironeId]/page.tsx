@@ -25,7 +25,8 @@ function TornaAlLive({ tappaId }: { tappaId: string }) {
     <p>
       <Link
         href={liveTappaHref(tappaId)}
-        className="font-semibold underline decoration-2 underline-offset-4"
+        // Courtside: 48 px tall, like the rest of the live screens.
+        className="inline-flex min-h-12 items-center font-semibold underline decoration-2 underline-offset-4 focus-ring"
       >
         Torna al live della tappa
       </Link>

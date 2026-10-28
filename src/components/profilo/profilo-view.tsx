@@ -114,12 +114,18 @@ export function ProfiloView({
         </dl>
       </section>
       <div className="flex flex-wrap gap-space-3">
-        <Link href={PROFILO_MODIFICA_PATH} className={buttonVariants()}>
+        <Link
+          href={PROFILO_MODIFICA_PATH}
+          className={buttonVariants({ className: "max-w-full" })}
+        >
           Modifica dati
         </Link>
         <Link
           href={IMPOSTAZIONI_PATH}
-          className={buttonVariants({ variant: "secondary" })}
+          className={buttonVariants({
+            variant: "secondary",
+            className: "max-w-full",
+          })}
         >
           Password, privacy e account
         </Link>

@@ -523,7 +523,7 @@ function FaseTabellone({ view }: { view: TabelloneLive }) {
       className="flex flex-wrap items-center gap-space-2"
       data-testid="fase-tabellone"
     >
-      <span>Fase del tabellone:{" "}</span>
+      <span>Fase del tabellone: </span>
       {fase === "conclusa" ? (
         <FaseConclusaBadge />
       ) : (
