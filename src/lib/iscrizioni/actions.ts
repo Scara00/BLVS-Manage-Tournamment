@@ -83,7 +83,7 @@ async function prendiPostoDemo(
     {
       categoria,
       iscrizione: preso
-        ? { posto: preso, stato: "in_attesa", categoria }
+        ? { id: tappaId, posto: preso, stato: "in_attesa", categoria }
         : null,
       at: now(),
     },

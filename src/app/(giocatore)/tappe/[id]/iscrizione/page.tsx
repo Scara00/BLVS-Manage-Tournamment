@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { IscrizioneConfermataView, TappaLoading } from "@/components/tappa";
+import { annullaIscrizione } from "@/lib/iscrizioni/annullamento/actions";
 import { readIscrizioneConfermata } from "@/lib/tappe/dettaglio-read";
 
 export const metadata: Metadata = { title: "Iscrizione confermata" };
@@ -11,7 +12,12 @@ export function generateStaticParams() {
 
 async function ConfermaContent({ id }: { id: string }) {
   const iscrizione = await readIscrizioneConfermata(id);
-  return <IscrizioneConfermataView iscrizione={iscrizione} />;
+  return (
+    <IscrizioneConfermataView
+      iscrizione={iscrizione}
+      annulla={annullaIscrizione}
+    />
+  );
 }
 
 /** w-iscrizione-ok: the seat just taken, with date, place and deadlines. */

@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "e2e/layout.spec.ts": {
-    "mtime": 1793197252.310976,
-    "ast_hash": "736e01f383d45db7430e1509cf0bf00d",
+    "mtime": 1793197290.9176114,
+    "ast_hash": "00804fcc99e206668c7326127be0ba85",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/classifica/page.tsx": {
@@ -380,8 +380,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/nav-items.ts": {
-    "mtime": 1793197252.7380805,
-    "ast_hash": "6ac38558711910e287deb66db77f2e10",
+    "mtime": 1793197320.8949518,
+    "ast_hash": "abf4e6b9462d939277cf4ae82a18a86e",
     "semantic_hash": ""
   },
   "src/components/layout/page-container.tsx": {
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "src/components/layout/player-nav.tsx": {
-    "mtime": 1793197252.132713,
-    "ast_hash": "e333de6c40420b14ab68d6051e0fb0c6",
+    "mtime": 1793197290.9245455,
+    "ast_hash": "028c6c1e8d7d281c81da23e455324854",
     "semantic_hash": ""
   },
   "src/components/layout/sign-out-button.test.tsx": {
@@ -1225,8 +1225,8 @@
     "semantic_hash": ""
   },
   "src/lib/audit/eventi.ts": {
-    "mtime": 1793197252.1470852,
-    "ast_hash": "8c3cc121f53c5090b0e7de239446814e",
+    "mtime": 1793197290.9259489,
+    "ast_hash": "1fe1acbd84b999d1c2cc80659e3517c1",
     "semantic_hash": ""
   },
   "src/lib/audit/index.ts": {
@@ -2555,18 +2555,18 @@
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/[id]/iscrizione/page.tsx": {
-    "mtime": 1793197252.0994852,
-    "ast_hash": "38b6d658ebae0f4ac8192dfb946e858f",
+    "mtime": 1793197290.9240792,
+    "ast_hash": "75bcf57d6ad0066c923fad9c766deb1c",
     "semantic_hash": ""
   },
   "src/app/(giocatore)/tappe/[id]/page.tsx": {
-    "mtime": 1793197252.1003327,
-    "ast_hash": "199fd24e87f4c636acdbdaa5ae1d7ee5",
+    "mtime": 1793197290.9241827,
+    "ast_hash": "155471c5f354c0a5e40afe4a83e29a76",
     "semantic_hash": ""
   },
   "src/components/tappa/fixtures.ts": {
-    "mtime": 1793197252.1412303,
-    "ast_hash": "361b08a3ecc835d64232833f7e551731",
+    "mtime": 1793197290.9254267,
+    "ast_hash": "ae30db8cb2a900eba46f82cd539d121d",
     "semantic_hash": ""
   },
   "src/components/tappa/index.ts": {
@@ -2575,13 +2575,13 @@
     "semantic_hash": ""
   },
   "src/components/tappa/iscrizione-confermata.stories.tsx": {
-    "mtime": 1793197252.141363,
-    "ast_hash": "5adf333dc31dee5b9fde71224d8aa8cd",
+    "mtime": 1793197290.925521,
+    "ast_hash": "8329d03c490e70aa656f037b396feb29",
     "semantic_hash": ""
   },
   "src/components/tappa/iscrizione-confermata.tsx": {
-    "mtime": 1793197252.1414354,
-    "ast_hash": "b1b33bc58a73941ad6c18fb2b09b3120",
+    "mtime": 1793197290.925631,
+    "ast_hash": "a0c3d918b47a3cd89918df2f80bb3240",
     "semantic_hash": ""
   },
   "src/components/tappa/prendi-posto-form.tsx": {
@@ -2590,8 +2590,8 @@
     "semantic_hash": ""
   },
   "src/components/tappa/tappa-dettaglio.tsx": {
-    "mtime": 1793197252.1416612,
-    "ast_hash": "3b72d8ceb3f4d4aaec6a007fdc57110e",
+    "mtime": 1793197290.9257438,
+    "ast_hash": "ea7e9aa87420cea85349448d22f183f5",
     "semantic_hash": ""
   },
   "src/components/tappa/tappa-loading.tsx": {
@@ -2600,8 +2600,8 @@
     "semantic_hash": ""
   },
   "src/components/tappa/tappa.stories.tsx": {
-    "mtime": 1793197252.141804,
-    "ast_hash": "196e21ccbec139e628b66ead3d6e3e5e",
+    "mtime": 1793197290.9258437,
+    "ast_hash": "9a05524e306fb042bca0da3d9784c75c",
     "semantic_hash": ""
   },
   "src/components/tappa/tappa.test.tsx": {
@@ -2615,13 +2615,13 @@
     "semantic_hash": ""
   },
   "src/lib/demo/tappa-dettaglio.ts": {
-    "mtime": 1793197252.1542263,
-    "ast_hash": "61e341465d0322866b4a446bfcc196bd",
+    "mtime": 1793197290.926249,
+    "ast_hash": "02281152cc1a9406b73df2e4c8de8556",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/actions.ts": {
-    "mtime": 1793197252.1604865,
-    "ast_hash": "a1581a12659c6d9d222db1a61c78a8fc",
+    "mtime": 1793197290.9264228,
+    "ast_hash": "4840b5fc217a5075cf06a985dfc414a3",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/iscrivi.ts": {
@@ -2650,18 +2650,18 @@
     "semantic_hash": ""
   },
   "src/lib/tappe/dettaglio-read.ts": {
-    "mtime": 1793197252.176474,
-    "ast_hash": "0d9f7f6aa62565bd8d9eae01fa5a9199",
+    "mtime": 1793197290.9279044,
+    "ast_hash": "e50d20e4dce3dd7bf87cd335d3d31174",
     "semantic_hash": ""
   },
   "src/lib/tappe/dettaglio.test.ts": {
-    "mtime": 1793197252.1765432,
-    "ast_hash": "14988844158263bd0de383ca8df3f5f5",
+    "mtime": 1793197290.928026,
+    "ast_hash": "16b5b3d883702eafbcc9abd8888c2e3a",
     "semantic_hash": ""
   },
   "src/lib/tappe/dettaglio.ts": {
-    "mtime": 1793197252.1766152,
-    "ast_hash": "bb5332d5b8c82f948e5b9695908cca99",
+    "mtime": 1793197290.928138,
+    "ast_hash": "b5100dda85119e0adc7f211eb1644061",
     "semantic_hash": ""
   },
   "src/lib/tappe/visibile.test.ts": {
@@ -3720,8 +3720,8 @@
     "semantic_hash": ""
   },
   "src/lib/registro/format.ts": {
-    "mtime": 1793197252.168433,
-    "ast_hash": "912a91f0096ae5c6fe204cad93966e8c",
+    "mtime": 1793197290.9277835,
+    "ast_hash": "4fbce1328c1cb8ec5fa09a9a54e0e062",
     "semantic_hash": ""
   },
   "src/lib/registro/index.ts": {
@@ -5392,6 +5392,136 @@
   "supabase/migrations/20261028530000_cancellazione_account.sql": {
     "mtime": 1793197252.740579,
     "ast_hash": "900c69b38901c060f28c1d1e3749be06",
+    "semantic_hash": ""
+  },
+  "e2e/mie-iscrizioni.spec.ts": {
+    "mtime": 1793197290.9177053,
+    "ast_hash": "bbf89ce4898a840576383fcd9009d4d6",
+    "semantic_hash": ""
+  },
+  "src/app/(giocatore)/iscrizioni/page.tsx": {
+    "mtime": 1793197290.9239376,
+    "ast_hash": "95ea703b51868c8e96f5b98e92b00ab4",
+    "semantic_hash": ""
+  },
+  "src/app/api/demo/mie-iscrizioni/route.ts": {
+    "mtime": 1793197290.9243011,
+    "ast_hash": "cecec4aacff30ec93edba1d42a718f8c",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/annulla-iscrizione-dialog.tsx": {
+    "mtime": 1793197290.9247353,
+    "ast_hash": "99e8be788d131af3b5a24ab2194f6e1a",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/annulla-iscrizione.tsx": {
+    "mtime": 1793197290.924816,
+    "ast_hash": "d1f031965b997a91244dbef3e3633de3",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/esito-annullamento.tsx": {
+    "mtime": 1793197290.9248908,
+    "ast_hash": "8fd469f433605f2ea4b0b3183f7e6455",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/fixtures.ts": {
+    "mtime": 1793197290.9249666,
+    "ast_hash": "467c269077eb8da3a1ce829958ece170",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/index.ts": {
+    "mtime": 1793197290.9250293,
+    "ast_hash": "a621cd6874c9a3bf563f6ef18fc705ae",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/mie-iscrizioni-stati.tsx": {
+    "mtime": 1793197290.925095,
+    "ast_hash": "7993a6f0c2eebeebb9fceac44f6e3ea2",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/mie-iscrizioni.stories.tsx": {
+    "mtime": 1793197290.9251657,
+    "ast_hash": "6cc37d576bcdad15af3220ff1acac4d0",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/mie-iscrizioni.test.tsx": {
+    "mtime": 1793197290.92524,
+    "ast_hash": "6571e5187c68f29be9e1e57293eef86a",
+    "semantic_hash": ""
+  },
+  "src/components/mie-iscrizioni/mie-iscrizioni.tsx": {
+    "mtime": 1793197290.9253266,
+    "ast_hash": "d4e80f8ec898d0d91d8a35315892b798",
+    "semantic_hash": ""
+  },
+  "src/lib/demo/mie-iscrizioni-route.ts": {
+    "mtime": 1793197290.9260437,
+    "ast_hash": "024c5361e97de309a7d185a6e833570a",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/actions.ts": {
+    "mtime": 1793197290.9266768,
+    "ast_hash": "ff252a1a7504d586b1527fe7eb8d296a",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/annulla-iscrizione.db.test.ts": {
+    "mtime": 1793197290.92678,
+    "ast_hash": "02dc65199079a4303ced6a8c964f9887",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/errori.ts": {
+    "mtime": 1793197290.9268527,
+    "ast_hash": "2b8f964980f2fead6a792e4d11fd76dc",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/regola.test.ts": {
+    "mtime": 1793197290.9269376,
+    "ast_hash": "2c68ddfc01e8e2179978e5f5f5284514",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/regola.ts": {
+    "mtime": 1793197290.9270234,
+    "ast_hash": "72661145a0a8c3604f5eba3bb1448fc1",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/state.ts": {
+    "mtime": 1793197290.9271052,
+    "ast_hash": "afd708d698a08ef0d16fd321ec888671",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/annullamento/view.ts": {
+    "mtime": 1793197290.9271872,
+    "ast_hash": "50a82de26770d9263a7487ed25033cc3",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/mie/mie.test.ts": {
+    "mtime": 1793197290.927337,
+    "ast_hash": "6d6a04b1a5fac97b966c456585a79078",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/mie/mie.ts": {
+    "mtime": 1793197290.927432,
+    "ast_hash": "e31999c08d04e473fa3b8f5541ca0e4b",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/mie/paths.ts": {
+    "mtime": 1793197290.9275126,
+    "ast_hash": "5d2202dd568de3ac4dc81521a0c446a5",
+    "semantic_hash": ""
+  },
+  "src/lib/iscrizioni/mie/read.ts": {
+    "mtime": 1793197290.9276154,
+    "ast_hash": "da595b7463e9f72c614e7e6518418e0c",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027510000_annullamento_iscrizione_evento.sql": {
+    "mtime": 1793197290.9282224,
+    "ast_hash": "205785367f8ee7f2843f07c2f18aeca6",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261027510100_annulla_iscrizione.sql": {
+    "mtime": 1793197290.9283004,
+    "ast_hash": "6b531cc871606efeda39b2c1fba3a263",
     "semantic_hash": ""
   }
 }

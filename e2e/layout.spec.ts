@@ -148,6 +148,10 @@ test("giocatore: tour da tastiera completo", async ({ page }) => {
   if (isDesktop(page)) {
     await page.keyboard.press("Tab");
     await expect(
+      page.getByRole("link", { name: "Le mie iscrizioni", exact: true }),
+    ).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(
       page.getByRole("link", { name: "Profilo", exact: true }),
     ).toBeFocused();
     await page.keyboard.press("Tab");
