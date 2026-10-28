@@ -5,7 +5,7 @@ const PAGES = [
   {
     path: "/",
     title: "BLVS – Manage Tournament",
-    h1: "BLVS – Manage Tournament",
+    h1: "Ciao, Luca",
   },
   { path: "/tappe", title: "Tappe · BLVS", h1: "Tappe" },
   { path: "/classifica", title: "Classifica · BLVS", h1: "Classifica" },
