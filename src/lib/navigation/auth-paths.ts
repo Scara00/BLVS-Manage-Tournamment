@@ -8,6 +8,7 @@ import {
   RESET_PASSWORD_PATH,
 } from "@/lib/auth/password-reset/messages";
 import { SIGNUP_PATH } from "@/lib/auth/paths";
+import { ACCOUNT_CANCELLATO_PATH } from "@/lib/impostazioni/types";
 import { REGOLE_PATH } from "@/lib/regole/paths";
 import { PRIVACY_PATH, RETURN_PARAM, safeReturnPath } from "./safe-return-path";
 
@@ -43,6 +44,8 @@ const PUBLIC_PATHS = [
   SIGNUP_PATH,
   FORGOT_PASSWORD_PATH,
   RESET_PASSWORD_PATH,
+  // BLVS-53: shown right after the deletion, when no session is left.
+  ACCOUNT_CANCELLATO_PATH,
 ];
 
 /** Error previews (BLVS-10) stay reachable without a session. */

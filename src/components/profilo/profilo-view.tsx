@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { CategoryLabel, Tape } from "@/components/scoreboard";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { IMPOSTAZIONI_PATH } from "@/lib/impostazioni/types";
 import {
   PROFILO_MESSAGES,
   PROFILO_MODIFICA_PATH,
@@ -100,9 +101,15 @@ export function ProfiloView({ profilo }: { profilo: Profilo }) {
           </Riga>
         </dl>
       </section>
-      <div>
+      <div className="flex flex-wrap gap-space-3">
         <Link href={PROFILO_MODIFICA_PATH} className={buttonVariants()}>
           Modifica dati
+        </Link>
+        <Link
+          href={IMPOSTAZIONI_PATH}
+          className={buttonVariants({ variant: "secondary" })}
+        >
+          Password, privacy e account
         </Link>
       </div>
     </div>
