@@ -1,9 +1,16 @@
 import Link from "next/link";
+import { AnnullaIscrizione } from "@/components/mie-iscrizioni/annulla-iscrizione";
 import { Tape } from "@/components/scoreboard";
 import { StatoTappaBadge } from "@/components/tappe/stato-tappa-badge";
+import type { AnnullaIscrizioneAction } from "@/lib/iscrizioni/annullamento/state";
+import { MIE_ISCRIZIONI_PATH } from "@/lib/iscrizioni/mie/paths";
 import type { TabelloneDettaglio, TappaDettaglio } from "@/lib/tappe/dettaglio";
 import { FASE_LABEL } from "@/lib/tappe/format";
-import { classificaTappaHref, tabelloneTappaHref } from "@/lib/tappe/paths";
+import {
+  classificaTappaHref,
+  tabelloneTappaHref,
+  tappaHref,
+} from "@/lib/tappe/paths";
 import { cn } from "@/lib/utils";
 import { PrendiPostoForm, type PrendiPostoAction } from "./prendi-posto-form";
 
@@ -91,15 +98,19 @@ function Riga({
 
 /**
  * w-tappa: the stage with its two boards (state and seats), the player's
- * board, programme and phase, and «Prendi il posto N». The page passes the
- * server action, so stories can pass a stub.
+ * board, programme and phase, and «Prendi il posto N». A registered
+ * player can cancel from here until the deadline (BLVS-51). The page
+ * passes the server actions, so stories can pass stubs.
  */
 export function TappaDettaglioView({
   tappa,
   action,
+  annulla,
 }: {
   tappa: TappaDettaglio;
   action: PrendiPostoAction;
+  /** «Annulla l'iscrizione»; without it the cancel is not offered. */
+  annulla?: AnnullaIscrizioneAction;
 }) {
   return (
     <article
@@ -179,8 +190,21 @@ export function TappaDettaglioView({
             <span className="font-mono font-semibold tabular-nums">
               {tappa.iscrizione.posto}
             </span>{" "}
-            in questa tappa.
+            in questa tappa.{" "}
+            <Link
+              href={MIE_ISCRIZIONI_PATH}
+              className="font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
+            >
+              Le mie iscrizioni
+            </Link>
           </p>
+        ) : null}
+        {annulla ? (
+          <AnnullaIscrizione
+            annullamento={tappa.annullamento}
+            action={annulla}
+            ritorno={tappaHref(tappa.id)}
+          />
         ) : null}
         <PrendiPostoForm tappa={tappa} action={action} />
       </section>

@@ -4,6 +4,11 @@ import type {
   StatoIscrizione,
   Tappa,
 } from "@/lib/db/types";
+import { scadenzaAnnullamento } from "@/lib/iscrizioni/annullamento/regola";
+import {
+  toAnnullamentoView,
+  type AnnullamentoView,
+} from "@/lib/iscrizioni/annullamento/view";
 import {
   motivoBlocco,
   testoMotivo,
@@ -52,9 +57,13 @@ export type TabelloneTappaRow = {
 
 /** The player's own registration to the stage, if any. */
 export type IscrizionePropria = {
+  /** `iscrizioni.id`; in the demo, the stage id. */
+  id: string;
   posto: number | null;
   stato: StatoIscrizione;
   categoria: Categoria;
+  /** Already placed in a group: cancelling is refused (BLVS-51). */
+  inGirone?: boolean;
 };
 
 export const CATEGORIA_LABEL: Record<Categoria, string> = {
@@ -98,6 +107,8 @@ export type TappaDettaglio = {
   azione: string;
   motivo: MotivoBlocco | null;
   motivoTesto: string | null;
+  /** The player's active registration and whether it can be cancelled. */
+  annullamento: AnnullamentoView | null;
 };
 
 const FASE_ORDINE: Record<FasePartita, number> = {
@@ -152,7 +163,8 @@ export function toTappaDettaglio(
       chiudono: row.iscrizioni_chiudono_il,
       categoria,
       liberi,
-      iscritto: iscrizione !== null,
+      // A cancelled registration does not stop a new one (BLVS-51).
+      iscritto: iscrizioneAttiva(iscrizione),
     },
     at,
   );
@@ -223,11 +235,36 @@ export function toTappaDettaglio(
           aprono: aperturaFutura,
         })
       : null,
+    annullamento: annullamentoPerTappa(row, iscrizione, at),
   };
 }
 
+/** The cancel action of an active registration (BLVS-51); null without one. */
+export function annullamentoPerTappa(
+  row: DettaglioTappaRow,
+  iscrizione: IscrizionePropria | null,
+  at: Date,
+): AnnullamentoView | null {
+  if (!iscrizione || !iscrizioneAttiva(iscrizione)) return null;
+  return toAnnullamentoView(
+    {
+      iscrizioneId: iscrizione.id,
+      tappaId: row.id,
+      nome: row.nome,
+      posto: iscrizione.posto,
+      categoria: iscrizione.categoria,
+      stato: iscrizione.stato,
+      inGirone: iscrizione.inGirone ?? false,
+      tappa: row,
+    },
+    at,
+  );
+}
+
 /** Only active registrations hold a seat. */
-export function iscrizioneAttiva(iscrizione: IscrizionePropria | null) {
+export function iscrizioneAttiva(
+  iscrizione: IscrizionePropria | null,
+): iscrizione is IscrizionePropria {
   return iscrizione !== null && ISCRIZIONE_ATTIVA.includes(iscrizione.stato);
 }
 
@@ -247,13 +284,16 @@ export type IscrizioneConfermata = {
   /** «21 giugno alle ore 23:59»: last moment to cancel (Europe/Rome). */
   annullaEntro: string | null;
   annullaEntroIso: string | null;
+  /** «Annulla l'iscrizione» and its dialog (BLVS-51). */
+  annullamento: AnnullamentoView | null;
 };
 
 export function toIscrizioneConfermata(
   row: DettaglioTappaRow,
   iscrizione: IscrizionePropria,
+  at: Date,
 ): IscrizioneConfermata {
-  const annulla = row.annullabile_fino_al ?? row.iscrizioni_chiudono_il;
+  const annulla = scadenzaAnnullamento(row);
   return {
     tappaId: row.id,
     nome: row.nome,
@@ -265,5 +305,6 @@ export function toIscrizioneConfermata(
     ritrovoAlle: row.ritrovo_alle ? formatScadenza(row.ritrovo_alle) : null,
     annullaEntro: annulla ? formatScadenza(annulla) : null,
     annullaEntroIso: annulla,
+    annullamento: annullamentoPerTappa(row, iscrizione, at),
   };
 }

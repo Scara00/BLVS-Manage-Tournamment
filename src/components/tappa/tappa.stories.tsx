@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { Toaster, ToastProvider } from "@/components/ui/toast";
+import { ANNULLA_ISCRIZIONE_INITIAL } from "@/lib/iscrizioni/annullamento/state";
 import { PRENDI_POSTO_INITIAL } from "@/lib/iscrizioni/prendi-posto-state";
 import { withText200 } from "@/design-system/text-200";
 import { STATI_DETTAGLIO, dettaglio, type StatoDettaglio } from "./fixtures";
@@ -6,16 +8,33 @@ import { TappaDettaglioView } from "./tappa-dettaglio";
 import { TappaLoading } from "./tappa-loading";
 
 const noop = async () => PRENDI_POSTO_INITIAL;
+const annulla = async () => ANNULLA_ISCRIZIONE_INITIAL;
 
 /** w-tappa in every state, without data fetching. */
 function DettaglioScreen({ stato }: { stato: StatoDettaglio | "loading" }) {
   if (stato === "loading") return <TappaLoading />;
-  return <TappaDettaglioView tappa={dettaglio(stato)} action={noop} />;
+  return (
+    <TappaDettaglioView
+      tappa={dettaglio(stato)}
+      action={noop}
+      annulla={annulla}
+    />
+  );
 }
 
 const meta = {
   title: "Tappa/Dettaglio",
   component: DettaglioScreen,
+  // AnnullaIscrizione navigates after a cancel (useRouter).
+  parameters: { nextjs: { appDirectory: true } },
+  decorators: [
+    (Story) => (
+      <ToastProvider>
+        <Story />
+        <Toaster />
+      </ToastProvider>
+    ),
+  ],
   args: { stato: "aperta" },
   argTypes: {
     stato: { control: "select", options: [...STATI_DETTAGLIO, "loading"] },

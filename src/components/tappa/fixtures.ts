@@ -47,6 +47,7 @@ export const STATI_DETTAGLIO = [
 export type StatoDettaglio = (typeof STATI_DETTAGLIO)[number];
 
 const ISCRITTO: IscrizionePropria = {
+  id: "00000000-0000-4000-8000-000000000012",
   posto: 12,
   stato: "in_attesa",
   categoria: "M",
@@ -93,4 +94,4 @@ export function dettaglio(stato: StatoDettaglio): TappaDettaglio {
   return toTappaDettaglio(row, boards, { categoria, iscrizione, at });
 }
 
-export const CONFERMATA = toIscrizioneConfermata(TAPPA_ROW, ISCRITTO);
+export const CONFERMATA = toIscrizioneConfermata(TAPPA_ROW, ISCRITTO, AT);

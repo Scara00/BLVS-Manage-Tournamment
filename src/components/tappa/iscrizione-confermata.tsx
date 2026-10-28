@@ -3,13 +3,16 @@
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { ActionLink } from "@/components/error-page/action-link";
 import { ScoreboardRows } from "@/components/error-page/scoreboard-rows";
+import { AnnullaIscrizione } from "@/components/mie-iscrizioni/annulla-iscrizione";
 import { Tape } from "@/components/scoreboard";
+import type { AnnullaIscrizioneAction } from "@/lib/iscrizioni/annullamento/state";
+import { MIE_ISCRIZIONI_PATH } from "@/lib/iscrizioni/mie/paths";
 import {
   CATEGORIA_LABEL,
   nelTabellone,
   type IscrizioneConfermata,
 } from "@/lib/tappe/dettaglio";
-import { TAPPE_PATH, tappaHref } from "@/lib/tappe/paths";
+import { iscrizioneHref, TAPPE_PATH, tappaHref } from "@/lib/tappe/paths";
 
 const subscribe = () => () => {};
 
@@ -21,8 +24,11 @@ const subscribe = () => () => {};
  */
 export function IscrizioneConfermataView({
   iscrizione,
+  annulla,
 }: {
   iscrizione: IscrizioneConfermata;
+  /** «Annulla l'iscrizione» (BLVS-51); without it the cancel is not offered. */
+  annulla?: AnnullaIscrizioneAction;
 }) {
   const titleRef = useRef<HTMLHeadingElement>(null);
   const mounted = useSyncExternalStore(
@@ -105,8 +111,17 @@ export function IscrizioneConfermataView({
         <ActionLink href={tappaHref(iscrizione.tappaId)} variant="primary">
           Torna alla tappa
         </ActionLink>
+        <ActionLink href={MIE_ISCRIZIONI_PATH}>Le mie iscrizioni</ActionLink>
         <ActionLink href={TAPPE_PATH}>Tutte le tappe</ActionLink>
       </div>
+      {annulla && iscrizione.annullamento ? (
+        <AnnullaIscrizione
+          annullamento={iscrizione.annullamento}
+          action={annulla}
+          ritorno={iscrizioneHref(iscrizione.tappaId)}
+          dopo={tappaHref(iscrizione.tappaId)}
+        />
+      ) : null}
     </section>
   );
 }
