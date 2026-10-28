@@ -31,6 +31,11 @@ export const AUTH_RATE_LIMITS = {
     { scope: "email", max: 5, windowSeconds: 60 * 60 },
   ],
   "reset-confirm": [{ scope: "ip", max: 20, windowSeconds: 15 * 60 }],
+  // Password change from w-impostazioni (BLVS-53): guesses of the current one.
+  "password-change": [
+    { scope: "ip", max: 20, windowSeconds: 15 * 60 },
+    { scope: "email", max: 5, windowSeconds: 15 * 60 },
+  ],
 } as const satisfies Record<string, readonly Rule[]>;
 
 export type AuthAction = keyof typeof AUTH_RATE_LIMITS;

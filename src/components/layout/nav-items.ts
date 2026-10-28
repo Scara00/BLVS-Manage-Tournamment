@@ -19,6 +19,7 @@ export const playerPrimaryNav: readonly NavItem[] = [
 export const playerSecondaryNav: readonly NavItem[] = [
   { href: "/", label: "Home", exact: true },
   { href: "/profilo", label: "Profilo", desktop: true },
+  { href: "/impostazioni", label: "Impostazioni" },
 ];
 
 export const adminNav: readonly NavItem[] = [
