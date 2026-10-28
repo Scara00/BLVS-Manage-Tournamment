@@ -137,7 +137,7 @@ test("giocatore: tour da tastiera completo", async ({ page }) => {
     await expect(menu).toHaveAttribute("aria-expanded", "false");
     await expect(menu).toBeFocused();
   }
-  for (const name of ["Tappe", "Live", "Classifica"]) {
+  for (const name of ["Tappe", "Live", "Classifica", "Regole"]) {
     await page.keyboard.press("Tab");
     await expect(nav.getByRole("link", { name })).toBeFocused();
   }
@@ -186,7 +186,7 @@ test("giocatore: il menu mobile si apre da tastiera e si chiude con Esc", async 
   await expect(home).toBeVisible();
   await expectNoA11yViolations(page);
   // Tab walks the primary row first, then into the panel.
-  for (let i = 0; i < 4; i++) await page.keyboard.press("Tab");
+  for (let i = 0; i < 5; i++) await page.keyboard.press("Tab");
   await expect(home).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(menu).toHaveAttribute("aria-expanded", "false");

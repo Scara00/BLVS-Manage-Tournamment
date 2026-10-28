@@ -23,10 +23,10 @@ describe("PlayerNav", () => {
   const panel = () =>
     document.getElementById(menuButton().getAttribute("aria-controls")!)!;
 
-  it("mostra sempre Tappe, Live e Classifica nella navigazione principale", () => {
+  it("mostra sempre Tappe, Live, Classifica e Regole nella navigazione principale", () => {
     render(<PlayerNav signOut={signOut} />);
     const nav = screen.getByRole("navigation", { name: "Principale" });
-    expect(nav).toHaveTextContent("TappeLiveClassifica");
+    expect(nav).toHaveTextContent("TappeLiveClassificaRegole");
   });
 
   it("segna la pagina attiva con aria-current", () => {
