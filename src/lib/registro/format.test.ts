@@ -70,6 +70,16 @@ describe("riepilogoValori", () => {
         { categoria: "F" },
       ),
     ).toEqual({ prima: "Maschile", dopo: "Femminile" });
+    expect(
+      riepilogoValori(
+        "cambio_categoria",
+        { categoria: "M", posto: 7, tappa_id: "t" },
+        { categoria: "F", posto: 17, oltre_massimo: true, tappa_id: "t" },
+      ),
+    ).toEqual({
+      prima: "Maschile · posto 7",
+      dopo: "Femminile · posto 17 · oltre il massimo",
+    });
     expect(riepilogoValori("ritiro", null, null)).toEqual({
       prima: "—",
       dopo: "Ritirato",

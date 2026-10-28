@@ -24,8 +24,20 @@ import {
 } from "./spareggi";
 import type { ClassificaGenerale, PartecipazioneTappa } from "./types";
 
-/** The jsonb returned by `classifica_generale_dati(categoria, stagione)`. */
-export type DatiClassificaGenerale = {
+/**
+ * The jsonb returned by `classifica_generale_dati(categoria, stagione)`:
+ * the board of `categoria` (w-classifica-tappa reads it per stage) and, in
+ * `altro`, the other category's board. Points follow the player's CURRENT
+ * category (BLVS-54), so a player who changed category brings the points
+ * of the stages played on the other board.
+ */
+export type DatiClassificaGenerale = DatiTabellone & {
+  /** Missing in older demo rows: then only this board counts. */
+  altro?: DatiTabellone;
+};
+
+/** The rows of one board category. */
+export type DatiTabellone = {
   tappe: readonly {
     id: string;
     nome: string;
@@ -46,6 +58,11 @@ export type DatiClassificaGenerale = {
     stato: StatoIscrizione;
     /** Deleted account (BLVS-50); missing in older demo rows = false. */
     anonimo?: boolean;
+    /**
+     * The player's category today (BLVS-54); null for a profile without
+     * one, missing in older demo rows: then the board's category.
+     */
+    categoria_attuale?: Categoria | null;
   }[];
 };
 
@@ -73,7 +90,7 @@ function nomeCompleto(
  * w-classifica-tappa (BLVS-49), so both read the same rows.
  */
 export function classificaTappaDaDati(
-  dati: DatiClassificaGenerale,
+  dati: DatiTabellone,
   tappaId: string,
 ): {
   classifica: ClassificaTappa;
@@ -104,14 +121,39 @@ export function classificaTappaDaDati(
   };
 }
 
-/** Every player's result in every stage of `dati`. */
+/**
+ * Every result in every stage of `dati` of the players whose current
+ * category is `categoria`: from this board (players with no category stay
+ * here) and from `altro`, the board they played on before a change. Without
+ * `categoria`, every player of this board, as before BLVS-54.
+ */
 export function partecipazioni(
   dati: DatiClassificaGenerale,
+  categoria?: Categoria,
+): PartecipazioneTappa[] {
+  if (!categoria) return partecipazioniTabellone(dati, () => true);
+  return [
+    ...partecipazioniTabellone(
+      dati,
+      (i) => (i.categoria_attuale ?? categoria) === categoria,
+    ),
+    ...(dati.altro
+      ? partecipazioniTabellone(
+          dati.altro,
+          (i) => i.categoria_attuale === categoria,
+        )
+      : []),
+  ];
+}
+
+function partecipazioniTabellone(
+  dati: DatiTabellone,
+  conta: (i: DatiTabellone["iscrizioni"][number]) => boolean,
 ): PartecipazioneTappa[] {
   return dati.tappe.flatMap((tappa) => {
     const { classifica, iscrizioni } = classificaTappaDaDati(dati, tappa.id);
     const righe = new Map(classifica.righe.map((r) => [r.iscrizioneId, r]));
-    return iscrizioni.map((i) => {
+    return iscrizioni.filter(conta).map((i) => {
       const riga = righe.get(i.id);
       return {
         utenteId: i.utente_id,
@@ -142,7 +184,10 @@ export function classificaDaDati(
   return {
     categoria,
     stagione,
-    righe: ordinaClassifica(sommaClassifica(partecipazioni(dati)), regola),
+    righe: ordinaClassifica(
+      sommaClassifica(partecipazioni(dati, categoria)),
+      regola,
+    ),
   };
 }
 

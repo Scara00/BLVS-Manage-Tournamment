@@ -39,13 +39,13 @@ async function LiveTappaContent({ id }: { id: string }) {
         </p>
         <Link
           href={tabelloneTappaHref(live.tappa.id)}
-          className="font-heading font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
+          className="inline-flex min-h-12 items-center font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
         >
           Gironi e fasi
         </Link>
         <Link
           href={classificaTappaHref(live.tappa.id)}
-          className="font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
+          className="inline-flex min-h-12 items-center font-heading font-semibold underline decoration-2 underline-offset-4 focus-ring hover:decoration-4"
         >
           Classifica di tappa
         </Link>

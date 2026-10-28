@@ -196,7 +196,13 @@ export async function readMieIscrizioni(): Promise<MieIscrizioniView | null> {
     lettura.righe.map(async (row) => {
       const risultato = CON_CLASSIFICA.includes(row.tappa.stato)
         ? risultatoDaClassifica(
-            (await classifica(row.categoria, row.tappa.stagione)).righe,
+            // Points follow the player's current category (BLVS-54).
+            (
+              await classifica(
+                lettura.categoria ?? row.categoria,
+                row.tappa.stagione,
+              )
+            ).righe,
             lettura.me,
             row.tappa.id,
           )

@@ -16,6 +16,7 @@ export function AppShell({
   signOut,
   nav,
   sidebar,
+  topbarActions,
   children,
 }: {
   variant: "player" | "admin";
@@ -25,6 +26,8 @@ export function AppShell({
   nav?: ReactNode;
   /** Overrides the variant's default sidebar. */
   sidebar?: ReactNode;
+  /** Controls in the Topbar before «Esci» (admin: the command palette). */
+  topbarActions?: ReactNode;
   children: ReactNode;
 }) {
   const isPlayer = variant === "player";
@@ -41,6 +44,7 @@ export function AppShell({
         signOutOnMobile={!isPlayer}
         label={isPlayer ? undefined : "Admin"}
         homeHref={isPlayer ? "/" : "/admin"}
+        actions={topbarActions}
       />
       <div className="flex flex-1 flex-col md:flex-row">
         {aside}

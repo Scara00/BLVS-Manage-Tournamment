@@ -62,6 +62,23 @@ tappe (la policy RLS impedisce comunque di iscriversi dopo la scadenza).
 
 Ridistribuisci dopo averle impostate: `ENFORCE_HTTPS` è letta al build.
 
+**Live su più istanze (BLVS-56).** Su Vercel il salvataggio di un punteggio e
+i client SSE di `/api/live/stream` girano su istanze diverse. Con
+`SUPABASE_SECRET_KEY` impostata, ogni istanza inoltra i propri eventi alle
+altre tramite Supabase Realtime: canale broadcast `blvs-live`, codice in
+`src/lib/live/relay.ts`. Ogni messaggio è firmato (HMAC con la chiave
+segreta), quindi un evento falso mandato con la chiave pubblica viene
+scartato. Non servono migrazioni né impostazioni nel dashboard. Con
+`LIVE_RELAY=off` il relay si spegne e il bus serve una sola istanza.
+
+Limiti:
+
+- un'istanza appena avviata ha solo gli eventi arrivati da quel momento: lo
+  snapshot di `/api/live/snapshot?tappa=` parte vuoto finché non arriva il
+  salvataggio successivo, come dopo un riavvio;
+- uno stream SSE si chiude alla durata massima della funzione Vercel. Il
+  client si ricollega da solo e si riallinea dallo snapshot.
+
 Con queste variabili l'app protegge le pagine (Proxy → `/accesso`) e legge i
 dati reali: `/tappe` da `public.tappe`, la dashboard `/admin` da tappe,
 iscrizioni e utenti. Senza variabili (CI, e2e) restano i dati demo.

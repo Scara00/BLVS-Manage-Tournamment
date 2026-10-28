@@ -469,7 +469,8 @@ export function InserimentoPunteggio({
           href={punteggiPath(tappa.id)}
           className={buttonVariants({
             variant: "link",
-            className: "self-start",
+            // Courtside: 48 px tall, like the rest of score entry.
+            className: "min-h-12 self-start",
           })}
         >
           <ArrowLeftIcon aria-hidden className="size-4" />

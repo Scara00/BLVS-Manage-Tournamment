@@ -84,7 +84,11 @@ export function RigaPubblica({
     },
   ];
   return (
-    <div data-slot="riga-pubblica" className={className}>
+    // Standings text is AAA (7:1): the card labels too, as on w-live.
+    <div
+      data-slot="riga-pubblica"
+      className={cn("[&_dt]:text-foreground", className)}
+    >
       <ResponsiveTable
         caption={caption}
         columns={columns}

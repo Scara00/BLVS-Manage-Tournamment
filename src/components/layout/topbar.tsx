@@ -14,6 +14,7 @@ export function Topbar({
   signOutOnMobile = true,
   homeHref = "/",
   label,
+  actions,
 }: {
   /** Navigation rendered after the mark (see PlayerNav). */
   nav?: ReactNode;
@@ -23,6 +24,8 @@ export function Topbar({
   homeHref?: string;
   /** Optional area label next to the mark, e.g. "Admin". */
   label?: string;
+  /** Controls before «Esci», e.g. the admin «Cerca» (BLVS-55). */
+  actions?: ReactNode;
 }) {
   return (
     <header className="z-40 bg-primary text-primary-foreground md:sticky md:top-0">
@@ -41,9 +44,13 @@ export function Topbar({
           <span className="sr-only"> – vai alla home</span>
         </Link>
         {nav}
+        {actions ? <div className="md:ml-auto">{actions}</div> : null}
         <SignOutButton
           action={signOut}
-          className={cn("md:ml-auto", !signOutOnMobile && "hidden md:block")}
+          className={cn(
+            !actions && "md:ml-auto",
+            !signOutOnMobile && "hidden md:block",
+          )}
         />
       </div>
     </header>

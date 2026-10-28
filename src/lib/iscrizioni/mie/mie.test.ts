@@ -43,6 +43,7 @@ const RIGHE: RigaGenerale[] = [
     tappeGiocate: 2,
     puntiProvvisori: true,
     pariMerito: false,
+    anonimo: false,
     tappe: [
       {
         tappaId: "t0",
@@ -51,6 +52,8 @@ const RIGHE: RigaGenerale[] = [
         posizione: 1,
         punti: 12,
         provvisori: false,
+        fase: "gold",
+        posizioneDefinitiva: true,
       },
     ],
   },
@@ -62,6 +65,7 @@ const RIGHE: RigaGenerale[] = [
     tappeGiocate: 2,
     puntiProvvisori: false,
     pariMerito: false,
+    anonimo: false,
     tappe: [],
   },
 ];

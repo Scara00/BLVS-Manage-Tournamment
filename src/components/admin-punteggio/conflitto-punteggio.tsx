@@ -279,6 +279,7 @@ export function ConflittoPunteggio({
               <Button
                 ref={sovrascriviRef}
                 variant="secondary"
+                size="campo"
                 className="max-w-full"
                 onClick={() => vaiA("conferma")}
               >
@@ -286,6 +287,7 @@ export function ConflittoPunteggio({
               </Button>
               <AlertDialogCancel
                 variant="primary"
+                size="campo"
                 className="max-w-full"
                 onClick={onTieniSalvato}
               >
@@ -297,6 +299,7 @@ export function ConflittoPunteggio({
               <Button
                 ref={annullaRef}
                 variant="secondary"
+                size="campo"
                 className="max-w-full"
                 disabled={pending}
                 focusableWhenDisabled
@@ -306,6 +309,7 @@ export function ConflittoPunteggio({
               </Button>
               <AlertDialogAction
                 tone="destructive"
+                size="campo"
                 className="max-w-full"
                 loading={pending}
                 loadingText="Salvataggio…"
