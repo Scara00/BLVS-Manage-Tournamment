@@ -4,6 +4,7 @@ import { pubblicaClassificaGenerale } from "@/lib/classifica-generale/pubblica";
 import { CATEGORIE, type Categoria } from "@/lib/db/types";
 import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { publishBoardMatches, publishPendingScores } from "@/lib/live/publish";
+import { pubblicaGironiTappa } from "@/lib/tabellone/pubblica";
 import { now } from "@/lib/time/server-time";
 import { CATEGORIA_NOME } from "@/lib/tappe/avvio/paths";
 import { leggiDovePartita, leggiTabelloneLive } from "./dati";
@@ -61,6 +62,8 @@ export async function pubblicaTabellone(
         .filter((p) => isDaInserire(p, adesso)).length,
     });
     await pubblicaClassificaGenerale(tappaId);
+    // w-tabellone (BLVS-48): groups, standings and phases of the stage.
+    await pubblicaGironiTappa(tappaId, cambio);
   } catch (error) {
     console.error("[admin-live] aggiornamento live non inviato", error);
   }
