@@ -8,7 +8,10 @@
  * so parallel tests never touch each other's data.
  */
 import type { Categoria, StatoPartita } from "@/lib/db/types";
-import type { DatiClassificaGenerale } from "@/lib/classifica-generale/dati";
+import type {
+  DatiClassificaGenerale,
+  DatiTabellone,
+} from "@/lib/classifica-generale/dati";
 
 /** The demo player («Luca Rossi»), as on the other demo player pages. */
 export const DEMO_ME_CLASSIFICA = "demo-u-m-01";
@@ -196,18 +199,78 @@ const SQUADRE: readonly [readonly number[], readonly number[]][] = [
   ],
 ];
 
+const CATEGORIE_KEY = Symbol.for("blvs.demo.classifica-generale.categorie");
+
+/** Category changes made by the demo admin (BLVS-54), by player id. */
+function categorieCambiate(): Map<string, Categoria> {
+  const g = globalThis as unknown as Record<
+    symbol,
+    Map<string, Categoria> | undefined
+  >;
+  return (g[CATEGORIE_KEY] ??= new Map());
+}
+
+/** The demo player `utenteId` now plays in `categoria` (w-admin-giocatore). */
+export function impostaCategoriaDemo(
+  utenteId: string,
+  categoria: Categoria,
+): void {
+  categorieCambiate().set(utenteId, categoria);
+}
+
+/** The category of a demo standing player: changed by the admin, or their board. */
+export function categoriaAttualeDemo(utenteId: string): Categoria | null {
+  const cambiata = categorieCambiate().get(utenteId);
+  if (cambiata) return cambiata;
+  const match = /^demo-u-([mf])-\d+$/.exec(utenteId);
+  return match ? (match[1].toUpperCase() as Categoria) : null;
+}
+
+/** The players of the demo standing, with their board category. */
+export function demoGiocatoriClassifica(): {
+  id: string;
+  nome: string;
+  cognome: string;
+  categoria: Categoria;
+  anonimo: boolean;
+}[] {
+  return (["M", "F"] as const).flatMap((categoria) =>
+    NOMI[categoria].map((completo, i) => {
+      const id = demoUtente(categoria, i + 1);
+      const [nome, ...cognome] = completo.split(" ");
+      return {
+        id,
+        nome: nome ?? "",
+        cognome: cognome.join(" "),
+        categoria,
+        anonimo: DEMO_ANONIMI.has(id),
+      };
+    }),
+  );
+}
+
 /** The rows `classifica_generale_dati(categoria, stagione)` would return. */
 export function getDemoDatiClassifica(
   categoria: Categoria,
   stagione: number | null,
 ): DatiClassificaGenerale {
+  return {
+    ...datiTabelloneDemo(categoria, stagione),
+    altro: datiTabelloneDemo(categoria === "M" ? "F" : "M", stagione),
+  };
+}
+
+function datiTabelloneDemo(
+  categoria: Categoria,
+  stagione: number | null,
+): DatiTabellone {
   const tappe = store()
     .tappe.filter((t) =>
       stagione === null ? !t.nascosta : t.stagione === stagione,
     )
     .sort((a, b) => a.data.localeCompare(b.data));
   const dati: {
-    [K in keyof DatiClassificaGenerale]: DatiClassificaGenerale[K][number][];
+    [K in keyof DatiTabellone]: DatiTabellone[K][number][];
   } = {
     tappe: [],
     gironi: [],
@@ -277,6 +340,7 @@ export function getDemoDatiClassifica(
         cognome: cognome.join(" "),
         stato: "confermata",
         anonimo,
+        categoria_attuale: categorieCambiate().get(utente) ?? categoria,
       });
     }
   }

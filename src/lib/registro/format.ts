@@ -228,11 +228,21 @@ export function riepilogoValori(
     }
     case "parita_risolta":
       return { prima: ordineTesto(prima), dopo: ordineTesto(dopo) };
-    case "cambio_categoria":
-      return {
-        prima: categoriaTesto(oggetto(prima)?.categoria ?? prima ?? undefined),
-        dopo: categoriaTesto(oggetto(dopo)?.categoria ?? dopo ?? undefined),
+    case "cambio_categoria": {
+      // BLVS-54: {categoria, posto?, tappa_id?}; dopo also `oltre_massimo`.
+      const testo = (valore: ValoreRegistro | null) => {
+        const o = oggetto(valore);
+        const posto = numero(o?.posto);
+        return [
+          categoriaTesto(o?.categoria ?? valore ?? undefined),
+          posto === null ? null : `posto ${posto}`,
+          o?.oltre_massimo === true ? "oltre il massimo" : null,
+        ]
+          .filter(Boolean)
+          .join(" · ");
       };
+      return { prima: testo(prima), dopo: testo(dopo) };
+    }
     case "ritiro":
     case "assenza":
       return ritiroTesto(tipo, prima, dopo);

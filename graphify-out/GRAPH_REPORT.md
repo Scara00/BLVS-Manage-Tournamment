@@ -1,16 +1,16 @@
 # Graph Report - 4775bc2d-e2f3-42bf-9ab9-58eb8204ae0b  (2026-10-28)
 
 ## Corpus Check
-- 1117 files · ~450,469 words
+- 1147 files · ~466,476 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6034 nodes · 17063 edges · 254 communities (229 shown, 25 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 129 edges (avg confidence: 0.8)
+- 6242 nodes · 17804 edges · 257 communities (234 shown, 23 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 148 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e4d737ef`
+- Built from commit: `f527acfa`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -251,7 +251,9 @@
 - [[_COMMUNITY_Community 236|Community 236]]
 - [[_COMMUNITY_Community 237|Community 237]]
 - [[_COMMUNITY_Community 238|Community 238]]
+- [[_COMMUNITY_Community 239|Community 239]]
 - [[_COMMUNITY_Community 240|Community 240]]
+- [[_COMMUNITY_Community 241|Community 241]]
 - [[_COMMUNITY_Community 242|Community 242]]
 - [[_COMMUNITY_Community 243|Community 243]]
 - [[_COMMUNITY_Community 244|Community 244]]
@@ -260,37 +262,42 @@
 - [[_COMMUNITY_Community 247|Community 247]]
 - [[_COMMUNITY_Community 248|Community 248]]
 - [[_COMMUNITY_Community 249|Community 249]]
+- [[_COMMUNITY_Community 250|Community 250]]
 - [[_COMMUNITY_Community 251|Community 251]]
+- [[_COMMUNITY_Community 252|Community 252]]
 - [[_COMMUNITY_Community 253|Community 253]]
+- [[_COMMUNITY_Community 254|Community 254]]
+- [[_COMMUNITY_Community 255|Community 255]]
+- [[_COMMUNITY_Community 258|Community 258]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `readSupabaseEnv()` - 147 edges
-2. `Categoria` - 118 edges
-3. `getCurrentUser()` - 104 edges
-4. `buttonVariants` - 96 edges
-5. `isUuid()` - 82 edges
-6. `asRole()` - 76 edges
-7. `now()` - 66 edges
-8. `Button()` - 61 edges
-9. `PageContainer()` - 57 edges
-10. `createAuthUser()` - 54 edges
+1. `readSupabaseEnv()` - 155 edges
+2. `Categoria` - 130 edges
+3. `getCurrentUser()` - 111 edges
+4. `buttonVariants` - 104 edges
+5. `isUuid()` - 89 edges
+6. `asRole()` - 79 edges
+7. `now()` - 70 edges
+8. `Button()` - 64 edges
+9. `PageContainer()` - 58 edges
+10. `sessionExpiredHref()` - 56 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `httpStatusOf()` --calls--> `render()`  [INFERRED]
   src/app/error-routes.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
-- `renderLive()` --calls--> `render()`  [INFERRED]
-  src/components/admin-live/admin-live.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
-- `renderPalette()` --calls--> `render()`  [INFERRED]
-  src/components/admin-palette/palette-comandi.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
+- `renderConcludi()` --calls--> `render()`  [INFERRED]
+  src/components/admin-chiusura/concludi-tabellone.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
+- `concludiTabellone()` --calls--> `Bloccato`  [INFERRED]
+  src/lib/tappe/chiusura/actions.ts → src/components/admin-giocatori/cambio-categoria-dialog.stories.tsx
 - `renderCorrezione()` --calls--> `render()`  [INFERRED]
   src/components/admin-punteggio/correzione.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
-- `renderWatcher()` --calls--> `render()`  [INFERRED]
-  src/components/admin-session/admin-session-watcher.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
+- `renderScheda()` --calls--> `render()`  [INFERRED]
+  src/components/admin-punteggio/inserimento-punteggio.test.tsx → src/components/mie-iscrizioni/mie-iscrizioni.test.tsx
 
 ## Import Cycles
 - 1-file cycle: `src/components/regole/regole.tsx -> src/components/regole/regole.tsx`
 
-## Communities (254 total, 25 thin omitted)
+## Communities (257 total, 23 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.10
@@ -302,7 +309,7 @@ Nodes (29): devDependencies, @axe-core/playwright, @electric-sql/pglite, eslint,
 
 ### Community 2 - "Community 2"
 Cohesion: 0.05
-Nodes (50): confermaValida(), anteprimaCancellazione, classifica, DEMO_CONSENSO, DEMO_IMPOSTAZIONI, EliminaAccountContent(), metadata, cambiaPassword() (+42 more)
+Nodes (42): metadata, AccountCancellato(), EliminaAccount(), PrimaDopo(), impostazioniLuca, impostazioniTestoLungo, luca, lungo (+34 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.09
@@ -317,28 +324,28 @@ Cohesion: 0.14
 Nodes (13): API, BLVS-Manage-Tournamment, CI, Database (Supabase), Deploy (Vercel), Email, Registro ed email, Registro (`public.registro`) (+5 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.21
-Nodes (10): dateFormatter, formatPolicyDate(), PRIVACY_CONTROLLER, PRIVACY_POLICY_VERSION, PrivacyPolicyVersion, PrivacySectionId, metadata, PrivacyPolicy() (+2 more)
+Cohesion: 0.10
+Nodes (18): dateFormatter, formatPolicyDate(), PRIVACY_CONTROLLER, PRIVACY_POLICY_VERSION, PrivacyPolicyVersion, PrivacySection, PrivacySectionId, metadata (+10 more)
 
 ### Community 7 - "Community 7"
 Cohesion: 0.33
 Nodes (5): Branch e pull request, Branch protection di `main` (da configurare su GitHub), Contribuire, Prima di aprire la PR, Regole
 
 ### Community 9 - "Community 9"
-Cohesion: 0.11
-Nodes (22): Apertura, Chiusura, ErroreRete, InCorso, Offline, PermessoNegato, SessioneScaduta, Story (+14 more)
+Cohesion: 0.07
+Nodes (37): Apertura, Chiusura, ErroreRete, InCorso, Offline, PermessoNegato, SessioneScaduta, Story (+29 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.09
-Nodes (30): ConflittoPunteggio(), ConflittoPunteggioProps, Passo, ConfermaSovrascrittura, Conflitto, DemoProps, Loading, LongText (+22 more)
+Nodes (26): ConflittoPunteggio(), ConfermaSovrascrittura, Conflitto, DemoProps, Loading, LongText, salvato, Story (+18 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.13
-Nodes (22): RitiroDialog(), anteprimaRitiro(), CambioClassifica, classificaRitiro(), cosaCambiaRitiro(), descriviCambio(), descriviRisultato(), GiocatoreGirone (+14 more)
+Cohesion: 0.05
+Nodes (64): DESCRIZIONE_TIPO, RitiroDialog(), RitiroDialogProps, Anteprima, ErroriCampi, ImpattoSullaFase, InCaricamento, Offline (+56 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.17
-Nodes (14): ActionLink(), ErrorBoard(), ErrorBoardProps, ForbiddenContent(), Role, roleLabels, Default, Story (+6 more)
+Nodes (13): ErrorBoard(), ErrorBoardProps, ForbiddenContent(), Role, roleLabels, Default, Story, Testo200 (+5 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.07
@@ -349,116 +356,112 @@ Cohesion: 0.40
 Nodes (4): desktop1440, mobile390, PORT, STORYBOOK_PORT
 
 ### Community 17 - "Community 17"
-Cohesion: 0.07
-Nodes (11): PAGES, WIDTHS, analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, WIDTHS (+3 more)
+Cohesion: 0.05
+Nodes (8): analyzeWhenIdle(), expectNoA11yViolations(), makeAxeBuilder(), test, WCAG_22_AA_TAGS, WIDTHS, StoryIndex, VIEWPORTS
 
 ### Community 18 - "Community 18"
-Cohesion: 0.11
-Nodes (26): readJsonObject(), POST(), FASI_TABELLONE, creaDemoAvvioFaseRoute(), demoPunteggiGet(), demoPunteggiPost(), creaDemoTappaRoute(), isDemoSeedEnabled() (+18 more)
+Cohesion: 0.07
+Nodes (22): DialogModificheNonSalvate, marco, modifica, ModificaCaricamento, ModificaCategoriaBloccata, ModificaErroriCampi, ModificaInvioConErrori, ModificaInvioInCorso (+14 more)
 
 ### Community 21 - "Community 21"
-Cohesion: 0.17
-Nodes (29): Blocco, classificaGirone, Esito, firmaParita(), gironeTerminato(), iscrizioniDellaFirma(), ordina(), ordineValido() (+21 more)
+Cohesion: 0.14
+Nodes (33): Blocco, classificaGirone, Esito, firmaParita(), gironeTerminato(), iscrizioniDellaFirma(), ordina(), ParitaPerfetta (+25 more)
 
 ### Community 25 - "Community 25"
-Cohesion: 0.08
-Nodes (29): iniziali(), A, B, F, FASE_GIOCO, girone(), gironiDi(), NOMI (+21 more)
+Cohesion: 0.09
+Nodes (28): ClassificaTappaContent(), GironeContent(), metadata, TornaAlLive(), HomeGara(), HomeGaraBody(), LaTuaPosizioneOggi(), MiaPartita() (+20 more)
 
 ### Community 26 - "Community 26"
 Cohesion: 0.22
 Nodes (5): auth, redirectMock, signInWithPassword, signOutMock, valid
 
 ### Community 27 - "Community 27"
-Cohesion: 0.05
-Nodes (48): renderAnnulla(), renderArchivia(), renderAvvio(), ConcludiTabellone(), Concluso, Default, Dialog, Offline (+40 more)
+Cohesion: 0.22
+Nodes (8): Caricamento, Default, Errore, Pillola, SoloIcona, Story, Testo200, Toni
 
 ### Community 28 - "Community 28"
-Cohesion: 0.08
-Nodes (31): AT, CAGLIARI_SCADUTA, elenco(), JESOLO_GIOCATA, LIGNANO_FUORI, PESCARA_ANNULLATA, RIGHE, RIMINI (+23 more)
+Cohesion: 0.11
+Nodes (17): ANNULLA_ISCRIZIONE_INITIAL, AnnullaIscrizioneAction, AnnullaIscrizioneState, AnnullamentoView, AnnullaIscrizione(), EsitoDialog, ScadenzaAnnullamento(), EsitoAnnullamento() (+9 more)
 
 ### Community 29 - "Community 29"
 Cohesion: 0.05
-Nodes (60): annuncioClassificaTappa(), annuncioEventoTappa(), cambioClassificaTappa(), CATEGORIA, classificaMostrata(), etichettaTabellone(), eventoDellaClassificaTappa(), FASE_FINALE_LABEL (+52 more)
+Nodes (56): annuncioClassificaTappa(), annuncioEventoTappa(), CATEGORIA, classificaMostrata(), etichettaTabellone(), eventoDellaClassificaTappa(), FASE_FINALE_LABEL, puntiLabel() (+48 more)
 
 ### Community 30 - "Community 30"
-Cohesion: 0.08
-Nodes (46): ParitaDialog(), risolviParitaDemo(), errore(), prossimo(), risolviParita(), Sessione, sessioneAdmin(), successo() (+38 more)
+Cohesion: 0.07
+Nodes (57): ParitaDialog(), ParitaGironeProps, paritaPerfette(), EsitoDemoParita, getDemoDatiParita(), risolviParitaDemo(), Store, STORE_KEY (+49 more)
 
 ### Community 31 - "Community 31"
-Cohesion: 0.12
-Nodes (16): azioniFinte, Default, demo, Empty, FiltroBozze, initial, Loading, longText (+8 more)
+Cohesion: 0.11
+Nodes (17): azioniFinte, Default, demo, Empty, FiltroBozze, initial, Loading, longText (+9 more)
 
 ### Community 32 - "Community 32"
 Cohesion: 0.11
 Nodes (18): ParitaDialogProps, ParitaGirone(), Conflitto, Decisa, DueGiocatori, FieldErrors, Loading, Offline (+10 more)
 
 ### Community 33 - "Community 33"
-Cohesion: 0.05
-Nodes (66): RitiroDialogProps, RitiroGirone(), attributiRiga(), ClassificaGirone(), ClassificaGironeProps, rowKey(), rows, CriteriSpareggio() (+58 more)
-
-### Community 34 - "Community 34"
-Cohesion: 0.05
-Nodes (51): concludi(), controllers, form(), mocks, standingsDi(), createDeduper(), createLiveConnection(), EventSourceLike (+43 more)
+Cohesion: 0.06
+Nodes (60): attributiRiga(), ClassificaGirone(), ClassificaGironeProps, rowKey(), renderClassifica(), rows, LiveGirone(), LiveGironeBody() (+52 more)
 
 ### Community 35 - "Community 35"
-Cohesion: 0.10
-Nodes (22): Avviata, Bloccata, Conferma, FieldErrors, Loading, Offline, Pronta, SchermataProps (+14 more)
+Cohesion: 0.07
+Nodes (39): leggiClassificaGenerale(), leggiStagioni(), ClassificaGenerale, RigaGenerale, MieIscrizioniContent(), mia, AT, CAGLIARI_SCADUTA (+31 more)
 
 ### Community 36 - "Community 36"
-Cohesion: 0.08
-Nodes (28): PRENDI_POSTO_INITIAL, PrendiPostoState, AT, dettaglio(), ISCRITTO, STATI_DETTAGLIO, StatoDettaglio, TABELLONI (+20 more)
+Cohesion: 0.05
+Nodes (39): ConfermaContent(), metadata, PRENDI_POSTO_INITIAL, PrendiPostoState, AT, CONFERMATA, dettaglio(), ISCRITTO (+31 more)
 
 ### Community 37 - "Community 37"
-Cohesion: 0.07
-Nodes (46): Avviso(), RigeneraGironi(), RigeneraGironiProps, ConPunteggi, FieldErrors, Loading, LoadingDiretta, Offline (+38 more)
+Cohesion: 0.09
+Nodes (36): RigeneraGironi(), RigeneraGironiProps, ConPunteggi, FieldErrors, Loading, LoadingDiretta, Offline, PunteggiCambiati (+28 more)
 
 ### Community 38 - "Community 38"
-Cohesion: 0.19
-Nodes (10): assegnaPosti(), GiocatoreFinale, ORDINE_FASE, partiteAperte(), posizioniCerte(), postiFinale(), Posto, StatoClassificaTappa (+2 more)
+Cohesion: 0.10
+Nodes (17): assegnaPosti(), FinaleTappa, GiocatoreFinale, ORDINE_FASE, partiteAperte(), posizioniCerte(), postiFinale(), Posto (+9 more)
 
 ### Community 39 - "Community 39"
-Cohesion: 0.07
-Nodes (47): columns, FASE_LABEL, annuncioClassifica(), annuncioEvento(), CATEGORIA, puntiLabel(), puntiProvvisoriLabel(), standings (+39 more)
+Cohesion: 0.08
+Nodes (42): annuncioClassifica(), annuncioEvento(), CATEGORIA, puntiLabel(), puntiProvvisoriLabel(), standings, titoloClassifica(), ClassificaGenerale() (+34 more)
 
 ### Community 40 - "Community 40"
 Cohesion: 0.16
 Nodes (13): AdminSessionSnapshot, AdminSessionTimer, Options, AdminSessionWarning(), AdminSessionWarningProps, AdminSessionWatcher(), ADMIN_SESSION_MESSAGES, countdownMilestone() (+5 more)
 
 ### Community 41 - "Community 41"
-Cohesion: 0.05
-Nodes (36): StagioneTappa(), AnnoNonValido, Archiviata, ErroreDiRete, Modificabile, Story, withText200(), annullamentoRimini() (+28 more)
+Cohesion: 0.04
+Nodes (47): ArchiviaTappa(), Abilitata, Caricamento, Disattivata, ErroreRete, Offline, Rifiutata, Story (+39 more)
 
 ### Community 42 - "Community 42"
 Cohesion: 0.07
-Nodes (16): ConBozze, Default, SessioneAdminChiusa, SessioneAdminChiusaConPunteggi, SessioneAdminChiusaSenzaBozze, SessioneAdminChiusaText200, Story, Text200 (+8 more)
+Nodes (17): SessionExpiredView(), ConBozze, Default, SessioneAdminChiusa, SessioneAdminChiusaConPunteggi, SessioneAdminChiusaSenzaBozze, SessioneAdminChiusaText200, Story (+9 more)
 
 ### Community 43 - "Community 43"
-Cohesion: 0.14
-Nodes (21): CRITERI, CRITERI_SPAREGGIO, DescrizioneCriterio, REGOLA_CLASSIFICA, spiegaRegolaClassifica(), spiegaRegolaGenerale(), REGOLA_SET, RegolaSet (+13 more)
+Cohesion: 0.18
+Nodes (17): spiegaRegolaClassifica(), spiegaRegolaGenerale(), REGOLA_SET, RegolaSet, spiegaRegolaSet(), daConfermare(), DomandaAperta, REGOLE_APERTE (+9 more)
 
 ### Community 44 - "Community 44"
-Cohesion: 0.06
-Nodes (28): initial, renderClassifica(), standings, initial, player(), renderGirone(), turno(), chiaveParziale() (+20 more)
+Cohesion: 0.05
+Nodes (55): ClassificaGeneraleLive(), standingsDi(), Caricamento, Connessione, Dati, Femminile, FuoriClassifica, Offline (+47 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.04
-Nodes (73): mergeIds(), clearSignupDraft(), EMPTY_DRAFT, readSignupDraft(), saveSignupDraft(), SignupDraft, storage(), text() (+65 more)
+Cohesion: 0.06
+Nodes (49): CATEGORIA_LABEL, mergeIds(), ProfiloFormProps, Checkbox(), CheckboxProps, Field(), FieldContext, FieldContextValue (+41 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.14
-Nodes (23): DecisioneSpareggio, paritaPerfette(), SetGioco, DatiGirone, erroreDb(), leggiClassificaGirone(), leggiDatiGirone(), PartitaGironeRow (+15 more)
+Cohesion: 0.15
+Nodes (23): DecisioneSpareggio, ordineValido(), SetGioco, DatiGirone, erroreDb(), leggiClassificaGirone(), leggiDatiGirone(), PartitaGironeRow (+15 more)
 
 ### Community 48 - "Community 48"
 Cohesion: 0.10
-Nodes (14): board(), match(), register(), riepilogo(), Esito, salva(), signUpAs(), Args (+6 more)
+Nodes (15): Esito, salva(), signUpAs(), boardOf(), createMatch(), createStage(), register(), Args (+7 more)
 
 ### Community 49 - "Community 49"
 Cohesion: 0.13
 Nodes (15): dependencies, @base-ui/react, class-variance-authority, cn, lucide-react, next, react, react-dom (+7 more)
 
 ### Community 50 - "Community 50"
-Cohesion: 0.19
-Nodes (15): AdminLayout(), adminSessionIdleSeconds(), AdminSessionStatus, describeCountdown(), formatCountdown(), isAdminArea(), isExpired(), nextDeadline() (+7 more)
+Cohesion: 0.10
+Nodes (32): IscrittiLettura, IscrizioneDb, readFromDb(), readIscrittiTappa(), IscrittoRow, TabelloneIscrittiRow, TappaIscrittiRow, StatoIscrizione (+24 more)
 
 ### Community 51 - "Community 51"
 Cohesion: 0.21
@@ -473,123 +476,123 @@ Cohesion: 0.40
 Nodes (3): { rememberPendingVerification }, { signInWithPassword, signUp, signOut }, validRegistration
 
 ### Community 55 - "Community 55"
-Cohesion: 0.10
-Nodes (21): columns, ParitaGironeProps, iscrittiPath(), stati, Variant, ConfrontoOraDopo(), GestioneTappa(), GestioneTappaProps (+13 more)
+Cohesion: 0.07
+Nodes (45): AggiungiGiocatoreDialog(), Ricerca, EsportaCsv(), colonne(), esitoId(), IscrittiTappa(), IscrittiTappaProps, Tabellone() (+37 more)
 
 ### Community 56 - "Community 56"
 Cohesion: 0.03
-Nodes (118): TestiConflitto, AZIONI, Iniziale, NonChiudeIlSet, Riepilogo, Salvataggio, SchermataProps, SenzaRete (+110 more)
+Nodes (68): AZIONI, Iniziale, NonChiudeIlSet, Riepilogo, Salvataggio, SchermataProps, SenzaRete, Story (+60 more)
 
 ### Community 57 - "Community 57"
-Cohesion: 0.13
-Nodes (22): GiocatoreRow, MESSAGGI, partiteDemo(), toRisultatoGiocatore(), cerca(), Nome, PartitaTrovataRow, squadra() (+14 more)
+Cohesion: 0.20
+Nodes (12): haModifiche(), ProfiloForm(), profilo, router, ProfiloView(), CAMPI_PROFILO, emailInAttesaMessage(), initialProfiloFormState (+4 more)
 
 ### Community 58 - "Community 58"
-Cohesion: 0.15
-Nodes (17): GironiPanel(), GironiPanelProps, postiDaAvvisare(), TABELLONE, AvvisoGironi(), AvvisoGironiProps, NuovaTappaLoading(), daAvvisare() (+9 more)
+Cohesion: 0.24
+Nodes (10): AvvisoGironi(), AvvisoGironiProps, NuovaTappaForm(), NuovaTappaFormProps, PostiField(), PostiFieldProps, TABELLONE, avvisoGironiMessage() (+2 more)
 
 ### Community 59 - "Community 59"
 Cohesion: 0.31
 Nodes (5): asAdmin(), avviata(), partiteDaInserire(), parziale(), PgError
 
 ### Community 60 - "Community 60"
-Cohesion: 0.04
-Nodes (65): CancellaAccountAction, metadata, ModificaContent(), ModificaProfiloPage(), aggiornaProfilo(), confirmationRedirect(), EMAIL_TAKEN_CODES, errorState() (+57 more)
+Cohesion: 0.19
+Nodes (13): aggiornaProfilo(), confirmationRedirect(), EMAIL_TAKEN_CODES, errorState(), RATE_LIMIT_CODES, TRIGGER_HINTS, EMAIL_CHANGE_REDIRECT_PATH, readStatoCategoria() (+5 more)
 
 ### Community 61 - "Community 61"
-Cohesion: 0.07
-Nodes (44): PartitaSuccessivaRow, parzialeAttualeDemo(), punteggioUfficialeDemo(), salvaParzialeDemo(), metadata, SchedaContent(), annullaPunteggio(), conclusoDellaPartita() (+36 more)
+Cohesion: 0.05
+Nodes (93): impatto, messaggioImpattoCambiato(), PartitaSuccessivaRow, toImpattoFase(), ImpattoFase, SceltaImpatto, SCELTE_IMPATTO, annullaPartitaPunteggiDemo() (+85 more)
 
 ### Community 62 - "Community 62"
 Cohesion: 0.18
-Nodes (11): accodaEmail(), EmailAccodata, ErroreCodaEmail, props, EmailTemplateName, EmailTemplateProps, emailTemplates, isEmailTemplateName() (+3 more)
+Nodes (16): TemplateDefinition, ConfermaEmail(), ConfermaEmailProps, confermaEmailCopy, ConfermaNuovaEmail(), ConfermaNuovaEmailProps, EmailAction(), EmailActionProps (+8 more)
 
 ### Community 63 - "Community 63"
 Cohesion: 0.15
 Nodes (13): describeError(), EmailMessage, EmailQueueLogger, EmailQueueResult, EmailQueueStore, EmailTransport, processEmailQueue(), QueuedEmail (+5 more)
 
 ### Community 64 - "Community 64"
-Cohesion: 0.20
-Nodes (9): AnteprimaForbidden(), Guasto(), AnteprimaErrore(), DraftFixtureForm(), AnteprimaBozza(), metadata, isErrorPreviewEnabled(), AnteprimaPunteggio() (+1 more)
+Cohesion: 0.22
+Nodes (8): AnteprimaForbidden(), Guasto(), AnteprimaErrore(), AnteprimaBozza(), metadata, isErrorPreviewEnabled(), AnteprimaPunteggio(), metadata
 
 ### Community 65 - "Community 65"
 Cohesion: 0.17
 Nodes (22): extractLinks(), getLatestLink(), HTML_ENTITIES, isMailpitAvailable(), mailpit(), MAILPIT_URL, MailpitMessage, MailpitSummary (+14 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.13
-Nodes (21): CSV_HEADER, csvField(), csvFilename(), csvLine(), iscrittiCsv(), slug(), tappa, Ricerca (+13 more)
+Cohesion: 0.04
+Nodes (56): effettiAttesi(), testiEffetti(), CAMBIO_MESSAGES, CambiaCategoria(), EsitoCambioCategoria(), CambioCategoriaDialog(), EsitoCambio, Bloccato (+48 more)
 
 ### Community 67 - "Community 67"
 Cohesion: 0.13
-Nodes (21): ERRORE_RETE, gruppiPalette(), PaletteComandi(), PaletteComandiProps, paroleComandi(), RICERCA_VUOTA, RicercaPalette, testoStato() (+13 more)
+Nodes (24): effettiDaRpc(), corrispondeRicerca(), FiltriGiocatori, filtriHref(), leggiFiltri(), paroleFiltro(), primo(), GiocatoriAdmin() (+16 more)
 
 ### Community 69 - "Community 69"
-Cohesion: 0.13
-Nodes (16): cancellaAccount(), CANCELLA_ACCOUNT_MESSAGES, CancellaAccountState, initialCancellaAccountState, messaggioCancellazione(), GET(), AccountAdmin, Conferma (+8 more)
+Cohesion: 0.16
+Nodes (12): cancellaAccount(), CANCELLA_ACCOUNT_MESSAGES, CancellaAccountAction, CancellaAccountState, initialCancellaAccountState, messaggioCancellazione(), AccountAdmin, Conferma (+4 more)
 
 ### Community 70 - "Community 70"
-Cohesion: 0.07
-Nodes (36): Errore, Finali, FinaliConferma, FinaliGenerate, Offline, PropostaBloccataDaParita, PropostaConferma, PropostaGoldSilver (+28 more)
+Cohesion: 0.09
+Nodes (28): Errore, Finali, FinaliConferma, FinaliGenerate, Offline, PropostaBloccataDaParita, PropostaConferma, PropostaGoldSilver (+20 more)
 
 ### Community 72 - "Community 72"
-Cohesion: 0.10
-Nodes (34): risultatiTesto(), SpostaDialogProps, AggiungiGiocatoreDialog(), AggiungiGiocatoreDialogProps, testoStato(), PunteggioDialogProps, DESCRIZIONE_TIPO, initialModificaIscrittiState (+26 more)
+Cohesion: 0.08
+Nodes (29): iniziali(), A, B, F, FASE_GIOCO, girone(), gironiDi(), NOMI (+21 more)
 
 ### Community 73 - "Community 73"
-Cohesion: 0.14
-Nodes (20): aggiornaContiDemo(), aggiungiDemoIscritto(), ATTIVI, cercaDemoGiocatori(), COGNOMI, DemoGiocatore, DemoIscritti, DemoIscrizione (+12 more)
+Cohesion: 0.20
+Nodes (8): EliminaAccountContent(), metadata, ImpostazioniContent(), metadata, ProfiloLoading(), ProfiloSessioneScaduta(), navigationTarget(), UnsavedChangesDialog()
 
 ### Community 74 - "Community 74"
-Cohesion: 0.06
-Nodes (37): Definitivi, Empty, finali, Provvisori, Story, Testo200, AdminLiveLoading(), AppenaAvviata (+29 more)
+Cohesion: 0.07
+Nodes (29): AvanzamentoFase(), ICONA, StatoPartitaBadge(), VARIANTE, Consenso, FASI_GIOCO, FASI_GIRONE, FASI_PARTITA (+21 more)
 
 ### Community 75 - "Community 75"
-Cohesion: 0.17
-Nodes (15): AnteprimaPartite(), AvvioFase(), AvvioFaseProps, AvvioFaseLinks(), ControlliAvvio(), ErroriAvvio(), RiepilogoAvvio(), VOCI (+7 more)
+Cohesion: 0.05
+Nodes (48): AnteprimaPartite(), AvvioFase(), AvvioFaseProps, AvvioFaseLinks(), ControlliAvvio(), ErroriAvvio(), RiepilogoAvvio(), VOCI (+40 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.09
-Nodes (27): day, dayMonth, dayMonthYear, deadline, DEMO_STATO, demoTappaCard(), descriviPosti(), escludiBozze() (+19 more)
+Cohesion: 0.18
+Nodes (14): ATTIVI, formatIscrittoIl(), iscrittiModificabili(), notaSolaLettura(), pad(), postiLiberiTesto(), risultatiTesto(), STATI_ISCRITTI_MODIFICABILI (+6 more)
 
 ### Community 79 - "Community 79"
 Cohesion: 0.33
 Nodes (5): createStage(), PostiTappa, postiTappe(), register(), setStato()
 
 ### Community 80 - "Community 80"
-Cohesion: 0.18
-Nodes (16): today(), demoTappaModifica(), TappaModificaLettura, TappaModificaRow, TabelloneModifica, TappaModifica, posti(), validaNuovaTappa() (+8 more)
+Cohesion: 0.07
+Nodes (50): pubblicaChiusura(), cambioClassificaTappa(), idClassificaTappa(), stessaClassifica(), pubblicaClassificaTappa(), pubblicati(), calcolaStageStandings(), ultimaClassificaTappa() (+42 more)
 
 ### Community 81 - "Community 81"
-Cohesion: 0.14
-Nodes (20): FixtureForm(), nav, renderWatcher(), signOut, clearDrafts(), Draft, draftable(), DraftValues (+12 more)
+Cohesion: 0.13
+Nodes (21): FixtureForm(), nav, renderWatcher(), signOut, DraftFixtureForm(), clearDrafts(), Draft, draftable() (+13 more)
 
 ### Community 82 - "Community 82"
-Cohesion: 0.12
-Nodes (14): Chiusa, Comandi, Empty, Errore, Loading, Risultati, Story, Testo200 (+6 more)
+Cohesion: 0.18
+Nodes (11): salvaFinto, FaseGirone, FaseTabellone, NOMI_DEMO, CATEGORIA_SEGMENTO, ComposizioneGironi, EditorGironi, GiocatoreGirone (+3 more)
 
 ### Community 83 - "Community 83"
-Cohesion: 0.17
-Nodes (18): demoDettaglioTappa(), demoIscrizioniGiocatore(), demoPrendiPosto(), DemoStore, demoTabelloniTappa(), DemoTappaExtra, EXTRA, globalExtra (+10 more)
+Cohesion: 0.09
+Nodes (30): getDemoTappaGestione(), demoDettaglioTappa(), demoIscrizioniGiocatore(), demoPrendiPosto(), DemoStore, demoTabelloniTappa(), DemoTappaExtra, EXTRA (+22 more)
 
 ### Community 84 - "Community 84"
-Cohesion: 0.09
-Nodes (27): ControlliGironi(), DragHandlers, GiocatoreRiga(), GironeCard(), NonAssegnatiCard(), statoMisura(), Fuoco, GironiEditor() (+19 more)
+Cohesion: 0.13
+Nodes (15): ControlliGironi(), DragHandlers, GiocatoreRiga(), GironeCard(), NonAssegnatiCard(), statoMisura(), Fuoco, GironiEditorProps (+7 more)
 
 ### Community 85 - "Community 85"
-Cohesion: 0.22
-Nodes (9): formatExpiry(), formatValidity(), EmailPreview(), EmailVerifyScreen(), EmailVerifyScreenProps, T0, RegistrationSteps(), ResendPanel() (+1 more)
+Cohesion: 0.19
+Nodes (12): EmailVerifyStatus, OUTCOMES, REGISTRATION_STEPS, ResendError, ResendResponse, EmailPreview(), EmailVerifyScreen(), EmailVerifyScreenProps (+4 more)
 
 ### Community 86 - "Community 86"
-Cohesion: 0.25
-Nodes (15): senzaNomi(), standingsDi(), classificaDaDati(), classificaTappaDaDati(), DATI_VUOTI, DatiClassificaGenerale, idClassifica(), partecipazioni() (+7 more)
+Cohesion: 0.12
+Nodes (19): FORM_ERRORS, LoginFormView(), LoginFormViewProps, loginHref(), signupHref(), signupReturnPath(), withReturn(), useRetryCountdown() (+11 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.14
-Nodes (21): parseCategoria(), parseIdClassifica(), readClassificaGenerale(), readClassificaGeneraleSync(), readSchedaGiocatore(), parseCategoriaTappa(), parseIdClassificaTappa(), calcolaStageStandings() (+13 more)
+Cohesion: 0.08
+Nodes (51): DATI_VUOTI, pubblicaClassificaGenerale(), calcolaClassificaGenerale(), meECategoria(), parseCategoria(), parseIdClassifica(), readClassificaGenerale(), readClassificaGeneraleSync() (+43 more)
 
 ### Community 88 - "Community 88"
-Cohesion: 0.11
+Cohesion: 0.14
 Nodes (26): aggiungiIscritto(), cercaGiocatori(), fallimento(), rimuoviIscritto(), Sessione, sessioneAdmin(), successo(), text() (+18 more)
 
 ### Community 89 - "Community 89"
@@ -597,28 +600,28 @@ Cohesion: 0.29
 Nodes (3): db, DbError, { getCurrentUser }
 
 ### Community 90 - "Community 90"
-Cohesion: 0.16
-Nodes (20): POST(), concludiTabelloniDemo(), creaScenarioClassificaDemo(), DemoFinale, DemoTabellone, DemoTappa, finale(), nomeTappaDemo() (+12 more)
+Cohesion: 0.15
+Nodes (22): cercaPalette(), GiocatoreRow, MESSAGGI, partiteDemo(), toRisultatoGiocatore(), Nome, PartitaTrovataRow, squadra() (+14 more)
 
 ### Community 91 - "Community 91"
-Cohesion: 0.13
-Nodes (23): vista(), gironiPath(), FaseGirone, alPosto(), avvisiDimensione(), blocco(), componiGironi(), EsitoProposta (+15 more)
+Cohesion: 0.14
+Nodes (19): alPosto(), avvisiDimensione(), blocco(), componiGironi(), GiocatoreProposto, GironeClassificato, GironeDaSistemare, proponiFinali() (+11 more)
 
 ### Community 92 - "Community 92"
-Cohesion: 0.09
-Nodes (17): TappaModificaLoading(), Caricamento, ConflittoDiVersione, Default, ErroriCampi, GironiIncompleti, InvioInCorso, NonModificabile (+9 more)
+Cohesion: 0.10
+Nodes (16): Caricamento, ConflittoDiVersione, Default, ErroriCampi, GironiIncompleti, InvioInCorso, NonModificabile, Offline (+8 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.07
-Nodes (12): apriRitiro(), openWarning(), StoryIndex, VIEWPORTS, gotoStory(), storyScope(), waitForAnimations(), LIVE_BAR_STORIES (+4 more)
+Cohesion: 0.09
+Nodes (10): Fixture, StoryIndex, VIEWPORTS, gotoStory(), storyScope(), LIVE_BAR_STORIES, LIVE_TAPPA_STORIES, gotoClosed() (+2 more)
 
 ### Community 94 - "Community 94"
-Cohesion: 0.23
-Nodes (13): RegistroFiltri(), filtriAttivi(), filtriQuery(), isTipoEvento(), OPZIONI_TIPO, Params, parseFiltri(), primo() (+5 more)
+Cohesion: 0.21
+Nodes (14): applicaFiltri(), descriviFiltri(), filtriAttivi(), filtriQuery(), isTipoEvento(), NESSUN_FILTRO, OPZIONI_TIPO, Params (+6 more)
 
 ### Community 95 - "Community 95"
-Cohesion: 0.28
-Nodes (4): confermaDaTastiera(), expectPassoAttuale(), expectStatoATesto(), flusso()
+Cohesion: 0.08
+Nodes (8): apriDaTastiera(), apriRitiro(), openWarning(), confermaDaTastiera(), expectPassoAttuale(), expectStatoATesto(), flusso(), waitForAnimations()
 
 ### Community 96 - "Community 96"
 Cohesion: 0.14
@@ -630,47 +633,47 @@ Nodes (19): params, AccessoSospeso, AccountCancellato, CredenzialiErrate, Defaul
 
 ### Community 98 - "Community 98"
 Cohesion: 0.07
-Nodes (28): GironiEditorLoading(), Bloccata, Caricamento, conDoppione(), Conflitto, conGironeIncompleto(), Doppione, Errore (+20 more)
+Nodes (27): Bloccata, Caricamento, conDoppione(), Conflitto, conGironeIncompleto(), Doppione, Errore, GironeIncompleto (+19 more)
 
 ### Community 99 - "Community 99"
 Cohesion: 0.06
-Nodes (50): LiveContent(), ClassificaGeneraleLive(), ClassificaContent(), ClassificaPage(), columns, metadata, primo(), Ricerca (+42 more)
+Nodes (56): readAdminTappe, LiveContent(), idClassifica(), SceltaCategoria(), SceltaStagione(), readSchedaGiocatore(), ClassificaContent(), ClassificaPage() (+48 more)
 
 ### Community 101 - "Community 101"
 Cohesion: 0.36
 Nodes (4): consent(), field(), fill(), password()
 
 ### Community 103 - "Community 103"
-Cohesion: 0.09
-Nodes (33): bloccoDaErrore(), concludiDb(), concludiTabellone(), EsitoDb, PgError, Sessione, sessioneAdmin(), CHIUSURA_MESSAGES (+25 more)
+Cohesion: 0.06
+Nodes (41): columns, FASE_LABEL, bloccoDaErrore(), concludiDb(), concludiTabellone(), EsitoDb, PgError, Sessione (+33 more)
 
 ### Community 104 - "Community 104"
 Cohesion: 0.14
-Nodes (13): Caricamento, Classifica(), Connessione, Dati, Femminile, FuoriClassifica, Offline, PuntiProvvisori (+5 more)
+Nodes (19): ERRORE_RETE, gruppiPalette(), PaletteComandi(), PaletteComandiProps, paroleComandi(), RICERCA_VUOTA, RicercaPalette, testoStato() (+11 more)
 
 ### Community 105 - "Community 105"
-Cohesion: 0.07
-Nodes (41): backoffDelay(), annuncioCambio(), applicaEsito(), DA_INVIARE, daInviare(), nuovaVoce(), riassuntoCoda(), riprendi() (+33 more)
+Cohesion: 0.12
+Nodes (24): backoffDelay(), annuncioCambio(), applicaEsito(), DA_INVIARE, daInviare(), nuovaVoce(), riassuntoCoda(), riprendi() (+16 more)
 
 ### Community 106 - "Community 106"
-Cohesion: 0.06
-Nodes (39): AvanzamentoFase(), ICONA, StatoPartitaBadge(), VARIANTE, Consenso, FasePartita, FASI_GIOCO, FASI_GIRONE (+31 more)
+Cohesion: 0.26
+Nodes (10): POST(), impostaRisultatoLiveDemo(), CON_PARITA, creaDemoChiusura(), FINALI, giocaFinali(), demoChiusuraRoute(), SCENARI_CHIUSURA (+2 more)
 
 ### Community 107 - "Community 107"
-Cohesion: 0.10
-Nodes (18): DEMO_ANONIMI, DatiScheda, syncScheda(), Anonimo, Caricamento, Femminile, NonInFinalePariMerito, NonPiuInClassifica (+10 more)
+Cohesion: 0.09
+Nodes (23): confermaValida(), anteprimaCancellazione, classifica, DEMO_ANONIMI, OverallStandings, DatiScheda, standingsScheda(), syncScheda() (+15 more)
 
 ### Community 108 - "Community 108"
 Cohesion: 0.53
 Nodes (5): isDesktop(), liveBar(), rows(), tappeSection(), waitForLive()
 
 ### Community 109 - "Community 109"
-Cohesion: 0.05
-Nodes (52): metadata, Avviso(), TappaModificaSessioneScaduta(), TappaNonModificabile(), Avviso(), NuovaTappaForm(), NuovaTappaFormProps, NuovaTappaSessioneScaduta() (+44 more)
+Cohesion: 0.10
+Nodes (21): AnnullaTappa(), Avviso(), Avviso(), TappaModificaSessioneScaduta(), TappaNonModificabile(), Avviso(), NuovaTappaSessioneScaduta(), COPY (+13 more)
 
 ### Community 110 - "Community 110"
-Cohesion: 0.20
-Nodes (16): caricaVociPrecedenti(), errore(), toPagina(), toPartiteFiltro(), REGISTRO_MESSAGES, leggiPaginaRegistro(), paginaDemo(), readRegistroTappa() (+8 more)
+Cohesion: 0.11
+Nodes (16): annullamentoRimini(), Caricamento, Completo, DialogAperto, DialogErrore, DialogInCorso, DialogRiuscito, DialogTesto200 (+8 more)
 
 ### Community 111 - "Community 111"
 Cohesion: 0.25
@@ -681,56 +684,56 @@ Cohesion: 0.40
 Nodes (3): mocks, supabase, valida
 
 ### Community 113 - "Community 113"
-Cohesion: 0.15
-Nodes (19): vista(), formatPeriodoTappa(), FASE_DA_STATO, FASE_PARTITA, faseTabellone(), flussoDi(), NOTA_STATO, ORDINE_FASI (+11 more)
+Cohesion: 0.07
+Nodes (35): Definitivi, Empty, finali, Provvisori, Story, Testo200, AppenaAvviata, classificaDi() (+27 more)
 
 ### Community 114 - "Community 114"
-Cohesion: 0.10
-Nodes (17): metadata, Ricerca, colonnePunti, CriteriSpareggio(), DaConfermare(), PassoFormato, PITTOGRAMMI, Regole() (+9 more)
+Cohesion: 0.12
+Nodes (15): CriteriSpareggio(), metadata, Ricerca, REGOLE_ANCORE, regoleHref(), colonnePunti, CriteriSpareggio(), DaConfermare() (+7 more)
 
 ### Community 115 - "Community 115"
 Cohesion: 0.16
 Nodes (10): geistMono, geistSans, metadata, Providers(), figtree, fontVariables, mono, outfit (+2 more)
 
 ### Community 116 - "Community 116"
-Cohesion: 0.18
-Nodes (11): ETICHETTE_EVENTO_REGISTRO, TIPI_EVENTO_REGISTRO, TipoEventoRegistro, ErroreRegistro, formatOraRegistro(), NuovoEventoRegistro, registraEvento(), MIGRATION (+3 more)
+Cohesion: 0.12
+Nodes (15): ETICHETTE_EVENTO_REGISTRO, TIPI_EVENTO_REGISTRO, TipoEventoRegistro, ErroreRegistro, formatOraRegistro(), NuovoEventoRegistro, registraEvento(), MIGRATION (+7 more)
 
 ### Community 117 - "Community 117"
-Cohesion: 0.14
-Nodes (14): Iscrizione, DbError, esitoDaErrore(), EsitoIscrizione, iscriviGiocatore(), IscrizioneCreata, MotivoRifiuto, PER_HINT (+6 more)
+Cohesion: 0.15
+Nodes (21): cambiati(), leggiRichiesta(), prossimo(), Richiesta, rigeneraGironi(), Sessione, sessioneAdmin(), ErroreDb (+13 more)
 
 ### Community 118 - "Community 118"
 Cohesion: 0.25
 Nodes (5): mocks, run(), supabase, mocks, outcome()
 
 ### Community 121 - "Community 121"
-Cohesion: 0.09
-Nodes (25): Phase, PhaseBadge(), PhaseBadgeProps, phases, Default, Fasi, RiduzioneMovimento, Story (+17 more)
+Cohesion: 0.08
+Nodes (19): times, Lato, PunteggioParziale(), PunteggioParzialeProps, InCorso, Offline, RiduzioneMovimento, Story (+11 more)
 
 ### Community 122 - "Community 122"
-Cohesion: 0.20
-Nodes (13): ATTIVI, formatIscrittoIl(), iscrittiModificabili(), notaSolaLettura(), pad(), postiLiberiTesto(), STATI_ISCRITTI_MODIFICABILI, STATO_ISCRIZIONE_LABEL (+5 more)
+Cohesion: 0.14
+Nodes (17): gara, garaFinita, garaParziale, garaVuota, girone, home(), match(), p() (+9 more)
 
 ### Community 123 - "Community 123"
 Cohesion: 0.08
-Nodes (36): faseDelTabellone, livelloGirone(), LivelloGironi, DatiTabellone, GironeDati, nomi, RpcTabellone, faseCorrente() (+28 more)
+Nodes (44): PhaseBadge(), annuncioTabellone(), eventoDelTabellone(), maiuscola(), faseCorrente(), LIVELLO_DELLA_FASE, LIVELLO_LABEL, ORDINE_LIVELLI (+36 more)
 
 ### Community 124 - "Community 124"
-Cohesion: 0.16
-Nodes (22): transizioneDi(), chiusura(), confrontoOraDopo(), COPY_TRANSIZIONE, CopyTransizione, EsitoScadenza, formatIstante(), fromRomeLocalInput() (+14 more)
+Cohesion: 0.13
+Nodes (25): transizioneDi(), chiusura(), confrontoOraDopo(), COPY_TRANSIZIONE, CopyTransizione, EsitoScadenza, formatIstante(), fromRomeLocalInput() (+17 more)
 
 ### Community 125 - "Community 125"
-Cohesion: 0.16
-Nodes (16): EmailVerifyState(), isConfirmed(), metadata, resolveState(), EmailVerifyOutcome, EmailVerifyStatus, OUTCOMES, readOutcome() (+8 more)
+Cohesion: 0.17
+Nodes (20): cambiaCategoria(), EsitoRpc, verificaCategoria(), categoriaMinuscola(), leggiAttesi(), messaggioCambio(), ordinale(), plurale() (+12 more)
 
 ### Community 126 - "Community 126"
-Cohesion: 0.08
-Nodes (34): gara, garaFinita, garaParziale, garaVuota, girone, home(), match(), p() (+26 more)
+Cohesion: 0.10
+Nodes (18): Caricamento, GiornoDiGara, GiornoDiGaraOffline, GiornoDiGaraPartiteFinite, GiornoDiGaraParziale, GiornoDiGaraRiduzioneMovimento, GiornoDiGaraSenzaPartite, ProssimaTappaAperta (+10 more)
 
 ### Community 127 - "Community 127"
-Cohesion: 0.16
-Nodes (16): ADMIN, aggiunte(), AGGIUNTE_KEY, DemoRegistro, demoRegistroTappa(), eventiTappa(), Evento, giornata() (+8 more)
+Cohesion: 0.17
+Nodes (14): ADMIN, aggiunte(), AGGIUNTE_KEY, DemoRegistro, eventiTappa(), Evento, giornata(), giornoDa() (+6 more)
 
 ### Community 128 - "Community 128"
 Cohesion: 0.09
@@ -738,59 +741,59 @@ Nodes (20): annulla(), createPlayer(), DbError, iscritto(), iscriviti(), tabello
 
 ### Community 129 - "Community 129"
 Cohesion: 0.13
-Nodes (24): etichettaStato(), useCodaPunteggi(), CodaPunteggiPanel(), StatoPunteggioPartita(), Conflitto, InAttesa, Misto, MistoText200 (+16 more)
+Nodes (25): etichettaStato(), useCodaPunteggi(), CodaPunteggiPanel(), StatoPunteggioPartita(), Conflitto, InAttesa, Misto, MistoText200 (+17 more)
 
 ### Community 130 - "Community 130"
 Cohesion: 0.26
 Nodes (9): componiGironi(), incontri(), mescola(), nomeGirone(), PartitaGirone, partiteGirone(), ROTAZIONE_GIRONE, sorteggiaGironi() (+1 more)
 
 ### Community 131 - "Community 131"
-Cohesion: 0.11
-Nodes (37): messaggioImpattoCambiato(), toImpattoFase(), classificaDemo(), leggiDovePartita(), pubblicaPartita(), pubblicaTabellone(), Sorgente, publishBoardMatches() (+29 more)
+Cohesion: 0.06
+Nodes (36): renderAnnulla(), renderArchivia(), renderAvvio(), renderLive(), renderDialog(), renderCambio(), renderForm(), renderClassifica() (+28 more)
 
 ### Community 132 - "Community 132"
-Cohesion: 0.06
-Nodes (68): IscrittiLettura, IscrizioneDb, readFromDb(), readIscrittiTappa(), requireAdmin(), getCurrentUser(), leggiClassificaGenerale(), leggiStagioni() (+60 more)
+Cohesion: 0.05
+Nodes (76): isUuid(), AdminUser, requireAdmin(), getCurrentUser(), sessioneAdmin(), GET(), stagioneDaData(), parseCategoriaTappa() (+68 more)
 
 ### Community 133 - "Community 133"
 Cohesion: 0.14
 Nodes (13): httpStatusOf(), useMediaQuery(), AdminSidebar(), adminNav, isNavItemActive(), NavItem, playerPrimaryNav, playerSecondaryNav (+5 more)
 
 ### Community 134 - "Community 134"
-Cohesion: 0.16
-Nodes (17): correzione, classificaCon(), cosaCambia, posizioni(), posto(), cambio(), vincitoreDi(), VoceCambio (+9 more)
+Cohesion: 0.06
+Nodes (69): TestiConflitto, ConfrontoPunteggio(), CosaCambia(), testoSet(), ElencoPunteggiView(), RigaPartita(), InserimentoPunteggio(), InserimentoPunteggioProps (+61 more)
 
 ### Community 135 - "Community 135"
-Cohesion: 0.09
-Nodes (36): pubblicati(), demoMeTabellone(), getDemoDatiTabellone(), readAdminLive(), createLiveBus(), getLiveBus(), globalForLive, LiveBus (+28 more)
+Cohesion: 0.23
+Nodes (12): LiveBus, formatSseEvent(), formatSsePing(), formatSseResync(), parseSeq(), createLiveStream(), SSE_HEADERS, GET() (+4 more)
 
 ### Community 136 - "Community 136"
 Cohesion: 0.29
 Nodes (7): cancella(), finale(), giocatore(), iscrivi(), PgError, tabellone(), tappa()
 
 ### Community 137 - "Community 137"
-Cohesion: 0.23
-Nodes (13): readSignup(), pendingCookie(), decodePending(), encodePending(), MAX_AGE_SECONDS, PendingVerification, readPendingVerification(), rememberPendingVerification() (+5 more)
+Cohesion: 0.12
+Nodes (20): FasePartita, Tappa, Iscrivibilita, MOTIVI_BLOCCO, motivoBlocco, APERTA, PRIMA, testoMotivo() (+12 more)
 
 ### Community 138 - "Community 138"
-Cohesion: 0.12
-Nodes (14): GestioneTappaLoading(), Bozza, BozzaSenzaScadenza, Caricamento, ChiuseAutomaticamente, ErroreRete, IscrizioniAperte, Offline (+6 more)
+Cohesion: 0.10
+Nodes (24): POST(), demoPunteggiGet(), demoPunteggiPost(), creaDemoTappaRoute(), isDemoSeedEnabled(), creaGiocatoreDemo(), creaDemoGironiRoute(), intero() (+16 more)
 
 ### Community 139 - "Community 139"
-Cohesion: 0.14
-Nodes (19): GironeInfo, dbGirone(), demoGirone(), GironeLive, GironeRow, LiveGironePagina, readLiveGirone(), coloreDellIscrizione() (+11 more)
+Cohesion: 0.12
+Nodes (13): Chiusa, Comandi, Empty, Errore, Loading, Risultati, Story, Testo200 (+5 more)
 
 ### Community 140 - "Community 140"
-Cohesion: 0.20
-Nodes (10): COLONNE, RegistroGiorno(), aMezzogiorno(), etichettaGiorno(), giornoAnnoFormatter, giornoFormatter, giornoPrima(), raggruppaPerGiorno() (+2 more)
+Cohesion: 0.18
+Nodes (12): COLONNE, aMezzogiorno(), etichettaGiorno(), giornoAnnoFormatter, giornoFormatter, giornoPrima(), raggruppaPerGiorno(), CaricaPrecedentiEsito (+4 more)
 
 ### Community 141 - "Community 141"
-Cohesion: 0.12
-Nodes (11): AvvisoGironi, Caricamento, Default, ErroriCampi, PermessoNegato, Salvataggio, SchermataProps, SessioneScaduta (+3 more)
+Cohesion: 0.13
+Nodes (15): vista(), faseDopo(), EsitoProposta, GironeProposto, GironeDaRisolvere, initialProssimaFaseState, PROSSIMA_FASE_MESSAGES, ProssimaFaseAction (+7 more)
 
 ### Community 142 - "Community 142"
-Cohesion: 0.27
-Nodes (9): count(), demoDashboard(), AdminDashboard, IscrizioneInAttesa, IscrizioneInAttesaRow, receivedFormat, toIscrizioneInAttesa(), readAdminDashboard() (+1 more)
+Cohesion: 0.13
+Nodes (24): pendingCookie(), demoMeTabellone(), getDemoDatiTabellone(), decodePending(), encodePending(), MAX_AGE_SECONDS, PendingVerification, readPendingVerification() (+16 more)
 
 ### Community 143 - "Community 143"
 Cohesion: 0.32
@@ -801,7 +804,7 @@ Cohesion: 0.27
 Nodes (18): CATEGORIA_LABEL, categoriaTesto(), contaGironi(), etichettaPartita(), numero(), Oggetto, ordineTesto(), parzialeTesto() (+10 more)
 
 ### Community 145 - "Community 145"
-Cohesion: 0.18
+Cohesion: 0.17
 Nodes (22): annullaTappa(), archiviaTappa(), erroreDb(), PgError, requestOrigin(), Sessione, sessioneAdmin(), text() (+14 more)
 
 ### Community 146 - "Community 146"
@@ -809,56 +812,56 @@ Cohesion: 0.31
 Nodes (5): comeAdmin(), gironeAvviato(), PgError, registra(), salva()
 
 ### Community 147 - "Community 147"
-Cohesion: 0.13
-Nodes (14): BordoCampo, Caricamento, ConIcona, Default, Dimensioni, Disabilitato, DisabilitatoConMotivo, Errore (+6 more)
+Cohesion: 0.14
+Nodes (17): FASE_DA_STATO, FASE_PARTITA, faseTabellone(), flussoDi(), NOTA_STATO, ORDINE_FASI, PassoFlusso, quando() (+9 more)
 
 ### Community 148 - "Community 148"
-Cohesion: 0.10
-Nodes (21): loginHref(), signupHref(), signupReturnPath(), withReturn(), AppFooter(), privacyHref(), safeReturnPath(), ReturnLink() (+13 more)
+Cohesion: 0.15
+Nodes (18): demoGiocatoriClassifica(), impostaCategoriaDemo(), ATTIVE, cambiaCategoriaDemo(), DA_VERIFICARE, demoEffettiCambio(), DemoEsitoCambio, DemoGiocatore (+10 more)
 
 ### Community 149 - "Community 149"
-Cohesion: 0.10
-Nodes (23): metadata, LoginForm(), LoginFormFromParams(), LoginFormProps, SignInAction, SignOutFormAction, FORM_ERRORS, LoginFormView() (+15 more)
+Cohesion: 0.14
+Nodes (17): LoginForm(), LoginFormFromParams(), LoginFormProps, SignInAction, SignOutFormAction, LoginNotice, SessionExpired(), SessionExpiredFromParams() (+9 more)
 
 ### Community 150 - "Community 150"
-Cohesion: 0.24
-Nodes (12): deadlineCookieOptions(), requiresSession(), forbiddenAdminApi(), isAdminApi(), isNavigation(), isPrefetch(), movesAdminDeadline(), redirectKeepingCookies() (+4 more)
+Cohesion: 0.33
+Nodes (8): demoTappaModifica(), readTappaModifica(), readTappaModificaRow(), TappaModificaLettura, TappaModificaRow, TabelloneModifica, TappaModifica, toRomeLocal()
 
 ### Community 151 - "Community 151"
 Cohesion: 0.27
 Nodes (7): aggiungi(), call(), createAdmin(), createPlayer(), DbError, Riga, rimuovi()
 
 ### Community 152 - "Community 152"
-Cohesion: 0.07
-Nodes (45): assegnaLettere(), chiave(), COGNOMI, componi(), creaDemoAvvioFase(), creaDemoTappaFinali(), creaDemoTappaGironi(), DemoAvvioEsito (+37 more)
+Cohesion: 0.24
+Nodes (12): aggiornaScadenzaDemo(), aggiungiDemoTappa(), board(), copy(), creaDemoTappa(), DemoEsito, DemoTappaGestione, seed() (+4 more)
 
 ### Community 153 - "Community 153"
 Cohesion: 0.36
 Nodes (8): dati(), girone(), iscritto(), partita(), PgError, tabellone(), tappa(), tappaConFinale()
 
 ### Community 154 - "Community 154"
+Cohesion: 0.12
+Nodes (12): NuovaTappaLoading(), AvvisoGironi, Caricamento, Default, ErroriCampi, PermessoNegato, Salvataggio, SchermataProps (+4 more)
+
+### Community 155 - "Community 155"
+Cohesion: 0.08
+Nodes (36): conCategoria(), datiDellAltra(), datiDellaStagione(), puntiPerStagione(), spostamentoPunti(), stagioniGiocate(), datiM(), riga() (+28 more)
+
+### Community 156 - "Community 156"
+Cohesion: 0.18
+Nodes (14): creaCoda(), creaInviatore(), accoda(), punteggio(), server(), T0, InviaPunteggio, creaDemoPartitaPunteggio() (+6 more)
+
+### Community 157 - "Community 157"
+Cohesion: 0.18
+Nodes (11): metadata, ModificaContent(), ModificaProfiloPage(), metadata, ProfiloContent(), getProfilo(), ProfiloRow, STATI_CATEGORIA (+3 more)
+
+### Community 158 - "Community 158"
 Cohesion: 0.13
 Nodes (9): { getCurrentUser }, Handler, HTTP_METHODS, modules, routes, CurrentUser, { getCurrentUser, rpc }, { getCurrentUser } (+1 more)
 
-### Community 155 - "Community 155"
-Cohesion: 0.14
-Nodes (14): TotaleGiocatore, confronta(), confrontaPosto(), confrontaRegola(), CRITERI_GENERALE, CRITERI_GENERALE_TESTO, CriterioGenerale, piazzamenti() (+6 more)
-
-### Community 156 - "Community 156"
-Cohesion: 0.22
-Nodes (6): Phase, PrivacySampleRow(), SAMPLE_ROW, TapeProps, usePrefersReducedMotion(), useReducedMotion()
-
-### Community 157 - "Community 157"
-Cohesion: 0.20
-Nodes (9): Default, Loading, LongText, PermissionDenied, ReinvioBloccato, SessionExpired, SessionExpiredSenzaEmail, Story (+1 more)
-
-### Community 158 - "Community 158"
-Cohesion: 0.09
-Nodes (17): Caricamento, Default, ErroreRete, MotivoMancante, NessunIscritto, Offline, SessioneScaduta, Story (+9 more)
-
 ### Community 159 - "Community 159"
-Cohesion: 0.16
-Nodes (9): metadata, signOut(), initialSignOutState, SignOutState, AppShell(), SignOutAction, SignOutButton(), TopbarHeight() (+1 more)
+Cohesion: 0.20
+Nodes (6): metadata, AppShell(), SignOutAction, SignOutButton(), TopbarHeight(), Topbar()
 
 ### Community 160 - "Community 160"
 Cohesion: 0.12
@@ -869,8 +872,8 @@ Cohesion: 0.40
 Nodes (3): apriScheda(), Scenario, waitForLive()
 
 ### Community 162 - "Community 162"
-Cohesion: 0.11
-Nodes (23): StatoIscrizione, Tappa, ConfermaContent(), metadata, IscrizioneConfermataView(), annullamentoPerTappa(), CATEGORIA_LABEL, DettaglioTappaRow (+15 more)
+Cohesion: 0.26
+Nodes (10): EmailVerifyState(), isConfirmed(), metadata, resolveState(), readOutcome(), formatCountdown(), formatExpiry(), formatValidity() (+2 more)
 
 ### Community 163 - "Community 163"
 Cohesion: 0.29
@@ -881,28 +884,32 @@ Cohesion: 0.20
 Nodes (6): createStage(), Esito, punteggiPersi(), register(), rigenera(), tappaConGironi()
 
 ### Community 165 - "Community 165"
-Cohesion: 0.12
-Nodes (14): FinaleTappa, GOLD, GOLD_COMPLETA, kingQueen(), SILVER, DatiFinali, FinaliTabellone, GironeRow (+6 more)
+Cohesion: 0.19
+Nodes (15): SpostaDialogContenuto(), SpostaDialogProps, daAvvisare(), posizioneGiocatore(), destinazioniSposta(), operazioneSposta(), OpzioneDestinazione, OpzioneScambio (+7 more)
 
 ### Community 166 - "Community 166"
-Cohesion: 0.06
-Nodes (50): ClassificaTappaContent(), FASE_GIRONE_LABEL, HomeContent(), GironeContent(), metadata, TornaAlLive(), HomeGara(), HomeGaraBody() (+42 more)
+Cohesion: 0.17
+Nodes (11): ATTIVE, giornoDiGara(), IscrizioneHome, NON_PROSSIME, scegliVista(), SceltaHome, TappaHomeRow, cagliari (+3 more)
 
 ### Community 167 - "Community 167"
-Cohesion: 0.11
-Nodes (19): caricaFinta(), Caricamento, ConVociPrecedenti, Offline, Registro, SchermataProps, Story, Testo200 (+11 more)
+Cohesion: 0.09
+Nodes (29): caricaFinta(), Caricamento, ConVociPrecedenti, Offline, Registro, SchermataProps, Story, Testo200 (+21 more)
 
 ### Community 168 - "Community 168"
 Cohesion: 0.16
-Nodes (7): FlipDigits(), FlipDigitsProps, Default, Interattivo, Orario, RiduzioneMovimento, Story
+Nodes (10): accodaEmail(), EmailAccodata, ErroreCodaEmail, props, EmailTemplateName, EmailTemplateProps, emailTemplates, isEmailTemplateName() (+2 more)
+
+### Community 169 - "Community 169"
+Cohesion: 0.14
+Nodes (3): DemoPartita, PAGES, WIDTHS
 
 ### Community 170 - "Community 170"
-Cohesion: 0.07
-Nodes (25): DemoAdminBoard, DemoAdminStage, demoAdminStages, DemoGroup, DemoGroupMatch, DemoMatch, DemoRegistration, demoRegistrations (+17 more)
+Cohesion: 0.05
+Nodes (64): DemoAdminBoard, DemoAdminStage, demoAdminStages, DemoGroup, DemoGroupMatch, DemoMatch, DemoRegistration, demoRegistrations (+56 more)
 
 ### Community 171 - "Community 171"
-Cohesion: 0.07
-Nodes (24): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+16 more)
+Cohesion: 0.13
+Nodes (12): Admin, AdminMobile, columns, Giocatore, GiocatoreMobile, mobile, Standing, standings (+4 more)
 
 ### Community 172 - "Community 172"
 Cohesion: 0.28
@@ -913,60 +920,60 @@ Cohesion: 0.09
 Nodes (25): Completo, coppie, giocatori, GironeGold, GironeScreen(), InAttesa, InCorso, Loading (+17 more)
 
 ### Community 174 - "Community 174"
-Cohesion: 0.27
-Nodes (9): ConfermaEmail(), ConfermaEmailProps, ConfermaNuovaEmail(), ConfermaNuovaEmailProps, EmailAction(), EmailActionProps, EmailLayout(), EmailLayoutProps (+1 more)
+Cohesion: 0.22
+Nodes (6): Conclusa, InCorso, Story, Testo200, Vuoto, elenco
 
 ### Community 175 - "Community 175"
 Cohesion: 0.40
 Nodes (5): form(), mocks, rigaPersa, rigenera(), supabase
 
 ### Community 176 - "Community 176"
-Cohesion: 0.27
-Nodes (9): POST(), CON_PARITA, creaDemoChiusura(), FINALI, giocaFinali(), demoChiusuraRoute(), SCENARI_CHIUSURA, ScenarioChiusura (+1 more)
+Cohesion: 0.13
+Nodes (26): AdminLayout(), adminSessionIdleSeconds(), AdminSessionStatus, deadlineCookieOptions(), describeCountdown(), formatCountdown(), isAdminArea(), isExpired() (+18 more)
 
 ### Community 177 - "Community 177"
-Cohesion: 0.11
-Nodes (26): Valido, inviaPunteggioCoda(), RispostaRpc, ErroreDb, esitoErroreSalvataggio(), accoda(), punteggio(), server() (+18 more)
+Cohesion: 0.21
+Nodes (13): Valido, inviaPunteggioCoda(), RispostaRpc, ErroreDb, esitoErroreSalvataggio(), CODA_MESSAGES, EsitoInvio, InvioPunteggio (+5 more)
 
 ### Community 178 - "Community 178"
-Cohesion: 0.21
-Nodes (5): PrivacySection, PrivacyIndex(), sections, tops, useActiveSection()
+Cohesion: 0.47
+Nodes (4): board(), match(), register(), riepilogo()
 
 ### Community 179 - "Community 179"
-Cohesion: 0.26
-Nodes (7): config, RouteHandler, serve(), proxy(), rewriteTappaNonTrovata(), tappaDaPercorso(), tappaVisibile()
+Cohesion: 0.13
+Nodes (14): BordoCampo, Caricamento, ConIcona, Default, Dimensioni, Disabilitato, DisabilitatoConMotivo, Errore (+6 more)
 
 ### Community 180 - "Community 180"
-Cohesion: 0.08
-Nodes (37): view(), ProblemaDb, problemiDaDettaglio(), toProblemi(), AvvioFaseView, toAvvioFaseView(), GiocatoreDb, IscrizioneDb (+29 more)
+Cohesion: 0.05
+Nodes (50): Squadra(), Avviata, Bloccata, Conferma, FieldErrors, Loading, Offline, Pronta (+42 more)
 
 ### Community 181 - "Community 181"
-Cohesion: 0.25
-Nodes (11): RegistroLoading(), RegistroOffline(), RegistroVuoto(), RegistroTappa(), RegistroTappaProps, descriviFiltri(), annuncioPrecedenti(), cursorePrecedenti() (+3 more)
+Cohesion: 0.20
+Nodes (14): RegistroFiltri(), RegistroGiorno(), RegistroLoading(), RegistroOffline(), RegistroVuoto(), RegistroTappa(), RegistroTappaProps, REGISTRO_MESSAGES (+6 more)
 
 ### Community 182 - "Community 182"
-Cohesion: 0.12
-Nodes (32): GironeAnteprima(), SpostaDialogContenuto(), annuncioModifica(), descriviOperazione(), verso(), controllaGironi(), applica(), applicaOperazione() (+24 more)
+Cohesion: 0.18
+Nodes (22): GironeAnteprima(), annuncioModifica(), descriviOperazione(), verso(), controllaGironi(), applica(), applicaOperazione(), esisteDestinazione() (+14 more)
 
 ### Community 183 - "Community 183"
 Cohesion: 0.60
 Nodes (5): apriPartita(), campo(), creaTappa(), dueAdmin(), salva()
 
 ### Community 185 - "Community 185"
-Cohesion: 0.22
-Nodes (8): ScoreDigits(), ScoreDigitsProps, Classifica, Default, RiduzioneMovimento, Story, Toni, tones
+Cohesion: 0.23
+Nodes (11): chiudiDemoScadute(), listDemoTappeGestione(), GestioneContent(), metadata, metadata, adminClient(), chiudiScadute(), readFromDb() (+3 more)
 
 ### Community 188 - "Community 188"
-Cohesion: 0.10
-Nodes (38): dbErrorResponse(), forbidden(), invalid(), jsonError(), malformedBody(), noContent(), notFound(), PostgrestLikeError (+30 more)
+Cohesion: 0.08
+Nodes (51): dbErrorResponse(), FieldErrors, forbidden(), invalid(), jsonError(), malformedBody(), noContent(), notFound() (+43 more)
 
 ### Community 189 - "Community 189"
-Cohesion: 0.20
-Nodes (8): Avviso, Demo(), ErroreProlungamento, Prolungamento, Scaduta, Story, Testo200, UltimiSecondi
+Cohesion: 0.15
+Nodes (12): CaptionNascosta, columns, Desktop1440, longRows, Mobile390, rows, Standing, Story (+4 more)
 
 ### Community 190 - "Community 190"
-Cohesion: 0.07
-Nodes (35): impatto, Anteprima, ErroriCampi, ImpattoSullaFase, InCaricamento, Offline, Story, Vuoto (+27 more)
+Cohesion: 0.18
+Nodes (12): stati, StatoTappaBadge(), Variant, AdminCategoria, contaPosti(), descriviPosti(), CategoriaCell(), categoriaColumn() (+4 more)
 
 ### Community 191 - "Community 191"
 Cohesion: 0.26
@@ -977,56 +984,56 @@ Cohesion: 0.40
 Nodes (4): Admin, Default, Story, Testo200
 
 ### Community 193 - "Community 193"
-Cohesion: 0.15
-Nodes (23): AdminCategoria, AdminTappaRpcRow, categorie(), contaPosti(), demoAdminTappa(), descriviPosti(), isAnnullabile(), isArchiviabile() (+15 more)
+Cohesion: 0.19
+Nodes (17): AdminTappaRpcRow, categorie(), demoAdminTappa(), isAnnullabile(), isArchiviabile(), iscrittiDaAvvisare(), isGiornoDiGara(), parseFiltroStato() (+9 more)
 
 ### Community 194 - "Community 194"
-Cohesion: 0.20
-Nodes (7): ANNULLA_ISCRIZIONE_INITIAL, CONFERMATA, Confermata, DopoLaScadenza, SenzaRitrovo, Story, Testo200
+Cohesion: 0.17
+Nodes (10): Caricamento, Default, ErroreRete, MotivoMancante, NessunIscritto, Offline, SessioneScaduta, Story (+2 more)
 
 ### Community 195 - "Community 195"
-Cohesion: 0.25
-Nodes (3): metadata, ResetLinkInvalid(), metadata
+Cohesion: 0.27
+Nodes (9): count(), demoDashboard(), AdminDashboard, IscrizioneInAttesa, IscrizioneInAttesaRow, receivedFormat, toIscrizioneInAttesa(), readAdminDashboard() (+1 more)
 
 ### Community 196 - "Community 196"
 Cohesion: 0.11
-Nodes (16): CATEGORIE, postiDi(), PostiFieldProps, TABELLONE, TappaModificaForm(), TappaModificaFormProps, valoriDi(), router (+8 more)
+Nodes (21): CATEGORIE, PostiFieldProps, TABELLONE, TappaModificaFormProps, router, tappa, CAMPI_TAPPA_MODIFICA, CAMPO_POSTI_MODIFICA (+13 more)
 
 ### Community 197 - "Community 197"
 Cohesion: 0.24
 Nodes (11): NOME_ANONIMO, cancella(), dati(), giocatore(), girone(), iscrivi(), partita(), PgError (+3 more)
 
 ### Community 198 - "Community 198"
-Cohesion: 0.31
-Nodes (4): nextConfig, enforceHttps(), isApiPath(), isHttpsEnforced()
+Cohesion: 0.29
+Nodes (8): HomeContent(), HomeGaraProps, HomeGiocatore(), HomeLoading(), HomeSessioneScaduta(), HomeHeader(), HomeVuota(), saluto()
 
 ### Community 199 - "Community 199"
-Cohesion: 0.29
-Nodes (8): register(), calendarDay, formatStartsAt(), TappaAnnullata(), TappaAnnullataProps, tappaAnnullataSubject(), formatServerTime(), getProcessTimeZone()
+Cohesion: 0.15
+Nodes (11): DemoProps, FaseCambiata, Offline, Rigenerazione, Scelta, SenzaPunteggi, SenzaRete, SenzaSpunta (+3 more)
 
 ### Community 200 - "Community 200"
 Cohesion: 0.06
-Nodes (31): AggiuntaInCorso, ErroreAggiunta, ErroreRicerca, NessunRisultato, RicercaInCorso, risultati, SessioneScaduta, Story (+23 more)
+Nodes (41): AggiungiGiocatoreDialogProps, Risultato(), AggiuntaInCorso, ErroreAggiunta, ErroreRicerca, NessunRisultato, RicercaInCorso, risultati (+33 more)
 
 ### Community 201 - "Community 201"
-Cohesion: 0.07
-Nodes (28): ApiErrorBody, FieldErrors, SignupInput, SignupResult, SignupValues, valid, ErrorBody, postJson() (+20 more)
+Cohesion: 0.06
+Nodes (42): ApiErrorBody, readSignup(), SignupInput, SignupResult, SignupValues, valid, readSets(), metadata (+34 more)
 
 ### Community 202 - "Community 202"
-Cohesion: 0.18
-Nodes (11): router, RPC_HINTS, CAMPI_NUOVA_TAPPA, CampoNuovaTappa, initialNuovaTappaFormState, NUOVA_TAPPA_MESSAGES, NuovaTappaAction, NuovaTappaFormState (+3 more)
+Cohesion: 0.13
+Nodes (20): renderForm(), router, validaTappaModifica(), RPC_HINTS, CAMPI_NUOVA_TAPPA, CAMPO_POSTI, CampoNuovaTappa, initialNuovaTappaFormState (+12 more)
 
 ### Community 203 - "Community 203"
-Cohesion: 0.06
-Nodes (64): pubblicaChiusura(), POST(), PartitaFaseSuccessiva, CATEGORIE, annullaPartitaDemo(), cambiaStatoDemo(), chiusi(), CHIUSI_KEY (+56 more)
+Cohesion: 0.22
+Nodes (8): ultimaPerPartita(), Coda, STATO_INIZIALE, autoreDellaSessione(), CodaPunteggi, CodaPunteggiProvider(), Context, createClient()
 
 ### Community 205 - "Community 205"
 Cohesion: 0.43
 Nodes (5): AdminClientGuard(), renderGuard(), replace, checkAdminInBrowser(), ClientRoleCheck
 
 ### Community 207 - "Community 207"
-Cohesion: 0.13
-Nodes (20): FaseTabellone, chiave(), copy(), EsitoDemoGironi, FASE_DEMO, getDemoGironi(), modificaDemoGironi(), seed() (+12 more)
+Cohesion: 0.18
+Nodes (18): chiave(), copy(), creaDemoGironi(), EsitoDemoGironi, FASE_DEMO, getDemoGironi(), seed(), sostituisciDemoGironi() (+10 more)
 
 ### Community 208 - "Community 208"
 Cohesion: 0.20
@@ -1053,60 +1060,60 @@ Cohesion: 0.38
 Nodes (4): correggi(), form(), mocks, salva()
 
 ### Community 214 - "Community 214"
-Cohesion: 0.12
-Nodes (28): avviaDb(), avviaDemo(), avviaFase(), errore(), Esito, esitoErrore(), MotivoErrore, PgError (+20 more)
+Cohesion: 0.05
+Nodes (74): avviaDb(), avviaDemo(), avviaFase(), errore(), Esito, esitoErrore(), MotivoErrore, PgError (+66 more)
 
 ### Community 215 - "Community 215"
-Cohesion: 0.25
-Nodes (3): SUPABASE_DIR, RenderedEmail, config
+Cohesion: 0.18
+Nodes (9): classifica(), comeAdmin(), effetti(), giocatore(), iscrivi(), partita(), PgError, tabellone() (+1 more)
 
 ### Community 216 - "Community 216"
-Cohesion: 0.07
-Nodes (49): AnnullaTappa(), AnnullaTappaProps, ArchiviaTappa(), ArchiviaTappaProps, ConcludiTabelloneProps, AZIONE, ProssimaFase(), ProssimaFaseProps (+41 more)
+Cohesion: 0.08
+Nodes (49): AnnullaTappaProps, ArchiviaTappaProps, CambioCategoriaDialogProps, RimuoviIscrittoDialogProps, PunteggioDialogProps, ConflittoPunteggioProps, Passo, TESTI_PUNTEGGIO (+41 more)
 
 ### Community 217 - "Community 217"
-Cohesion: 0.10
-Nodes (34): Squadra(), firmaPunti(), puntiCheCambiano(), finaliTappaDemo(), aggiornaPartita(), Campi, correggiConclusoDb(), correzioneConclusa() (+26 more)
+Cohesion: 0.08
+Nodes (47): AzioniVoce, Operazione(), PartitaVoce(), PunteggioDialog(), riepilogoCambi(), firmaPunti(), puntiCheCambiano(), finaliTappaDemo() (+39 more)
 
 ### Community 218 - "Community 218"
-Cohesion: 0.08
-Nodes (46): SceltaTappaIscritti(), aggiornaScadenzaDemo(), board(), cambiaStatoDemo(), chiudiDemoScadute(), copy(), creaDemoTappa(), DemoEsito (+38 more)
+Cohesion: 0.32
+Nodes (13): cambiaStatoDemo(), aggiornaScadenzaTappa(), cambiaStatoTappa(), esitoDemo(), messaggioDb(), motivoDb(), PgError, Sessione (+5 more)
 
 ### Community 219 - "Community 219"
-Cohesion: 0.15
-Nodes (9): attuale(), creaAdmin(), partitaAvviata(), PgError, salva(), sovrascrivi(), modifica(), register() (+1 more)
+Cohesion: 0.11
+Nodes (13): attuale(), creaAdmin(), partitaAvviata(), PgError, salva(), sovrascrivi(), Editor, leggi() (+5 more)
 
 ### Community 220 - "Community 220"
-Cohesion: 0.28
-Nodes (5): primo(), Ricerca, SchedaContent(), SchedaGiocatoreLive(), metadata
+Cohesion: 0.31
+Nodes (7): CSV_HEADER, csvField(), csvFilename(), csvLine(), iscrittiCsv(), slug(), tappa
 
 ### Community 221 - "Community 221"
-Cohesion: 0.22
-Nodes (8): Caricamento, Default, Errore, Pillola, SoloIcona, Story, Testo200, Toni
+Cohesion: 0.29
+Nodes (8): apri(), CodaStore, indexedDbStore(), memoriaStore(), richiesta(), storeDelDispositivo(), T0, voce()
 
 ### Community 223 - "Community 223"
-Cohesion: 0.22
-Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story, Testo200
+Cohesion: 0.20
+Nodes (9): Default, Loading, LongText, PermissionDenied, ReinvioBloccato, SessionExpired, SessionExpiredSenzaEmail, Story (+1 more)
 
 ### Community 224 - "Community 224"
-Cohesion: 0.53
-Nodes (4): boardOf(), createMatch(), createStage(), register()
+Cohesion: 0.20
+Nodes (9): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Obbligatorio, Story (+1 more)
 
 ### Community 225 - "Community 225"
-Cohesion: 0.13
-Nodes (26): aggiornaTappa(), conflict(), CONSTRAINT_FIELDS, errorState(), HINT_FIELDS, postiSottoIscritti(), rpcErrorState(), readTappaModifica() (+18 more)
+Cohesion: 0.17
+Nodes (16): postiDi(), TappaModificaForm(), valoriDi(), aggiornaTappa(), conflict(), CONSTRAINT_FIELDS, errorState(), HINT_FIELDS (+8 more)
 
 ### Community 226 - "Community 226"
-Cohesion: 0.40
-Nodes (4): ATTUALE, POSIZIONE, PassoFlusso, StatoFlusso
+Cohesion: 0.17
+Nodes (11): BordoCampo, Caricamento, ConDescrizione, Default, Disabilitato, Errore, Focus, Gruppo (+3 more)
 
 ### Community 227 - "Community 227"
 Cohesion: 0.32
 Nodes (3): apriGirone(), liveBar(), waitForLive()
 
 ### Community 228 - "Community 228"
-Cohesion: 0.15
-Nodes (15): AdminTappeLoading(), mergePendingScores(), PendingScoresBanner(), PendingScoresBannerView(), Default, jesolo, PiuTappe, Story (+7 more)
+Cohesion: 0.19
+Nodes (12): mergePendingScores(), PendingScoresBanner(), PendingScoresBannerView(), Default, jesolo, PiuTappe, Story, TuttoInserito (+4 more)
 
 ### Community 229 - "Community 229"
 Cohesion: 0.33
@@ -1121,84 +1128,120 @@ Cohesion: 0.60
 Nodes (3): apriDialog(), apriLive(), concludi()
 
 ### Community 232 - "Community 232"
-Cohesion: 0.53
-Nodes (5): iscritto(), leggi(), tabellone(), tappa(), tappaConGirone()
+Cohesion: 0.43
+Nodes (6): RpcTabellone, iscritto(), leggi(), tabellone(), tappa(), tappaConGirone()
 
 ### Community 233 - "Community 233"
 Cohesion: 0.50
 Nodes (4): form(), mocks, salva(), tappa
 
 ### Community 234 - "Community 234"
-Cohesion: 0.33
-Nodes (4): Editor, leggi(), rpc(), setup()
+Cohesion: 0.22
+Nodes (4): asAdmin(), iscrivi(), PgError, REGOLA_AVVIO
 
 ### Community 235 - "Community 235"
 Cohesion: 0.38
 Nodes (6): cambia(), cancella(), form(), mocks, supabase, valida
 
 ### Community 236 - "Community 236"
-Cohesion: 0.10
-Nodes (31): isUuid(), EditorContent(), chiamaRpc(), demo(), idValidi(), modificaGironi(), ErroreDb, MESSAGGIO_ERRORE_GIRONI (+23 more)
+Cohesion: 0.12
+Nodes (23): GironiEditor(), EditorContent(), modificaDemoGironi(), chiamaRpc(), demo(), idValidi(), modificaGironi(), ErroreDb (+15 more)
 
 ### Community 237 - "Community 237"
-Cohesion: 0.25
-Nodes (3): asAdmin(), iscrivi(), PgError
+Cohesion: 0.22
+Nodes (8): BordoCampo, Caricamento, Default, Disabilitato, Errore, Focus, Story, Testo200
 
 ### Community 238 - "Community 238"
+Cohesion: 0.43
+Nodes (6): DEMO_CONSENSO, DEMO_IMPOSTAZIONI, getImpostazioni(), readConsensoPrivacy(), readRigaPubblica(), ConsensoPrivacy
+
+### Community 239 - "Community 239"
 Cohesion: 0.29
-Nodes (6): DbError, EsitoGenerazione, esitoGenerazioneDaErrore(), generaGironi(), MotivoRifiutoGironi, PER_HINT
+Nodes (5): SessionExpired, Stato, Story, Success, Text200
 
 ### Community 240 - "Community 240"
-Cohesion: 0.15
-Nodes (18): isAdminPath(), signIn(), rateLimitedLoginMessage(), AuthAction, AuthAttemptCheck, checkAuthAttempt(), clientIp(), createMemoryRateLimitStore() (+10 more)
+Cohesion: 0.10
+Nodes (24): metadata, isAdminPath(), signIn(), signOut(), rateLimitedLoginMessage(), AuthAction, AuthAttemptCheck, checkAuthAttempt() (+16 more)
+
+### Community 241 - "Community 241"
+Cohesion: 0.22
+Nodes (8): ScoreDigits(), ScoreDigitsProps, Classifica, Default, RiduzioneMovimento, Story, Toni, tones
 
 ### Community 242 - "Community 242"
 Cohesion: 0.22
 Nodes (4): apri(), liveBar(), Scenario, waitForLive()
 
 ### Community 243 - "Community 243"
-Cohesion: 0.43
-Nodes (5): parseFiltroStato(), readAdminTappe, TappeContent(), metadata, TappeContent()
+Cohesion: 0.38
+Nodes (5): apri(), form(), mocks, salva(), supabase
 
-### Community 246 - "Community 246"
+### Community 244 - "Community 244"
 Cohesion: 0.40
-Nodes (3): DettaglioContent(), metadata, readTappaDettaglio()
+Nodes (3): ErrorBody, postJson(), PostOutcome
+
+### Community 245 - "Community 245"
+Cohesion: 0.40
+Nodes (5): form(), mocks, salva(), supabase, unchanged
 
 ### Community 247 - "Community 247"
 Cohesion: 0.40
 Nodes (4): Caricamento, Default, Story, Testo200
 
 ### Community 248 - "Community 248"
-Cohesion: 0.40
-Nodes (5): form(), mocks, salva(), supabase, unchanged
+Cohesion: 0.60
+Nodes (4): HomeProssima(), HomeProssima, iscrizioneAttiva(), statoIscrizioneHome()
 
 ### Community 249 - "Community 249"
 Cohesion: 0.29
 Nodes (3): gotrue, { jar }, T0
 
+### Community 250 - "Community 250"
+Cohesion: 0.17
+Nodes (8): nextConfig, enforceHttps(), isApiPath(), isHttpsEnforced(), config, RouteHandler, serve(), proxy()
+
 ### Community 251 - "Community 251"
 Cohesion: 0.40
-Nodes (4): Default, RiduzioneMovimento, Spessa, Story
+Nodes (4): Default, Fasi, RiduzioneMovimento, Story
+
+### Community 252 - "Community 252"
+Cohesion: 0.07
+Nodes (26): FaseConclusaBadge(), Default, Story, Testo200, FASE_TABELLONE_LABEL, CATEGORIA_LABEL, CATEGORIA_TESTO, Category (+18 more)
+
+### Community 253 - "Community 253"
+Cohesion: 0.39
+Nodes (5): GironiPanel(), GironiPanelProps, postiDaAvvisare(), TABELLONE, TappaModificaLoading()
+
+### Community 254 - "Community 254"
+Cohesion: 0.67
+Nodes (3): dayMonthYear, formatScadenza(), riepilogoTappa()
+
+### Community 255 - "Community 255"
+Cohesion: 0.40
+Nodes (4): concludi(), controllers, form(), mocks
+
+### Community 258 - "Community 258"
+Cohesion: 0.67
+Nodes (3): form(), invia(), mocks
 
 ## Knowledge Gaps
-- **1687 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+1682 more)
+- **1732 isolated node(s):** `plugins`, `tailwindStylesheet`, `config`, `VIEWPORTS`, `preview` (+1727 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **25 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Categoria` connect `Community 75` to `Community 2`, `Community 131`, `Community 132`, `Community 135`, `Community 139`, `Community 144`, `Community 148`, `Community 152`, `Community 155`, `Community 28`, `Community 29`, `Community 30`, `Community 33`, `Community 34`, `Community 35`, `Community 36`, `Community 37`, `Community 166`, `Community 39`, `Community 165`, `Community 162`, `Community 45`, `Community 176`, `Community 180`, `Community 57`, `Community 58`, `Community 188`, `Community 60`, `Community 190`, `Community 193`, `Community 66`, `Community 196`, `Community 70`, `Community 72`, `Community 201`, `Community 73`, `Community 203`, `Community 202`, `Community 76`, `Community 207`, `Community 80`, `Community 84`, `Community 212`, `Community 214`, `Community 86`, `Community 216`, `Community 217`, `Community 90`, `Community 91`, `Community 87`, `Community 218`, `Community 96`, `Community 225`, `Community 103`, `Community 104`, `Community 106`, `Community 107`, `Community 236`, `Community 109`, `Community 110`, `Community 113`, `Community 117`, `Community 123`?**
-  _High betweenness centrality (0.060) - this node is a cross-community bridge._
-- **Why does `expectNoA11yViolations()` connect `Community 17` to `Community 161`, `Community 169`, `Community 172`, `Community 183`, `Community 186`, `Community 65`, `Community 68`, `Community 209`, `Community 93`, `Community 95`, `Community 227`, `Community 100`, `Community 101`, `Community 102`, `Community 231`, `Community 108`, `Community 239`, `Community 241`, `Community 242`, `Community 245`, `Community 250`, `Community 252`, `Community 253`?**
-  _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `readSupabaseEnv()` connect `Community 132` to `Community 2`, `Community 131`, `Community 135`, `Community 137`, `Community 139`, `Community 142`, `Community 145`, `Community 18`, `Community 150`, `Community 152`, `Community 30`, `Community 159`, `Community 162`, `Community 177`, `Community 50`, `Community 179`, `Community 180`, `Community 57`, `Community 188`, `Community 61`, `Community 69`, `Community 202`, `Community 80`, `Community 83`, `Community 214`, `Community 87`, `Community 88`, `Community 217`, `Community 218`, `Community 96`, `Community 225`, `Community 99`, `Community 103`, `Community 236`, `Community 110`, `Community 240`?**
+- **Why does `Categoria` connect `Community 80` to `Community 2`, `Community 132`, `Community 134`, `Community 137`, `Community 11`, `Community 140`, `Community 141`, `Community 144`, `Community 147`, `Community 148`, `Community 150`, `Community 25`, `Community 155`, `Community 29`, `Community 30`, `Community 157`, `Community 33`, `Community 35`, `Community 36`, `Community 39`, `Community 170`, `Community 44`, `Community 45`, `Community 50`, `Community 180`, `Community 55`, `Community 57`, `Community 58`, `Community 185`, `Community 188`, `Community 61`, `Community 60`, `Community 193`, `Community 66`, `Community 67`, `Community 196`, `Community 200`, `Community 201`, `Community 74`, `Community 75`, `Community 202`, `Community 207`, `Community 82`, `Community 212`, `Community 214`, `Community 87`, `Community 216`, `Community 217`, `Community 90`, `Community 96`, `Community 103`, `Community 106`, `Community 107`, `Community 236`, `Community 125`, `Community 117`, `Community 123`, `Community 252`, `Community 253`?**
+  _High betweenness centrality (0.059) - this node is a cross-community bridge._
+- **Why does `expectNoA11yViolations()` connect `Community 17` to `Community 161`, `Community 65`, `Community 227`, `Community 68`, `Community 100`, `Community 102`, `Community 231`, `Community 38`, `Community 169`, `Community 101`, `Community 108`, `Community 172`, `Community 209`, `Community 242`, `Community 183`, `Community 186`, `Community 93`, `Community 95`?**
   _High betweenness centrality (0.031) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `readSupabaseEnv()` (e.g. with `annullaIscrizione()` and `readClassificaTappa()`) actually correct?**
-  _`readSupabaseEnv()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `readSupabaseEnv()` connect `Community 132` to `Community 138`, `Community 11`, `Community 142`, `Community 145`, `Community 150`, `Community 30`, `Community 35`, `Community 167`, `Community 170`, `Community 176`, `Community 177`, `Community 50`, `Community 185`, `Community 188`, `Community 61`, `Community 67`, `Community 195`, `Community 202`, `Community 83`, `Community 214`, `Community 87`, `Community 88`, `Community 217`, `Community 90`, `Community 218`, `Community 96`, `Community 225`, `Community 103`, `Community 236`, `Community 238`, `Community 240`, `Community 117`, `Community 125`?**
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
+- **Are the 5 inferred relationships involving `readSupabaseEnv()` (e.g. with `readGiocatoriAdmin()` and `readSchedaGiocatoreAdmin()`) actually correct?**
+  _`readSupabaseEnv()` has 5 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 2 inferred relationships involving `getCurrentUser()` (e.g. with `annullaIscrizione()` and `sessioneAdmin()`) actually correct?**
+  _`getCurrentUser()` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 4 inferred relationships involving `isUuid()` (e.g. with `cambiaCategoria()` and `verificaCategoria()`) actually correct?**
+  _`isUuid()` has 4 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `plugins`, `tailwindStylesheet`, `config` to the rest of the system?**
-  _1687 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.1 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
+  _1732 weakly-connected nodes found - possible documentation gaps or missing edges._
