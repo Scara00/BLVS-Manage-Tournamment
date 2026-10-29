@@ -4,7 +4,7 @@ import { waitForAnimations } from "./storybook-helpers";
 
 /**
  * BLVS-18 in the demo (no Supabase): the countdown runs in the browser, so
- * Playwright's clock drives it. 30 minutes idle, warning at 28 minutes.
+ * Playwright's clock drives it. 2 hours idle, warning 2 minutes before.
  * /admin/anteprima/bozza is a dev/e2e-only admin page with a draft form.
  */
 const PATH = "/admin/anteprima/bozza";
@@ -19,7 +19,7 @@ async function openWithClock(page: Page) {
 }
 
 async function openWarning(page: Page) {
-  await page.clock.fastForward("28:00");
+  await page.clock.fastForward("01:58:00");
   const dialog = page.getByRole("alertdialog", {
     name: "La sessione sta per scadere",
   });
@@ -88,7 +88,7 @@ test.describe("avviso di scadenza della sessione admin", () => {
   }) => {
     await openWithClock(page);
     await page.getByLabel("Nome della tappa").fill("Tappa di Jesolo");
-    await page.clock.fastForward("30:00");
+    await page.clock.fastForward("02:00:00");
 
     await expect(page).toHaveURL(
       `/sessione-scaduta?da=${encodeURIComponent(PATH)}`,

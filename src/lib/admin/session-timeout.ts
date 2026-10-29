@@ -7,8 +7,8 @@
  * `POST /api/admin/sessione`.
  */
 
-/** Minutes of inactivity before the admin session closes. */
-export const DEFAULT_ADMIN_SESSION_IDLE_SECONDS = 30 * 60;
+/** Seconds of inactivity (2 hours) before the admin session closes. */
+export const DEFAULT_ADMIN_SESSION_IDLE_SECONDS = 2 * 60 * 60;
 
 /** The warning shows this long before the deadline. */
 export const ADMIN_SESSION_WARNING_SECONDS = 120;
@@ -21,7 +21,7 @@ export const ADMIN_SESSION_API_PATH = "/api/admin/sessione";
 
 /**
  * Idle seconds, from `ADMIN_SESSION_IDLE_SECONDS` when it is a sensible
- * number (never shorter than the warning plus a minute), else 30 minutes.
+ * number (never shorter than the warning plus a minute), else 2 hours.
  */
 export function adminSessionIdleSeconds(
   raw: string | undefined = process.env.ADMIN_SESSION_IDLE_SECONDS,

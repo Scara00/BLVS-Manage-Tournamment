@@ -357,11 +357,11 @@ describe("updateSession", () => {
         },
       });
 
-    it("la prima pagina admin fissa la scadenza a 30 minuti, in un cookie httpOnly", async () => {
+    it("la prima pagina admin fissa la scadenza a 2 ore, in un cookie httpOnly", async () => {
       const updateSession = await loadUpdateSession();
       const res = await updateSession(request("/admin"));
       const cookie = res.cookies.get("blvs_admin_scadenza");
-      expect(cookie?.value).toBe(String(NOW + 30 * 60 * 1000));
+      expect(cookie?.value).toBe(String(NOW + 2 * 60 * 60 * 1000));
       expect(cookie?.httpOnly).toBe(true);
       expect(res.headers.get("x-middleware-next")).toBe("1");
     });
@@ -370,13 +370,13 @@ describe("updateSession", () => {
       const updateSession = await loadUpdateSession();
       const page = await updateSession(request("/admin/tappe", NOW + 60_000));
       expect(page.cookies.get("blvs_admin_scadenza")?.value).toBe(
-        String(NOW + 1_800_000),
+        String(NOW + 7_200_000),
       );
       const api = await updateSession(
         request("/api/admin/tappe", NOW + 60_000, { method: "POST" }),
       );
       expect(api.cookies.get("blvs_admin_scadenza")?.value).toBe(
-        String(NOW + 1_800_000),
+        String(NOW + 7_200_000),
       );
     });
 

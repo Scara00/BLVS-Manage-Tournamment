@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
-    "mtime": 1793269941.043432,
-    "ast_hash": "aa593cbd642bf16e73c11eafef87bd87",
+    "mtime": 1793273305.1050084,
+    "ast_hash": "dd8b3492757dcb7ae0b22a26711b9da1",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.ts": {
@@ -1890,8 +1890,8 @@
     "semantic_hash": ""
   },
   "e2e/admin-sessione.spec.ts": {
-    "mtime": 1793101307.6446881,
-    "ast_hash": "14056a20a070cf96019c2d3b038e57c7",
+    "mtime": 1793273294.0713997,
+    "ast_hash": "92bda01b970b89f49d50a8de44b0110f",
     "semantic_hash": ""
   },
   "src/app/admin/anteprima/bozza/fixture-form.tsx": {
@@ -1905,8 +1905,8 @@
     "semantic_hash": ""
   },
   "src/app/api/admin/sessione/route.test.ts": {
-    "mtime": 1793101307.658798,
-    "ast_hash": "edbe5d3262cf33f3846a10bd699fc4a0",
+    "mtime": 1793273294.070901,
+    "ast_hash": "6978eb52f18459489c5b6d3025bbc267",
     "semantic_hash": ""
   },
   "src/app/api/admin/sessione/route.ts": {
@@ -1960,13 +1960,13 @@
     "semantic_hash": ""
   },
   "src/lib/admin/session-timeout.test.ts": {
-    "mtime": 1793101307.67852,
-    "ast_hash": "7c8f5485f5855f9e1333f2ff2949bb5a",
+    "mtime": 1793273294.070655,
+    "ast_hash": "a799ed91f7447c17846add81a3050e20",
     "semantic_hash": ""
   },
   "src/lib/admin/session-timeout.ts": {
-    "mtime": 1793215781.6445863,
-    "ast_hash": "f6a96a95e92edb1c2c762efb4a22a56f",
+    "mtime": 1793273305.1080196,
+    "ast_hash": "dc91a1630ecd1cdd82e6959322280e19",
     "semantic_hash": ""
   },
   "e2e/admin-dashboard.spec.ts": {
@@ -5720,8 +5720,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1793270731.4401798,
-    "ast_hash": "ec66ad60d1bce2eafac2af0842cbe62c",
+    "mtime": 1793272995.3663046,
+    "ast_hash": "d3b72e007f2255e73c33ea0fd090407d",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {

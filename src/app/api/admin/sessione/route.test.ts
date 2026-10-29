@@ -47,22 +47,22 @@ describe("/api/admin/sessione", () => {
     expect(res.headers.get("cache-control")).toBe("private, no-store");
   });
 
-  it("GET senza cookie conta 30 minuti (il proxy l'ha appena fissata)", async () => {
+  it("GET senza cookie conta 2 ore (il proxy l'ha appena fissata)", async () => {
     const res = await GET(new NextRequest(URL), undefined);
-    expect((await res.json()).scadeTraSecondi).toBe(1800);
+    expect((await res.json()).scadeTraSecondi).toBe(7200);
   });
 
-  it("POST prolunga di 30 minuti e riscrive il cookie", async () => {
+  it("POST prolunga di 2 ore e riscrive il cookie", async () => {
     const res = (await POST(
       new NextRequest(URL, { method: "POST" }),
       undefined,
     )) as NextResponse;
     expect(await res.json()).toEqual({
-      scadeTraSecondi: 1800,
-      scadeAlle: "2026-10-27T10:30:00.000Z",
+      scadeTraSecondi: 7200,
+      scadeAlle: "2026-10-27T12:00:00.000Z",
     });
     const cookie = res.cookies.get("blvs_admin_scadenza");
-    expect(cookie?.value).toBe(String(NOW + 1_800_000));
+    expect(cookie?.value).toBe(String(NOW + 7_200_000));
     expect(cookie?.httpOnly).toBe(true);
   });
 

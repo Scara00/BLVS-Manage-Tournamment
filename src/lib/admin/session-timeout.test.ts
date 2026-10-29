@@ -12,8 +12,8 @@ import {
 } from "./session-timeout";
 
 describe("scadenza della sessione admin", () => {
-  it("dura 30 minuti, o quanto dice ADMIN_SESSION_IDLE_SECONDS se sensato", () => {
-    expect(adminSessionIdleSeconds(undefined)).toBe(30 * 60);
+  it("dura 2 ore, o quanto dice ADMIN_SESSION_IDLE_SECONDS se sensato", () => {
+    expect(adminSessionIdleSeconds(undefined)).toBe(2 * 60 * 60);
     expect(adminSessionIdleSeconds("600")).toBe(600);
     // Shorter than warning + 1 minute, or garbage: the default.
     expect(adminSessionIdleSeconds("100")).toBe(
