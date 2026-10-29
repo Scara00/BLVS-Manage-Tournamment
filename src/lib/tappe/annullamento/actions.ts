@@ -2,12 +2,10 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
-import { headers } from "next/headers";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
-import { accodaAvvisiAnnullamento } from "./avvisi";
 import {
   ANNULLAMENTO_MESSAGES,
   erroreMotivo,
@@ -88,19 +86,11 @@ function erroreDb(error: PgError): {
   return { reason: "network", message: ANNULLAMENTO_MESSAGES.network };
 }
 
-/** Origin of the request, for the links in the emails. */
-async function requestOrigin(): Promise<string> {
-  const h = await headers();
-  const origin = h.get("origin");
-  if (origin) return origin;
-  const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-  const proto = h.get("x-forwarded-proto") ?? "https";
-  return `${proto}://${host}`;
-}
-
 /**
- * w-admin-annulla-tappa: cancels the stage with its reason, then queues the
- * «Tappa annullata» email for every pending or confirmed player.
+ * w-admin-annulla-tappa: cancels the stage with its reason. The «Tappa
+ * annullata» emails are suspended until the delivery is set up (Edge
+ * Function `send-emails`, Vault secrets, README «Coda email»);
+ * `accodaAvvisiAnnullamento()` in ./avvisi is ready for when they return.
  */
 export async function annullaTappa(
   _prev: AnnullaTappaState,
@@ -130,23 +120,10 @@ export async function annullaTappa(
   }
   if (!isUuid(id)) return fail("conflict", ANNULLAMENTO_MESSAGES.conflict);
 
-  const supabase = sessione.supabase;
-  let tappa: { nome: string; luogo: string; data_inizio: string } | null;
-  let destinatari: { email: string }[];
+  // The RPC returns the pending and confirmed players (their emails).
+  let iscritti: number;
   try {
-    const letta = await supabase
-      .from("tappe")
-      .select("nome, luogo, data_inizio")
-      .eq("id", id)
-      .maybeSingle();
-    if (letta.error) {
-      const e = erroreDb(letta.error);
-      return fail(e.reason, e.message, e.fields);
-    }
-    tappa = letta.data;
-    if (!tappa) return fail("conflict", ANNULLAMENTO_MESSAGES.conflict);
-
-    const { data, error } = await supabase.rpc("annulla_tappa", {
+    const { data, error } = await sessione.supabase.rpc("annulla_tappa", {
       p_tappa: id,
       p_motivo: motivo,
     });
@@ -154,36 +131,17 @@ export async function annullaTappa(
       const e = erroreDb(error);
       return fail(e.reason, e.message, e.fields);
     }
-    destinatari = (data ?? []) as { email: string }[];
+    iscritti = (data ?? []).length;
   } catch (error) {
     console.error("[tappe] annullamento non riuscito", error);
     return fail("network", ANNULLAMENTO_MESSAGES.network);
   }
 
-  // The stage is cancelled: from here on nothing undoes it.
-  let avvisi = { accodati: 0, nonAccodati: destinatari.length };
-  try {
-    avvisi = await accodaAvvisiAnnullamento({
-      tappa: {
-        id,
-        nome: tappa.nome,
-        luogo: tappa.luogo,
-        dataInizio: tappa.data_inizio,
-        motivo,
-      },
-      destinatari,
-      origin: await requestOrigin(),
-    });
-  } catch (error) {
-    console.error("[tappe] avvisi di annullamento non accodati", error);
-  }
-
   refresh();
   return {
     status: "success",
-    message: messaggioAnnullata(avvisi.accodati, avvisi.nonAccodati),
-    avvisi: avvisi.accodati,
-    nonAccodati: avvisi.nonAccodati,
+    message: messaggioAnnullata(iscritti),
+    iscritti,
     at,
   };
 }

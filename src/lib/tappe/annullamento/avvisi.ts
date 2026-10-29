@@ -1,3 +1,8 @@
+// Not called while the email notices are suspended (29/10/2026): the
+// delivery is not set up in production (Edge Function `send-emails` not
+// deployed, Vault secrets missing). To bring them back, call
+// `accodaAvvisiAnnullamento()` from `annullaTappa()` after the RPC and
+// restore the dialog copy.
 import "server-only";
 import { accodaEmail } from "@/lib/email/queue";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";

@@ -2,6 +2,8 @@
  * BLVS-22 · Cancelling and archiving a stage: action states, copy and the
  * pure checks shared by the dialog and the server actions. A plain module,
  * so client components import it without touching the "use server" file.
+ * The email notices to the players are suspended (29/10/2026) until the
+ * delivery is set up: the copy tells the admin no email leaves.
  */
 
 /** Same limit as the `tappe_motivo_annullamento_lunghezza` CHECK. */
@@ -21,10 +23,8 @@ export type AnnullaTappaState =
   | {
       status: "success";
       message: string;
-      /** Notices queued for the players. */
-      avvisi: number;
-      /** Notices that could not be queued (logged on the server). */
-      nonAccodati: number;
+      /** Pending and confirmed players of the stage (none is emailed). */
+      iscritti: number;
       at: number;
     }
   | {
@@ -95,18 +95,9 @@ export function erroreMotivo(value: string): string | null {
 }
 
 /** Toast after the cancellation. */
-export function messaggioAnnullata(avvisi: number, nonAccodati: number) {
-  if (avvisi + nonAccodati === 0) {
-    return "Tappa annullata. Non c'erano iscritti da avvisare.";
-  }
-  const inviati =
-    avvisi === 1
-      ? "Tappa annullata. 1 avviso è in partenza."
-      : `Tappa annullata. ${avvisi} avvisi sono in partenza.`;
-  if (nonAccodati === 0) return inviati;
-  const mancanti =
-    nonAccodati === 1
-      ? "1 avviso non è stato accodato"
-      : `${nonAccodati} avvisi non sono stati accodati`;
-  return `${inviati} ${mancanti}: avvisa direttamente quegli iscritti.`;
+export function messaggioAnnullata(iscritti: number) {
+  if (iscritti === 0) return "Tappa annullata. Non c'erano iscritti.";
+  return iscritti === 1
+    ? "Tappa annullata. Non parte nessuna email: se serve, avvisa tu l'iscritto."
+    : `Tappa annullata. Non parte nessuna email: se serve, avvisa tu i ${iscritti} iscritti.`;
 }

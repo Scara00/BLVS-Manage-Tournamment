@@ -1,27 +1,20 @@
 import { expect, test } from "@playwright/test";
-import { isMailpitAvailable, waitForLatestEmail } from "../mailpit";
-import {
-  adminClient,
-  isSupabaseLocalConfigured,
-  supabaseLocal,
-  uniqueAddress,
-} from "./env";
+import { adminClient, isSupabaseLocalConfigured, uniqueAddress } from "./env";
 
 /*
  * BLVS-22 end to end on the local stack: an admin cancels a stage from the
- * dashboard, every pending or confirmed player gets «Tappa annullata»
- * through the BLVS-08 queue (verified in Mailpit), the others do not, and
- * the database refuses new registrations.
+ * dashboard and the database refuses new registrations. The «Tappa
+ * annullata» emails are suspended (29/10/2026): nothing is queued.
  */
 
 const PASSWORD = "Password-di-prova-1";
 
 test.beforeAll(async () => {
-  const ready = isSupabaseLocalConfigured() && (await isMailpitAvailable());
+  const ready = isSupabaseLocalConfigured();
   if (process.env.CI) {
-    expect(ready, "Supabase locale e Mailpit raggiungibili").toBe(true);
+    expect(ready, "Supabase locale raggiungibile").toBe(true);
   }
-  test.skip(!ready, "Serve Supabase locale (supabase start) con Mailpit");
+  test.skip(!ready, "Serve Supabase locale (supabase start)");
 });
 
 async function createUser(prefix: string, ruolo: "admin" | "giocatore") {
@@ -44,7 +37,7 @@ async function createUser(prefix: string, ruolo: "admin" | "giocatore") {
   return { id: data.user!.id, email };
 }
 
-test("annullare una tappa avvisa gli iscritti via email e blocca le iscrizioni", async ({
+test("annullare una tappa blocca le iscrizioni e non accoda email", async ({
   page,
 }) => {
   const admin = adminClient();
@@ -105,7 +98,7 @@ test("annullare una tappa avvisa gli iscritti via email e blocca le iscrizioni",
     name: `Annullare «${nome}»?`,
   });
   await expect(dialog).toContainText(
-    "2 iscritti riceveranno l'avviso via email",
+    "2 iscritti vedranno la tappa annullata nell'app. Non parte nessuna email",
   );
   await dialog
     .getByRole("textbox", { name: /Motivo/ })
@@ -113,31 +106,24 @@ test("annullare una tappa avvisa gli iscritti via email e blocca le iscrizioni",
   await dialog.getByRole("button", { name: "Annulla tappa" }).click();
   await expect(
     page
-      .getByText("Tappa annullata. 2 avvisi sono in partenza.", {
-        exact: true,
-      })
+      .getByText(
+        "Tappa annullata. Non parte nessuna email: se serve, avvisa tu i 2 iscritti.",
+        {
+          exact: true,
+        },
+      )
       .first(),
   ).toBeVisible();
 
-  // The worker runs every minute through pg_cron; run it now.
-  const response = await fetch(
-    `${supabaseLocal.url}/functions/v1/send-emails`,
-    {
-      method: "POST",
-      headers: { Authorization: `Bearer ${supabaseLocal.emailWorkerSecret}` },
-    },
-  );
-  expect(response.status).toBe(200);
-
-  for (const iscritto of iscritti) {
-    const message = await waitForLatestEmail(iscritto.email, { after: since });
-    expect(message.Subject).toBe(`Tappa annullata: ${nome} · BLVS`);
-    expect(message.Text).toContain("Motivo: Allerta meteo: spiaggia chiusa");
-  }
+  // Nobody is emailed while the notices are suspended.
   const { data: coda } = await admin
     .from("coda_email")
     .select("destinatario")
-    .eq("destinatario", ritirato.email);
+    .in(
+      "destinatario",
+      [...iscritti, ritirato].map((u) => u.email),
+    )
+    .gte("created_at", since.toISOString());
   expect(coda).toEqual([]);
 
   const { data: annullata } = await admin

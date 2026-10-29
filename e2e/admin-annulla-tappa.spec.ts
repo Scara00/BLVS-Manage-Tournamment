@@ -33,7 +33,7 @@ test("annulla tappa: da tastiera, focus sull'azione sicura, Esc torna al pulsant
   await expect(dialog).toBeVisible();
   // 9 + 17 pending or confirmed players in the demo.
   await expect(dialog).toContainText(
-    "26 iscritti riceveranno l'avviso via email",
+    "26 iscritti vedranno la tappa annullata nell'app. Non parte nessuna email",
   );
   await expect(
     dialog.getByRole("button", { name: "Non annullare" }),

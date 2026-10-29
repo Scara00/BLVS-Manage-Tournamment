@@ -8,7 +8,7 @@ const meta = {
   parameters: { layout: "padded" },
   args: {
     label: "Motivo",
-    hint: "Lo leggeranno gli iscritti nell'email",
+    hint: "Resta nell'elenco delle tappe dell'area admin.",
     children: <Textarea />,
   },
   decorators: [

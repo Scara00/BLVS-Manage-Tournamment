@@ -171,7 +171,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_stopbaseline_version",
-      "community": 292,
+      "community": 243,
       "norm_label": "version"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_stopbaseline_engine",
-      "community": 245,
+      "community": 270,
       "norm_label": "engine"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_classifica_generale_giocatore_ts",
-      "community": 300,
+      "community": 270,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/lib/classifica-generale/giocatore.ts"
     },
     {
@@ -369,7 +369,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_classifica_generale_giocatore_ts_editcount",
-      "community": 300,
+      "community": 270,
       "norm_label": "editcount"
     },
     {
@@ -378,7 +378,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_classifica_generale_giocatore_ts_findings",
-      "community": 300,
+      "community": 270,
       "norm_label": "findings"
     },
     {
@@ -387,7 +387,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_classifica_generale_giocatore_ts_stopbaseline",
-      "community": 300,
+      "community": 270,
       "norm_label": "stopbaseline"
     },
     {
@@ -801,7 +801,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_iscrizione_tappa_db_test_ts",
-      "community": 238,
+      "community": 152,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/lib/iscrizioni/iscrizione-tappa.db.test.ts"
     },
     {
@@ -810,7 +810,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_iscrizione_tappa_db_test_ts_editcount",
-      "community": 238,
+      "community": 152,
       "norm_label": "editcount"
     },
     {
@@ -819,7 +819,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_iscrizione_tappa_db_test_ts_findings",
-      "community": 238,
+      "community": 152,
       "norm_label": "findings"
     },
     {
@@ -828,7 +828,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_iscrizione_tappa_db_test_ts_stopbaseline",
-      "community": 238,
+      "community": 152,
       "norm_label": "stopbaseline"
     },
     {
@@ -837,7 +837,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_admin_admin_iscritti_db_test_ts",
-      "community": 245,
+      "community": 238,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/lib/iscrizioni/admin/admin-iscritti.db.test.ts"
     },
     {
@@ -846,7 +846,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_admin_admin_iscritti_db_test_ts_editcount",
-      "community": 245,
+      "community": 238,
       "norm_label": "editcount"
     },
     {
@@ -855,7 +855,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_admin_admin_iscritti_db_test_ts_findings",
-      "community": 245,
+      "community": 238,
       "norm_label": "findings"
     },
     {
@@ -864,7 +864,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_iscrizioni_admin_admin_iscritti_db_test_ts_stopbaseline",
-      "community": 245,
+      "community": 238,
       "norm_label": "stopbaseline"
     },
     {
@@ -1044,7 +1044,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_auth_require_admin_ts",
-      "community": 238,
+      "community": 94,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/lib/auth/require-admin.ts"
     },
     {
@@ -1053,7 +1053,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_auth_require_admin_ts_editcount",
-      "community": 238,
+      "community": 94,
       "norm_label": "editcount"
     },
     {
@@ -1062,7 +1062,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_auth_require_admin_ts_findings",
-      "community": 238,
+      "community": 94,
       "norm_label": "findings"
     },
     {
@@ -1071,7 +1071,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_auth_require_admin_ts_stopbaseline",
-      "community": 238,
+      "community": 94,
       "norm_label": "stopbaseline"
     },
     {
@@ -1116,7 +1116,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_supabase_proxy_test_ts",
-      "community": 301,
+      "community": 243,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/lib/supabase/proxy.test.ts"
     },
     {
@@ -1125,7 +1125,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_supabase_proxy_test_ts_editcount",
-      "community": 301,
+      "community": 243,
       "norm_label": "editcount"
     },
     {
@@ -1134,7 +1134,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_supabase_proxy_test_ts_findings",
-      "community": 301,
+      "community": 243,
       "norm_label": "findings"
     },
     {
@@ -1143,7 +1143,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_lib_supabase_proxy_test_ts_stopbaseline",
-      "community": 301,
+      "community": 243,
       "norm_label": "stopbaseline"
     },
     {
@@ -1152,7 +1152,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_files_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_app_api_diagnosi_temp_route_ts",
-      "community": 292,
+      "community": 238,
       "norm_label": "/users/cristianscaratti/desktop/my_projects/blvs-manage-tournamment/src/app/api/diagnosi-temp/route.ts"
     },
     {
@@ -1161,7 +1161,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_app_api_diagnosi_temp_route_ts_editcount",
-      "community": 292,
+      "community": 238,
       "norm_label": "editcount"
     },
     {
@@ -1170,7 +1170,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_app_api_diagnosi_temp_route_ts_findings",
-      "community": 292,
+      "community": 238,
       "norm_label": "findings"
     },
     {
@@ -1179,7 +1179,7 @@
       "source_file": ".impeccable/hook.cache.json",
       "source_location": "L1",
       "id": "impeccable_hook_cache_users_cristianscaratti_desktop_my_projects_blvs_manage_tournamment_src_app_api_diagnosi_temp_route_ts_stopbaseline",
-      "community": 292,
+      "community": 238,
       "norm_label": "stopbaseline"
     },
     {
@@ -3877,7 +3877,7 @@
       "label": "createUser()",
       "file_type": "code",
       "source_file": "e2e/supabase/annulla-tappa.spec.ts",
-      "source_location": "L27",
+      "source_location": "L20",
       "id": "supabase_annulla_tappa_spec_createuser",
       "community": 65,
       "norm_label": "createuser()"
@@ -5301,7 +5301,7 @@
       "source_file": "src/app/(giocatore)/live/page.tsx",
       "source_location": "L36",
       "id": "live_page_livetappaincorso",
-      "community": 32,
+      "community": 177,
       "norm_label": "livetappaincorso()"
     },
     {
@@ -5526,7 +5526,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L1",
       "id": "gironeid_page",
-      "community": 32,
+      "community": 177,
       "norm_label": "page.tsx"
     },
     {
@@ -5535,7 +5535,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L12",
       "id": "gironeid_page_metadata",
-      "community": 32,
+      "community": 177,
       "norm_label": "metadata"
     },
     {
@@ -5544,7 +5544,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L19",
       "id": "gironeid_page_generatestaticparams",
-      "community": 32,
+      "community": 177,
       "norm_label": "generatestaticparams()"
     },
     {
@@ -5553,7 +5553,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L23",
       "id": "gironeid_page_tornaallive",
-      "community": 32,
+      "community": 177,
       "norm_label": "tornaallive()"
     },
     {
@@ -5562,7 +5562,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L37",
       "id": "gironeid_page_gironecontent",
-      "community": 32,
+      "community": 177,
       "norm_label": "gironecontent()"
     },
     {
@@ -5571,7 +5571,7 @@
       "source_file": "src/app/(giocatore)/tappe/[id]/gironi/[gironeId]/page.tsx",
       "source_location": "L79",
       "id": "gironeid_page_gironetappapage",
-      "community": 32,
+      "community": 177,
       "norm_label": "gironetappapage()"
     },
     {
@@ -6507,7 +6507,7 @@
       "source_file": "src/app/admin/(protetta)/tappe/[id]/registro/page.tsx",
       "source_location": "L25",
       "id": "registro_page_registrocontent",
-      "community": 94,
+      "community": 180,
       "norm_label": "registrocontent()"
     },
     {
@@ -7488,7 +7488,7 @@
       "source_file": "src/app/api/cron/chiudi-iscrizioni/route.ts",
       "source_location": "L1",
       "id": "chiudi_iscrizioni_route",
-      "community": 121,
+      "community": 185,
       "norm_label": "route.ts"
     },
     {
@@ -7497,7 +7497,7 @@
       "source_file": "src/app/api/cron/chiudi-iscrizioni/route.ts",
       "source_location": "L4",
       "id": "chiudi_iscrizioni_route_get",
-      "community": 121,
+      "community": 185,
       "norm_label": "get()"
     },
     {
@@ -7893,7 +7893,7 @@
       "source_file": "src/app/api/live/stream/route.test.ts",
       "source_location": "L1",
       "id": "stream_route_test",
-      "community": 195,
+      "community": 135,
       "norm_label": "route.test.ts"
     },
     {
@@ -7902,7 +7902,7 @@
       "source_file": "src/app/api/live/stream/route.test.ts",
       "source_location": "L11",
       "id": "stream_route_test_readuntil",
-      "community": 195,
+      "community": 135,
       "norm_label": "readuntil()"
     },
     {
@@ -7911,7 +7911,7 @@
       "source_file": "src/app/api/live/stream/route.test.ts",
       "source_location": "L41",
       "id": "stream_route_test_controllers",
-      "community": 195,
+      "community": 135,
       "norm_label": "controllers"
     },
     {
@@ -7920,7 +7920,7 @@
       "source_file": "src/app/api/live/stream/route.test.ts",
       "source_location": "L42",
       "id": "stream_route_test_open",
-      "community": 195,
+      "community": 135,
       "norm_label": "open()"
     },
     {
@@ -7929,7 +7929,7 @@
       "source_file": "src/app/api/live/stream/route.test.ts",
       "source_location": "L57",
       "id": "stream_route_test_match",
-      "community": 195,
+      "community": 135,
       "norm_label": "match"
     },
     {
@@ -7938,7 +7938,7 @@
       "source_file": "src/app/api/live/stream/route.ts",
       "source_location": "L1",
       "id": "stream_route",
-      "community": 195,
+      "community": 135,
       "norm_label": "route.ts"
     },
     {
@@ -7947,7 +7947,7 @@
       "source_file": "src/app/api/live/stream/route.ts",
       "source_location": "L9",
       "id": "stream_route_get",
-      "community": 195,
+      "community": 135,
       "norm_label": "get()"
     },
     {
@@ -10440,7 +10440,7 @@
       "source_file": "src/components/admin-gironi/gironi-editor.test.tsx",
       "source_location": "L1",
       "id": "admin_gironi_gironi_editor_test",
-      "community": 82,
+      "community": 37,
       "norm_label": "gironi-editor.test.tsx"
     },
     {
@@ -10449,7 +10449,7 @@
       "source_file": "src/components/admin-gironi/gironi-editor.test.tsx",
       "source_location": "L18",
       "id": "admin_gironi_gironi_editor_test_editor",
-      "community": 82,
+      "community": 37,
       "norm_label": "editor()"
     },
     {
@@ -10458,7 +10458,7 @@
       "source_file": "src/components/admin-gironi/gironi-editor.test.tsx",
       "source_location": "L29",
       "id": "admin_gironi_gironi_editor_test_salvafinto",
-      "community": 82,
+      "community": 37,
       "norm_label": "salvafinto"
     },
     {
@@ -10467,7 +10467,7 @@
       "source_file": "src/components/admin-gironi/gironi-editor.test.tsx",
       "source_location": "L44",
       "id": "admin_gironi_gironi_editor_test_girone",
-      "community": 82,
+      "community": 37,
       "norm_label": "girone()"
     },
     {
@@ -10476,7 +10476,7 @@
       "source_file": "src/components/admin-gironi/gironi-editor.test.tsx",
       "source_location": "L48",
       "id": "admin_gironi_gironi_editor_test_nomi",
-      "community": 82,
+      "community": 37,
       "norm_label": "nomi()"
     },
     {
@@ -13941,7 +13941,7 @@
       "source_file": "src/components/admin-registro/registro-filtri.tsx",
       "source_location": "L1",
       "id": "admin_registro_registro_filtri",
-      "community": 94,
+      "community": 180,
       "norm_label": "registro-filtri.tsx"
     },
     {
@@ -13950,7 +13950,7 @@
       "source_file": "src/components/admin-registro/registro-filtri.tsx",
       "source_location": "L18",
       "id": "admin_registro_registro_filtri_registrofiltri",
-      "community": 94,
+      "community": 180,
       "norm_label": "registrofiltri()"
     },
     {
@@ -16774,7 +16774,7 @@
       "label": "renderArchivia()",
       "file_type": "code",
       "source_file": "src/components/admin/annulla-tappa.test.tsx",
-      "source_location": "L161",
+      "source_location": "L165",
       "id": "admin_annulla_tappa_test_renderarchivia",
       "community": 44,
       "norm_label": "renderarchivia()"
@@ -16792,7 +16792,7 @@
       "label": "AvvisoIscritti()",
       "file_type": "code",
       "source_file": "src/components/admin/annulla-tappa.tsx",
-      "source_location": "L42",
+      "source_location": "L45",
       "id": "admin_annulla_tappa_avvisoiscritti",
       "community": 92,
       "norm_label": "avvisoiscritti()"
@@ -16801,7 +16801,7 @@
       "label": "AnnullaTappaProps",
       "file_type": "code",
       "source_file": "src/components/admin/annulla-tappa.tsx",
-      "source_location": "L58",
+      "source_location": "L59",
       "id": "admin_annulla_tappa_annullatappaprops",
       "community": 92,
       "norm_label": "annullatappaprops"
@@ -16810,7 +16810,7 @@
       "label": "AnnullaTappa()",
       "file_type": "code",
       "source_file": "src/components/admin/annulla-tappa.tsx",
-      "source_location": "L86",
+      "source_location": "L88",
       "id": "admin_annulla_tappa_annullatappa",
       "community": 92,
       "norm_label": "annullatappa()"
@@ -21708,7 +21708,7 @@
       "source_file": "src/components/live/live-bar.tsx",
       "source_location": "L1",
       "id": "live_live_bar",
-      "community": 177,
+      "community": 199,
       "norm_label": "live-bar.tsx"
     },
     {
@@ -21717,7 +21717,7 @@
       "source_file": "src/components/live/live-bar.tsx",
       "source_location": "L10",
       "id": "live_live_bar_livebarprops",
-      "community": 177,
+      "community": 199,
       "norm_label": "livebarprops"
     },
     {
@@ -21735,7 +21735,7 @@
       "source_file": "src/components/live/live-bar.tsx",
       "source_location": "L39",
       "id": "live_live_bar_livebar",
-      "community": 177,
+      "community": 199,
       "norm_label": "livebar()"
     },
     {
@@ -21753,7 +21753,7 @@
       "source_file": "src/components/live/live-loading.tsx",
       "source_location": "L1",
       "id": "live_live_loading",
-      "community": 177,
+      "community": 199,
       "norm_label": "live-loading.tsx"
     },
     {
@@ -21915,7 +21915,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L1",
       "id": "live_live_tappa_stories",
-      "community": 168,
+      "community": 32,
       "norm_label": "live-tappa.stories.tsx"
     },
     {
@@ -21924,7 +21924,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L9",
       "id": "live_live_tappa_stories_p",
-      "community": 168,
+      "community": 32,
       "norm_label": "p()"
     },
     {
@@ -21933,7 +21933,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L11",
       "id": "live_live_tappa_stories_match",
-      "community": 168,
+      "community": 32,
       "norm_label": "match()"
     },
     {
@@ -21942,7 +21942,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L34",
       "id": "live_live_tappa_stories_matches",
-      "community": 168,
+      "community": 32,
       "norm_label": "matches"
     },
     {
@@ -21951,7 +21951,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L65",
       "id": "live_live_tappa_stories_girone",
-      "community": 168,
+      "community": 32,
       "norm_label": "girone"
     },
     {
@@ -21960,7 +21960,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L87",
       "id": "live_live_tappa_stories_longmatches",
-      "community": 168,
+      "community": 32,
       "norm_label": "longmatches"
     },
     {
@@ -21969,7 +21969,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L106",
       "id": "live_live_tappa_stories_sync",
-      "community": 168,
+      "community": 32,
       "norm_label": "sync()"
     },
     {
@@ -21978,7 +21978,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L122",
       "id": "live_live_tappa_stories_stato",
-      "community": 168,
+      "community": 32,
       "norm_label": "stato"
     },
     {
@@ -21987,7 +21987,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L133",
       "id": "live_live_tappa_stories_partialmatches",
-      "community": 168,
+      "community": 32,
       "norm_label": "partialmatches"
     },
     {
@@ -21996,7 +21996,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L148",
       "id": "live_live_tappa_stories_livetappascreen",
-      "community": 168,
+      "community": 32,
       "norm_label": "livetappascreen()"
     },
     {
@@ -22005,7 +22005,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L202",
       "id": "live_live_tappa_stories_story",
-      "community": 168,
+      "community": 32,
       "norm_label": "story"
     },
     {
@@ -22014,7 +22014,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L204",
       "id": "live_live_tappa_stories_loading",
-      "community": 168,
+      "community": 32,
       "norm_label": "loading"
     },
     {
@@ -22023,7 +22023,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L205",
       "id": "live_live_tappa_stories_empty",
-      "community": 168,
+      "community": 32,
       "norm_label": "empty"
     },
     {
@@ -22032,7 +22032,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L206",
       "id": "live_live_tappa_stories_offline",
-      "community": 168,
+      "community": 32,
       "norm_label": "offline"
     },
     {
@@ -22041,7 +22041,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L207",
       "id": "live_live_tappa_stories_sessionexpired",
-      "community": 168,
+      "community": 32,
       "norm_label": "sessionexpired"
     },
     {
@@ -22050,7 +22050,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L208",
       "id": "live_live_tappa_stories_success",
-      "community": 168,
+      "community": 32,
       "norm_label": "success"
     },
     {
@@ -22059,7 +22059,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L209",
       "id": "live_live_tappa_stories_longtext",
-      "community": 168,
+      "community": 32,
       "norm_label": "longtext"
     },
     {
@@ -22068,7 +22068,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L211",
       "id": "live_live_tappa_stories_parzialeincorso",
-      "community": 168,
+      "community": 32,
       "norm_label": "parzialeincorso"
     },
     {
@@ -22077,7 +22077,7 @@
       "source_file": "src/components/live/live-tappa.stories.tsx",
       "source_location": "L213",
       "id": "live_live_tappa_stories_parzialeoffline",
-      "community": 168,
+      "community": 32,
       "norm_label": "parzialeoffline"
     },
     {
@@ -22212,7 +22212,7 @@
       "source_file": "src/components/live/live-tappa.tsx",
       "source_location": "L415",
       "id": "live_live_tappa_livetappasessionescaduta",
-      "community": 32,
+      "community": 177,
       "norm_label": "livetappasessionescaduta()"
     },
     {
@@ -25182,7 +25182,7 @@
       "source_file": "src/components/scoreboard/use-prefers-reduced-motion.ts",
       "source_location": "L34",
       "id": "scoreboard_use_prefers_reduced_motion_usereducedmotion",
-      "community": 177,
+      "community": 199,
       "norm_label": "usereducedmotion()"
     },
     {
@@ -33246,7 +33246,7 @@
       "source_file": "src/lib/demo/avvio-fase.ts",
       "source_location": "L64",
       "id": "demo_avvio_fase_chiave",
-      "community": 139,
+      "community": 59,
       "norm_label": "chiave()"
     },
     {
@@ -33318,7 +33318,7 @@
       "source_file": "src/lib/demo/avvio-fase.ts",
       "source_location": "L230",
       "id": "demo_avvio_fase_proponigoldsilverdemo",
-      "community": 139,
+      "community": 59,
       "norm_label": "proponigoldsilverdemo()"
     },
     {
@@ -33327,7 +33327,7 @@
       "source_file": "src/lib/demo/avvio-fase.ts",
       "source_location": "L267",
       "id": "demo_avvio_fase_generafinalidemo",
-      "community": 139,
+      "community": 59,
       "norm_label": "generafinalidemo()"
     },
     {
@@ -33372,7 +33372,7 @@
       "source_file": "src/lib/demo/avvio-fase.ts",
       "source_location": "L368",
       "id": "demo_avvio_fase_creademotappagironi",
-      "community": 139,
+      "community": 59,
       "norm_label": "creademotappagironi()"
     },
     {
@@ -33390,7 +33390,7 @@
       "source_file": "src/lib/demo/avvio-fase.ts",
       "source_location": "L402",
       "id": "demo_avvio_fase_getdemofasetabellone",
-      "community": 139,
+      "community": 59,
       "norm_label": "getdemofasetabellone()"
     },
     {
@@ -33912,7 +33912,7 @@
       "source_file": "src/lib/demo/fasi-route.ts",
       "source_location": "L30",
       "id": "demo_fasi_route_concludi",
-      "community": 139,
+      "community": 59,
       "norm_label": "concludi()"
     },
     {
@@ -33948,7 +33948,7 @@
       "source_file": "src/lib/demo/fasi-route.ts",
       "source_location": "L59",
       "id": "demo_fasi_route_crea",
-      "community": 139,
+      "community": 59,
       "norm_label": "crea()"
     },
     {
@@ -38070,7 +38070,7 @@
       "source_file": "src/lib/gironi/editor/actions.ts",
       "source_location": "L1",
       "id": "editor_actions",
-      "community": 152,
+      "community": 82,
       "norm_label": "actions.ts"
     },
     {
@@ -38079,7 +38079,7 @@
       "source_file": "src/lib/gironi/editor/actions.ts",
       "source_location": "L20",
       "id": "editor_actions_idvalidi",
-      "community": 152,
+      "community": 82,
       "norm_label": "idvalidi()"
     },
     {
@@ -38088,7 +38088,7 @@
       "source_file": "src/lib/gironi/editor/actions.ts",
       "source_location": "L36",
       "id": "editor_actions_chiamarpc",
-      "community": 152,
+      "community": 82,
       "norm_label": "chiamarpc()"
     },
     {
@@ -38106,7 +38106,7 @@
       "source_file": "src/lib/gironi/editor/actions.ts",
       "source_location": "L100",
       "id": "editor_actions_modificagironi",
-      "community": 152,
+      "community": 82,
       "norm_label": "modificagironi()"
     },
     {
@@ -38295,7 +38295,7 @@
       "source_file": "src/lib/gironi/editor/errori.ts",
       "source_location": "L1",
       "id": "editor_errori",
-      "community": 152,
+      "community": 82,
       "norm_label": "errori.ts"
     },
     {
@@ -38304,7 +38304,7 @@
       "source_file": "src/lib/gironi/editor/errori.ts",
       "source_location": "L3",
       "id": "editor_errori_erroredb",
-      "community": 152,
+      "community": 82,
       "norm_label": "erroredb"
     },
     {
@@ -38313,7 +38313,7 @@
       "source_file": "src/lib/gironi/editor/errori.ts",
       "source_location": "L9",
       "id": "editor_errori_tipoerroregironi",
-      "community": 152,
+      "community": 82,
       "norm_label": "tipoerroregironi"
     },
     {
@@ -38322,7 +38322,7 @@
       "source_file": "src/lib/gironi/editor/errori.ts",
       "source_location": "L25",
       "id": "editor_errori_messaggio_errore_gironi",
-      "community": 152,
+      "community": 82,
       "norm_label": "messaggio_errore_gironi"
     },
     {
@@ -38682,7 +38682,7 @@
       "source_file": "src/lib/gironi/editor/types.ts",
       "source_location": "L54",
       "id": "editor_types_editorgironi",
-      "community": 82,
+      "community": 37,
       "norm_label": "editorgironi"
     },
     {
@@ -38691,7 +38691,7 @@
       "source_file": "src/lib/gironi/editor/types.ts",
       "source_location": "L60",
       "id": "editor_types_esitogironi",
-      "community": 152,
+      "community": 82,
       "norm_label": "esitogironi"
     },
     {
@@ -38700,7 +38700,7 @@
       "source_file": "src/lib/gironi/editor/types.ts",
       "source_location": "L68",
       "id": "editor_types_modificagironiinput",
-      "community": 152,
+      "community": 82,
       "norm_label": "modificagironiinput"
     },
     {
@@ -38709,7 +38709,7 @@
       "source_file": "src/lib/gironi/editor/types.ts",
       "source_location": "L75",
       "id": "editor_types_modificagironiaction",
-      "community": 82,
+      "community": 37,
       "norm_label": "modificagironiaction"
     },
     {
@@ -38718,7 +38718,7 @@
       "source_file": "src/lib/gironi/editor/types.ts",
       "source_location": "L79",
       "id": "editor_types_gironi_editor_messages",
-      "community": 152,
+      "community": 82,
       "norm_label": "gironi_editor_messages"
     },
     {
@@ -38763,7 +38763,7 @@
       "source_file": "src/lib/gironi/editor/validation.ts",
       "source_location": "L1",
       "id": "editor_validation",
-      "community": 152,
+      "community": 82,
       "norm_label": "validation.ts"
     },
     {
@@ -38772,7 +38772,7 @@
       "source_file": "src/lib/gironi/editor/validation.ts",
       "source_location": "L7",
       "id": "editor_validation_testo",
-      "community": 152,
+      "community": 82,
       "norm_label": "testo()"
     },
     {
@@ -38781,7 +38781,7 @@
       "source_file": "src/lib/gironi/editor/validation.ts",
       "source_location": "L10",
       "id": "editor_validation_operazione",
-      "community": 152,
+      "community": 82,
       "norm_label": "operazione()"
     },
     {
@@ -38790,7 +38790,7 @@
       "source_file": "src/lib/gironi/editor/validation.ts",
       "source_location": "L37",
       "id": "editor_validation_leggimodificagironi",
-      "community": 152,
+      "community": 82,
       "norm_label": "leggimodificagironi()"
     },
     {
@@ -38844,7 +38844,7 @@
       "source_file": "src/lib/gironi/fasi/actions.ts",
       "source_location": "L44",
       "id": "fasi_actions_sessioneadmin",
-      "community": 174,
+      "community": 139,
       "norm_label": "sessioneadmin()"
     },
     {
@@ -38880,7 +38880,7 @@
       "source_file": "src/lib/gironi/fasi/actions.ts",
       "source_location": "L153",
       "id": "fasi_actions_proponiprossimafase",
-      "community": 174,
+      "community": 139,
       "norm_label": "proponiprossimafase()"
     },
     {
@@ -38970,7 +38970,7 @@
       "source_file": "src/lib/gironi/fasi/fase.ts",
       "source_location": "L78",
       "id": "fasi_fase_annunciofase",
-      "community": 174,
+      "community": 139,
       "norm_label": "annunciofase()"
     },
     {
@@ -39177,7 +39177,7 @@
       "source_file": "src/lib/gironi/fasi/qualificazione.ts",
       "source_location": "L29",
       "id": "fasi_qualificazione_gironeproposto",
-      "community": 139,
+      "community": 70,
       "norm_label": "gironeproposto"
     },
     {
@@ -39312,7 +39312,7 @@
       "source_file": "src/lib/gironi/fasi/read.ts",
       "source_location": "L94",
       "id": "fasi_read_datidemoprossimafase",
-      "community": 139,
+      "community": 59,
       "norm_label": "datidemoprossimafase()"
     },
     {
@@ -39375,7 +39375,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L1",
       "id": "fasi_types",
-      "community": 139,
+      "community": 70,
       "norm_label": "types.ts"
     },
     {
@@ -39393,7 +39393,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L16",
       "id": "fasi_types_statoprossimafase",
-      "community": 139,
+      "community": 70,
       "norm_label": "statoprossimafase"
     },
     {
@@ -39402,7 +39402,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L19",
       "id": "fasi_types_gironedarisolvere",
-      "community": 139,
+      "community": 70,
       "norm_label": "gironedarisolvere"
     },
     {
@@ -39420,7 +39420,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L37",
       "id": "fasi_types_prossimafasestate",
-      "community": 139,
+      "community": 70,
       "norm_label": "prossimafasestate"
     },
     {
@@ -39429,7 +39429,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L52",
       "id": "fasi_types_initialprossimafasestate",
-      "community": 139,
+      "community": 70,
       "norm_label": "initialprossimafasestate"
     },
     {
@@ -39447,7 +39447,7 @@
       "source_file": "src/lib/gironi/fasi/types.ts",
       "source_location": "L59",
       "id": "fasi_types_prossima_fase_messages",
-      "community": 139,
+      "community": 70,
       "norm_label": "prossima_fase_messages"
     },
     {
@@ -43290,7 +43290,7 @@
       "source_file": "src/lib/live/bus.ts",
       "source_location": "L1",
       "id": "live_bus",
-      "community": 121,
+      "community": 131,
       "norm_label": "bus.ts"
     },
     {
@@ -43299,7 +43299,7 @@
       "source_file": "src/lib/live/bus.ts",
       "source_location": "L14",
       "id": "live_bus_livelistener",
-      "community": 121,
+      "community": 131,
       "norm_label": "livelistener"
     },
     {
@@ -43317,7 +43317,7 @@
       "source_file": "src/lib/live/bus.ts",
       "source_location": "L103",
       "id": "live_bus_livebus",
-      "community": 195,
+      "community": 135,
       "norm_label": "livebus"
     },
     {
@@ -43326,7 +43326,7 @@
       "source_file": "src/lib/live/bus.ts",
       "source_location": "L105",
       "id": "live_bus_globalforlive",
-      "community": 121,
+      "community": 131,
       "norm_label": "globalforlive"
     },
     {
@@ -44037,7 +44037,7 @@
       "source_file": "src/lib/live/publish.ts",
       "source_location": "L62",
       "id": "live_publish_publishphasestarted",
-      "community": 174,
+      "community": 139,
       "norm_label": "publishphasestarted()"
     },
     {
@@ -44262,7 +44262,7 @@
       "source_file": "src/lib/live/sse.ts",
       "source_location": "L1",
       "id": "live_sse",
-      "community": 195,
+      "community": 135,
       "norm_label": "sse.ts"
     },
     {
@@ -44271,7 +44271,7 @@
       "source_file": "src/lib/live/sse.ts",
       "source_location": "L4",
       "id": "live_sse_formatsseevent",
-      "community": 195,
+      "community": 135,
       "norm_label": "formatsseevent()"
     },
     {
@@ -44280,7 +44280,7 @@
       "source_file": "src/lib/live/sse.ts",
       "source_location": "L9",
       "id": "live_sse_formatsseresync",
-      "community": 195,
+      "community": 135,
       "norm_label": "formatsseresync()"
     },
     {
@@ -44289,7 +44289,7 @@
       "source_file": "src/lib/live/sse.ts",
       "source_location": "L17",
       "id": "live_sse_formatsseping",
-      "community": 195,
+      "community": 135,
       "norm_label": "formatsseping()"
     },
     {
@@ -44298,7 +44298,7 @@
       "source_file": "src/lib/live/sse.ts",
       "source_location": "L25",
       "id": "live_sse_parseseq",
-      "community": 195,
+      "community": 135,
       "norm_label": "parseseq()"
     },
     {
@@ -44307,7 +44307,7 @@
       "source_file": "src/lib/live/stream.ts",
       "source_location": "L1",
       "id": "live_stream",
-      "community": 195,
+      "community": 135,
       "norm_label": "stream.ts"
     },
     {
@@ -44316,7 +44316,7 @@
       "source_file": "src/lib/live/stream.ts",
       "source_location": "L13",
       "id": "live_stream_sse_headers",
-      "community": 195,
+      "community": 135,
       "norm_label": "sse_headers"
     },
     {
@@ -44325,7 +44325,7 @@
       "source_file": "src/lib/live/stream.ts",
       "source_location": "L25",
       "id": "live_stream_createlivestream",
-      "community": 195,
+      "community": 135,
       "norm_label": "createlivestream()"
     },
     {
@@ -47871,7 +47871,7 @@
       "source_file": "src/lib/registro/filtri.test.ts",
       "source_location": "L1",
       "id": "registro_filtri_test",
-      "community": 94,
+      "community": 180,
       "norm_label": "filtri.test.ts"
     },
     {
@@ -47880,7 +47880,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L1",
       "id": "registro_filtri",
-      "community": 94,
+      "community": 180,
       "norm_label": "filtri.ts"
     },
     {
@@ -47889,7 +47889,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L9",
       "id": "registro_filtri_nessun_filtro",
-      "community": 94,
+      "community": 180,
       "norm_label": "nessun_filtro"
     },
     {
@@ -47898,7 +47898,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L11",
       "id": "registro_filtri_params",
-      "community": 94,
+      "community": 180,
       "norm_label": "params"
     },
     {
@@ -47907,7 +47907,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L14",
       "id": "registro_filtri_primo",
-      "community": 94,
+      "community": 180,
       "norm_label": "primo()"
     },
     {
@@ -47916,7 +47916,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L21",
       "id": "registro_filtri_istipoevento",
-      "community": 94,
+      "community": 180,
       "norm_label": "istipoevento()"
     },
     {
@@ -47925,7 +47925,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L32",
       "id": "registro_filtri_parsefiltri",
-      "community": 94,
+      "community": 180,
       "norm_label": "parsefiltri()"
     },
     {
@@ -47934,7 +47934,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L41",
       "id": "registro_filtri_filtriquery",
-      "community": 94,
+      "community": 180,
       "norm_label": "filtriquery()"
     },
     {
@@ -47943,7 +47943,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L48",
       "id": "registro_filtri_filtriattivi",
-      "community": 94,
+      "community": 180,
       "norm_label": "filtriattivi()"
     },
     {
@@ -47952,7 +47952,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L53",
       "id": "registro_filtri_applicafiltri",
-      "community": 127,
+      "community": 180,
       "norm_label": "applicafiltri()"
     },
     {
@@ -47961,7 +47961,7 @@
       "source_file": "src/lib/registro/filtri.ts",
       "source_location": "L64",
       "id": "registro_filtri_opzioni_tipo",
-      "community": 94,
+      "community": 180,
       "norm_label": "opzioni_tipo"
     },
     {
@@ -48204,7 +48204,7 @@
       "source_file": "src/lib/registro/paths.ts",
       "source_location": "L1",
       "id": "registro_paths",
-      "community": 94,
+      "community": 180,
       "norm_label": "paths.ts"
     },
     {
@@ -48213,7 +48213,7 @@
       "source_file": "src/lib/registro/paths.ts",
       "source_location": "L5",
       "id": "registro_paths_registropath",
-      "community": 94,
+      "community": 180,
       "norm_label": "registropath()"
     },
     {
@@ -48537,7 +48537,7 @@
       "source_file": "src/lib/registro/types.ts",
       "source_location": "L72",
       "id": "registro_types_partitafiltro",
-      "community": 94,
+      "community": 180,
       "norm_label": "partitafiltro"
     },
     {
@@ -49563,7 +49563,7 @@
       "source_file": "src/lib/supabase/admin.ts",
       "source_location": "L1",
       "id": "supabase_admin",
-      "community": 121,
+      "community": 131,
       "norm_label": "admin.ts"
     },
     {
@@ -49572,7 +49572,7 @@
       "source_file": "src/lib/supabase/admin.ts",
       "source_location": "L12",
       "id": "supabase_admin_getsupabaseadmin",
-      "community": 121,
+      "community": 131,
       "norm_label": "getsupabaseadmin()"
     },
     {
@@ -49635,7 +49635,7 @@
       "source_file": "src/lib/supabase/env.ts",
       "source_location": "L31",
       "id": "supabase_env_readsupabasesecretkey",
-      "community": 121,
+      "community": 131,
       "norm_label": "readsupabasesecretkey()"
     },
     {
@@ -50629,19 +50629,10 @@
       "norm_label": "mocks"
     },
     {
-      "label": "codaClient",
-      "file_type": "code",
-      "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L39",
-      "id": "annullamento_actions_test_codaclient",
-      "community": 143,
-      "norm_label": "codaclient"
-    },
-    {
       "label": "supabase",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L41",
+      "source_location": "L32",
       "id": "annullamento_actions_test_supabase",
       "community": 143,
       "norm_label": "supabase"
@@ -50650,7 +50641,7 @@
       "label": "form()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L55",
+      "source_location": "L41",
       "id": "annullamento_actions_test_form",
       "community": 143,
       "norm_label": "form()"
@@ -50659,7 +50650,7 @@
       "label": "annulla()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L61",
+      "source_location": "L47",
       "id": "annullamento_actions_test_annulla",
       "community": 143,
       "norm_label": "annulla()"
@@ -50668,7 +50659,7 @@
       "label": "archivia()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L65",
+      "source_location": "L51",
       "id": "annullamento_actions_test_archivia",
       "community": 143,
       "norm_label": "archivia()"
@@ -50677,7 +50668,7 @@
       "label": "utente()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.test.ts",
-      "source_location": "L69",
+      "source_location": "L55",
       "id": "annullamento_actions_test_utente",
       "community": 143,
       "norm_label": "utente()"
@@ -50695,7 +50686,7 @@
       "label": "PgError",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L20",
+      "source_location": "L18",
       "id": "annullamento_actions_pgerror",
       "community": 145,
       "norm_label": "pgerror"
@@ -50704,7 +50695,7 @@
       "label": "Sessione",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L22",
+      "source_location": "L20",
       "id": "annullamento_actions_sessione",
       "community": 145,
       "norm_label": "sessione"
@@ -50713,7 +50704,7 @@
       "label": "sessioneAdmin()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L32",
+      "source_location": "L30",
       "id": "annullamento_actions_sessioneadmin",
       "community": 145,
       "norm_label": "sessioneadmin()"
@@ -50722,7 +50713,7 @@
       "label": "text()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L46",
+      "source_location": "L44",
       "id": "annullamento_actions_text",
       "community": 145,
       "norm_label": "text()"
@@ -50731,25 +50722,16 @@
       "label": "erroreDb()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L51",
+      "source_location": "L49",
       "id": "annullamento_actions_erroredb",
       "community": 145,
       "norm_label": "erroredb()"
     },
     {
-      "label": "requestOrigin()",
-      "file_type": "code",
-      "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L92",
-      "id": "annullamento_actions_requestorigin",
-      "community": 145,
-      "norm_label": "requestorigin()"
-    },
-    {
       "label": "annullaTappa()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L105",
+      "source_location": "L95",
       "id": "annullamento_actions_annullatappa",
       "community": 145,
       "norm_label": "annullatappa()"
@@ -50758,7 +50740,7 @@
       "label": "archiviaTappa()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L195",
+      "source_location": "L153",
       "id": "annullamento_actions_archiviatappa",
       "community": 145,
       "norm_label": "archiviatappa()"
@@ -50776,7 +50758,7 @@
       "label": "DestinatarioAvviso",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/avvisi.ts",
-      "source_location": "L6",
+      "source_location": "L11",
       "id": "annullamento_avvisi_destinatarioavviso",
       "community": 145,
       "norm_label": "destinatarioavviso"
@@ -50785,7 +50767,7 @@
       "label": "TappaAnnullataAvviso",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/avvisi.ts",
-      "source_location": "L8",
+      "source_location": "L13",
       "id": "annullamento_avvisi_tappaannullataavviso",
       "community": 145,
       "norm_label": "tappaannullataavviso"
@@ -50794,7 +50776,7 @@
       "label": "dettaglioTappaUrl()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/avvisi.ts",
-      "source_location": "L21",
+      "source_location": "L26",
       "id": "annullamento_avvisi_dettagliotappaurl",
       "community": 145,
       "norm_label": "dettagliotappaurl()"
@@ -50803,7 +50785,7 @@
       "label": "accodaAvvisiAnnullamento()",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/avvisi.ts",
-      "source_location": "L30",
+      "source_location": "L35",
       "id": "annullamento_avvisi_accodaavvisiannullamento",
       "community": 145,
       "norm_label": "accodaavvisiannullamento()"
@@ -50821,7 +50803,7 @@
       "label": "MotivoErroreAnnullamento",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/state.ts",
-      "source_location": "L11",
+      "source_location": "L13",
       "id": "annullamento_state_motivoerroreannullamento",
       "community": 145,
       "norm_label": "motivoerroreannullamento"
@@ -50830,7 +50812,7 @@
       "label": "AnnullaTappaState",
       "file_type": "code",
       "source_file": "src/lib/tappe/annullamento/state.ts",
-      "source_location": "L19",
+      "source_location": "L21",
       "id": "annullamento_state_annullatappastate",
       "community": 145,
       "norm_label": "annullatappastate"
@@ -51183,7 +51165,7 @@
       "source_file": "src/lib/tappe/avvio/format.ts",
       "source_location": "L20",
       "id": "avvio_format_avviofaseview",
-      "community": 57,
+      "community": 174,
       "norm_label": "avviofaseview"
     },
     {
@@ -51282,7 +51264,7 @@
       "source_file": "src/lib/tappe/avvio/read.ts",
       "source_location": "L1",
       "id": "avvio_read",
-      "community": 57,
+      "community": 174,
       "norm_label": "read.ts"
     },
     {
@@ -51291,7 +51273,7 @@
       "source_file": "src/lib/tappe/avvio/read.ts",
       "source_location": "L19",
       "id": "avvio_read_giocatoredb",
-      "community": 57,
+      "community": 174,
       "norm_label": "giocatoredb"
     },
     {
@@ -51300,7 +51282,7 @@
       "source_file": "src/lib/tappe/avvio/read.ts",
       "source_location": "L27",
       "id": "avvio_read_iscrizionedb",
-      "community": 57,
+      "community": 174,
       "norm_label": "iscrizionedb"
     },
     {
@@ -51453,7 +51435,7 @@
       "source_file": "src/lib/tappe/avvio/regole.ts",
       "source_location": "L76",
       "id": "avvio_regole_tabelloneavvio",
-      "community": 57,
+      "community": 174,
       "norm_label": "tabelloneavvio"
     },
     {
@@ -51687,7 +51669,7 @@
       "source_file": "src/lib/tappe/chiusura-automatica.ts",
       "source_location": "L1",
       "id": "tappe_chiusura_automatica",
-      "community": 121,
+      "community": 185,
       "norm_label": "chiusura-automatica.ts"
     },
     {
@@ -51696,7 +51678,7 @@
       "source_file": "src/lib/tappe/chiusura-automatica.ts",
       "source_location": "L10",
       "id": "tappe_chiusura_automatica_iscronauthorized",
-      "community": 121,
+      "community": 185,
       "norm_label": "iscronauthorized()"
     },
     {
@@ -51705,7 +51687,7 @@
       "source_file": "src/lib/tappe/chiusura-automatica.ts",
       "source_location": "L23",
       "id": "tappe_chiusura_automatica_chiudiiscrizioniscadute",
-      "community": 121,
+      "community": 185,
       "norm_label": "chiudiiscrizioniscadute()"
     },
     {
@@ -55656,7 +55638,7 @@
       "source_file": "src/lib/tappe/paths.ts",
       "source_location": "L1",
       "id": "tappe_paths",
-      "community": 32,
+      "community": 177,
       "norm_label": "paths.ts"
     },
     {
@@ -55683,7 +55665,7 @@
       "source_file": "src/lib/tappe/paths.ts",
       "source_location": "L14",
       "id": "tappe_paths_livetappahref",
-      "community": 32,
+      "community": 177,
       "norm_label": "livetappahref()"
     },
     {
@@ -55728,7 +55710,7 @@
       "source_file": "src/lib/tappe/paths.ts",
       "source_location": "L39",
       "id": "tappe_paths_gironetappahref",
-      "community": 32,
+      "community": 177,
       "norm_label": "gironetappahref()"
     },
     {
@@ -57825,7 +57807,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L146",
       "id": "risultati_live_p95_metrics_http_req_duration",
-      "community": 253,
+      "community": 224,
       "norm_label": "http_req_duration"
     },
     {
@@ -57834,7 +57816,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L147",
       "id": "risultati_live_p95_http_req_duration_type",
-      "community": 253,
+      "community": 224,
       "norm_label": "type"
     },
     {
@@ -57843,7 +57825,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L148",
       "id": "risultati_live_p95_http_req_duration_contains",
-      "community": 253,
+      "community": 224,
       "norm_label": "contains"
     },
     {
@@ -58149,7 +58131,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L253",
       "id": "risultati_live_p95_metrics_checks",
-      "community": 224,
+      "community": 69,
       "norm_label": "checks"
     },
     {
@@ -58158,7 +58140,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L254",
       "id": "risultati_live_p95_checks_type",
-      "community": 224,
+      "community": 69,
       "norm_label": "type"
     },
     {
@@ -58167,7 +58149,7 @@
       "source_file": "tests/load/risultati/live-p95.json",
       "source_location": "L255",
       "id": "risultati_live_p95_checks_contains",
-      "community": 224,
+      "community": 69,
       "norm_label": "contains"
     },
     {
@@ -59555,6 +59537,24 @@
       "id": "profilo_paths_email_change_redirect_path",
       "community": 125,
       "norm_label": "email_change_redirect_path"
+    },
+    {
+      "label": "codaClient",
+      "file_type": "code",
+      "source_file": "src/lib/tappe/annullamento/actions.test.ts",
+      "source_location": "L39",
+      "community": 143,
+      "norm_label": "codaclient",
+      "id": "annullamento_actions_test_codaclient"
+    },
+    {
+      "label": "requestOrigin()",
+      "file_type": "code",
+      "source_file": "src/lib/tappe/annullamento/actions.ts",
+      "source_location": "L92",
+      "community": 145,
+      "norm_label": "requestorigin()",
+      "id": "annullamento_actions_requestorigin"
     },
     {
       "label": "PrimaDopo()",
@@ -136299,9 +136299,9 @@
       "source_file": "src/components/impostazioni/elimina-account.tsx",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "impostazioni_elimina_account",
-      "target": "impostazioni_elimina_account_rigachesparisce",
-      "confidence_score": 1.0
+      "target": "impostazioni_elimina_account_rigachesparisce"
     },
     {
       "relation": "imports_from",
@@ -136673,9 +136673,9 @@
       "source_file": "src/components/impostazioni/index.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "impostazioni_index",
-      "target": "impostazioni_elimina_account_rigachesparisce",
-      "confidence_score": 1.0
+      "target": "impostazioni_elimina_account_rigachesparisce"
     },
     {
       "relation": "calls",
@@ -173466,9 +173466,9 @@
       "source_file": "src/lib/cancellazione/cancellazione.db.test.ts",
       "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cancellazione_cancellazione_db_test",
-      "target": "cancellazione_cancellazione_db_test_conta",
-      "confidence_score": 1.0
+      "target": "cancellazione_cancellazione_db_test_conta"
     },
     {
       "relation": "contains",
@@ -173486,9 +173486,9 @@
       "source_file": "src/lib/cancellazione/cancellazione.db.test.ts",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cancellazione_cancellazione_db_test",
-      "target": "cancellazione_cancellazione_db_test_eliminadaauth",
-      "confidence_score": 1.0
+      "target": "cancellazione_cancellazione_db_test_eliminadaauth"
     },
     {
       "relation": "contains",
@@ -173536,9 +173536,9 @@
       "source_file": "src/lib/cancellazione/cancellazione.db.test.ts",
       "source_location": "L194",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cancellazione_cancellazione_db_test",
-      "target": "cancellazione_cancellazione_db_test_niente",
-      "confidence_score": 1.0
+      "target": "cancellazione_cancellazione_db_test_niente"
     },
     {
       "relation": "contains",
@@ -173566,9 +173566,9 @@
       "source_file": "src/lib/cancellazione/cancellazione.db.test.ts",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cancellazione_cancellazione_db_test",
-      "target": "cancellazione_cancellazione_db_test_resti",
-      "confidence_score": 1.0
+      "target": "cancellazione_cancellazione_db_test_resti"
     },
     {
       "relation": "contains",
@@ -173826,9 +173826,9 @@
       "source_file": "src/lib/cancellazione/cancellazione.db.test.ts",
       "source_location": "L169",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cancellazione_cancellazione_db_test_resti",
-      "target": "cancellazione_cancellazione_db_test_conta",
-      "confidence_score": 1.0
+      "target": "cancellazione_cancellazione_db_test_conta"
     },
     {
       "relation": "imports_from",
@@ -238916,11 +238916,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L92",
+      "source_location": "L105",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "annullamento_actions",
-      "target": "annullamento_actions_requestorigin"
+      "target": "annullamento_actions_annullatappa"
     },
     {
       "relation": "calls",
@@ -238932,16 +238932,6 @@
       "confidence_score": 1.0,
       "source": "annullamento_actions_annullatappa",
       "target": "annullamento_actions_requestorigin"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/tappe/annullamento/actions.ts",
-      "source_location": "L105",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "annullamento_actions",
-      "target": "annullamento_actions_annullatappa"
     },
     {
       "relation": "calls",
@@ -257906,6 +257896,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/lib/tappe/annullamento/actions.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "annullamento_actions",
+      "target": "annullamento_actions_requestorigin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/lib/iscrizioni/admin/actions.ts",
       "source_location": "L56",
       "weight": 1.0,
@@ -258280,5 +258280,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "da73345340ffd55893e7abb9d95680b0f661a1b6"
+  "built_at_commit": "4ddfb0a9d7afa301bb4a9a53718749b312cf1eb1"
 }

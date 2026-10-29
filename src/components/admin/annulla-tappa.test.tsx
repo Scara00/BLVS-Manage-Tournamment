@@ -46,15 +46,16 @@ async function apri(user: ReturnType<typeof userEvent.setup>) {
 }
 
 describe("AnnullaTappa (w-admin-annulla-tappa)", () => {
-  it("si apre da tastiera con il focus su «Non annullare» e dice quanti iscritti avvisa", async () => {
+  it("si apre da tastiera con il focus su «Non annullare», dice quanti iscritti ci sono e che non parte nessuna email", async () => {
     const user = userEvent.setup();
     const action = vi.fn<AnnullaTappaAction>();
     renderAnnulla(action);
 
     const { trigger, dialog } = await apri(user);
     expect(dialog).toHaveTextContent(
-      "26 iscritti riceveranno l'avviso via email",
+      "26 iscritti vedranno la tappa annullata nell'app. Non parte nessuna email: se serve, avvisali tu.",
     );
+    expect(dialog).not.toHaveTextContent("riceveranno");
     await waitFor(() =>
       expect(
         within(dialog).getByRole("button", { name: "Non annullare" }),
@@ -91,9 +92,9 @@ describe("AnnullaTappa (w-admin-annulla-tappa)", () => {
     const user = userEvent.setup();
     const action = vi.fn<AnnullaTappaAction>(async () => ({
       status: "success",
-      message: "Tappa annullata. 26 avvisi sono in partenza.",
-      avvisi: 26,
-      nonAccodati: 0,
+      message:
+        "Tappa annullata. Non parte nessuna email: se serve, avvisa tu i 26 iscritti.",
+      iscritti: 26,
       at: 1,
     }));
     renderAnnulla(action);
@@ -113,9 +114,12 @@ describe("AnnullaTappa (w-admin-annulla-tappa)", () => {
     expect(data.get("motivo")).toBe("Allerta meteo");
     await waitFor(() =>
       expect(
-        screen.getByText("Tappa annullata. 26 avvisi sono in partenza.", {
-          selector: "p[tabindex='-1']",
-        }),
+        screen.getByText(
+          "Tappa annullata. Non parte nessuna email: se serve, avvisa tu i 26 iscritti.",
+          {
+            selector: "p[tabindex='-1']",
+          },
+        ),
       ).toHaveFocus(),
     );
   });

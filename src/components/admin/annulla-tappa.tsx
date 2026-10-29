@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircleIcon, MailIcon, WifiOffIcon } from "lucide-react";
+import { AlertCircleIcon, UsersIcon, WifiOffIcon } from "lucide-react";
 import Link from "next/link";
 import {
   startTransition,
@@ -38,19 +38,20 @@ import {
   type AnnullaTappaState,
 } from "@/lib/tappe/annullamento/state";
 
-/** «12 iscritti riceveranno…», with the number in `font.mono`. */
+/**
+ * «12 iscritti vedranno…», with the number in `font.mono`. The email
+ * notices are suspended: the admin is told to tell the players.
+ */
 function AvvisoIscritti({ iscritti }: { iscritti: number }) {
-  if (iscritti <= 0) {
-    return <p>Nessun iscritto da avvisare: non partirà alcuna email.</p>;
-  }
+  if (iscritti <= 0) return <p>Non ci sono iscritti.</p>;
   return (
     <p>
       <span className="font-mono text-lg font-semibold tabular-nums">
         {iscritti}
       </span>{" "}
       {iscritti === 1
-        ? "iscritto riceverà l'avviso via email, con il motivo."
-        : "iscritti riceveranno l'avviso via email, con il motivo."}
+        ? "iscritto vedrà la tappa annullata nell'app. Non parte nessuna email: se serve, avvisalo tu."
+        : "iscritti vedranno la tappa annullata nell'app. Non parte nessuna email: se serve, avvisali tu."}
     </p>
   );
 }
@@ -58,7 +59,7 @@ function AvvisoIscritti({ iscritti }: { iscritti: number }) {
 type AnnullaTappaProps = {
   tappaId: string;
   nome: string;
-  /** Pending + confirmed players: who gets the email. */
+  /** Pending + confirmed players of the stage. */
   iscritti: number;
   /** False once the stage is concluded, cancelled or archived. */
   annullabile: boolean;
@@ -78,7 +79,8 @@ type AnnullaTappaProps = {
 
 /**
  * w-admin-annulla-tappa: «Annulla tappa» and its confirmation dialog. The
- * reason is required; the dialog says how many players get the email.
+ * reason is required; the dialog says how many players are registered and
+ * that no email leaves.
  * Initial focus is on «Non annullare», the safe action; Esc closes it and
  * focus returns to the trigger. After a success the trigger is gone, so the
  * component stays mounted and focus lands on the outcome message.
@@ -231,12 +233,12 @@ export function AnnullaTappa({
               data-slot="avviso-iscritti"
               className="flex items-start gap-space-2 border-s-4 border-error-fg bg-error-bg p-inset text-error-fg"
             >
-              <MailIcon aria-hidden className="mt-1 size-4 shrink-0" />
+              <UsersIcon aria-hidden className="mt-1 size-4 shrink-0" />
               <AvvisoIscritti iscritti={nelDialog.iscritti} />
             </div>
             <Field
               label="Motivo dell'annullamento"
-              hint="Lo leggeranno gli iscritti nell'email."
+              hint="Resta nell'elenco delle tappe dell'area admin."
               required
               error={erroreCampo ?? undefined}
             >

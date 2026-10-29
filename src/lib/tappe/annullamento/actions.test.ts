@@ -4,27 +4,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   getCurrentUser: vi.fn(),
   readSupabaseEnv: vi.fn(),
-  getSupabaseAdmin: vi.fn(),
   accodaEmail: vi.fn(),
   refresh: vi.fn(),
   rpc: vi.fn(),
   update: vi.fn(),
-  tappa: null as Record<string, unknown> | null,
 }));
 
 vi.mock("server-only", () => ({}));
 vi.mock("next/cache", () => ({ refresh: mocks.refresh }));
-vi.mock("next/headers", () => ({
-  headers: async () => new Headers({ origin: "https://blvs.example" }),
-}));
 vi.mock("@/lib/auth/session", () => ({
   getCurrentUser: mocks.getCurrentUser,
 }));
 vi.mock("@/lib/supabase/env", () => ({
   readSupabaseEnv: mocks.readSupabaseEnv,
-}));
-vi.mock("@/lib/supabase/admin", () => ({
-  getSupabaseAdmin: mocks.getSupabaseAdmin,
 }));
 vi.mock("@/lib/email/queue", () => ({ accodaEmail: mocks.accodaEmail }));
 
@@ -36,16 +28,10 @@ const {
 } = await import("./state");
 
 const ID = "00000000-0000-4000-8000-000000002201";
-const codaClient = { coda: true };
 
 const supabase = {
   rpc: (name: string, args: unknown) => mocks.rpc(name, args),
   from: () => ({
-    select: () => ({
-      eq: () => ({
-        maybeSingle: async () => ({ data: mocks.tappa, error: null }),
-      }),
-    }),
     update: (values: unknown) => ({
       eq: () => ({ select: async () => mocks.update(values) }),
     }),
@@ -78,13 +64,6 @@ function utente(ruolo: "admin" | "giocatore" = "admin") {
 beforeEach(() => {
   vi.clearAllMocks();
   mocks.readSupabaseEnv.mockReturnValue({ url: "x", publishableKey: "y" });
-  mocks.getSupabaseAdmin.mockReturnValue(codaClient);
-  mocks.accodaEmail.mockResolvedValue({ id: "e1" });
-  mocks.tappa = {
-    nome: "Tappa 2 · Rimini",
-    luogo: "Rimini, Bagno 26",
-    data_inizio: "2027-06-26",
-  };
   mocks.rpc.mockResolvedValue({
     data: [{ email: "anna@example.it" }, { email: "bruno@example.it" }],
     error: null,
@@ -93,65 +72,42 @@ beforeEach(() => {
   utente();
 });
 
-describe("annullaTappa: invio degli avvisi", () => {
-  it("annulla con il motivo e accoda un'email per ogni iscritto", async () => {
+describe("annullaTappa: avvisi via email sospesi", () => {
+  it("annulla con il motivo e non accoda nessuna email", async () => {
     const state = await annulla("  Allerta meteo  ");
 
     expect(mocks.rpc).toHaveBeenCalledWith("annulla_tappa", {
       p_tappa: ID,
       p_motivo: "Allerta meteo",
     });
-    expect(mocks.accodaEmail).toHaveBeenCalledTimes(2);
-    expect(mocks.accodaEmail).toHaveBeenCalledWith(codaClient, {
-      to: "anna@example.it",
-      template: "tappa-annullata",
-      props: {
-        stageName: "Tappa 2 · Rimini",
-        startsAt: "2027-06-26",
-        location: "Rimini, Bagno 26",
-        reason: "Allerta meteo",
-        detailsUrl: `https://blvs.example/tappe/${ID}`,
-      },
-    });
-    expect(mocks.accodaEmail.mock.calls[1][1].to).toBe("bruno@example.it");
+    expect(mocks.accodaEmail).not.toHaveBeenCalled();
     expect(state).toMatchObject({
       status: "success",
-      avvisi: 2,
-      nonAccodati: 0,
-      message: "Tappa annullata. 2 avvisi sono in partenza.",
+      iscritti: 2,
+      message:
+        "Tappa annullata. Non parte nessuna email: se serve, avvisa tu i 2 iscritti.",
     });
     expect(mocks.refresh).toHaveBeenCalled();
   });
 
-  it("senza iscritti non parte nessuna email", async () => {
+  it("dice al singolare di avvisare l'unico iscritto", async () => {
+    mocks.rpc.mockResolvedValue({
+      data: [{ email: "anna@example.it" }],
+      error: null,
+    });
+    expect(await annulla()).toMatchObject({
+      iscritti: 1,
+      message:
+        "Tappa annullata. Non parte nessuna email: se serve, avvisa tu l'iscritto.",
+    });
+  });
+
+  it("senza iscritti lo dice", async () => {
     mocks.rpc.mockResolvedValue({ data: [], error: null });
     expect(await annulla()).toMatchObject({
       status: "success",
-      avvisi: 0,
-      message: "Tappa annullata. Non c'erano iscritti da avvisare.",
-    });
-    expect(mocks.accodaEmail).not.toHaveBeenCalled();
-  });
-
-  it("un'email non accodata non annulla l'annullamento ma viene segnalata", async () => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    mocks.accodaEmail
-      .mockResolvedValueOnce({ id: "e1" })
-      .mockRejectedValueOnce(new Error("coda giù"));
-    expect(await annulla()).toMatchObject({
-      status: "success",
-      avvisi: 1,
-      nonAccodati: 1,
-    });
-  });
-
-  it("senza chiave segreta segnala tutti gli avvisi come non accodati", async () => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    mocks.getSupabaseAdmin.mockReturnValue(null);
-    expect(await annulla()).toMatchObject({
-      status: "success",
-      avvisi: 0,
-      nonAccodati: 2,
+      iscritti: 0,
+      message: "Tappa annullata. Non c'erano iscritti.",
     });
   });
 });

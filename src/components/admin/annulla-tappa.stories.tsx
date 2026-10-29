@@ -8,9 +8,9 @@ import { AnnullaTappa } from "./annulla-tappa";
 
 const annullaFinto: AnnullaTappaAction = async () => ({
   status: "success",
-  message: "Tappa annullata. 26 avvisi sono in partenza.",
-  avvisi: 26,
-  nonAccodati: 0,
+  message:
+    "Tappa annullata. Non parte nessuna email: se serve, avvisa tu i 26 iscritti.",
+  iscritti: 26,
   at: 1,
 });
 
@@ -44,13 +44,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** «26 iscritti riceveranno l'avviso»; focus on «Non annullare». */
+/** «26 iscritti vedranno la tappa annullata»; focus on «Non annullare». */
 export const Default: Story = {};
 
 /** One player: singular copy. */
 export const UnIscritto: Story = { args: { iscritti: 1 } };
 
-/** Nobody registered: no email will leave. */
+/** Nobody registered. */
 export const NessunIscritto: Story = { args: { iscritti: 0 } };
 
 /** Submitted without a reason. */
