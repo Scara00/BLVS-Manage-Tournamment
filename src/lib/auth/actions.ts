@@ -1,7 +1,11 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import {
+  ADMIN_DEADLINE_COOKIE,
+  clearedDeadlineCookieOptions,
+} from "@/lib/admin/session-timeout";
 import { BodyReader } from "@/lib/api/validation";
 import type { Ruolo } from "@/lib/db/types";
 import { loginHref, safeAfterLoginPath } from "@/lib/navigation/auth-paths";
@@ -15,6 +19,7 @@ import {
 import { checkAuthAttempt, clientIp } from "./rate-limit";
 import {
   LOGIN_UNAVAILABLE_MESSAGE,
+  NO_PROFILE_MESSAGE,
   PERMISSION_DENIED_MESSAGE,
   type SignInState,
 } from "./sign-in-state";
@@ -102,25 +107,38 @@ export async function signIn(
     };
   }
 
-  const toHome = target === "/";
-  if (toHome || isAdminPath(target)) {
-    const { data: utente } = await supabase
-      .from("utenti")
-      .select("ruolo")
-      .eq("id", data.user.id)
-      .maybeSingle<{ ruolo: Ruolo }>();
-    const isAdmin = utente?.ruolo === "admin";
-    if (!toHome && !isAdmin)
-      return {
-        status: "permissionDenied",
-        message: PERMISSION_DENIED_MESSAGE,
-        email,
-        attempt,
-      };
-    // With no page to go back to, an admin starts from the dashboard: the
-    // player navigation has no way into the admin area.
-    if (toHome && isAdmin) redirect("/admin");
+  // The pages trust a session only with a usable profile (`getCurrentUser`):
+  // without one they would send the user straight back here, so the
+  // session ends now, with a reason.
+  const { data: utente, error: profileError } = await supabase
+    .from("utenti")
+    .select("ruolo")
+    .eq("id", data.user.id)
+    .maybeSingle<{ ruolo: Ruolo }>();
+  if (profileError || !utente) {
+    if (profileError)
+      console.error("[auth] lettura del profilo non riuscita", profileError);
+    await supabase.auth.signOut({ scope: "local" });
+    return {
+      status: profileError ? "unavailable" : "noProfile",
+      message: profileError ? LOGIN_UNAVAILABLE_MESSAGE : NO_PROFILE_MESSAGE,
+      email,
+      attempt,
+    };
   }
+
+  await clearAdminDeadline();
+
+  const isAdmin = utente.ruolo === "admin";
+  if (isAdminPath(target) && !isAdmin)
+    return {
+      status: "permissionDenied",
+      message: PERMISSION_DENIED_MESSAGE,
+      email,
+      attempt,
+    };
+  // With no page to go back to, an admin starts from the dashboard.
+  if (target === "/" && isAdmin) redirect("/admin");
 
   redirect(target);
 }
@@ -142,6 +160,19 @@ export async function signOut(): Promise<SignOutState> {
       console.error("[auth] signOut failed", error);
       return { error: SIGN_OUT_ERROR_MESSAGE };
     }
+    await clearAdminDeadline();
   }
   redirect(loginHref(null, { signedOut: true }));
+}
+
+/**
+ * The admin idle deadline (BLVS-18) belongs to one session: left in place,
+ * an old one would close the next session at its first admin request.
+ */
+async function clearAdminDeadline() {
+  (await cookies()).set(
+    ADMIN_DEADLINE_COOKIE,
+    "",
+    clearedDeadlineCookieOptions(),
+  );
 }

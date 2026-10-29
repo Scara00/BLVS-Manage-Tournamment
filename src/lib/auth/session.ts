@@ -13,38 +13,49 @@ export type CurrentUser = {
 };
 
 /**
+ * `readCurrentUser()`: `signedOut` also covers a valid session whose profile
+ * is gone (a deleted account); `error` is a profile that could not be read
+ * (the user may well be signed in).
+ */
+export type CurrentUserResult =
+  | { status: "ok"; user: CurrentUser }
+  | { status: "signedOut" }
+  | { status: "error" };
+
+/**
  * The signed-in user, verified on the server: `getClaims()` validates the
  * JWT signature, then the role is read from `public.utenti`. The role never
  * comes from the cookie, the JWT metadata or the request.
  * Returns `null` when nobody is signed in or Supabase is not configured.
  */
 export async function getCurrentUser(): Promise<CurrentUser | null> {
-  if (!readSupabaseEnv()) return null;
+  const result = await readCurrentUser();
+  return result.status === "ok" ? result.user : null;
+}
+
+/** `getCurrentUser()` that also tells a failed profile read apart. */
+export async function readCurrentUser(): Promise<CurrentUserResult> {
+  if (!readSupabaseEnv()) return { status: "signedOut" };
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getClaims();
   const sub = data?.claims?.sub;
-  if (error || !sub) return null;
+  if (error || !sub) return { status: "signedOut" };
 
   const { data: utente, error: profileError } = await supabase
     .from("utenti")
-    .select("id, email, ruolo, anonimizzato_il")
+    .select("id, email, ruolo")
     .eq("id", sub)
-    .maybeSingle<{
-      id: string;
-      email: string;
-      ruolo: Ruolo;
-      anonimizzato_il: string | null;
-    }>();
+    .maybeSingle<{ id: string; email: string; ruolo: Ruolo }>();
 
   if (profileError) {
     console.error("[auth] lettura del profilo non riuscita", profileError);
-    return null;
+    return { status: "error" };
   }
-  // A deleted account (BLVS-50/53): its access token outlives the Auth user
-  // until it expires.
-  if (!utente || utente.anonimizzato_il) return null;
+  // A deleted account: its access token outlives the Auth user until it
+  // expires. The proxy signs such a session out (`updateSession`).
+  if (!utente) return { status: "signedOut" };
 
   const { id, email, ruolo } = utente;
-  return { id, email, ruolo, supabase };
+  return { status: "ok", user: { id, email, ruolo, supabase } };
 }

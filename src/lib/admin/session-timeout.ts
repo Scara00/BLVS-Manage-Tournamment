@@ -77,6 +77,15 @@ export function deadlineCookieOptions(idleSeconds = adminSessionIdleSeconds()) {
   };
 }
 
+/**
+ * Deletes the deadline cookie: at sign-in and sign-out, and when the
+ * session is closed. A deadline left over from an earlier session would
+ * close the next one at its first admin request.
+ */
+export function clearedDeadlineCookieOptions() {
+  return { ...deadlineCookieOptions(), maxAge: 0 };
+}
+
 /** «1:59», «0:05»: the countdown in the warning. */
 export function formatCountdown(totalSeconds: number): string {
   const s = Math.max(0, Math.floor(totalSeconds));

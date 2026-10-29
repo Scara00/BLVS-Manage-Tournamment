@@ -43,8 +43,8 @@ export async function readConsensoPrivacy(
 
 /**
  * The player's row in the overall standing of their category and the
- * newest season (what /classifica opens on), with the same row after a
- * deletion. Computed like w-classifica (BLVS-44), so the preview matches.
+ * newest season (what /classifica opens on). Computed like w-classifica
+ * (BLVS-44), so it matches what the player sees there.
  */
 export async function readRigaPubblica(): Promise<RigaPubblica | null> {
   const vista = await readClassificaGenerale({});

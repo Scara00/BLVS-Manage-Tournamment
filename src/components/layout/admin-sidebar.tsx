@@ -3,7 +3,12 @@
 import { ChevronDownIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { adminNav, isNavItemActive, type NavItem } from "./nav-items";
+import {
+  adminNav,
+  adminPlayerNav,
+  isNavItemActive,
+  type NavItem,
+} from "./nav-items";
 import { useNavDisclosure } from "./use-nav-disclosure";
 
 function AdminNavList({
@@ -45,11 +50,14 @@ function AdminNavList({
 /**
  * Admin navigation: a black sidebar column from `md`, a compact
  * «Menu amministrazione» disclosure at the top of the content below it.
+ * Below a rule, the way to the player pages: an admin may also play.
  */
 export function AdminSidebar({
   items = adminNav,
+  playerItems = adminPlayerNav,
 }: {
   items?: readonly NavItem[];
+  playerItems?: readonly NavItem[];
 }) {
   const { pathname, open, buttonProps, panelProps } = useNavDisclosure();
 
@@ -58,6 +66,9 @@ export function AdminSidebar({
       <aside className="hidden w-64 max-w-1/3 shrink-0 flex-col bg-primary py-space-5 text-primary-foreground md:flex">
         <nav aria-label="Amministrazione" className="px-space-3">
           <AdminNavList items={items} pathname={pathname} tone="dark" />
+          <div className="mt-space-4 border-t border-neutral-600 pt-space-4">
+            <AdminNavList items={playerItems} pathname={pathname} tone="dark" />
+          </div>
         </nav>
       </aside>
 
@@ -81,6 +92,13 @@ export function AdminSidebar({
           className="pt-space-2"
         >
           <AdminNavList items={items} pathname={pathname} tone="light" />
+          <div className="mt-space-2 border-t border-border pt-space-2">
+            <AdminNavList
+              items={playerItems}
+              pathname={pathname}
+              tone="light"
+            />
+          </div>
         </nav>
       </div>
     </>

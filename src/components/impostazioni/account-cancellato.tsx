@@ -2,7 +2,6 @@ import { CheckCircle2Icon } from "lucide-react";
 import Link from "next/link";
 import { Tape } from "@/components/scoreboard";
 import { buttonVariants } from "@/components/ui/button";
-import { GIOCATORE_ANONIMO } from "@/lib/cancellazione/anonimo";
 
 /**
  * w-account-eliminato: the account no longer exists and this device is
@@ -22,13 +21,10 @@ export function AccountCancellato() {
       </header>
       <div className="flex max-w-prose flex-col gap-space-3 text-lg">
         <p>
-          Abbiamo eliminato nome, email, password e consensi, e sei uscito da
-          questo dispositivo.
+          Abbiamo eliminato il tuo account con iscrizioni e risultati, e sei
+          uscito da questo dispositivo.
         </p>
-        <p>
-          I risultati delle tappe giocate restano nelle classifiche come «
-          {GIOCATORE_ANONIMO}», con la stessa posizione e gli stessi punti.
-        </p>
+        <p>Le classifiche ora sono calcolate senza di te.</p>
       </div>
       <div className="flex flex-col items-start gap-space-3 sm:flex-row sm:flex-wrap">
         <Link href="/classifica" className={buttonVariants()}>

@@ -10,6 +10,13 @@ const auth = vi.hoisted(() => ({
   session: null as null | { sub: string },
   ruolo: "giocatore" as "giocatore" | "admin",
   signOutError: null as Error | null,
+  /** Overrides the `utenti` read (missing, deleted or failing profile). */
+  profilo: undefined as
+    | undefined
+    | {
+        data: Record<string, unknown> | null;
+        error: { message: string } | null;
+      },
 }));
 const signInWithPassword = vi.fn(
   async ({ email, password }: { email: string; password: string }) => {
@@ -30,6 +37,7 @@ const signOutMock = vi.fn(async () => {
   auth.session = null;
   return { error: null };
 });
+const cookieSet = vi.fn();
 const redirectMock = vi.fn((path: string) => {
   throw Object.assign(new Error("NEXT_REDIRECT"), { path });
 });
@@ -38,6 +46,7 @@ vi.mock("server-only", () => ({}));
 vi.mock("next/navigation", () => ({ redirect: redirectMock }));
 vi.mock("next/headers", () => ({
   headers: async () => new Headers({ "x-forwarded-for": "203.0.113.9" }),
+  cookies: async () => ({ set: cookieSet }),
 }));
 vi.mock("@/lib/supabase/admin", () => ({ getSupabaseAdmin: () => null }));
 vi.mock("@/lib/supabase/server", () => ({
@@ -53,10 +62,11 @@ vi.mock("@/lib/supabase/server", () => ({
     from: () => ({
       select: () => ({
         eq: (_col: string, id: string) => ({
-          maybeSingle: async () => ({
-            data: { id, email: "mario@blvs.it", ruolo: auth.ruolo },
-            error: null,
-          }),
+          maybeSingle: async () =>
+            auth.profilo ?? {
+              data: { id, email: "mario@blvs.it", ruolo: auth.ruolo },
+              error: null,
+            },
         }),
       }),
     }),
@@ -66,7 +76,7 @@ vi.mock("@/lib/supabase/server", () => ({
 const { signIn, signOut } = await import("./actions");
 const { getCurrentUser } = await import("./session");
 const { SIGN_OUT_ERROR_MESSAGE } = await import("./sign-out-state");
-const { initialSignInState, PERMISSION_DENIED_MESSAGE } =
+const { initialSignInState, NO_PROFILE_MESSAGE, PERMISSION_DENIED_MESSAGE } =
   await import("./sign-in-state");
 const { AUTH_RATE_LIMITS, createMemoryRateLimitStore, setRateLimitStore } =
   await import("./rate-limit");
@@ -97,9 +107,11 @@ beforeEach(() => {
   auth.session = null;
   auth.ruolo = "giocatore";
   auth.signOutError = null;
+  auth.profilo = undefined;
   signInWithPassword.mockClear();
   signOutMock.mockClear();
   redirectMock.mockClear();
+  cookieSet.mockClear();
   vi.useFakeTimers();
   vi.setSystemTime(new Date("2026-10-27T12:00:00Z"));
   setRateLimitStore(createMemoryRateLimitStore());
@@ -172,6 +184,65 @@ describe("signIn: redirect di ritorno", () => {
       status: "permissionDenied",
       message: PERMISSION_DENIED_MESSAGE,
     });
+    expect(redirectMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("scadenza della sessione admin (BLVS-18)", () => {
+  const cancellata = [
+    "blvs_admin_scadenza",
+    "",
+    expect.objectContaining({ path: "/", maxAge: 0 }),
+  ];
+
+  it("ogni accesso riparte senza la scadenza della sessione precedente", async () => {
+    auth.ruolo = "admin";
+    await redirectedTo(signIn(initialSignInState, form(valid)));
+    expect(cookieSet).toHaveBeenCalledWith(...cancellata);
+  });
+
+  it("un accesso fallito non tocca la scadenza", async () => {
+    await signIn(initialSignInState, form({ ...valid, password: "sbagliata" }));
+    expect(cookieSet).not.toHaveBeenCalled();
+  });
+
+  it("«Esci» la cancella, solo se la sessione si è chiusa davvero", async () => {
+    auth.session = { sub: "u1" };
+    await redirectedTo(signOut());
+    expect(cookieSet).toHaveBeenCalledWith(...cancellata);
+
+    cookieSet.mockClear();
+    auth.signOutError = new Error("network");
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    await signOut();
+    expect(cookieSet).not.toHaveBeenCalled();
+  });
+});
+
+describe("signIn: account senza profilo", () => {
+  it.each([["senza profilo (account cancellato)", null]])(
+    "%s non entra: chiude la sessione e lo dice, invece di rimbalzare al login",
+    async (_caso, data) => {
+      auth.profilo = { data, error: null };
+      const state = await signIn(initialSignInState, form(valid));
+      expect(state).toMatchObject({
+        status: "noProfile",
+        message: NO_PROFILE_MESSAGE,
+        email: valid.email,
+      });
+      expect(redirectMock).not.toHaveBeenCalled();
+      expect(signOutMock).toHaveBeenCalledWith({ scope: "local" });
+      expect(auth.session).toBeNull();
+    },
+  );
+
+  it("profilo non leggibile: accesso non disponibile, sessione chiusa", async () => {
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    auth.profilo = { data: null, error: { message: "boom" } };
+    expect(await signIn(initialSignInState, form(valid))).toMatchObject({
+      status: "unavailable",
+    });
+    expect(auth.session).toBeNull();
     expect(redirectMock).not.toHaveBeenCalled();
   });
 });

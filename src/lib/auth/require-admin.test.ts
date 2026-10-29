@@ -1,10 +1,10 @@
 // @vitest-environment node
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const mocks = vi.hoisted(() => ({ getCurrentUser: vi.fn() }));
+const mocks = vi.hoisted(() => ({ readCurrentUser: vi.fn() }));
 
 vi.mock("server-only", () => ({}));
-vi.mock("./session", () => ({ getCurrentUser: mocks.getCurrentUser }));
+vi.mock("./session", () => ({ readCurrentUser: mocks.readCurrentUser }));
 
 const { requireAdmin } = await import("./require-admin");
 
@@ -25,7 +25,7 @@ async function outcome(run: () => Promise<unknown>) {
 
 describe("requireAdmin", () => {
   beforeEach(() => {
-    mocks.getCurrentUser.mockReset();
+    mocks.readCurrentUser.mockReset();
     vi.stubEnv("__NEXT_EXPERIMENTAL_AUTH_INTERRUPTS", "true");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "http://127.0.0.1:54321");
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test");
@@ -35,26 +35,34 @@ describe("requireAdmin", () => {
   });
 
   it("un giocatore riceve 403", async () => {
-    mocks.getCurrentUser.mockResolvedValue({ id: "g", ruolo: "giocatore" });
+    mocks.readCurrentUser.mockResolvedValue({
+      status: "ok",
+      user: { id: "g", ruolo: "giocatore" },
+    });
     expect(await outcome(() => requireAdmin())).toEqual({ status: 403 });
   });
 
   it("senza sessione va al login, ricordando la pagina", async () => {
-    mocks.getCurrentUser.mockResolvedValue(null);
+    mocks.readCurrentUser.mockResolvedValue({ status: "signedOut" });
     expect(await outcome(() => requireAdmin("/admin/tappe"))).toEqual({
       redirect: "/accesso?da=%2Fadmin%2Ftappe",
     });
   });
 
+  it("con il profilo non leggibile mostra l'errore invece del login, che rimanderebbe qui", async () => {
+    mocks.readCurrentUser.mockResolvedValue({ status: "error" });
+    await expect(requireAdmin()).rejects.toThrow(/Profilo non leggibile/);
+  });
+
   it("l'admin passa e riceve l'utente", async () => {
     const user = { id: "a", ruolo: "admin" };
-    mocks.getCurrentUser.mockResolvedValue(user);
+    mocks.readCurrentUser.mockResolvedValue({ status: "ok", user });
     expect(await outcome(() => requireAdmin())).toEqual({ value: user });
   });
 
   it("senza Supabase (CI, e2e) non controlla nulla", async () => {
     vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
     expect(await outcome(() => requireAdmin())).toEqual({ value: null });
-    expect(mocks.getCurrentUser).not.toHaveBeenCalled();
+    expect(mocks.readCurrentUser).not.toHaveBeenCalled();
   });
 });

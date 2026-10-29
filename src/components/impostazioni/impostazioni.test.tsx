@@ -72,29 +72,20 @@ describe("ImpostazioniView", () => {
 });
 
 describe("EliminaAccount", () => {
-  function prima() {
-    return within(document.querySelector("[data-slot=prima]") as HTMLElement);
-  }
-  function dopo() {
-    return within(document.querySelector("[data-slot=dopo]") as HTMLElement);
-  }
-
-  it("prima e dopo: stessa posizione e punti, solo il nome diventa anonimo", () => {
+  it("mostra la riga che sparisce e dice che la classifica si ricalcola", () => {
     render(<EliminaAccount riga={rigaLuca} action={vi.fn()} />);
-    const righe = document.querySelectorAll(
-      "[data-slot=riga-pubblica] tbody tr",
-    );
-    expect(righe).toHaveLength(2);
-    const [a, b] = Array.from(righe);
-    expect(a.getAttribute("data-posizione")).toBe(
-      b.getAttribute("data-posizione"),
-    );
-    expect(a.getAttribute("data-punti")).toBe(b.getAttribute("data-punti"));
+    expect(
+      document.querySelectorAll("[data-slot=riga-pubblica] tbody tr"),
+    ).toHaveLength(1);
     // Table and card (below md) both carry the row.
-    expect(prima().getAllByText("Luca Rossi")).toHaveLength(2);
-    expect(dopo().getAllByText(GIOCATORE_ANONIMO)).toHaveLength(2);
-    expect(dopo().getAllByText("(nome cambiato)")).toHaveLength(2);
-    expect(dopo().queryByText("Luca Rossi")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Luca Rossi")).toHaveLength(2);
+    expect(
+      screen.getByText(/questa riga sparisce e la classifica si ricalcola/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Cosa cambia per gli altri" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(GIOCATORE_ANONIMO)).not.toBeInTheDocument();
   });
 
   it("senza ELIMINA l'errore è accanto al campo e il dialogo non si apre", async () => {

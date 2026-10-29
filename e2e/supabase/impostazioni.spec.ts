@@ -57,7 +57,7 @@ test.describe("impostazioni (BLVS-53)", () => {
     ]);
   });
 
-  test("cancella_account elimina utente Auth, email, nome e consensi", async () => {
+  test("cancella_account elimina utente Auth, profilo e consensi", async () => {
     const { id, email, client } = await signedInPlayer("cancella");
     const { error } = await client.rpc("cancella_account");
     expect(error).toBeNull();
@@ -66,17 +66,12 @@ test.describe("impostazioni (BLVS-53)", () => {
     const { data: auth } = await admin.auth.admin.getUserById(id);
     expect(auth.user).toBeNull();
 
+    // The profile is gone, not anonymised.
     const { data: utente } = await admin
       .from("utenti")
-      .select("nome, cognome, email, anonimizzato_il")
-      .eq("id", id)
-      .single();
-    expect(utente).toMatchObject({
-      nome: "Giocatore",
-      cognome: "anonimo",
-      email: null,
-    });
-    expect(utente?.anonimizzato_il).toBeTruthy();
+      .select("id")
+      .eq("id", id);
+    expect(utente).toEqual([]);
 
     const { data: consensi } = await admin
       .from("consensi")

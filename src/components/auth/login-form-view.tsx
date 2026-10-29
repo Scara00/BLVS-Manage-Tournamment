@@ -47,6 +47,7 @@ const FORM_ERRORS = new Set<SignInState["status"]>([
   "invalid",
   "rateLimited",
   "permissionDenied",
+  "noProfile",
   "unavailable",
 ]);
 
@@ -151,7 +152,9 @@ export function LoginFormView({
       <form
         ref={formRef}
         action={formAction}
-        method="post"
+        // React sets POST itself for a function action and warns if we do.
+        // Without one, POST still keeps the password out of the URL.
+        method={formAction ? undefined : "post"}
         noValidate
         aria-label="Accedi"
         className="flex flex-col gap-space-5"

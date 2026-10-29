@@ -1,4 +1,9 @@
-import { TicketIcon, UserIcon, type LucideIcon } from "lucide-react";
+import {
+  LayoutDashboardIcon,
+  TicketIcon,
+  UserIcon,
+  type LucideIcon,
+} from "lucide-react";
 
 export type NavItem = {
   href: string;
@@ -35,11 +40,24 @@ export const playerSecondaryNav: readonly NavItem[] = [
   { href: "/impostazioni", label: "Impostazioni" },
 ];
 
+/** Extra player link for an admin: the way back to the admin area. */
+export const playerAdminNav: NavItem = {
+  href: "/admin",
+  label: "Admin",
+  desktop: true,
+  icon: LayoutDashboardIcon,
+};
+
 export const adminNav: readonly NavItem[] = [
   { href: "/admin", label: "Dashboard", exact: true },
   { href: "/admin/tappe", label: "Tappe" },
   { href: "/admin/iscrizioni", label: "Iscrizioni" },
   { href: "/admin/giocatori", label: "Giocatori" },
+];
+
+/** Below the admin sections: an admin may also play (stages, profile). */
+export const adminPlayerNav: readonly NavItem[] = [
+  { href: "/", label: "Area giocatore", exact: true },
 ];
 
 export function isNavItemActive(item: NavItem, pathname: string): boolean {

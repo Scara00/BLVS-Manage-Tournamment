@@ -130,15 +130,28 @@ describe("admin_iscrivi_giocatore()", () => {
     expect(await attivi(tappa)).toBe(1);
   });
 
-  it("rifiuta chi non ha categoria e chi non è un giocatore", async () => {
+  it("rifiuta chi non ha categoria e chi non esiste", async () => {
     const admin = await createAdmin();
     const tappa = await createStage();
     expect(
       await aggiungi(admin, tappa, await createPlayer(null)),
     ).toMatchObject({ ok: false, error: { hint: "categoria_mancante" } });
-    expect(await aggiungi(admin, tappa, await createAdmin())).toMatchObject({
+    expect(await aggiungi(admin, tappa, crypto.randomUUID())).toMatchObject({
       ok: false,
       error: { code: "P0002", hint: "giocatore_non_trovato" },
+    });
+  });
+
+  it("iscrive anche un admin, compreso sé stesso", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    expect(await aggiungi(admin, tappa, await createAdmin())).toMatchObject({
+      ok: true,
+      row: { posto: 1, stato: "confermata" },
+    });
+    expect(await aggiungi(admin, tappa, admin)).toMatchObject({
+      ok: true,
+      row: { posto: 2, stato: "confermata" },
     });
   });
 

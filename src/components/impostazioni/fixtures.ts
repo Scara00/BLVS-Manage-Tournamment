@@ -1,4 +1,3 @@
-import { GIOCATORE_ANONIMO } from "@/lib/cancellazione/anonimo";
 import type { OverallPlayerRow } from "@/lib/live/types";
 import type { Impostazioni, RigaPubblica } from "@/lib/impostazioni/types";
 
@@ -15,8 +14,7 @@ const luca: OverallPlayerRow = {
 export const rigaLuca: RigaPubblica = {
   categoria: "M",
   stagione: 2026,
-  prima: luca,
-  dopo: { ...luca, name: GIOCATORE_ANONIMO },
+  attuale: luca,
 };
 
 /** Stories and tests: «Luca Rossi», 3rd with 28 provisional points. */
@@ -50,7 +48,6 @@ export const impostazioniTestoLungo: Impostazioni = {
   riga: {
     categoria: "F",
     stagione: 2026,
-    prima: lungo,
-    dopo: { ...lungo, name: GIOCATORE_ANONIMO },
+    attuale: lungo,
   },
 };

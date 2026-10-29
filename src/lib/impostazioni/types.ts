@@ -19,7 +19,7 @@ export type ConsensoPrivacy = {
   accettatoIl: string;
 };
 
-/** The player's row in the overall standing, now and after a deletion. */
+/** The player's row in the overall standing, which a deletion removes. */
 export type RigaPubblica = AnteprimaCancellazione & {
   categoria: Categoria;
   stagione: number;

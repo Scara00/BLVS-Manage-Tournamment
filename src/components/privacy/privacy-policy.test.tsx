@@ -66,7 +66,7 @@ describe("PrivacyPolicy", () => {
     render(<PrivacyPolicy />);
     expect(screen.getByText(/L'email non compare mai/)).toBeInTheDocument();
     expect(screen.getByRole("region", { name: "In breve" })).toHaveTextContent(
-      "forma anonima",
+      "sparisci dalle classifiche",
     );
   });
 

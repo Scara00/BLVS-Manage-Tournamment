@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Tape } from "@/components/scoreboard";
-import { GIOCATORE_ANONIMO } from "@/lib/cancellazione/anonimo";
 import { buttonVariants } from "@/components/ui/button";
 import {
   ELIMINA_ACCOUNT_PATH,
@@ -147,7 +146,7 @@ export function ImpostazioniView({
           {riga ? (
             <RigaPubblica
               caption={titoloClassifica(riga.categoria, riga.stagione)}
-              riga={riga.prima}
+              riga={riga.attuale}
               mio
               className="max-w-xl"
             />
@@ -176,9 +175,9 @@ export function ImpostazioniView({
         tone="error"
         description={
           <p>
-            Eliminiamo nome, email, password e consensi. I tuoi risultati
-            restano nelle classifiche come «{GIOCATORE_ANONIMO}», con la stessa
-            posizione e gli stessi punti. Prima di confermare vedi cosa cambia.
+            Eliminiamo l&apos;account con tutte le iscrizioni e i risultati:
+            sparisci dalle classifiche, che si ricalcolano senza di te. Prima di
+            confermare vedi cosa cambia.
           </p>
         }
       >

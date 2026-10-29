@@ -11,7 +11,7 @@ import {
   createTestDatabase,
   type TestDatabase,
 } from "@/test/pglite";
-import { GIOCATORE_ANONIMO, NOME_ANONIMO } from "./anonimo";
+import { NOME_ANONIMO } from "./anonimo";
 
 let db: TestDatabase;
 let admin: string;
@@ -152,143 +152,139 @@ function cancella(utente: string) {
   });
 }
 
-/** Everything a standing shows except the name, per player. */
-function senzaNomi(d: DatiClassificaGenerale) {
-  const generale = classificaDaDati(d, "M", 2026).righe.map((r) => ({
-    utenteId: r.utenteId,
-    posizione: r.posizione,
-    punti: r.punti,
-    tappeGiocate: r.tappeGiocate,
-    puntiProvvisori: r.puntiProvvisori,
-    pariMerito: r.pariMerito,
-  }));
-  const tappe = d.tappe.map((t) =>
-    classificaTappaDaDati(d, t.id).classifica.righe.map((r) => ({
-      iscrizioneId: r.iscrizioneId,
-      posizione: r.posizione,
-      punti: r.punti,
-    })),
-  );
-  const ordina = <T extends { utenteId: string }>(rows: T[]) =>
-    [...rows].sort((a, b) => a.utenteId.localeCompare(b.utenteId));
-  return { generale: ordina(generale), tappe };
-}
-
 beforeEach(async () => {
   db = await createTestDatabase();
   admin = await createAuthUser(db, { email: "admin@example.it" });
   await db.query("update utenti set ruolo = 'admin' where id = $1", [admin]);
 });
 
-describe("cancella_account", () => {
-  it("il segnaposto SQL è quello di GIOCATORE_ANONIMO", async () => {
+async function conta(sql: string, params: unknown[]) {
+  const { rows } = await db.query<{ n: number }>(sql, params);
+  return Number(rows[0].n);
+}
+
+/** What is left of `utente` and of the given registrations. */
+async function resti(utente: string, iscrizioni: string[]) {
+  return {
+    profilo: await conta("select count(*) as n from utenti where id = $1", [
+      utente,
+    ]),
+    auth: await conta("select count(*) as n from auth.users where id = $1", [
+      utente,
+    ]),
+    consensi: await conta(
+      "select count(*) as n from consensi where utente_id = $1",
+      [utente],
+    ),
+    iscrizioni: await conta(
+      "select count(*) as n from iscrizioni where id = any($1::uuid[])",
+      [iscrizioni],
+    ),
+    gironi: await conta(
+      "select count(*) as n from girone_iscrizioni where iscrizione_id = any($1::uuid[])",
+      [iscrizioni],
+    ),
+    partite: await conta(
+      "select count(*) as n from partita_giocatori where iscrizione_id = any($1::uuid[])",
+      [iscrizioni],
+    ),
+  };
+}
+
+const NIENTE = {
+  profilo: 0,
+  auth: 0,
+  consensi: 0,
+  iscrizioni: 0,
+  gironi: 0,
+  partite: 0,
+};
+
+/** Deletes the Auth user as the dashboard or the admin API do (no JWT). */
+function eliminaDaAuth(utente: string) {
+  return db.query("delete from auth.users where id = $1", [utente]);
+}
+
+describe("cancella_account: cancellazione definitiva", () => {
+  it("il segnaposto SQL è ancora quello di GIOCATORE_ANONIMO", async () => {
     const { rows } = await db.query<{ nome: string; cognome: string }>(
       "select * from nome_anonimo()",
     );
     expect(rows[0]).toEqual(NOME_ANONIMO);
   });
 
-  it("classifica generale e classifiche di tappa non cambiano, solo il nome", async () => {
+  it("cancella profilo, utente Auth, consensi, iscrizioni giocate, gironi e partite", async () => {
+    const giocatori = [];
+    for (const c of ["Uno", "Due", "Tre", "Quattro"])
+      giocatori.push(await giocatore(c));
+    const [io, ...altri] = giocatori;
+    const { iscrizioni } = await tappaGiocata("2026-06-01", giocatori, true);
+    const partitePrima = await conta("select count(*) as n from partite", []);
+
+    const esito = await cancella(io);
+    expect(esito.tappe).toHaveLength(1);
+    expect(esito.ritirate).toBe(0);
+
+    expect(await resti(io, [iscrizioni[0]])).toEqual(NIENTE);
+    // The matches stay for the other three players.
+    expect(await conta("select count(*) as n from partite", [])).toBe(
+      partitePrima,
+    );
+    expect(
+      await conta(
+        "select count(*) as n from partita_giocatori where iscrizione_id = any($1::uuid[])",
+        [iscrizioni.slice(1)],
+      ),
+    ).toBe(9);
+    for (const a of altri)
+      expect(
+        await conta("select count(*) as n from utenti where id = $1", [a]),
+      ).toBe(1);
+  });
+
+  it("le classifiche si ricalcolano senza di lui", async () => {
     const giocatori = [];
     for (const c of ["Uno", "Due", "Tre", "Quattro"])
       giocatori.push(await giocatore(c));
     const [io] = giocatori;
     await tappaGiocata("2026-06-01", giocatori, true);
-    // Second stage: «io» finishes 3rd.
-    await tappaGiocata(
-      "2026-07-01",
-      [giocatori[1], giocatori[2], io, giocatori[3]],
-      true,
-    );
 
-    const prima = await dati();
-    const rigaPrima = classificaDaDati(prima, "M", 2026).righe.find(
-      (r) => r.utenteId === io,
-    );
-    expect(rigaPrima?.nome).toBe("N Uno");
+    await cancella(io);
 
-    const esito = await cancella(io);
-    // Both stages are in season 2026: one is enough to republish it.
-    expect(esito.tappe).toHaveLength(1);
-    expect(esito.ritirate).toBe(0);
-
-    const dopo = await dati();
-    expect(senzaNomi(dopo)).toEqual(senzaNomi(prima));
-    const rigaDopo = classificaDaDati(dopo, "M", 2026).righe.find(
-      (r) => r.utenteId === io,
-    );
-    expect(rigaDopo).toMatchObject({
-      nome: GIOCATORE_ANONIMO,
-      posizione: rigaPrima!.posizione,
-      punti: rigaPrima!.punti,
-    });
-    // Each stage standing shows the anonymous name too.
-    for (const t of dopo.tappe) {
-      const { iscrizioni } = classificaTappaDaDati(dopo, t.id);
-      const mia = iscrizioni.find((i) => i.utente_id === io);
-      expect(`${mia?.nome} ${mia?.cognome}`).toBe(GIOCATORE_ANONIMO);
+    const d = await dati();
+    const generale = classificaDaDati(d, "M", 2026).righe;
+    expect(generale.map((r) => r.utenteId)).not.toContain(io);
+    expect(generale).toHaveLength(3);
+    for (const t of d.tappe) {
+      const { iscrizioni, classifica } = classificaTappaDaDati(d, t.id);
+      expect(iscrizioni.map((i) => i.utente_id)).not.toContain(io);
+      expect(classifica.righe).toHaveLength(3);
     }
   });
 
-  it("elimina nome, email, utente Auth e consensi; i risultati restano", async () => {
+  it("anche dalle tappe archiviate, che per il resto restano bloccate", async () => {
     const giocatori = [];
     for (const c of ["Uno", "Due", "Tre", "Quattro"])
       giocatori.push(await giocatore(c));
     const [io] = giocatori;
-    const { iscrizioni } = await tappaGiocata("2026-06-01", giocatori, true);
-    const conta = async (sql: string) =>
-      Number((await db.query<{ n: number }>(sql, [iscrizioni[0]])).rows[0].n);
-    const risultati = () =>
-      Promise.all([
-        conta("select count(*) as n from iscrizioni where id = $1"),
-        conta(
-          "select count(*) as n from partita_giocatori where iscrizione_id = $1",
-        ),
-        conta(
-          "select count(*) as n from girone_iscrizioni where iscrizione_id = $1",
-        ),
-      ]);
-    const primaRisultati = await risultati();
-    expect(
-      (await db.query("select 1 from consensi where utente_id = $1", [io]))
-        .rows,
-    ).toHaveLength(1);
+    const { id, iscrizioni } = await tappaGiocata(
+      "2026-06-01",
+      giocatori,
+      true,
+    );
+    await db.query("update tappe set stato = 'archiviata' where id = $1", [id]);
 
     await cancella(io);
+    expect(await resti(io, [iscrizioni[0]])).toEqual(NIENTE);
 
-    const { rows } = await db.query<{
-      nome: string;
-      cognome: string;
-      email: string | null;
-      ruolo: string;
-      anonimizzato_il: Date | null;
-    }>(
-      "select nome, cognome, email, ruolo, anonimizzato_il from utenti where id = $1",
-      [io],
+    // The bypass ends with the deletion.
+    const e = await errore(
+      db.query("delete from iscrizioni where id = $1", [iscrizioni[1]]),
     );
-    expect(rows[0]).toMatchObject({
-      ...NOME_ANONIMO,
-      email: null,
-      ruolo: "giocatore",
-    });
-    expect(rows[0].anonimizzato_il).not.toBeNull();
-    expect(
-      (await db.query("select 1 from auth.users where id = $1", [io])).rows,
-    ).toHaveLength(0);
-    expect(
-      (await db.query("select 1 from consensi where utente_id = $1", [io]))
-        .rows,
-    ).toHaveLength(0);
-    expect(await risultati()).toEqual(primaRisultati);
-    // Nothing personal is copied into the registro by the anonymisation.
-    const registro = await db.query<{ dati: unknown }>(
-      "select dati from registro where entita = 'utenti' and entita_id = $1",
-      [io],
-    );
-    expect(JSON.stringify(registro.rows)).not.toContain("@example.it");
+    expect(e.hint).toBe("tappa_archiviata");
   });
 
-  it("ritira le iscrizioni delle tappe non iniziate e libera il girone", async () => {
+  it("nelle tappe non iniziate libera il posto e alza la versione dei gironi", async () => {
     const io = await giocatore("Uno");
     const aperta = await tappa("iscrizioni_aperte", "2026-08-01");
     const chiusa = await tappa("iscrizioni_chiuse", "2026-08-15");
@@ -308,35 +304,31 @@ describe("cancella_account", () => {
       ).rows[0].versione_gironi;
     const versionePrima = await versione();
 
-    const esito = await cancella(io);
-    expect(esito).toEqual({ tappe: [], ritirate: 2 });
-
-    const { rows } = await db.query<{ stato: string }>(
-      "select stato from iscrizioni where id = any($1::uuid[]) order by id",
-      [[iscrizioneAperta, iscrizioneChiusa]],
+    expect(await cancella(io)).toEqual({ tappe: [], ritirate: 2 });
+    expect(await resti(io, [iscrizioneAperta, iscrizioneChiusa])).toEqual(
+      NIENTE,
     );
-    expect(rows.map((r) => r.stato)).toEqual(["ritirata", "ritirata"]);
-    expect(
-      (
-        await db.query(
-          "select 1 from girone_iscrizioni where iscrizione_id = $1",
-          [iscrizioneChiusa],
-        )
-      ).rows,
-    ).toHaveLength(0);
     expect(await versione()).toBe(versionePrima + 1);
   });
 
-  it("un account cancellato non si iscrive più, neanche da admin", async () => {
+  it("scrive nel registro la cancellazione, senza dati personali", async () => {
     const io = await giocatore("Uno");
-    const aperta = await tappa("iscrizioni_aperte", "2026-08-01");
     await cancella(io);
-    const e = await errore(
-      asRole(db, "authenticated", admin, () =>
-        db.query("select admin_iscrivi_giocatore($1, $2)", [aperta, io]),
-      ),
+    const { rows } = await db.query<{
+      azione: string;
+      attore_id: string;
+      dati: unknown;
+    }>(
+      "select azione, attore_id, dati from registro where entita = 'utenti' and entita_id = $1",
+      [io],
     );
-    expect(e.hint).toBe("giocatore_non_trovato");
+    expect(rows).toEqual([
+      {
+        azione: "eliminazione_account",
+        attore_id: io,
+        dati: { eliminato: true },
+      },
+    ]);
   });
 
   it("si cancella solo il proprio account, una volta sola", async () => {
@@ -353,26 +345,94 @@ describe("cancella_account", () => {
     expect((await errore(cancella(io))).hint).toBe("gia_cancellato");
   });
 
-  it("nessuno anonimizza un account scrivendo su utenti", async () => {
+  it("un admin non si cancella da qui, neanche con un altro admin", async () => {
+    const altro = await createAuthUser(db, { email: "admin2@example.it" });
+    await db.query("update utenti set ruolo = 'admin' where id = $1", [altro]);
+    expect((await errore(cancella(admin))).hint).toBe("account_admin");
+    expect(
+      await conta("select count(*) as n from utenti where id = $1", [admin]),
+    ).toBe(1);
+  });
+});
+
+describe("eliminazione dell'utente Auth (dashboard, API admin)", () => {
+  it("cancella anche il profilo e tutto ciò che è suo, tappe concluse comprese", async () => {
+    const giocatori = [];
+    for (const c of ["Uno", "Due", "Tre", "Quattro"])
+      giocatori.push(await giocatore(c));
+    const [io] = giocatori;
+    const { iscrizioni } = await tappaGiocata("2026-06-01", giocatori, true);
+
+    await eliminaDaAuth(io);
+    expect(await resti(io, [iscrizioni[0]])).toEqual(NIENTE);
+  });
+
+  it("un admin eliminato: i punteggi che ha scritto restano, senza autore", async () => {
+    const giocatori = [];
+    for (const c of ["Uno", "Due", "Tre", "Quattro"])
+      giocatori.push(await giocatore(c));
+    const { id } = await tappaGiocata("2026-06-01", giocatori, true);
+    const { rows: prima } = await db.query<{
+      partita_id: string;
+      sets: unknown;
+      versione: number;
+    }>(
+      `select pu.partita_id, pu.sets, pu.versione from punteggi pu
+       join partite p on p.id = pu.partita_id
+       join tabelloni tb on tb.id = p.tabellone_id
+       where tb.tappa_id = $1 order by pu.partita_id`,
+      [id],
+    );
+    await db.query(
+      "update punteggi set aggiornato_da = $1, versione = versione + 1 where partita_id = any($2::uuid[])",
+      [admin, prima.map((r) => r.partita_id)],
+    );
+
+    await eliminaDaAuth(admin);
+
+    const { rows: dopo } = await db.query<{
+      sets: unknown;
+      versione: number;
+      aggiornato_da: string | null;
+    }>(
+      "select sets, versione, aggiornato_da from punteggi where partita_id = any($1::uuid[]) order by partita_id",
+      [prima.map((r) => r.partita_id)],
+    );
+    expect(dopo).toEqual(
+      prima.map((r) => ({
+        sets: r.sets,
+        versione: r.versione + 1,
+        aggiornato_da: null,
+      })),
+    );
+  });
+});
+
+describe("profili «mezzi cancellati»", () => {
+  it("nessuno segna un profilo come cancellato, neanche dal SQL della dashboard", async () => {
     const io = await giocatore("Uno");
-    const e = await errore(
+    const giocatoreStesso = await errore(
       asRole(db, "authenticated", io, () =>
         db.query("update utenti set anonimizzato_il = now() where id = $1", [
           io,
         ]),
       ),
     );
-    expect(e.code).toBe("42501");
+    expect(giocatoreStesso.code).toBe("42501");
+    // No JWT (dashboard SQL editor, scripts): the check constraint.
+    const backend = await errore(
+      db.query("update utenti set anonimizzato_il = now() where id = $1", [io]),
+    );
+    expect(backend.code).toBe("23514");
   });
 
-  it("un admin non si cancella da qui, neanche con un altro admin", async () => {
-    const altro = await createAuthUser(db, { email: "admin2@example.it" });
-    await db.query("update utenti set ruolo = 'admin' where id = $1", [altro]);
-    expect((await errore(cancella(admin))).hint).toBe("account_admin");
-    const { rows } = await db.query<{ anonimizzato_il: Date | null }>(
-      "select anonimizzato_il from utenti where id = $1",
-      [admin],
+  it("un profilo esiste solo con il suo utente Auth", async () => {
+    const e = await errore(
+      db.query(
+        "insert into utenti (id, email, nome, cognome) values ($1, 'x@example.it', 'X', 'Y')",
+        [crypto.randomUUID()],
+      ),
     );
-    expect(rows[0].anonimizzato_il).toBeNull();
+    expect(e.code).toBe("23503");
   });
 });

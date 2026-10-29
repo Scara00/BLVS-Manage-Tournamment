@@ -18,20 +18,17 @@ export function titoloClassifica(categoria: Categoria, stagione: number) {
 
 /**
  * One row of the overall standing as /classifica shows it: place, name,
- * points (font.mono); a card below md. `nomeCambiato` marks the name on
- * color.tape and says it in words too, never colour alone.
+ * points (font.mono); a card below md.
  */
 export function RigaPubblica({
   caption,
   riga,
   mio = false,
-  nomeCambiato = false,
   className,
 }: {
   caption: string;
   riga: OverallPlayerRow;
   mio?: boolean;
-  nomeCambiato?: boolean;
   className?: string;
 }) {
   const columns: ResponsiveTableColumn<OverallPlayerRow>[] = [
@@ -54,19 +51,10 @@ export function RigaPubblica({
       render: (r) => (
         <span
           data-slot="nome"
-          data-cambiato={nomeCambiato || undefined}
-          className={cn(
-            "inline-flex flex-wrap items-center gap-x-space-2 gap-y-space-1",
-            nomeCambiato && "bg-tape px-space-2 text-primary",
-          )}
+          className="inline-flex flex-wrap items-center gap-x-space-2 gap-y-space-1"
         >
           <span>{r.name}</span>
           {mio ? <BadgeTu /> : null}
-          {nomeCambiato ? (
-            <span className="font-sans text-sm font-normal">
-              (nome cambiato)
-            </span>
-          ) : null}
         </span>
       ),
     },

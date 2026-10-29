@@ -158,6 +158,28 @@ describe("updateSession", () => {
     );
   });
 
+  it("cookie di sessione vuoti: niente «Sessione scaduta» per sempre, li cancella e manda al login", async () => {
+    createServerClient.mockReturnValue({ auth: { getClaims } });
+    getClaims.mockResolvedValue({ data: null, error: null });
+    const updateSession = await loadUpdateSession();
+
+    const res = await updateSession(
+      new NextRequest("https://localhost/admin", {
+        headers: { cookie: "sb-ref-auth-token.0=; sb-ref-auth-token.1=" },
+      }),
+    );
+    expect(res.headers.get("location")).toBe(
+      "https://localhost/accesso?da=%2Fadmin",
+    );
+    for (const name of ["sb-ref-auth-token.0", "sb-ref-auth-token.1"]) {
+      expect(res.cookies.get(name)).toMatchObject({
+        value: "",
+        path: "/",
+        maxAge: 0,
+      });
+    }
+  });
+
   it.each([
     "/accesso",
     "/sessione-scaduta?da=/live",
@@ -184,12 +206,26 @@ describe("updateSession", () => {
     expect(res.headers.get("x-middleware-next")).toBe("1");
   });
 
-  it("chi ha già una sessione valida e apre il login torna alla pagina richiesta", async () => {
-    createServerClient.mockReturnValue({ auth: { getClaims } });
+  /** A signed-in client whose `utenti` read returns `profilo`. */
+  function conProfilo(profilo: {
+    data: { id: string } | null;
+    error: { message: string } | null;
+  }) {
+    const signOut = vi.fn(async () => ({ error: null }));
+    const eq = vi.fn(() => ({ maybeSingle: async () => profilo }));
+    createServerClient.mockReturnValue({
+      auth: { getClaims, signOut },
+      from: () => ({ select: () => ({ eq }) }),
+    });
     getClaims.mockResolvedValue({
       data: { claims: { sub: "u1" } },
       error: null,
     });
+    return { signOut, eq };
+  }
+
+  it("chi ha già una sessione valida e apre il login torna alla pagina richiesta", async () => {
+    const { eq } = conProfilo({ data: { id: "u1" }, error: null });
     const updateSession = await loadUpdateSession();
 
     const res = await updateSession(
@@ -200,6 +236,42 @@ describe("updateSession", () => {
       new NextRequest("https://localhost/accesso?da=%2Flive"),
     );
     expect(back.headers.get("location")).toBe("https://localhost/live");
+    expect(eq).toHaveBeenCalledWith("id", "u1");
+  });
+
+  it.each([["senza profilo (account cancellato)", null]])(
+    "%s la sessione si chiude e il login resta: niente rimbalzo infinito con la pagina",
+    async (_caso, data) => {
+      const { signOut } = conProfilo({ data, error: null });
+      const updateSession = await loadUpdateSession();
+
+      const res = await updateSession(
+        new NextRequest("https://localhost/accesso?da=%2Fadmin"),
+      );
+      expect(res.headers.get("location")).toBeNull();
+      expect(res.headers.get("x-middleware-next")).toBe("1");
+      expect(signOut).toHaveBeenCalledWith({ scope: "local" });
+      expect(res.cookies.get("blvs_admin_scadenza")).toMatchObject({
+        value: "",
+        maxAge: 0,
+      });
+    },
+  );
+
+  it("con il profilo non leggibile il login resta e la sessione non si tocca", async () => {
+    const error = vi.spyOn(console, "error").mockImplementation(() => {});
+    const { signOut } = conProfilo({ data: null, error: { message: "boom" } });
+    const updateSession = await loadUpdateSession();
+
+    const res = await updateSession(
+      new NextRequest("https://localhost/accesso?da=%2Fadmin"),
+    );
+    expect(res.headers.get("location")).toBeNull();
+    expect(signOut).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(
+      "[auth] lettura del profilo non riuscita",
+      { message: "boom" },
+    );
   });
 
   it("con una sessione valida lascia la verifica del ruolo al Route Handler", async () => {

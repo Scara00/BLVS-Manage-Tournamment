@@ -50,6 +50,18 @@ describe("PlayerNav", () => {
     for (const link of links) expect(link).toHaveAttribute("href", "/profilo");
   });
 
+  it("solo un admin ha «Admin», nel menu e da desktop", () => {
+    const { rerender } = render(<PlayerNav signOut={signOut} />);
+    expect(
+      screen.queryAllByRole("link", { name: "Admin", hidden: true }),
+    ).toHaveLength(0);
+
+    rerender(<PlayerNav signOut={signOut} admin />);
+    const links = screen.getAllByRole("link", { name: "Admin", hidden: true });
+    expect(links).toHaveLength(2);
+    for (const link of links) expect(link).toHaveAttribute("href", "/admin");
+  });
+
   it("«Impostazioni» è solo nel menu", () => {
     render(<PlayerNav signOut={signOut} />);
     const links = screen.getAllByRole("link", {

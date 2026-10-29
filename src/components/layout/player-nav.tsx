@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import {
   isNavItemActive,
+  playerAdminNav,
   playerPrimaryNav,
   playerSecondaryNav,
   type NavItem,
@@ -19,18 +20,22 @@ const focusOnDark =
 /**
  * Player navigation inside the Topbar. Tappe/Live/Classifica are always
  * visible (one tap on phones); secondary links and «Esci» live behind the
- * «Menu» disclosure on mobile.
+ * «Menu» disclosure on mobile. An admin also gets «Admin», back to the
+ * admin area.
  */
 export function PlayerNav({
   signOut,
+  admin = false,
   primary = playerPrimaryNav,
-  secondary = playerSecondaryNav,
+  secondary: secondaryBase = playerSecondaryNav,
 }: {
   signOut: SignOutAction;
+  admin?: boolean;
   primary?: readonly NavItem[];
   secondary?: readonly NavItem[];
 }) {
   const { pathname, open, buttonProps, panelProps } = useNavDisclosure();
+  const secondary = admin ? [...secondaryBase, playerAdminNav] : secondaryBase;
 
   return (
     <>

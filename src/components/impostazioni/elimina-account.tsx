@@ -23,11 +23,7 @@ import {
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Field, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  GIOCATORE_ANONIMO,
-  PAROLA_CONFERMA,
-  confermaValida,
-} from "@/lib/cancellazione/anonimo";
+import { PAROLA_CONFERMA, confermaValida } from "@/lib/cancellazione/anonimo";
 import {
   ELIMINA_ACCOUNT_PATH,
   IMPOSTAZIONI_MESSAGES,
@@ -40,43 +36,35 @@ import {
 import { profiloSessionExpiredHref } from "@/lib/profilo/paths";
 import { RigaPubblica, titoloClassifica } from "./riga-pubblica";
 
-/** «Prima» above «Dopo»: the same row, only the name changes. */
-export function PrimaDopo({ riga }: { riga: DatiRigaPubblica | null }) {
+/** The player's row in the overall standing, which the deletion removes. */
+export function RigaCheSparisce({ riga }: { riga: DatiRigaPubblica | null }) {
   if (!riga) {
     return (
       <p className="max-w-prose">
-        Non sei ancora nella classifica generale: non c&apos;è nessuna riga
-        pubblica da rendere anonima. I risultati delle tappe a cui sei iscritto,
-        se già giocate, restano come «{GIOCATORE_ANONIMO}».
+        Non sei ancora nella classifica generale. Se hai già giocato qualche
+        partita, la cancellazione toglie anche quella dalle classifiche delle
+        tappe.
       </p>
     );
   }
   const titolo = titoloClassifica(riga.categoria, riga.stagione);
   return (
     <div className="flex flex-col gap-space-3">
-      <div className="flex flex-col gap-space-5">
-        <div className="flex flex-col gap-space-2" data-slot="prima">
-          <h3 className="font-heading text-lg font-semibold">Prima</h3>
-          <RigaPubblica caption={titolo} riga={riga.prima} mio />
-        </div>
-        <div className="flex flex-col gap-space-2" data-slot="dopo">
-          <h3 className="font-heading text-lg font-semibold">Dopo</h3>
-          <RigaPubblica caption={titolo} riga={riga.dopo} nomeCambiato />
-        </div>
-      </div>
+      <RigaPubblica caption={titolo} riga={riga.attuale} mio />
       <p className="max-w-prose font-semibold">
-        Cambia solo il nome: «{riga.prima.name}» diventa «{GIOCATORE_ANONIMO}».
-        Posizione ({riga.prima.position}) e punti ({riga.prima.points}) restano
-        uguali, e così le classifiche di ogni tappa.
+        Con la cancellazione questa riga sparisce e la classifica si ricalcola
+        senza di te: chi è dietro di te sale, e i punti di chi ha giocato con te
+        o contro di te possono cambiare.
       </p>
     </div>
   );
 }
 
 /**
- * w-elimina-account: what changes in the overall standing, what is deleted
- * and what stays, then «ELIMINA» typed in a field and one more
- * confirmation in a dialog. Only the dialog's button calls the action.
+ * w-elimina-account: the row that disappears from the overall standing,
+ * what is deleted and what changes for the others, then «ELIMINA» typed in
+ * a field and one more confirmation in a dialog. Only the dialog's button
+ * calls the action.
  */
 export function EliminaAccount({
   riga,
@@ -133,7 +121,7 @@ export function EliminaAccount({
           </h2>
           <Tape size={4} className="max-w-24" />
         </div>
-        <PrimaDopo riga={riga} />
+        <RigaCheSparisce riga={riga} />
       </section>
 
       <section
@@ -152,16 +140,17 @@ export function EliminaAccount({
             <li>email</li>
             <li>password e accesso</li>
             <li>i consensi che hai dato</li>
-            <li>le iscrizioni alle tappe non ancora iniziate</li>
+            <li>tutte le tue iscrizioni, anche alle tappe già giocate</li>
+            <li>i tuoi risultati, in ogni classifica</li>
           </ul>
         </div>
         <div className="flex flex-col gap-space-2 border-l-4 border-primary pl-space-4">
-          <h3 className="font-heading text-lg font-semibold">Cosa resta</h3>
+          <h3 className="font-heading text-lg font-semibold">
+            Cosa cambia per gli altri
+          </h3>
           <ul className="list-disc pl-space-5">
-            <li>
-              i risultati delle tappe giocate, sotto un identificativo anonimo
-            </li>
-            <li>posizioni e punti in ogni classifica</li>
+            <li>le partite giocate con te restano, senza di te</li>
+            <li>le classifiche di tappa e generale si ricalcolano</li>
           </ul>
           <p className="text-sm text-muted-foreground">
             Non si torna indietro: per giocare di nuovo dovrai creare un nuovo
@@ -280,9 +269,8 @@ export function EliminaAccount({
             <AlertDialogHeader>
               <AlertDialogTitle>Cancellare l&apos;account?</AlertDialogTitle>
               <AlertDialogDescription>
-                Nome, email, password e consensi vengono eliminati subito e non
-                si recuperano. Nelle classifiche resterai come «
-                {GIOCATORE_ANONIMO}».
+                Account, iscrizioni e risultati vengono eliminati subito e non
+                si recuperano. Sparisci da tutte le classifiche.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

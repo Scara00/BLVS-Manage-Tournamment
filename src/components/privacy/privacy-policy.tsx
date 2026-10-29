@@ -104,8 +104,8 @@ export function PrivacyPolicy({
             posizione e i punti, come nella riga qui sotto.
           </li>
           <li>
-            Se cancelli l&apos;account i tuoi dati personali vengono eliminati;
-            i risultati restano, ma in forma anonima.
+            Se cancelli l&apos;account eliminiamo i tuoi dati personali e i tuoi
+            risultati: sparisci dalle classifiche.
           </li>
         </ul>
         <div className="max-w-xl">
@@ -208,9 +208,9 @@ export function PrivacyPolicy({
               eliminiamo nome, email e gli altri dati personali.
             </p>
             <p>
-              Dopo la cancellazione i risultati restano nelle classifiche, ma in
-              forma anonima (ad esempio «Giocatore anonimo»), così punteggi e
-              posizioni degli altri giocatori restano corretti.
+              Con la cancellazione eliminiamo anche le tue iscrizioni e i tuoi
+              risultati: le classifiche si ricalcolano senza di te, e i punti di
+              chi ha giocato con te o contro di te possono cambiare.
             </p>
             <p>
               I dati richiesti da obblighi di legge sono conservati solo per il

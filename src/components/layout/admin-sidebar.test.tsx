@@ -25,7 +25,7 @@ describe("AdminSidebar", () => {
     expect(menuButton().parentElement).toHaveClass("md:hidden");
   });
 
-  it("elenca Dashboard, Tappe, Iscrizioni e Giocatori con la voce attiva", () => {
+  it("elenca Dashboard, Tappe, Iscrizioni e Giocatori con la voce attiva, poi l'area giocatore", () => {
     const { container } = render(<AdminSidebar />);
     const desktop = within(container.querySelector("aside")!);
     expect(desktop.getAllByRole("link").map((l) => l.textContent)).toEqual([
@@ -33,7 +33,11 @@ describe("AdminSidebar", () => {
       "Tappe",
       "Iscrizioni",
       "Giocatori",
+      "Area giocatore",
     ]);
+    expect(
+      desktop.getByRole("link", { name: "Area giocatore" }),
+    ).toHaveAttribute("href", "/");
     expect(desktop.getByRole("link", { name: "Iscrizioni" })).toHaveAttribute(
       "aria-current",
       "page",

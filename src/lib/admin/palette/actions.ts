@@ -117,9 +117,7 @@ export async function cercaPalette(query: string): Promise<EsitoPalette> {
     let ricercaGiocatori = user.supabase
       .from("utenti")
       .select("id, nome, cognome, email, categoria")
-      .eq("ruolo", "giocatore")
-      // A deleted account (BLVS-53) has no card worth opening.
-      .is("anonimizzato_il", null);
+      .eq("ruolo", "giocatore");
     for (const filtro of filtriRicerca(parole)) {
       ricercaGiocatori = ricercaGiocatori.or(filtro);
     }

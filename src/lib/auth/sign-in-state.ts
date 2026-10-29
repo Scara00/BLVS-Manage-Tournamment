@@ -9,6 +9,7 @@ export type SignInStatus =
   | "invalid"
   | "rateLimited"
   | "permissionDenied"
+  | "noProfile"
   | "unavailable";
 
 export type SignInField = "email" | "password";
@@ -34,3 +35,7 @@ export const LOGIN_UNAVAILABLE_MESSAGE =
 
 export const PERMISSION_DENIED_MESSAGE =
   "Accesso effettuato, ma il tuo account non può aprire la pagina da cui sei partito: è riservata agli amministratori.";
+
+/** Signed in at Auth, but no usable profile (deleted or missing account). */
+export const NO_PROFILE_MESSAGE =
+  "Email e password sono giuste, ma questo account non ha più un profilo valido: forse è stato cancellato. Chiedi a un amministratore di controllarlo.";

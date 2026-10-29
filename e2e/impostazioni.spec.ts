@@ -67,7 +67,7 @@ test("cambio password: errori accanto ai campi, poi salvataggio", async ({
   ).toBeVisible();
 });
 
-test("cancellazione da tastiera: prima e dopo, conferma, «Account cancellato»", async ({
+test("cancellazione da tastiera: la riga che sparisce, conferma, «Account cancellato»", async ({
   page,
 }) => {
   await page.goto("/impostazioni/elimina-account");
@@ -75,23 +75,14 @@ test("cancellazione da tastiera: prima e dopo, conferma, «Account cancellato»"
     page.getByRole("heading", { level: 1, name: "Cancella l'account" }),
   ).toBeVisible();
 
-  // Before and after: same place and points, only the name changes.
-  const prima = page.locator("[data-slot=prima]");
-  const dopo = page.locator("[data-slot=dopo]");
+  // The player's row, which the deletion removes from the standing.
   await expect(
-    prima.getByText("Luca Rossi").filter({ visible: true }),
+    page.getByText("Luca Rossi").filter({ visible: true }),
   ).toBeVisible();
   await expect(
-    dopo.getByText("Giocatore anonimo").filter({ visible: true }),
+    page.getByText(/questa riga sparisce e la classifica si ricalcola/),
   ).toBeVisible();
-  const [p, d] = [prima.locator("tbody tr"), dopo.locator("tbody tr")];
-  expect(await p.getAttribute("data-posizione")).toMatch(/^\d+$/);
-  expect(await d.getAttribute("data-posizione")).toBe(
-    await p.getAttribute("data-posizione"),
-  );
-  expect(await d.getAttribute("data-punti")).toBe(
-    await p.getAttribute("data-punti"),
-  );
+  await expect(page.getByText("Giocatore anonimo")).toHaveCount(0);
   await expectNoA11yViolations(page);
 
   // Empty confirmation: the error sits next to the field, nothing opens.

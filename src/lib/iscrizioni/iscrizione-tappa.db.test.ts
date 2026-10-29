@@ -208,6 +208,69 @@ describe("iscriviti_tappa(): posto garantito", () => {
   });
 });
 
+describe("iscriviti_tappa(): l'admin che gioca", () => {
+  it("prende il primo posto libero del suo tabellone", async () => {
+    const tappa = await createStage();
+    await iscriviti(await createPlayer(), tappa);
+    const result = await iscriviti(await createAdmin(), tappa);
+    expect(result).toMatchObject({
+      ok: true,
+      row: { posto: 2, stato: "in_attesa" },
+    });
+  });
+
+  it("segue le regole del giocatore: posti, stato, scadenza, una sola iscrizione", async () => {
+    const admin = await createAdmin();
+
+    const piena = await createStage({ posti: 1 });
+    await iscriviti(await createPlayer(), piena);
+    expect(await iscriviti(admin, piena)).toMatchObject({
+      ok: false,
+      error: { hint: "posti_esauriti" },
+    });
+
+    const chiusa = await createStage({ stato: "iscrizioni_chiuse" });
+    expect(await iscriviti(admin, chiusa)).toMatchObject({
+      ok: false,
+      error: { hint: "chiuse" },
+    });
+
+    const scaduta = await createStage({ chiudono: "2020-01-01 00:00+01" });
+    expect(await iscriviti(admin, scaduta)).toMatchObject({
+      ok: false,
+      error: { hint: "scadute" },
+    });
+
+    const aperta = await createStage();
+    await iscriviti(admin, aperta);
+    expect(await iscriviti(admin, aperta)).toMatchObject({
+      ok: false,
+      error: { hint: "gia_iscritto" },
+    });
+  });
+
+  it("una bozza non accetta iscrizioni da qui, nemmeno dall'admin", async () => {
+    const bozza = await createStage({ stato: "bozza" });
+    expect(await iscriviti(await createAdmin(), bozza)).toMatchObject({
+      ok: false,
+      error: { code: "P0002" },
+    });
+  });
+
+  it("con l'email da confermare è rifiutato come un giocatore", async () => {
+    const tappa = await createStage();
+    const admin = await createAdmin();
+    await db.query(
+      "update auth.users set email_confirmed_at = null where id = $1",
+      [admin],
+    );
+    expect(await iscriviti(admin, tappa)).toMatchObject({
+      ok: false,
+      error: { code: "42501" },
+    });
+  });
+});
+
 describe("tabelloni_tappa(): posti di una tappa", () => {
   it("restituisce posti, occupati e prossimo posto per M e F", async () => {
     const tappa = await createStage({ posti: 4 });

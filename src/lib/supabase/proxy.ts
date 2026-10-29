@@ -1,10 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
-import { isAuthSessionMissingError } from "@supabase/supabase-js";
+import {
+  isAuthSessionMissingError,
+  type SupabaseClient,
+} from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 import {
   ADMIN_DEADLINE_COOKIE,
   ADMIN_SESSION_API_PATH,
   ADMIN_SESSION_EXPIRED_MESSAGE,
+  clearedDeadlineCookieOptions,
   deadlineCookieOptions,
   isAdminArea,
   isExpired,
@@ -106,9 +110,10 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Read before the refresh, which may clear an expired session's cookies.
+  // An empty auth cookie holds no session.
   const hadSession = request.cookies
     .getAll()
-    .some((cookie) => AUTH_COOKIE.test(cookie.name));
+    .some((cookie) => AUTH_COOKIE.test(cookie.name) && cookie.value !== "");
 
   let response = NextResponse.next({ request });
 
@@ -141,6 +146,22 @@ export async function updateSession(request: NextRequest) {
     console.error("[supabase] session refresh failed", error);
   }
 
+  // Empty auth cookies: Supabase only clears a session it can read, so
+  // nothing else would ever remove them.
+  for (const cookie of request.cookies.getAll()) {
+    if (
+      AUTH_COOKIE.test(cookie.name) &&
+      cookie.value === "" &&
+      !response.cookies.has(cookie.name)
+    ) {
+      response.cookies.set(cookie.name, "", {
+        path: "/",
+        sameSite: "lax",
+        maxAge: 0,
+      });
+    }
+  }
+
   if (isAdminApi(request) && !data?.claims?.sub) {
     const denied = forbiddenAdminApi();
     // Keep the cookie clean-up (e.g. an expired session) on the 403 too.
@@ -171,10 +192,11 @@ export async function updateSession(request: NextRequest) {
           signOutError,
         );
       }
-      response.cookies.set(ADMIN_DEADLINE_COOKIE, "", {
-        ...deadlineCookieOptions(),
-        maxAge: 0,
-      });
+      response.cookies.set(
+        ADMIN_DEADLINE_COOKIE,
+        "",
+        clearedDeadlineCookieOptions(),
+      );
       if (isAdminApi(request)) {
         const expired = NextResponse.json(
           { error: ADMIN_SESSION_EXPIRED_MESSAGE },
@@ -210,11 +232,52 @@ export async function updateSession(request: NextRequest) {
     );
   }
   if (isNavigation(request) && signedIn && pathname === LOGIN_PATH) {
-    const back = safeAfterLoginPath(
-      request.nextUrl.searchParams.get(RETURN_PARAM),
-    );
-    return redirectKeepingCookies(request, response, back);
+    // The pages trust a session only with a usable profile
+    // (`getCurrentUser`): without one they send here, and bouncing back
+    // would reload the two pages forever. A missing profile (deleted
+    // account) ends the session; an unreadable one leaves the login page.
+    const profilo = await statoProfilo(supabase, data?.claims?.sub);
+    if (profilo === "utilizzabile") {
+      const back = safeAfterLoginPath(
+        request.nextUrl.searchParams.get(RETURN_PARAM),
+      );
+      return redirectKeepingCookies(request, response, back);
+    }
+    if (profilo === "assente") {
+      try {
+        // Clears the auth cookies through setAll, which replaces `response`.
+        await supabase.auth.signOut({ scope: "local" });
+      } catch (signOutError) {
+        console.error(
+          "[auth] chiusura della sessione senza profilo non riuscita",
+          signOutError,
+        );
+      }
+      response.cookies.set(
+        ADMIN_DEADLINE_COOKIE,
+        "",
+        clearedDeadlineCookieOptions(),
+      );
+    }
   }
 
   return response;
+}
+
+/** Same rule as `getCurrentUser()`: the profile row exists. */
+async function statoProfilo(
+  supabase: SupabaseClient,
+  sub: string | undefined,
+): Promise<"utilizzabile" | "assente" | "errore"> {
+  if (!sub) return "assente";
+  const { data: utente, error } = await supabase
+    .from("utenti")
+    .select("id")
+    .eq("id", sub)
+    .maybeSingle<{ id: string }>();
+  if (error) {
+    console.error("[auth] lettura del profilo non riuscita", error);
+    return "errore";
+  }
+  return utente ? "utilizzabile" : "assente";
 }

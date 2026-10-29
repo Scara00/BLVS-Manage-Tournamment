@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { OverallStandings } from "@/lib/live/types";
-import { GIOCATORE_ANONIMO, confermaValida } from "./anonimo";
+import { confermaValida } from "./anonimo";
 import { anteprimaCancellazione } from "./anteprima";
 
 const classifica: OverallStandings = {
@@ -30,12 +30,9 @@ const classifica: OverallStandings = {
 };
 
 describe("anteprimaCancellazione", () => {
-  it("cambia solo il nome: posizione, punti, tappe, provvisori e pari merito restano", () => {
-    const anteprima = anteprimaCancellazione(classifica, "me");
-    expect(anteprima?.prima).toBe(classifica.rows[1]);
-    expect(anteprima?.dopo).toEqual({
-      ...classifica.rows[1],
-      name: GIOCATORE_ANONIMO,
+  it("è la riga del giocatore, quella che la cancellazione toglie", () => {
+    expect(anteprimaCancellazione(classifica, "me")).toEqual({
+      attuale: classifica.rows[1],
     });
   });
 

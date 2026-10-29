@@ -145,11 +145,11 @@ type EsitoCancellazione = { tappe: string[]; ritirate: number };
 
 /**
  * «Cancella l'account» on w-elimina-account, after the player typed
- * ELIMINA and confirmed the dialog. RPC `cancella_account()` anonymises
- * the account in one transaction (BLVS-53); then this device signs out,
- * the overall standings of the player's stages are published again (the
- * name is now «Giocatore anonimo») and the player lands on
- * w-account-eliminato.
+ * ELIMINA and confirmed the dialog. RPC `cancella_account()` deletes the
+ * account and, by cascade, every registration and result of the player in
+ * one transaction; then this device signs out, the overall standings of
+ * the player's seasons are published again without them and the player
+ * lands on w-account-eliminato.
  */
 export async function cancellaAccount(
   _prev: CancellazioneState,

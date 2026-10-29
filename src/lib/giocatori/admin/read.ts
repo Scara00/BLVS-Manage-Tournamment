@@ -121,8 +121,7 @@ export async function readGiocatoriAdmin(
   if (supabase === "sessionExpired") return { status: "sessionExpired" };
   let query = supabase
     .from("utenti")
-    .select(COLONNE_UTENTE, { count: "exact" })
-    .is("anonimizzato_il", null);
+    .select(COLONNE_UTENTE, { count: "exact" });
   for (const filtro of filtriRicerca(parole)) query = query.or(filtro);
   if (filtri.daVerificare) {
     query = query.is("categoria_verificata_il", null).eq("ruolo", "giocatore");
@@ -231,7 +230,6 @@ export async function readSchedaGiocatoreAdmin(
     .from("utenti")
     .select(COLONNE_UTENTE)
     .eq("id", id)
-    .is("anonimizzato_il", null)
     .maybeSingle<UtenteDb>();
   if (error) throw new Error(`giocatore: ${error.message}`);
   if (!utente) notFound();
