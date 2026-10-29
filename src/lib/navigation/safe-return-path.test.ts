@@ -26,6 +26,12 @@ describe("safeReturnPath", () => {
     "",
     "/privacy",
     "/privacy?da=/classifica",
+    // Dot segments that collapse into `//host`.
+    "/.//evil.example",
+    "/..//evil.example",
+    "/a/..//evil.example/p?q",
+    "/%2e//evil.example",
+    "/%2e%2e//evil.example",
   ])("rifiuta %j e torna al fallback", (raw) => {
     expect(safeReturnPath(raw)).toBe("/");
   });

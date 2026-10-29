@@ -18,8 +18,8 @@ const PER_HINT: Record<string, string> = {
 };
 
 /**
- * Maps an error of `admin_iscrivi_giocatore()` / `admin_rimuovi_iscrizione()`
- * (hints of the migration 20261027350000) onto the copy shown in the dialog.
+ * Maps an error of `admin_iscrivi_giocatore()`, `admin_rimuovi_iscrizione()`
+ * and `admin_conferma_iscrizioni()` (their hints) onto the copy shown.
  */
 export function erroreDaDb(error: DbError): ErroreIscritti {
   const known = error.hint ? PER_HINT[error.hint] : undefined;

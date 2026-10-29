@@ -22,6 +22,13 @@ function renderIscritti(
     message: "Iscrizione di Rossi Luca rimossa: il posto 1 è di nuovo libero.",
     at: 1,
   }));
+  const conferma = vi.fn<ModificaIscrittiAction>(async (_prev, data) => ({
+    status: "success",
+    message: data.get("iscrizioneId")
+      ? `Iscrizione di ${String(data.get("nome"))} confermata.`
+      : "3 iscrizioni confermate.",
+    at: Date.now(),
+  }));
   const cerca = vi.fn<CercaGiocatoriAction>(async () => ({
     status: "ok",
     giocatori: giocatoriTrovati,
@@ -32,13 +39,14 @@ function renderIscritti(
         tappa={iscrittiDemo()}
         aggiungi={aggiungi}
         rimuovi={rimuovi}
+        conferma={conferma}
         cerca={cerca}
         {...props}
       />
       <Toaster />
     </ToastProvider>,
   );
-  return { aggiungi, rimuovi, cerca };
+  return { aggiungi, rimuovi, conferma, cerca };
 }
 
 function tabellone(nome: string) {
@@ -185,6 +193,101 @@ describe("IscrittiTappa (w-admin-iscritti)", () => {
     const esito = within(m).getByTestId("iscritti-esito");
     expect(esito).toHaveTextContent("il posto 1 è di nuovo libero");
     await waitFor(() => expect(esito).toHaveFocus());
+  });
+
+  it("solo le iscrizioni in attesa hanno «Conferma», e il tabellone dice quante sono", () => {
+    renderIscritti({ tappa: iscrittiDemo({ m: 8, f: 4 }) });
+    const m = tabellone("Tabellone maschile");
+    const tabella = within(m).getByRole("table");
+    // Seats 4 and 8 are pending in the sample data.
+    expect(
+      within(tabella).getAllByRole("button", { name: /^Conferma / }),
+    ).toHaveLength(2);
+    expect(within(m).getByTestId("in-attesa")).toHaveTextContent("2");
+    expect(
+      screen.getByRole("button", { name: "Conferma tutte (3)" }),
+    ).toBeInTheDocument();
+    // Confirming is the primary action while anyone is pending.
+    expect(
+      screen.getByRole("button", { name: "Aggiungi giocatore" }),
+    ).not.toHaveAttribute("data-variant", "primary");
+  });
+
+  it("«Conferma» su una riga manda tappa, iscrizione e nome e porta il focus sul messaggio", async () => {
+    const user = userEvent.setup();
+    const { conferma } = renderIscritti();
+    const m = tabellone("Tabellone maschile");
+    const pulsante = within(within(m).getByRole("table")).getByRole("button", {
+      name: /^Conferma /,
+    });
+    const nome = pulsante.getAttribute("aria-label")!.replace("Conferma ", "");
+    await user.click(pulsante);
+
+    await waitFor(() => expect(conferma).toHaveBeenCalledTimes(1));
+    const data = conferma.mock.calls[0][1];
+    expect(data.get("tappaId")).toBe("rimini");
+    expect(data.get("iscrizioneId")).toBe("M-4");
+    expect(data.get("nome")).toBe(nome);
+    const esito = within(m).getByTestId("iscritti-esito");
+    expect(esito).toHaveTextContent(`Iscrizione di ${nome} confermata.`);
+    await waitFor(() => expect(esito).toHaveFocus());
+  });
+
+  it("un errore della conferma di una riga è annunciato nel suo tabellone", async () => {
+    const user = userEvent.setup();
+    const conferma = vi.fn<ModificaIscrittiAction>(async () => ({
+      status: "error",
+      reason: "invalid",
+      message:
+        "Con la tappa in corso o conclusa gli iscritti non cambiano più.",
+      at: 1,
+    }));
+    renderIscritti({ conferma });
+    const m = tabellone("Tabellone maschile");
+    await user.click(
+      within(within(m).getByRole("table")).getByRole("button", {
+        name: /^Conferma /,
+      }),
+    );
+    expect(await within(m).findByRole("alert")).toHaveTextContent(
+      "gli iscritti non cambiano più",
+    );
+  });
+
+  it("«Conferma tutte» chiede prima quante sono, poi conferma tutto e lo dice in cima", async () => {
+    const user = userEvent.setup();
+    const { conferma } = renderIscritti({
+      tappa: iscrittiDemo({ m: 8, f: 4 }),
+    });
+    await user.click(
+      screen.getByRole("button", { name: "Conferma tutte (3)" }),
+    );
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Confermare 3 iscrizioni in attesa?",
+    });
+    expect(dialog).toHaveAccessibleDescription(/entrano nei gironi/);
+    await user.click(
+      within(dialog).getByRole("button", { name: "Conferma tutte" }),
+    );
+
+    await waitFor(() => expect(conferma).toHaveBeenCalledTimes(1));
+    const data = conferma.mock.calls[0][1];
+    expect(data.get("tappaId")).toBe("rimini");
+    expect(data.get("iscrizioneId")).toBeNull();
+    await waitFor(() => expect(dialog).not.toBeInTheDocument());
+    const esito = screen.getByTestId("iscritti-esito-tutte");
+    expect(esito).toHaveTextContent("3 iscrizioni confermate.");
+    await waitFor(() => expect(esito).toHaveFocus());
+  });
+
+  it("senza iscrizioni in attesa non c'è niente da confermare", () => {
+    renderIscritti({ tappa: iscrittiDemo({ m: 3, f: 3 }) });
+    expect(screen.queryByRole("button", { name: /^Conferma/ })).toBeNull();
+  });
+
+  it("con la tappa in corso le iscrizioni in attesa non si confermano più", () => {
+    renderIscritti({ tappa: iscrittiDemo({ stato: "in_corso", m: 8, f: 4 }) });
+    expect(screen.queryByRole("button", { name: /^Conferma/ })).toBeNull();
   });
 
   it("«Annulla» non rimuove e ridà il focus al pulsante", async () => {

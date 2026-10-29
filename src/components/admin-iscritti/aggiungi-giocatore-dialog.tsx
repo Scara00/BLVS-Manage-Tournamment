@@ -71,6 +71,8 @@ type AggiungiGiocatoreDialogProps = {
   initialQuery?: string;
   initialRicerca?: Ricerca;
   initialState?: ModificaIscrittiState;
+  /** «secondary» while another action of the page is the primary one. */
+  triggerVariant?: "primary" | "secondary";
 };
 
 /** Why a found player cannot be added, or null. */
@@ -167,6 +169,7 @@ export function AggiungiGiocatoreDialog({
   initialQuery = "",
   initialRicerca = { stato: "vuota" },
   initialState = initialModificaIscrittiState,
+  triggerVariant = "primary",
 }: AggiungiGiocatoreDialogProps) {
   const [open, setOpen] = useState(defaultOpen);
   const [query, setQuery] = useState(initialQuery);
@@ -292,7 +295,7 @@ export function AggiungiGiocatoreDialog({
       }}
     >
       <DialogTrigger
-        render={<Button variant="primary" className="max-w-full" />}
+        render={<Button variant={triggerVariant} className="max-w-full" />}
       >
         <UserPlusIcon aria-hidden className="size-4" />
         Aggiungi giocatore

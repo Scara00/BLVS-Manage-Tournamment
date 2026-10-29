@@ -24,6 +24,7 @@ import {
   sessionExpiredHref,
 } from "@/lib/navigation/auth-paths";
 import { RETURN_PARAM } from "@/lib/navigation/safe-return-path";
+import { isHttpsEnforced } from "@/lib/security/https";
 import { now } from "@/lib/time/server-time";
 import { readSupabaseEnv } from "./env";
 
@@ -118,6 +119,7 @@ export async function updateSession(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(env.url, env.publishableKey, {
+    cookieOptions: { secure: isHttpsEnforced() },
     cookies: {
       getAll() {
         return request.cookies.getAll();

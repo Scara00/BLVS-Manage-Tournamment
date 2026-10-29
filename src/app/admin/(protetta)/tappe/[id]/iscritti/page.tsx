@@ -7,6 +7,7 @@ import { PageContainer } from "@/components/layout/page-container";
 import {
   aggiungiIscritto,
   cercaGiocatori,
+  confermaIscritti,
   rimuoviIscritto,
 } from "@/lib/iscrizioni/admin/actions";
 import { iscrittiPath } from "@/lib/iscrizioni/admin/paths";
@@ -32,6 +33,7 @@ async function IscrittiContent({ id }: { id: string }) {
       tappa={lettura.tappa}
       aggiungi={aggiungiIscritto}
       rimuovi={rimuoviIscritto}
+      conferma={confermaIscritti}
       cerca={cercaGiocatori}
     />
   );
@@ -45,7 +47,7 @@ export default function IscrittiTappaPage({
     <PageContainer
       title="Iscritti"
       eyebrow="Amministrazione · Tappe"
-      description="Gli iscritti di ogni tabellone con posto e data. Aggiungi un giocatore registrato anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
+      description="Gli iscritti di ogni tabellone con posto e data. Conferma le iscrizioni in attesa (nei gironi entrano solo quelle confermate), aggiungi un giocatore registrato anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
     >
       <Suspense
         fallback={<GestioneTappaLoading testo="Caricamento degli iscritti…" />}

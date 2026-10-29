@@ -49,7 +49,9 @@ Route Handler JSON sotto `src/app/api/`. Gli errori hanno la forma `{ error, fie
 
 - `POST /api/auth/login`, `POST /api/auth/logout`, `POST /api/auth/register` (solo giocatori, con consenso privacy). Login e registrazione hanno un limite ai tentativi per IP e per email (`src/lib/auth/rate-limit.ts`): oltre il limite rispondono 429 con `Retry-After`.
 - `/api/admin/*` (tappe, iscrizioni, punteggi, utenti, registro): ogni handler è avvolto da `withAdmin` (`src/lib/auth/guards.ts`), che verifica sessione e ruolo sul server e risponde 403 in ogni altro caso. Il test `src/app/api/admin/admin-routes.test.ts` trova da solo ogni nuova rotta e fallisce se non è protetta.
-- Con `ENFORCE_HTTPS=true` le API in HTTP ricevono 403 `HTTPS obbligatorio.` invece del redirect delle pagine.
+- Con `ENFORCE_HTTPS=true` le API in HTTP ricevono 403 `HTTPS obbligatorio.` invece del redirect delle pagine, e i cookie di sessione sono `Secure`.
+- Le richieste che modificano dati (`POST`, `PUT`, `PATCH`, `DELETE` su `/api/*`) arrivano solo dalle pagine dell'app: con un `Origin` di un altro sito il Proxy risponde 403 (`src/lib/security/origine.ts`). Cron e script, che non mandano `Origin`, passano.
+- `POST /api/auth/conferma-email/reinvio` ha lo stesso limite ai tentativi per IP e per email delle altre rotte di accesso.
 
 ## Script
 

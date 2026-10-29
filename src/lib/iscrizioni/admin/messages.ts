@@ -32,6 +32,21 @@ export function aggiuntoMessage(nome: string, posto: number | null): string {
     : `${nome} ora ha il posto ${posto}.`;
 }
 
+/** After «Conferma» on a row; `confermate` 0 = it was already confirmed. */
+export function confermataMessage(nome: string, confermate: number): string {
+  return confermate === 0
+    ? `L'iscrizione di ${nome} era già confermata.`
+    : `Iscrizione di ${nome} confermata.`;
+}
+
+/** After «Conferma tutte». */
+export function confermateMessage(confermate: number): string {
+  if (confermate === 0) return "Nessuna iscrizione in attesa da confermare.";
+  return confermate === 1
+    ? "1 iscrizione confermata."
+    : `${confermate} iscrizioni confermate.`;
+}
+
 export function rimossoMessage(nome: string, posto: number | null): string {
   return posto === null
     ? `Iscrizione di ${nome} rimossa.`

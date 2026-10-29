@@ -249,3 +249,119 @@ describe("admin_rimuovi_iscrizione()", () => {
     });
   });
 });
+
+/** A self-made registration (pending), written by the backend. */
+async function inAttesa(tappa: string, utente: string) {
+  const { rows } = await db.query<{ id: string }>(
+    `insert into iscrizioni (tappa_id, tabellone_id, utente_id)
+     select $1, tb.id, $2 from tabelloni tb
+     join utenti u on u.id = $2 and u.categoria = tb.categoria
+     where tb.tappa_id = $1
+     returning id`,
+    [tappa, utente],
+  );
+  return rows[0].id;
+}
+
+function conferma(admin: string, tappa: string, iscrizioni: string[] | null) {
+  return call<{ admin_conferma_iscrizioni: number }>(
+    admin,
+    "select admin_conferma_iscrizioni($1, $2::uuid[])",
+    [tappa, iscrizioni],
+  );
+}
+
+async function statoDi(iscrizione: string) {
+  const { rows } = await db.query<{ stato: string }>(
+    "select stato from iscrizioni where id = $1",
+    [iscrizione],
+  );
+  return rows[0]?.stato;
+}
+
+describe("admin_conferma_iscrizioni()", () => {
+  it("conferma solo l'iscrizione indicata", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    const a = await inAttesa(tappa, await createPlayer());
+    const b = await inAttesa(tappa, await createPlayer("F"));
+
+    expect(await conferma(admin, tappa, [a])).toMatchObject({
+      ok: true,
+      row: { admin_conferma_iscrizioni: 1 },
+    });
+    expect(await statoDi(a)).toBe("confermata");
+    expect(await statoDi(b)).toBe("in_attesa");
+  });
+
+  it("senza elenco conferma tutte quelle in attesa della tappa, non di altre", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    const altra = await createStage();
+    const mie = [
+      await inAttesa(tappa, await createPlayer()),
+      await inAttesa(tappa, await createPlayer()),
+      await inAttesa(tappa, await createPlayer("F")),
+    ];
+    const fuori = await inAttesa(altra, await createPlayer());
+
+    expect(await conferma(admin, tappa, null)).toMatchObject({
+      ok: true,
+      row: { admin_conferma_iscrizioni: 3 },
+    });
+    for (const id of mie) expect(await statoDi(id)).toBe("confermata");
+    expect(await statoDi(fuori)).toBe("in_attesa");
+    // Nothing left: a second «Conferma tutte» confirms none.
+    expect(await conferma(admin, tappa, null)).toMatchObject({
+      row: { admin_conferma_iscrizioni: 0 },
+    });
+  });
+
+  it("un'iscrizione già confermata non è un errore, una ritirata o di un'altra tappa sì", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    const aggiunta = await aggiungi(admin, tappa, await createPlayer());
+    if (!aggiunta.ok) throw new Error("setup");
+    expect(await conferma(admin, tappa, [aggiunta.row.id])).toMatchObject({
+      ok: true,
+      row: { admin_conferma_iscrizioni: 0 },
+    });
+
+    const ritirata = await inAttesa(tappa, await createPlayer());
+    await db.query("update iscrizioni set stato = 'ritirata' where id = $1", [
+      ritirata,
+    ]);
+    const altrove = await inAttesa(await createStage(), await createPlayer());
+    for (const id of [ritirata, altrove, crypto.randomUUID()]) {
+      expect(await conferma(admin, tappa, [id])).toMatchObject({
+        ok: false,
+        error: { code: "P0002", hint: "iscrizione_non_trovata" },
+      });
+    }
+    expect(await statoDi(altrove)).toBe("in_attesa");
+  });
+
+  it.each([
+    ["in_corso", "tappa_non_iscrivibile"],
+    ["conclusa", "tappa_non_iscrivibile"],
+    ["annullata", "tappa_annullata"],
+  ])("rifiuta una tappa %s", async (stato, hint) => {
+    const admin = await createAdmin();
+    const tappa = await createStage({ stato });
+    expect(await conferma(admin, tappa, null)).toMatchObject({
+      ok: false,
+      error: { hint },
+    });
+  });
+
+  it("solo l'admin può chiamarla", async () => {
+    const tappa = await createStage();
+    const giocatore = await createPlayer();
+    const sua = await inAttesa(tappa, giocatore);
+    expect(await conferma(giocatore, tappa, [sua])).toMatchObject({
+      ok: false,
+      error: { code: "42501" },
+    });
+    expect(await statoDi(sua)).toBe("in_attesa");
+  });
+});

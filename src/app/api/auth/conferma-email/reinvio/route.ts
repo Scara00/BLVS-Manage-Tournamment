@@ -17,6 +17,7 @@ import {
   readPendingVerification,
   rememberPendingVerification,
 } from "@/lib/auth/email-verification/pending";
+import { checkAuthAttempt, clientIp } from "@/lib/auth/rate-limit";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { now } from "@/lib/time/server-time";
@@ -29,7 +30,10 @@ import { now } from "@/lib/time/server-time";
  * `{ email }` when the link was opened in another browser (the same thing
  * Supabase's public `resend` allows). Nobody to confirm → 403.
  * Less than 60 s since the last link → 429 `{ attesaSecondi }`, checked here
- * first and again by Supabase Auth (`max_frequency`).
+ * first and again by Supabase Auth (`max_frequency`). Every request also
+ * counts towards a limit per IP and per address (`verify-resend`), the
+ * same 429, so naming addresses in the body cannot flood inboxes or spend
+ * the project's email quota.
  * An unknown or already confirmed address gets the same 200 (no enumeration).
  */
 export async function POST(request: NextRequest) {
@@ -44,6 +48,15 @@ export async function POST(request: NextRequest) {
     email = fromBody;
   }
   if (!email) return jsonError(403, NO_PENDING_VERIFICATION_MESSAGE);
+
+  const check = await checkAuthAttempt(
+    clientIp(request),
+    "verify-resend",
+    email,
+  );
+  if (check.status === "unavailable")
+    return jsonError(503, "Servizio momentaneamente non disponibile. Riprova.");
+  if (check.status === "blocked") return tooSoon(check.retryAfterSeconds);
 
   if (pending && pending.email === email) {
     const wait = resendWaitSeconds(pending.inviataIl, now());

@@ -7,6 +7,7 @@ import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
 import {
   aggiungiDemoIscritto,
   cercaDemoGiocatori,
+  confermaDemoIscritti,
   rimuoviDemoIscritto,
 } from "@/lib/demo/iscritti-admin";
 import { readSupabaseEnv } from "@/lib/supabase/env";
@@ -15,6 +16,8 @@ import { erroreDaDb, erroreDaDemo, type ErroreIscritti } from "./errors";
 import { nomeCompleto } from "./format";
 import {
   aggiuntoMessage,
+  confermataMessage,
+  confermateMessage,
   ISCRITTI_MESSAGES,
   RICERCA_MAX_RISULTATI,
   rimossoMessage,
@@ -119,6 +122,70 @@ export async function aggiungiIscritto(
     );
   } catch (error) {
     console.error("[iscritti] aggiunta non riuscita", error);
+    return fallimento({
+      reason: "network",
+      message: ISCRITTI_MESSAGES.network,
+    });
+  }
+}
+
+/**
+ * «Conferma» on a row (`iscrizioneId`) or «Conferma tutte» (no id): the
+ * pending registrations become `confermata`, the only ones groups and
+ * phases count. `admin_conferma_iscrizioni()` checks role and stage state.
+ */
+export async function confermaIscritti(
+  _prev: ModificaIscrittiState,
+  formData: FormData,
+): Promise<ModificaIscrittiState> {
+  const sessione = await sessioneAdmin();
+  if (!sessione.ok) {
+    return fallimento({
+      reason: sessione.reason,
+      message: ISCRITTI_MESSAGES[sessione.reason],
+    });
+  }
+  const tappaId = text(formData.get("tappaId"));
+  const iscrizioneId = text(formData.get("iscrizioneId")) || null;
+  const nome = text(formData.get("nome")).slice(0, 200) || "del giocatore";
+  if (!tappaId) {
+    return fallimento({
+      reason: "invalid",
+      message: ISCRITTI_MESSAGES.tappaNonTrovata,
+    });
+  }
+  const messaggio = (confermate: number) =>
+    iscrizioneId
+      ? confermataMessage(nome, confermate)
+      : confermateMessage(confermate);
+
+  if (!sessione.supabase) {
+    const esito = confermaDemoIscritti(
+      tappaId,
+      iscrizioneId ? [iscrizioneId] : null,
+    );
+    if (!esito.ok) return fallimento(erroreDaDemo(esito));
+    return successo(messaggio(esito.confermate.length));
+  }
+
+  if (!isUuid(tappaId) || (iscrizioneId && !isUuid(iscrizioneId))) {
+    return fallimento({
+      reason: "invalid",
+      message: ISCRITTI_MESSAGES.iscrizioneNonTrovata,
+    });
+  }
+  try {
+    const { data, error } = await sessione.supabase.rpc(
+      "admin_conferma_iscrizioni",
+      {
+        p_tappa: tappaId,
+        p_iscrizioni: iscrizioneId ? [iscrizioneId] : null,
+      },
+    );
+    if (error) return fallimento(erroreDaDb(error));
+    return successo(messaggio(typeof data === "number" ? data : 0));
+  } catch (error) {
+    console.error("[iscritti] conferma non riuscita", error);
     return fallimento({
       reason: "network",
       message: ISCRITTI_MESSAGES.network,

@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { connection } from "next/server";
+import { isHttpsEnforced } from "@/lib/security/https";
 import { getSupabaseEnv } from "./env";
 
 export async function createClient() {
@@ -13,6 +14,8 @@ export async function createClient() {
   await connection();
 
   return createServerClient(url, publishableKey, {
+    // Tokens never travel over plain HTTP where HTTPS is enforced.
+    cookieOptions: { secure: isHttpsEnforced() },
     cookies: {
       getAll() {
         return cookieStore.getAll();

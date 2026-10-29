@@ -237,6 +237,11 @@ describe("updateSession", () => {
     );
     expect(back.headers.get("location")).toBe("https://localhost/live");
     expect(eq).toHaveBeenCalledWith("id", "u1");
+    // Dot segments must not collapse into another site.
+    const fuori = await updateSession(
+      new NextRequest("https://localhost/accesso?da=%2F.%2F%2Fevil.example"),
+    );
+    expect(fuori.headers.get("location")).toBe("https://localhost/");
   });
 
   it.each([["senza profilo (account cancellato)", null]])(

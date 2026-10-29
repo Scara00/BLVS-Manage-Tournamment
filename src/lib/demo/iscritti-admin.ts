@@ -345,6 +345,31 @@ export function aggiungiDemoIscritto(
   return { ok: true, row: toRow(nuova) };
 }
 
+/**
+ * `admin_conferma_iscrizioni()` on the demo data: the pending registrations
+ * named in `ids`, or all of the stage with `null`. Returns those confirmed.
+ */
+export function confermaDemoIscritti(
+  tappaId: string,
+  ids: readonly string[] | null,
+):
+  | { ok: true; confermate: IscrittoRow[] }
+  | Extract<DemoEsitoIscritti, { ok: false }> {
+  const bloccato = statoBloccato(tappaId);
+  if (bloccato && !bloccato.ok) return bloccato;
+  const iscrizioni = iscrizioniDi(tappaId)!;
+  if (ids?.some((id) => !iscrizioni.some((i) => i.id === id && attiva(i)))) {
+    return { ok: false, motivo: "iscrizioneNonTrovata" };
+  }
+  const daConfermare = iscrizioni.filter(
+    (i) => i.stato === "in_attesa" && (ids === null || ids.includes(i.id)),
+  );
+  for (const i of daConfermare) i.stato = "confermata";
+  for (const categoria of new Set(daConfermare.map((i) => i.categoria)))
+    scriviConti(tappaId, categoria);
+  return { ok: true, confermate: daConfermare.map(toRow) };
+}
+
 /** `admin_rimuovi_iscrizione()` on the demo data: the seat is freed. */
 export function rimuoviDemoIscritto(
   tappaId: string,

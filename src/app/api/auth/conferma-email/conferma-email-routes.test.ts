@@ -80,6 +80,8 @@ const verifica =
   await import("../../../registrati/conferma-email/verifica/route");
 const { PENDING_VERIFICATION_COOKIE, encodePending } =
   await import("@/lib/auth/email-verification/pending");
+const { createMemoryRateLimitStore, setRateLimitStore } =
+  await import("@/lib/auth/rate-limit");
 
 const T0 = new Date("2026-10-27T12:00:00Z");
 
@@ -116,6 +118,7 @@ beforeEach(() => {
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
   vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test");
   jar.clear();
+  setRateLimitStore(createMemoryRateLimitStore());
   gotrue.reset();
   gotrue.resend.mockClear();
   gotrue.verifyOtp.mockClear();
@@ -185,6 +188,20 @@ describe("POST /api/auth/conferma-email/reinvio", () => {
       type: "signup",
       email: "altro@example.it",
     });
+  });
+
+  it("limita i reinvii per indirizzo anche senza il cookie, con la stessa risposta 429", async () => {
+    for (let i = 0; i < 5; i++) {
+      vi.setSystemTime(new Date(T0.getTime() + i * 61_000));
+      expect((await resend({ email: "vittima@example.it" })).status).toBe(200);
+    }
+    vi.setSystemTime(new Date(T0.getTime() + 5 * 61_000));
+    const res = await resend({ email: "vittima@example.it" });
+    expect(res.status).toBe(429);
+    expect(await res.json()).toMatchObject({
+      attesaSecondi: expect.any(Number),
+    });
+    expect(gotrue.resend).toHaveBeenCalledTimes(5);
   });
 
   it("un errore di Supabase Auth non espone dettagli", async () => {

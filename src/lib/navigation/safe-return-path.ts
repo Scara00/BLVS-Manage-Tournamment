@@ -28,6 +28,10 @@ export function safeReturnPath(
     return fallback;
   }
   if (url.origin !== BASE) return fallback;
+  // Dot segments collapse after the check above: `/.//evil.com` becomes
+  // `//evil.com`, which a browser or `new URL(path, base)` reads as
+  // another site.
+  if (url.pathname.startsWith("//")) return fallback;
   if (url.pathname === PRIVACY_PATH) return fallback;
   return `${url.pathname}${url.search}${url.hash}`;
 }

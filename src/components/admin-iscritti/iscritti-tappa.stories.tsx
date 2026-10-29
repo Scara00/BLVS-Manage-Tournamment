@@ -28,10 +28,16 @@ type SchermataProps = {
   tappa: IscrittiTappaView;
   caricamento?: boolean;
   rimuoviAperto?: string;
+  confermaTutteAperto?: boolean;
 };
 
 /** w-admin-iscritti inside the admin shell. */
-function Schermata({ tappa, caricamento, rimuoviAperto }: SchermataProps) {
+function Schermata({
+  tappa,
+  caricamento,
+  rimuoviAperto,
+  confermaTutteAperto,
+}: SchermataProps) {
   return (
     <ToastProvider>
       <div className="flex min-h-screen flex-col">
@@ -39,7 +45,7 @@ function Schermata({ tappa, caricamento, rimuoviAperto }: SchermataProps) {
           <PageContainer
             title="Iscritti"
             eyebrow="Amministrazione · Tappe"
-            description="Gli iscritti di ogni tabellone con posto e data. Aggiungi un giocatore registrato anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
+            description="Gli iscritti di ogni tabellone con posto e data. Conferma le iscrizioni in attesa (nei gironi entrano solo quelle confermate), aggiungi un giocatore registrato anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
           >
             {caricamento ? (
               <GestioneTappaLoading testo="Caricamento degli iscritti…" />
@@ -48,8 +54,10 @@ function Schermata({ tappa, caricamento, rimuoviAperto }: SchermataProps) {
                 tappa={tappa}
                 aggiungi={azioneFinta}
                 rimuovi={azioneFinta}
+                conferma={azioneFinta}
                 cerca={cercaFinta}
                 rimuoviAperto={rimuoviAperto}
+                confermaTutteAperto={confermaTutteAperto}
               />
             )}
           </PageContainer>
@@ -76,8 +84,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Registrations closed: the admin can still add and remove. */
+/**
+ * Registrations closed: the admin can still add and remove, and confirm
+ * the pending ones (every 4th seat) one by one or all together.
+ */
 export const Elenco: Story = {};
+
+/** «Conferma tutte», open: how many and what it means for the groups. */
+export const ConfermaTutte: Story = { args: { confermaTutteAperto: true } };
 
 export const Vuoto: Story = {
   args: { tappa: iscrittiDemo({ stato: "iscrizioni_aperte", m: 0, f: 0 }) },

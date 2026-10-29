@@ -3,6 +3,7 @@ import { creaDemoTappa, getDemoTappaGestione } from "./gestione-tappe";
 import {
   aggiungiDemoIscritto,
   cercaDemoGiocatori,
+  confermaDemoIscritti,
   demoIscrittiTappa,
   rimuoviDemoIscritto,
 } from "./iscritti-admin";
@@ -81,6 +82,30 @@ describe("iscritti demo (stesse regole di admin_iscrivi_giocatore)", () => {
     expect(aggiungiDemoIscritto(id, liberoM(id).id, AT)).toMatchObject({
       ok: true,
       row: { posto: 2 },
+    });
+  });
+
+  it("conferma una iscrizione in attesa o tutte, come admin_conferma_iscrizioni", () => {
+    const id = tappa();
+    const inAttesa = () =>
+      demoIscrittiTappa(id)!.rows.filter((r) => r.stato === "in_attesa");
+    const prima = inAttesa();
+    expect(prima.length).toBeGreaterThan(0);
+
+    const una = confermaDemoIscritti(id, [prima[0].id]);
+    expect(una).toMatchObject({ ok: true, confermate: [{ id: prima[0].id }] });
+    expect(inAttesa()).toHaveLength(prima.length - 1);
+
+    const tutte = confermaDemoIscritti(id, null);
+    expect(tutte).toMatchObject({ ok: true });
+    expect(inAttesa()).toHaveLength(0);
+    expect(confermaDemoIscritti(id, ["sconosciuta"])).toEqual({
+      ok: false,
+      motivo: "iscrizioneNonTrovata",
+    });
+    expect(confermaDemoIscritti(tappa(6, "in_corso"), null)).toEqual({
+      ok: false,
+      motivo: "nonModificabile",
     });
   });
 
