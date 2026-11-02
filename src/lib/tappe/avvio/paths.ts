@@ -1,26 +1,30 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
+import {
+  TABELLONE_NOME,
+  TABELLONE_SEGMENTO,
+  parseTabelloneSegmento,
+} from "@/lib/tappe/formato";
 import type { ProblemaAvvio } from "./regole";
 
-/**
- * URL segment of a board, `m` or `f`. Same as BLVS-28's
- * `CATEGORIA_SEGMENTO` (`src/lib/gironi/editor/types.ts`); switch to it
- * once both are merged.
- */
-export const CATEGORIA_SEGMENTO: Record<Categoria, string> = { M: "m", F: "f" };
+/** URL segment of a board, `m`, `f` or `x` (mixed). */
+export const CATEGORIA_SEGMENTO: Record<CategoriaTabellone, string> =
+  TABELLONE_SEGMENTO;
 
-export const CATEGORIA_NOME: Record<Categoria, string> = {
-  M: "maschile",
-  F: "femminile",
-};
+export const CATEGORIA_NOME: Record<CategoriaTabellone, string> =
+  TABELLONE_NOME;
 
-/** Accepts `m`/`f` (any case) from the URL. */
-export function parseCategoriaSegmento(segmento: string): Categoria | null {
-  const valore = segmento.toUpperCase();
-  return valore === "M" || valore === "F" ? valore : null;
+/** Accepts `m`/`f`/`x` (any case) from the URL. */
+export function parseCategoriaSegmento(
+  segmento: string,
+): CategoriaTabellone | null {
+  return parseTabelloneSegmento(segmento);
 }
 
 /** w-admin-avvio-fase of one board. */
-export function avvioFasePath(tappaId: string, categoria: Categoria): string {
+export function avvioFasePath(
+  tappaId: string,
+  categoria: CategoriaTabellone,
+): string {
   return `/admin/tappe/${encodeURIComponent(tappaId)}/avvio/${CATEGORIA_SEGMENTO[categoria]}`;
 }
 
@@ -28,7 +32,10 @@ export function avvioFasePath(tappaId: string, categoria: Categoria): string {
  * The groups editor of one board (BLVS-28, w-admin-gironi), same path as
  * its `gironiEditorPath`.
  */
-export function gironiPath(tappaId: string, categoria: Categoria): string {
+export function gironiPath(
+  tappaId: string,
+  categoria: CategoriaTabellone,
+): string {
   return `/admin/tappe/${encodeURIComponent(tappaId)}/gironi/${CATEGORIA_SEGMENTO[categoria]}`;
 }
 
@@ -39,7 +46,7 @@ export function gironiPath(tappaId: string, categoria: Categoria): string {
  */
 export function linkProblema(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   problema: ProblemaAvvio,
 ): string {
   const base = gironiPath(tappaId, categoria);

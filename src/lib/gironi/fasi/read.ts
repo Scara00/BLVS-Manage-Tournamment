@@ -4,7 +4,12 @@ import { forbidden } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseGioco, FaseGirone } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  FaseGioco,
+  FaseGirone,
+} from "@/lib/db/types";
 import { getDemoFaseTabellone } from "@/lib/demo/avvio-fase";
 import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
 import { classificaDemo } from "@/lib/demo/punteggi";
@@ -20,7 +25,13 @@ const FASI_GIOCATE: Record<TipoProssimaFase, FaseGirone[]> = {
   finali: ["gold", "silver"],
 };
 
-type GiocatoreDb = { iscrizione_id: string; nome: string; cognome: string };
+type GiocatoreDb = {
+  iscrizione_id: string;
+  nome: string;
+  cognome: string;
+  /** Since the mixed format. */
+  categoria?: Categoria | null;
+};
 
 /**
  * The board, its phase and the groups of the phase just played with their
@@ -29,7 +40,7 @@ type GiocatoreDb = { iscrizione_id: string; nome: string; cognome: string };
 export async function leggiDatiProssimaFase(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   tipo: TipoProssimaFase,
 ): Promise<(DatiProssimaFase & { tabelloneId: string }) | null> {
   const { data: tappa, error } = await supabase
@@ -44,7 +55,7 @@ export async function leggiDatiProssimaFase(
     nome: string;
     tabelloni: {
       id: string;
-      categoria: Categoria;
+      categoria: CategoriaTabellone;
       fase_gioco: FaseGioco | null;
     }[];
   };
@@ -70,13 +81,23 @@ export async function leggiDatiProssimaFase(
       if (giocatori.error) {
         throw new Error(`giocatori: ${giocatori.error.message}`);
       }
+      const righe = giocatori.data as GiocatoreDb[];
       const nomi = Object.fromEntries(
-        (giocatori.data as GiocatoreDb[]).map((p) => [
-          p.iscrizione_id,
-          `${p.nome} ${p.cognome}`.trim(),
-        ]),
+        righe.map((p) => [p.iscrizione_id, `${p.nome} ${p.cognome}`.trim()]),
       );
-      return { id: g.id, nome: g.nome, fase: g.fase, nomi, classifica };
+      const categorie = Object.fromEntries(
+        righe.flatMap((p) =>
+          p.categoria ? [[p.iscrizione_id, p.categoria] as const] : [],
+        ),
+      );
+      return {
+        id: g.id,
+        nome: g.nome,
+        fase: g.fase,
+        nomi,
+        categorie,
+        classifica,
+      };
     }),
   );
 
@@ -93,7 +114,7 @@ export async function leggiDatiProssimaFase(
 /** The same data from the in-memory demo stores (no Supabase env). */
 export function datiDemoProssimaFase(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): DatiProssimaFase | null {
   const tappa = getDemoTappaGestione(tappaId);
   const board = getDemoFaseTabellone(tappaId, categoria);
@@ -121,7 +142,7 @@ export function datiDemoProssimaFase(
  */
 export async function readProssimaFase(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   tipo: TipoProssimaFase,
 ): Promise<ProssimaFaseView | null> {
   await connection();

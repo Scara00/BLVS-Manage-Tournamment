@@ -106,6 +106,12 @@ export function GestioneTappa({
             <dt className="text-sm font-medium text-muted-foreground">Date</dt>
             <dd>{tappa.periodo}</dd>
           </div>
+          <div className="flex flex-col gap-space-1">
+            <dt className="text-sm font-medium text-muted-foreground">
+              Formato
+            </dt>
+            <dd>{tappa.formatoLabel}</dd>
+          </div>
           <div className="flex flex-col items-start gap-space-1">
             <dt className="text-sm font-medium text-muted-foreground">Stato</dt>
             <dd>

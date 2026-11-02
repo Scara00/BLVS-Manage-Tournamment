@@ -1,4 +1,4 @@
-import type { FaseGirone, FaseTabellone } from "@/lib/db/types";
+import type { Categoria, FaseGirone, FaseTabellone } from "@/lib/db/types";
 import { coloreGirone, type LivelloGironi } from "@/lib/gironi/fasi/fase";
 import type { ComposizioneGironi, GiocatoreGirone } from "./types";
 
@@ -16,17 +16,22 @@ export type GironiEditorJson = {
     posizione: number;
     /** Since BLVS-39. */
     fase?: FaseGirone;
-    giocatori: { iscrizione_id: string; nome: string }[];
+    giocatori: GiocatoreJson[];
   }[];
-  non_assegnati: { iscrizione_id: string; nome: string }[];
+  non_assegnati: GiocatoreJson[];
 };
 
-const giocatore = (g: {
+/** `categoria` only on a mixed board (null elsewhere, absent before it). */
+type GiocatoreJson = {
   iscrizione_id: string;
   nome: string;
-}): GiocatoreGirone => ({
+  categoria?: Categoria | null;
+};
+
+const giocatore = (g: GiocatoreJson): GiocatoreGirone => ({
   iscrizioneId: g.iscrizione_id,
   nome: g.nome,
+  ...(g.categoria ? { categoria: g.categoria } : {}),
 });
 
 export function toComposizione(json: GironiEditorJson): ComposizioneGironi {

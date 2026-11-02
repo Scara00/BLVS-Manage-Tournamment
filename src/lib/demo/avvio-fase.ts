@@ -1,4 +1,4 @@
-import type { Categoria, FaseGioco, FaseGirone } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseGioco, FaseGirone } from "@/lib/db/types";
 import {
   assegnaLettere,
   controllaAvvio,
@@ -56,16 +56,17 @@ const COGNOMI = [
   "Bruno",
   "Mancini",
 ];
-const NOMI: Record<Categoria, string[]> = {
+const NOMI: Record<CategoriaTabellone, string[]> = {
   M: ["Luca", "Marco", "Paolo", "Andrea", "Matteo", "Davide", "Simone"],
   F: ["Giulia", "Sara", "Chiara", "Marta", "Elena", "Anna", "Laura"],
+  X: ["Luca", "Giulia", "Marco", "Sara", "Paolo", "Chiara", "Andrea"],
 };
 
-function chiave(tappaId: string, categoria: Categoria): string {
+function chiave(tappaId: string, categoria: CategoriaTabellone): string {
   return `${tappaId}:${categoria}`;
 }
 
-function giocatore(tappaId: string, categoria: Categoria, i: number) {
+function giocatore(tappaId: string, categoria: CategoriaTabellone, i: number) {
   return {
     iscrizioneId: `${tappaId}-${categoria}-i${i + 1}`,
     utenteId: `${tappaId}-${categoria}-u${i + 1}`,
@@ -81,7 +82,7 @@ function giocatore(tappaId: string, categoria: Categoria, i: number) {
  */
 function componi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   dimensioni: number[],
   fuori = 0,
 ): DemoBoard {
@@ -144,7 +145,7 @@ const copiaGirone = (g: GironeAvvio): GironeAvvio => ({
  */
 function gironiProposti(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   board: DemoBoard,
 ): { gironi: GironeAvvio[]; nonAssegnati: IscrittoFuori[] } {
   const giocatori = new Map(
@@ -176,7 +177,7 @@ function gironiProposti(
 /** One board for the start screen, or null for an unknown stage. */
 export function getDemoAvvioFase(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): TabelloneAvvio | null {
   const tappa = getDemoTappaGestione(tappaId);
   if (!tappa) return null;
@@ -215,7 +216,7 @@ export function getDemoAvvioFase(
  */
 export function getDemoGironiGiocati(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): GironeAvvio[] {
   const board = store().get(chiave(tappaId, categoria));
   if (!board || board.faseGioco === null) return [];
@@ -229,7 +230,7 @@ export function getDemoGironiGiocati(
  */
 export function proponiGoldSilverDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   gironi: readonly { fase: FaseGirone; nome: string; iscrizioni: string[] }[],
 ): boolean {
   const board = store().get(chiave(tappaId, categoria));
@@ -266,7 +267,7 @@ export function proponiGoldSilverDemo(
  */
 export function generaFinaliDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   finali: readonly { fase: FaseGirone; nome: string; iscrizioni: string[] }[],
 ): number | null {
   const board = store().get(chiave(tappaId, categoria));
@@ -313,7 +314,7 @@ export type DemoAvvioEsito =
 /** Same rules and effects as `avvia_fase`. */
 export function avviaFaseDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): DemoAvvioEsito {
   const tabellone = getDemoAvvioFase(tappaId, categoria);
   if (!tabellone) return { status: "nonTrovata" };
@@ -401,7 +402,7 @@ export function creaDemoAvvioFase(scenario: ScenarioAvvio): string {
  */
 export function getDemoFaseTabellone(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): {
   faseGioco: FaseGioco | null;
   proposta: boolean;

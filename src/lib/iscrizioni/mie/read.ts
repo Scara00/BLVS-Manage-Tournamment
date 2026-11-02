@@ -10,7 +10,12 @@ import {
 } from "@/lib/classifica-generale/dati";
 import { stagioneScelta } from "@/lib/classifica-generale/stagione";
 import type { ClassificaGenerale } from "@/lib/classifica-generale/types";
-import type { Categoria, StatoIscrizione, StatoTappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+  StatoTappa,
+} from "@/lib/db/types";
 import {
   DEMO_ME_CLASSIFICA,
   getDemoDatiClassifica,
@@ -55,7 +60,7 @@ type RigaDb = {
   id: string;
   stato: StatoIscrizione;
   posto: number | null;
-  tabelloni: { categoria: Categoria } | null;
+  tabelloni: { categoria: CategoriaTabellone } | null;
   girone_iscrizioni: { girone_id: string }[] | null;
   tappe: IscrizioneMiaRow["tappa"] | null;
 };
@@ -192,26 +197,31 @@ export async function readMieIscrizioni(): Promise<MieIscrizioniView | null> {
     return valore;
   };
 
+  /** The overall standing a registration counts in: never the mixed one. */
+  const categoriaGenerale = (row: { categoria: CategoriaTabellone }) =>
+    row.categoria === "X" ? null : (lettura.categoria ?? row.categoria);
+
   const iscrizioni = await Promise.all(
     lettura.righe.map(async (row) => {
-      const risultato = CON_CLASSIFICA.includes(row.tappa.stato)
-        ? risultatoDaClassifica(
-            // Points follow the player's current category (BLVS-54).
-            (
-              await classifica(
-                lettura.categoria ?? row.categoria,
-                row.tappa.stagione,
-              )
-            ).righe,
-            lettura.me,
-            row.tappa.id,
-          )
-        : null;
+      // Points follow the player's current category (BLVS-54); a mixed
+      // stage gives none.
+      const generale = categoriaGenerale(row);
+      const risultato =
+        generale && CON_CLASSIFICA.includes(row.tappa.stato)
+          ? risultatoDaClassifica(
+              (await classifica(generale, row.tappa.stagione)).righe,
+              lettura.me,
+              row.tappa.id,
+            )
+          : null;
       return toIscrizioneMia(row, risultato, at);
     }),
   );
 
-  const categoria = lettura.categoria ?? lettura.righe[0]?.categoria ?? null;
+  const categoria =
+    lettura.categoria ??
+    lettura.righe.map(categoriaGenerale).find((c) => c !== null) ??
+    null;
   const stagione = stagioneScelta(
     null,
     lettura.stagioni,

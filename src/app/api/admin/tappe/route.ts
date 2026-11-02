@@ -17,7 +17,10 @@ export const GET = withAdmin(async (_request, _context, { supabase }) => {
   return Response.json({ tappe: data });
 });
 
-/** POST /api/admin/tappe — creates a stage; the M and F boards come with it. */
+/**
+ * POST /api/admin/tappe — creates a stage; its boards come with it (M and
+ * F, or the single mixed board with `formato: "misto"`).
+ */
 export const POST = withAdmin(async (request, _context, { supabase }) => {
   const body = await readJsonObject(request);
   if (!body) return malformedBody();

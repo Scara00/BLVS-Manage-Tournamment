@@ -1,6 +1,6 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { publishBoardClosed } from "@/lib/live/publish";
 import { now } from "@/lib/time/server-time";
@@ -22,7 +22,7 @@ export async function pubblicaChiusura(
     classifica,
   }: {
     tappaId: string;
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     tappaConclusa: boolean;
     classifica: ClassificaTappa | null;
   },

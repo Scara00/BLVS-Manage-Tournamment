@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type { CriterioSpareggio } from "@/lib/gironi/classifica";
 
 /** A tied player, by registration (one registration is one player). */
@@ -32,7 +32,7 @@ export type ParitaVista = {
 /** The ties of one group; empty while the group is still being played. */
 export type ParitaGirone = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
   gironeNome: string;
   parita: ParitaVista[];

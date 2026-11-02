@@ -1,4 +1,9 @@
-import type { Categoria, StatoIscrizione, StatoTappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+  StatoTappa,
+} from "@/lib/db/types";
 
 /** An active registration as read from the database (or the demo store). */
 export type IscrittoRow = {
@@ -6,14 +11,20 @@ export type IscrittoRow = {
   posto: number | null;
   stato: StatoIscrizione;
   created_at: string;
-  categoria: Categoria;
+  /** The board of the registration. */
+  categoria: CategoriaTabellone;
+  /** The player's own category (M/F), shown on a mixed board. */
+  categoriaGiocatore?: Categoria | null;
   nome: string;
   cognome: string;
   email: string;
 };
 
 /** A board of the stage: its maximum. */
-export type TabelloneIscrittiRow = { categoria: Categoria; posti: number };
+export type TabelloneIscrittiRow = {
+  categoria: CategoriaTabellone;
+  posti: number;
+};
 
 export type TappaIscrittiRow = {
   id: string;
@@ -35,12 +46,27 @@ export type IscrittoView = {
   iscrittoIlTesto: string;
   stato: StatoIscrizione;
   statoLabel: string;
+  /** Mixed board only: «Uomo» / «Donna». */
+  categoriaLabel: string | null;
+};
+
+/** One half of a mixed board: its seats and players. */
+export type QuotaIscrittiView = {
+  categoria: Categoria;
+  /** «Uomini» / «Donne». */
+  label: string;
+  posti: number;
+  occupati: number;
+  liberiTesto: string;
+  pieno: boolean;
 };
 
 export type IscrittiTabelloneView = {
-  categoria: Categoria;
-  /** «Maschile» / «Femminile». */
+  categoria: CategoriaTabellone;
+  /** «Maschile» / «Femminile» / «Misto». */
   label: string;
+  /** Mixed board: the two halves (men, women); empty otherwise. */
+  quote: QuotaIscrittiView[];
   posti: number;
   occupati: number;
   liberi: number;

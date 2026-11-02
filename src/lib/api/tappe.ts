@@ -1,8 +1,8 @@
 import { BodyReader } from "./validation";
-import { STATI_TAPPA } from "@/lib/db/types";
+import { FORMATI_TAPPA, STATI_TAPPA } from "@/lib/db/types";
 
 export const TAPPA_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, created_at, updated_at, tabelloni (id, categoria)";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, formato, created_at, updated_at, tabelloni (id, categoria)";
 
 /** Reads the writable fields of a stage; `partial` for PATCH. */
 export function readTappa(body: Record<string, unknown>, partial: boolean) {
@@ -26,6 +26,10 @@ export function readTappa(body: Record<string, unknown>, partial: boolean) {
         ? undefined
         : reader.date("dataFine", { required }),
     stato: reader.oneOf("stato", STATI_TAPPA, { required: false }),
+    // Only on creation: the database keeps the format fixed afterwards.
+    formato: partial
+      ? undefined
+      : reader.oneOf("formato", FORMATI_TAPPA, { required: false }),
     iscrizioni_aprono_il: reader.timestamp("iscrizioniApronoIl"),
     iscrizioni_chiudono_il: reader.timestamp("iscrizioniChiudonoIl"),
   });

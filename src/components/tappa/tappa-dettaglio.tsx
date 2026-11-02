@@ -217,8 +217,11 @@ export function TappaDettaglioView({
           id="tabelloni-titolo"
           className="font-heading text-2xl font-semibold"
         >
-          Tabelloni
+          {tappa.misto ? "Tabellone misto" : "Tabelloni"}
         </h2>
+        {tappa.formatoTesto ? (
+          <p className="max-w-prose">{tappa.formatoTesto}</p>
+        ) : null}
         <div className="grid gap-stack md:grid-cols-2">
           {tappa.tabelloni.map((t) => (
             <Tabellone

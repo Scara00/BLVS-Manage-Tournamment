@@ -1,5 +1,5 @@
-import type { Categoria, FaseGioco } from "@/lib/db/types";
-import type { GironeProposto } from "./qualificazione";
+import type { CategoriaTabellone, FaseGioco } from "@/lib/db/types";
+import type { FinaleDaComporre, GironeProposto } from "./qualificazione";
 
 /** The step after a group phase: the gold/silver groups, or the finals. */
 export type TipoProssimaFase = "gold_silver" | "finali";
@@ -10,17 +10,24 @@ export type TipoProssimaFase = "gold_silver" | "finali";
  * - `parita`: a group has a perfect tie to resolve first (R-40);
  * - `non_componibile`: the groups can't make the next phase in automatic;
  * - `pronta`: the proposal can be saved (`anteprima`);
+ * - `manuale`: mixed finals the admin composes by hand (`scelta`);
  * - `proposta`: the gold/silver groups are proposed, not started yet;
  * - `fatta`: the finals exist.
  */
 export type StatoProssimaFase =
-  "in_corso" | "parita" | "non_componibile" | "pronta" | "proposta" | "fatta";
+  | "in_corso"
+  | "parita"
+  | "non_componibile"
+  | "pronta"
+  | "manuale"
+  | "proposta"
+  | "fatta";
 
 export type GironeDaRisolvere = { id: string; nome: string; href: string };
 
 export type ProssimaFaseView = {
   tappa: { id: string; nome: string };
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   tipo: TipoProssimaFase;
   /** The board's current game phase. */
   faseGioco: FaseGioco | null;
@@ -32,6 +39,8 @@ export type ProssimaFaseView = {
   anteprima: GironeProposto[];
   /** Warnings on the proposal, e.g. a group of 2 to complete. */
   avvisi: string[];
+  /** The finals to compose by hand (`manuale`); empty otherwise. */
+  scelta?: FinaleDaComporre[];
 };
 
 export type ProssimaFaseState =
@@ -60,6 +69,8 @@ export const PROSSIMA_FASE_MESSAGES = {
   propostaSalvata:
     "Proposta salvata: controlla i gironi gold e silver qui sotto e modificali se serve, poi avviali.",
   finaliGenerate: "Finali generate: le partite sono da giocare.",
+  sceltaFinali:
+    "Ci sono più gironi di quanti una finale ne possa accogliere: scegli tu i finalisti di ogni finale, metà uomini e metà donne.",
   inCorso:
     "Alcune partite non sono ancora concluse: la proposta parte quando lo sono tutte.",
   parita: "C'è una parità da risolvere: la proposta parte dopo la risoluzione.",

@@ -4,7 +4,12 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseGioco, StatoTappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  FaseGioco,
+  StatoTappa,
+} from "@/lib/db/types";
 import { getDemoAvvioFase } from "@/lib/demo/avvio-fase";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { toAvvioFaseView, type AvvioFaseView } from "./format";
@@ -22,6 +27,8 @@ type GiocatoreDb = {
   utente_id: string;
   nome: string;
   cognome: string;
+  /** Since the mixed format. */
+  categoria?: Categoria | null;
 };
 
 type IscrizioneDb = {
@@ -32,7 +39,7 @@ type IscrizioneDb = {
 async function readFromDb(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<{ tabellone: TabelloneAvvio; problemi: ProblemaAvvio[] } | null> {
   const { data: tappa, error: tappaError } = await supabase
     .from("tappe")
@@ -47,7 +54,7 @@ async function readFromDb(
     stato: StatoTappa;
     tabelloni: {
       id: string;
-      categoria: Categoria;
+      categoria: CategoriaTabellone;
       fase_gioco: FaseGioco | null;
     }[];
   };
@@ -90,6 +97,7 @@ async function readFromDb(
         lettera: p.lettera,
         nome: p.nome,
         cognome: p.cognome,
+        ...(p.categoria ? { categoria: p.categoria } : {}),
       }));
     }),
   );
@@ -126,7 +134,7 @@ async function readFromDb(
  */
 export async function readAvvioFase(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<AvvioFaseView> {
   await connection();
   if (!readSupabaseEnv()) {

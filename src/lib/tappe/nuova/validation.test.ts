@@ -35,6 +35,7 @@ describe("validaNuovaTappa", () => {
     expect(validaNuovaTappa(form())).toEqual({
       ok: true,
       values: {
+        formato: "classico",
         nome: "Tappa 4 · Lignano",
         luogo: "Lignano, Bagno 3",
         data: "2027-11-14",

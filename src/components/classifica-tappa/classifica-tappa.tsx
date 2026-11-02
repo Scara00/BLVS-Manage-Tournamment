@@ -12,7 +12,7 @@ import {
   type ResponsiveTableColumn,
 } from "@/components/responsive-table/responsive-table";
 import { FlipDigits, useReducedMotion } from "@/components/scoreboard";
-import type { Categoria, FaseTabellone } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseTabellone } from "@/lib/db/types";
 import type { StageStandingRow, StageStandings } from "@/lib/live/types";
 import {
   classificaMostrata,
@@ -30,6 +30,17 @@ const STATO_TESTO: Record<StageStandings["state"], string> = {
   definitiva:
     "Tutte le posizioni sono decise: i punti restano provvisori finché l'organizzazione chiude il tabellone.",
   conclusa: "Tabellone chiuso: i punti sono definitivi.",
+};
+
+/** The same states for the mixed board, which gives no points. */
+const STATO_TESTO_MISTO: Record<StageStandings["state"], string> = {
+  in_attesa:
+    "Le finali non sono ancora iniziate: la classifica si riempie con le finali gold e silver.",
+  in_corso:
+    "Finali in corso: le posizioni segnate «non ancora definitiva» possono ancora cambiare.",
+  definitiva:
+    "Tutte le posizioni sono decise: la classifica diventa definitiva quando l'organizzazione chiude il tabellone.",
+  conclusa: "Tabellone chiuso: la classifica è definitiva.",
 };
 
 /** Points in font.mono: split-flap digits, plain digits with reduced motion. */
@@ -71,8 +82,9 @@ function colonne(
   provvisori: boolean,
   still: boolean,
   pari: (row: StageStandingRow) => boolean,
+  senzaPunti = false,
 ): ResponsiveTableColumn<StageStandingRow>[] {
-  return [
+  const tutte: ResponsiveTableColumn<StageStandingRow>[] = [
     {
       key: "position",
       header: "Posizione",
@@ -123,18 +135,25 @@ function colonne(
       ),
     },
   ];
+  // The mixed board gives no points: places only.
+  return senzaPunti ? tutte.filter((c) => c.key !== "points") : tutte;
 }
 
 type Gruppo = { key: string; caption: string; rows: StageStandingRow[] };
 
 /** Gold final, then silver, then (rarely) a final of unknown phase. */
-function gruppi(rows: readonly StageStandingRow[]): Gruppo[] {
+function gruppi(
+  rows: readonly StageStandingRow[],
+  senzaPunti = false,
+): Gruppo[] {
   const fasi: (FaseTabellone | null)[] = ["gold", "silver", null];
   return fasi
     .map((fase) => ({
       key: fase ?? "altra",
       caption: fase
-        ? `${FASE_FINALE_LABEL[fase]} · punti ${puntiPerPosizioneTesto(fase)}`
+        ? senzaPunti
+          ? FASE_FINALE_LABEL[fase]
+          : `${FASE_FINALE_LABEL[fase]} · punti ${puntiPerPosizioneTesto(fase)}`
         : "Finale",
       rows: rows.filter((r) => r.phase === fase),
     }))
@@ -156,7 +175,7 @@ export function ClassificaTappa({
 }: {
   /** `<stage>:<M|F>`: which standing of the snapshot to show. */
   standingsId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   me: string | null;
   /** The player is registered on this board. */
   mostraLaTuaTappa: boolean;
@@ -178,8 +197,9 @@ export function ClassificaTappa({
     rows.some(
       (r) => r.playerId !== row.playerId && r.position === row.position,
     );
-  const columns = colonne(me, provvisori, still, pari);
-  const elenco = gruppi(rows);
+  const senzaPunti = categoria === "X";
+  const columns = colonne(me, provvisori, still, pari, senzaPunti);
+  const elenco = gruppi(rows, senzaPunti);
 
   return (
     <div
@@ -192,8 +212,15 @@ export function ClassificaTappa({
       <h2 className="font-heading text-2xl font-semibold">
         {titoloClassificaTappa(categoria)}
       </h2>
-      <p data-testid="classifica-tappa-stato">{STATO_TESTO[stato]}</p>
-      {provvisori && rows.length > 0 ? (
+      <p data-testid="classifica-tappa-stato">
+        {senzaPunti ? STATO_TESTO_MISTO[stato] : STATO_TESTO[stato]}
+      </p>
+      {senzaPunti ? (
+        <p className="text-sm">
+          Il misto non assegna punti alla classifica generale.
+        </p>
+      ) : null}
+      {!senzaPunti && provvisori && rows.length > 0 ? (
         <p className="text-sm">
           I punti sono provvisori finché il tabellone non è chiuso: lo indica la
           scritta «provvisori» accanto ai punti.

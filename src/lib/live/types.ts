@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { Categoria, CategoriaTabellone } from "@/lib/db/types";
 import type { StageBoard } from "@/lib/tabellone/types";
 import type { PartitaLive } from "@/lib/tappe/live-admin/types";
 
@@ -42,7 +42,7 @@ export type LiveMatch = {
    * and the Gold/Silver board.
    */
   stageId?: string;
-  category?: "M" | "F";
+  category?: CategoriaTabellone;
   /** Round of the group (1..3), orders a player's matches. */
   round?: number;
   state?: LiveMatchState;
@@ -78,7 +78,7 @@ export type GroupStandings = {
   label: string;
   /** BLVS-36: the stage and board of the group, when known. */
   stageId?: string;
-  category?: "M" | "F";
+  category?: CategoriaTabellone;
   rows: readonly GroupStandingRow[];
 };
 
@@ -156,7 +156,7 @@ export type PhaseStarted = {
   stageId: string;
   /** Spoken in announcements, e.g. «Tappa 3 · Cagliari, maschile». */
   label: string;
-  category: "M" | "F";
+  category: CategoriaTabellone;
   phase: "gironi_iniziali" | "gironi_gold_silver" | "finali";
   /** Matches created, all still to play. */
   matches: number;
@@ -170,7 +170,7 @@ export type BoardMatches = {
   /** `<stage id>:<category>`, one per board. */
   id: string;
   stageId: string;
-  category: Categoria;
+  category: CategoriaTabellone;
   /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
   label: string;
   /** What changed, e.g. «Girone A · turno 2: partita conclusa». */
@@ -198,7 +198,7 @@ export type BoardClosed = {
   /** `<stage id>:<category>`, one per board. */
   id: string;
   stageId: string;
-  category: Categoria;
+  category: CategoriaTabellone;
   /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
   label: string;
   /** ISO time the board was closed. */
@@ -233,7 +233,7 @@ export type StageStandings = {
   /** `<stage id>:<category>`, one per board. */
   id: string;
   stageId: string;
-  category: Categoria;
+  category: CategoriaTabellone;
   /** Spoken in announcements, e.g. «Tappa 1 · Jesolo, maschile». */
   label: string;
   state: "in_attesa" | "in_corso" | "definitiva" | "conclusa";

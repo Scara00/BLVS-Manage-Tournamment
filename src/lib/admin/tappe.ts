@@ -3,6 +3,7 @@ import {
   CATEGORIE,
   STATI_TAPPA,
   type Categoria,
+  type CategoriaTabellone,
   type FaseTabellone,
   type StatoTappa,
 } from "@/lib/db/types";
@@ -17,6 +18,11 @@ export type AdminCategoria = {
   fase: FaseTabellone | null;
   /** Results closed for good (BLVS-43 `tabelloni.concluso_il`). */
   concluso: boolean;
+  /**
+   * The men's or women's half of a mixed stage's single board: seats and
+   * players of that half, phase of the whole board.
+   */
+  misto?: boolean;
 };
 
 /** A stage row of the admin dashboard table (drafts included). */
@@ -44,11 +50,14 @@ export type AdminTappaRpcRow = {
   stato: StatoTappa;
   motivo_annullamento: string | null;
   categorie: {
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     posti: number;
     fase: FaseTabellone | null;
     concluso?: boolean;
     iscritti: number;
+    /** Mixed board only: active players per category. */
+    iscritti_m?: number;
+    iscritti_f?: number;
   }[];
   partite_da_inserire: number;
 };
@@ -146,6 +155,20 @@ export function isGiornoDiGara(
 }
 
 function categorie(row: AdminTappaRpcRow): AdminCategoria[] {
+  // A mixed stage fills the M and F columns with the halves of its board.
+  const misto = row.categorie.find((c) => c.categoria === "X");
+  if (misto) {
+    return CATEGORIE.map((categoria) => ({
+      categoria,
+      iscritti: Number(
+        (categoria === "M" ? misto.iscritti_m : misto.iscritti_f) ?? 0,
+      ),
+      posti: Math.floor(Number(misto.posti ?? 0) / 2),
+      fase: misto.fase ?? null,
+      concluso: misto.concluso === true,
+      misto: true,
+    }));
+  }
   return CATEGORIE.map((categoria) => {
     const found = row.categorie.find((c) => c.categoria === categoria);
     return {

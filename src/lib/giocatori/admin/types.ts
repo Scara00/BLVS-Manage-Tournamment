@@ -3,6 +3,7 @@ import type {
   Ruolo,
   StatoIscrizione,
   StatoTappa,
+  CategoriaTabellone,
 } from "@/lib/db/types";
 
 /** One row of w-admin-giocatori. */
@@ -34,8 +35,11 @@ export type IscrizioneGiocatore = {
   data: string;
   statoTappa: StatoTappa;
   stato: StatoIscrizione;
-  /** The board it is on: a played stage stays on it after a change. */
-  categoria: Categoria;
+  /**
+   * The board it is on: a played stage stays on it after a change. X is a
+   * mixed stage, which the category change never moves.
+   */
+  categoria: CategoriaTabellone;
   posto: number | null;
 };
 

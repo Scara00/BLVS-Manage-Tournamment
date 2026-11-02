@@ -208,6 +208,18 @@ export function Regole({
       </SezioneRegole>
 
       <SezioneRegole
+        id={REGOLE_ANCORE.misto}
+        titolo="La tappa King & Queen misto"
+        aperta={regole.misto.daConfermare}
+      >
+        {regole.misto.contenuto.map((testo) => (
+          <p key={testo} className="max-w-prose text-pretty">
+            {testo}
+          </p>
+        ))}
+      </SezioneRegole>
+
+      <SezioneRegole
         id={REGOLE_ANCORE.set}
         titolo="Il set"
         aperta={regole.set.daConfermare}

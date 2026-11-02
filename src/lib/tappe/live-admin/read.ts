@@ -3,7 +3,7 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { now } from "@/lib/time/server-time";
@@ -17,7 +17,7 @@ import type { TabelloneLive } from "./types";
  */
 export async function readAdminLive(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<TabelloneLive> {
   await connection();
   if (!readSupabaseEnv()) {

@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { descriviCambio, riepilogoCambi } from "@/lib/tappe/chiusura/format";
 import { CATEGORIA_SEGMENTO } from "@/lib/tappe/avvio/paths";
 import { descriviPartita, squadraLabel } from "@/lib/tappe/live-admin/format";
@@ -42,7 +42,7 @@ import type { PartitaLive } from "@/lib/tappe/live-admin/types";
 type PunteggioDialogProps = {
   partita: PartitaLive;
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** The `salvaPunteggio` server action (a fake in Storybook). */
   action: AzionePartitaAction;
   disabled?: boolean;

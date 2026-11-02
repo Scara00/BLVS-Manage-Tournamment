@@ -203,7 +203,10 @@ describe("leggiRichiestaParita", () => {
       motivo: "sorteggio",
       note: "",
     });
+    // X is the mixed board.
     data.set("categoria", "X");
+    expect(leggiRichiestaParita(data)).toMatchObject({ categoria: "X" });
+    data.set("categoria", "Z");
     expect(leggiRichiestaParita(data)).toBeNull();
   });
 });

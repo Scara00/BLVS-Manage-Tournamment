@@ -1,11 +1,23 @@
-import type { Categoria, FaseGirone, FaseTabellone } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  FaseGirone,
+  FaseTabellone,
+} from "@/lib/db/types";
 import type { LivelloGironi } from "@/lib/gironi/fasi/fase";
+import {
+  TABELLONE_NOME,
+  TABELLONE_SEGMENTO,
+  parseTabelloneSegmento,
+} from "@/lib/tappe/formato";
 
 /** One player of a board, by registration (a registration is one player). */
 export type GiocatoreGirone = {
   iscrizioneId: string;
   /** Full name, never truncated in the editor. */
   nome: string;
+  /** The player's category, shown on a mixed board (2 men + 2 women). */
+  categoria?: Categoria;
 };
 
 export type GironeEditor = {
@@ -53,7 +65,7 @@ export type OperazioneGironi =
 /** The editor of one board of one stage (w-admin-gironi). */
 export type EditorGironi = {
   tappa: { id: string; nome: string };
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   composizione: ComposizioneGironi;
 };
 
@@ -67,7 +79,7 @@ export type EsitoGironi =
 
 export type ModificaGironiInput = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   versione: number;
   operazione: OperazioneGironi;
 };
@@ -88,23 +100,23 @@ export const GIRONI_EDITOR_MESSAGES = {
   offline: "Sei offline: la modifica non è stata salvata.",
 } as const;
 
-export const CATEGORIA_SEGMENTO: Record<Categoria, string> = { M: "m", F: "f" };
+export const CATEGORIA_SEGMENTO: Record<CategoriaTabellone, string> =
+  TABELLONE_SEGMENTO;
 
-export const CATEGORIA_LABEL: Record<Categoria, string> = {
-  M: "maschile",
-  F: "femminile",
-};
+export const CATEGORIA_LABEL: Record<CategoriaTabellone, string> =
+  TABELLONE_NOME;
 
-/** Accepts `m`/`f` (any case) from the URL. */
-export function parseCategoriaSegmento(segmento: string): Categoria | null {
-  const valore = segmento.toUpperCase();
-  return valore === "M" || valore === "F" ? valore : null;
+/** Accepts `m`/`f`/`x` (any case) from the URL. */
+export function parseCategoriaSegmento(
+  segmento: string,
+): CategoriaTabellone | null {
+  return parseTabelloneSegmento(segmento);
 }
 
 /** w-admin-gironi of one board. */
 export function gironiEditorPath(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): string {
   return `/admin/tappe/${encodeURIComponent(tappaId)}/gironi/${CATEGORIA_SEGMENTO[categoria]}`;
 }

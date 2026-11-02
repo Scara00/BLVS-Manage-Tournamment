@@ -1,5 +1,6 @@
 import { BodyReader } from "@/lib/api/validation";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
+import { categorieTabelloni } from "@/lib/tappe/formato";
 import {
   NUOVA_TAPPA_MESSAGES,
   POSTI_MAX,
@@ -31,7 +32,11 @@ export type TappaModificaValidation =
  * the client runs this on every change, the server before saving, and the
  * trigger `tabelloni_posti_minimo` is the final guard.
  */
-export function errorePosti(raw: string, iscritti: number): string | undefined {
+export function errorePosti(
+  raw: string,
+  iscritti: number,
+  { pari = false }: { pari?: boolean } = {},
+): string | undefined {
   const value = raw.trim();
   if (value === "") return "Campo obbligatorio.";
   const posti = Number(value);
@@ -39,6 +44,7 @@ export function errorePosti(raw: string, iscritti: number): string | undefined {
     return NUOVA_TAPPA_MESSAGES.posti;
   if (posti < iscritti) return maxSottoIscrittiMessage(iscritti);
   if (posti < POSTI_MIN) return NUOVA_TAPPA_MESSAGES.posti;
+  if (pari && posti % 2 !== 0) return M.postiDispari;
   return undefined;
 }
 
@@ -96,14 +102,19 @@ export function validaTappaModifica(
     }
   }
 
-  const posti = {} as Record<Categoria, number>;
-  for (const categoria of ["M", "F"] as const) {
+  // One maximum per board: M and F, or the single (even) mixed one.
+  const posti: Partial<Record<CategoriaTabellone, number>> = {};
+  for (const categoria of categorieTabelloni(originale.formato)) {
     const campo = CAMPO_POSTI_MODIFICA[categoria];
     const raw =
       typeof formData.get(campo) === "string"
         ? (formData.get(campo) as string)
         : "";
-    const errore = errorePosti(raw, originale.tabelloni[categoria].iscritti);
+    const errore = errorePosti(
+      raw,
+      originale.tabelloni[categoria]?.iscritti ?? 0,
+      { pari: categoria === "X" },
+    );
     if (errore) reader.errors[campo] ??= errore;
     else posti[categoria] = Number(raw.trim());
   }
@@ -116,8 +127,8 @@ export function validaTappaModifica(
       luogo: luogo!,
       data: data!,
       scadenza: scadenza!.toISOString(),
-      postiM: posti.M,
-      postiF: posti.F,
+      postiM: posti.X ?? posti.M!,
+      postiF: posti.X ?? posti.F!,
     },
   };
 }

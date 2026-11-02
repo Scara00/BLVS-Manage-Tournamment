@@ -4,7 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseGioco } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseGioco } from "@/lib/db/types";
 import { avviaFaseDemo, getDemoAvvioFase } from "@/lib/demo/avvio-fase";
 import { annuncioFase } from "@/lib/gironi/fasi/fase";
 import { publishPhaseStarted } from "@/lib/live/publish";
@@ -57,7 +57,7 @@ function errore(reason: MotivoErrore, message: string): Esito {
   return { ok: false, reason, message };
 }
 
-function avviaDemo(tappaId: string, categoria: Categoria): Esito {
+function avviaDemo(tappaId: string, categoria: CategoriaTabellone): Esito {
   const nome = getDemoAvvioFase(tappaId, categoria)?.tappa.nome ?? tappaId;
   const esito = avviaFaseDemo(tappaId, categoria);
   switch (esito.status) {
@@ -80,7 +80,7 @@ function avviaDemo(tappaId: string, categoria: Categoria): Esito {
 async function avviaDb(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<Esito> {
   if (!isUuid(tappaId)) return errore("conflict", AVVIO_MESSAGES.nonAvviabile);
   const { data: tappa, error: readError } = await supabase
@@ -91,7 +91,7 @@ async function avviaDb(
   if (readError) throw readError;
   const row = tappa as {
     nome: string;
-    tabelloni: { id: string; categoria: Categoria }[];
+    tabelloni: { id: string; categoria: CategoriaTabellone }[];
   } | null;
   const tabellone = row?.tabelloni.find((t) => t.categoria === categoria);
   if (!row || !tabellone) {

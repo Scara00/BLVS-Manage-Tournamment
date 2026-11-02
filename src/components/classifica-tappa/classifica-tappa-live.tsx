@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { LiveAnnouncer } from "@/components/live/live-announcer";
 import { LiveBarConnected } from "@/components/live/live-bar";
 import { LiveProvider } from "@/components/live/live-provider";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type {
   LiveConnectionOptions,
   LiveStatus,
@@ -36,7 +36,7 @@ export function ClassificaTappaLive({
 }: {
   initial: LiveSync;
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   me: string | null;
   mostraLaTuaTappa: boolean;
   connect?: boolean;

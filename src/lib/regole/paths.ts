@@ -4,6 +4,7 @@ export const REGOLE_PATH = "/regole";
 /** Anchors of the sections, for links from other pages. */
 export const REGOLE_ANCORE = {
   formato: "formato",
+  misto: "misto",
   set: "set",
   spareggiGirone: "spareggi-girone",
   punti: "punti",

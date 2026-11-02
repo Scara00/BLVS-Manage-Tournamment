@@ -2,7 +2,11 @@ import "server-only";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseGirone, FaseTabellone } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  FaseGirone,
+  FaseTabellone,
+} from "@/lib/db/types";
 import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
 import { coloreGirone, livelloGirone } from "@/lib/gironi/fasi/fase";
 import { classificaDemo, getDemoPunteggi } from "@/lib/demo/punteggi";
@@ -37,7 +41,7 @@ function primo<T>(valore: UnoOMolti<T>): T | null {
 
 type IscrizioneLive = {
   id: string;
-  tabelloni: UnoOMolti<{ categoria: Categoria }>;
+  tabelloni: UnoOMolti<{ categoria: CategoriaTabellone }>;
   girone_iscrizioni: { gironi: UnoOMolti<{ fase: FaseGirone }> }[] | null;
 };
 
@@ -167,7 +171,9 @@ export async function readLiveTappa(tappaId: string): Promise<LiveTappa> {
       .from("tabelloni")
       .select("categoria, fase")
       .eq("tappa_id", tappaId)
-      .returns<{ categoria: Categoria; fase: FaseTabellone | null }[]>(),
+      .returns<
+        { categoria: CategoriaTabellone; fase: FaseTabellone | null }[]
+      >(),
   ]);
   if (error) throw new Error(`tappa: ${error.message}`);
   if (!tappa) return { status: "notFound" };

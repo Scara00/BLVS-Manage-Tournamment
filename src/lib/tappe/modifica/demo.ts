@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
 import { POSTI_PREDEFINITI } from "@/lib/tappe/nuova/types";
 import { toRomeLocal } from "@/lib/time/rome-local";
@@ -16,7 +16,7 @@ export function demoTappaModifica(id: string): TappaModifica | null {
   const tabelloni = {
     M: { posti: POSTI_PREDEFINITI, iscritti: 0 },
     F: { posti: POSTI_PREDEFINITI, iscritti: 0 },
-  } as Record<Categoria, TabelloneModifica>;
+  } as Partial<Record<CategoriaTabellone, TabelloneModifica>>;
   for (const t of demo.tabelloni) {
     const iscritti = t.confermate + t.inAttesa;
     tabelloni[t.categoria] = {
@@ -35,6 +35,7 @@ export function demoTappaModifica(id: string): TappaModifica | null {
       : "",
     stato: row.stato,
     versione: 1,
+    formato: "classico",
     tabelloni,
   };
 }

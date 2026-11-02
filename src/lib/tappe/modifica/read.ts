@@ -3,7 +3,11 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { forbidden } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/session";
 import { isUuid } from "@/lib/api/validation";
-import type { Categoria, StatoTappa } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  FormatoTappa,
+  StatoTappa,
+} from "@/lib/db/types";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { toRomeLocal } from "@/lib/time/rome-local";
 import { demoTappaModifica } from "./demo";
@@ -18,7 +22,12 @@ type TappaModificaRow = {
   iscrizioni_chiudono_il: string | null;
   stato: StatoTappa;
   versione: number;
-  tabelloni: { id: string; categoria: Categoria; posti: number | null }[];
+  formato?: FormatoTappa;
+  tabelloni: {
+    id: string;
+    categoria: CategoriaTabellone;
+    posti: number | null;
+  }[];
 };
 
 async function iscritti(supabase: SupabaseClient, tabelloneId: string) {
@@ -27,6 +36,21 @@ async function iscritti(supabase: SupabaseClient, tabelloneId: string) {
   });
   if (error) throw new Error(`iscritti_tabellone: ${error.message}`);
   return Number(data ?? 0);
+}
+
+/** The floor of a mixed board's maximum: twice its fuller half. */
+async function minimoMisto(supabase: SupabaseClient, tabelloneId: string) {
+  const quote = await Promise.all(
+    (["M", "F"] as const).map(async (categoria) => {
+      const { data, error } = await supabase.rpc("occupati_quota", {
+        p_tabellone: tabelloneId,
+        p_categoria: categoria,
+      });
+      if (error) throw new Error(`occupati_quota: ${error.message}`);
+      return Number(data ?? 0);
+    }),
+  );
+  return 2 * Math.max(...quote);
 }
 
 /**
@@ -41,19 +65,22 @@ export async function readTappaModificaRow(
   const { data, error } = await supabase
     .from("tappe")
     .select(
-      "id, nome, luogo, data_inizio, data_fine, iscrizioni_chiudono_il, stato, versione, tabelloni (id, categoria, posti)",
+      "id, nome, luogo, data_inizio, data_fine, iscrizioni_chiudono_il, stato, versione, formato, tabelloni (id, categoria, posti)",
     )
     .eq("id", id)
     .maybeSingle<TappaModificaRow>();
   if (error) throw new Error(`tappe: ${error.message}`);
   if (!data) return null;
 
-  const tabelloni = {} as Record<Categoria, TabelloneModifica>;
+  const tabelloni: Partial<Record<CategoriaTabellone, TabelloneModifica>> = {};
   await Promise.all(
     data.tabelloni.map(async (t) => {
       tabelloni[t.categoria] = {
         posti: t.posti ?? 0,
-        iscritti: await iscritti(supabase, t.id),
+        iscritti:
+          t.categoria === "X"
+            ? await minimoMisto(supabase, t.id)
+            : await iscritti(supabase, t.id),
       };
     }),
   );
@@ -69,6 +96,7 @@ export async function readTappaModificaRow(
       : "",
     stato: data.stato,
     versione: data.versione,
+    formato: data.formato ?? "classico",
     tabelloni,
   };
 }

@@ -1,4 +1,4 @@
-import type { Categoria, StatoPartita } from "@/lib/db/types";
+import type { CategoriaTabellone, StatoPartita } from "@/lib/db/types";
 import { punteggioPath } from "@/lib/punteggi/paths";
 import { CATEGORIA_TABELLONE } from "@/lib/tappe/gestione-format";
 import { adminLivePath } from "@/lib/tappe/live-admin/paths";
@@ -11,7 +11,7 @@ export type PartitaTrovataRow = {
   partita_id: string;
   tappa_id: string;
   tappa_nome: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** partite.fase: 'gironi' | 'eliminazione' | 'finale'. */
   fase: string;
   girone_nome: string | null;

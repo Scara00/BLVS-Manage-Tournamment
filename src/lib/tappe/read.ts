@@ -64,7 +64,7 @@ export async function readElencoTappe(): Promise<ElencoTappe> {
     supabase
       .from("tappe")
       .select(
-        "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il",
+        "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_chiudono_il, formato",
       )
       .neq("stato", "bozza")
       .order("data_inizio", { ascending: true }),

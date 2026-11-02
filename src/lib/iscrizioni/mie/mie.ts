@@ -5,7 +5,12 @@
  * server clock is passed as `at`.
  */
 import type { RigaGenerale } from "@/lib/classifica-generale/types";
-import type { Categoria, StatoIscrizione, StatoTappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+  StatoTappa,
+} from "@/lib/db/types";
 import {
   toAnnullamentoView,
   type AnnullamentoView,
@@ -19,7 +24,8 @@ export type IscrizioneMiaRow = {
   id: string;
   stato: StatoIscrizione;
   posto: number | null;
-  categoria: Categoria;
+  /** The board of the registration (X: mixed). */
+  categoria: CategoriaTabellone;
   inGirone: boolean;
   tappa: {
     id: string;
@@ -68,7 +74,8 @@ export type IscrizioneMia = {
   statoTesto: string;
   tono: TonoStato;
   posto: number | null;
-  categoria: Categoria;
+  /** The board of the registration (X: mixed). */
+  categoria: CategoriaTabellone;
   quando: "prossima" | "passata";
   /** Link to w-tappa; false for demo-only rows that have no page. */
   apribile: boolean;

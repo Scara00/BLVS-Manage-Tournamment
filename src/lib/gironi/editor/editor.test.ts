@@ -233,11 +233,15 @@ describe("annunci", () => {
 });
 
 describe("percorsi", () => {
-  it("usa m/f nell'URL", () => {
+  it("usa m/f nell'URL, x per il tabellone misto", () => {
     expect(gironiEditorPath("rimini", "F")).toBe(
       "/admin/tappe/rimini/gironi/f",
     );
+    expect(gironiEditorPath("rimini", "X")).toBe(
+      "/admin/tappe/rimini/gironi/x",
+    );
     expect(parseCategoriaSegmento("M")).toBe("M");
-    expect(parseCategoriaSegmento("x")).toBeNull();
+    expect(parseCategoriaSegmento("x")).toBe("X");
+    expect(parseCategoriaSegmento("z")).toBeNull();
   });
 });

@@ -30,6 +30,7 @@ const HINT_FIELDS: Record<string, TappaModificaFieldErrors> = {
   scadenza_passata: { scadenza: M.scadenzaPassata },
   scadenza_dopo_tappa: { scadenza: M.scadenzaDopoTappa },
   scadenza_mancante: { scadenza: M.scadenzaPassata },
+  posti_dispari: { posti: M.postiDispari },
 };
 
 /** Field errors for table constraints (BLVS-07, BLVS-19). */
@@ -40,9 +41,9 @@ const CONSTRAINT_FIELDS: Record<string, TappaModificaFieldErrors> = {
 
 /** `detail` of `posti_sotto_iscritti` is `<categoria>:<iscritti>`. */
 function postiSottoIscritti(detail: string): TappaModificaFieldErrors | null {
-  const match = /^([MF]):(\d+)$/.exec(detail);
+  const match = /^([MFX]):(\d+)$/.exec(detail);
   if (!match) return null;
-  const categoria = match[1] as "M" | "F";
+  const categoria = match[1] as "M" | "F" | "X";
   return {
     [CAMPO_POSTI_MODIFICA[categoria]]: maxSottoIscrittiMessage(
       Number(match[2]),
@@ -180,10 +181,24 @@ export async function aggiornaTappa(
       data: v.data,
       scadenza: String(formData.get("scadenza") ?? ""),
       versione: Number(data),
-      tabelloni: {
-        M: { ...originale.tabelloni.M, posti: v.postiM },
-        F: { ...originale.tabelloni.F, posti: v.postiF },
-      },
+      tabelloni:
+        originale.formato === "misto"
+          ? {
+              X: {
+                iscritti: originale.tabelloni.X?.iscritti ?? 0,
+                posti: v.postiM,
+              },
+            }
+          : {
+              M: {
+                iscritti: originale.tabelloni.M?.iscritti ?? 0,
+                posti: v.postiM,
+              },
+              F: {
+                iscritti: originale.tabelloni.F?.iscritti ?? 0,
+                posti: v.postiF,
+              },
+            },
     },
   };
 }

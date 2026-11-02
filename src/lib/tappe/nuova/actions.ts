@@ -16,12 +16,15 @@ const RPC_HINTS: Record<string, [CampoNuovaTappa, string]> = {
   data_passata: ["data", M.dataPassata],
   scadenza_passata: ["scadenza", M.scadenzaPassata],
   scadenza_dopo_tappa: ["scadenza", M.scadenzaDopoTappa],
+  posti: ["posti", M.posti],
+  posti_dispari: ["posti", M.postiDispari],
 };
 
 /**
- * Creates a stage in draft with its two boards (M and F) through the
- * `crea_tappa` RPC, as the signed-in admin (RLS applies). Without Supabase
- * env (CI, e2e) it still validates, then answers `unavailable`.
+ * Creates a stage in draft through the `crea_tappa` RPC (classic: boards M
+ * and F) or `crea_tappa_mista` (one mixed board), as the signed-in admin
+ * (RLS applies). Without Supabase env (CI, e2e) it still validates, then
+ * answers `unavailable`.
  */
 export async function creaTappa(
   _prevState: NuovaTappaFormState,
@@ -47,15 +50,24 @@ export async function creaTappa(
   }
   if (!user) return { status: "unavailable", message: M.unavailable };
 
-  const { nome, luogo, data, scadenza, postiM, postiF } = result.values;
-  const { data: id, error } = await user.supabase.rpc("crea_tappa", {
-    p_nome: nome,
-    p_luogo: luogo,
-    p_data: data,
-    p_scadenza: scadenza,
-    p_posti_m: postiM,
-    p_posti_f: postiF,
-  });
+  const v = result.values;
+  const comuni = {
+    p_nome: v.nome,
+    p_luogo: v.luogo,
+    p_data: v.data,
+    p_scadenza: v.scadenza,
+  };
+  const { data: id, error } =
+    v.formato === "misto"
+      ? await user.supabase.rpc("crea_tappa_mista", {
+          ...comuni,
+          p_posti: v.posti,
+        })
+      : await user.supabase.rpc("crea_tappa", {
+          ...comuni,
+          p_posti_m: v.postiM,
+          p_posti_f: v.postiF,
+        });
   if (error) {
     const campo = error.code === "23514" && RPC_HINTS[error.hint];
     if (campo) {

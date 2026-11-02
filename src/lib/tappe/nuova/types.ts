@@ -1,4 +1,5 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone, FormatoTappa } from "@/lib/db/types";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 
 export const NUOVA_TAPPA_PATH = "/admin/tappe/nuova";
 /** Where the admin lands once the stage is created. */
@@ -9,31 +10,48 @@ export const POSTI_MAX = 256;
 export const POSTI_PREDEFINITI = 16;
 
 export const CAMPI_NUOVA_TAPPA = [
+  "formato",
   "nome",
   "luogo",
   "data",
   "scadenza",
   "postiM",
   "postiF",
+  "posti",
 ] as const;
 export type CampoNuovaTappa = (typeof CAMPI_NUOVA_TAPPA)[number];
 
-/** The form field holding the maximum of each board. */
-export const CAMPO_POSTI: Record<Categoria, "postiM" | "postiF"> = {
+/** The form field holding the maximum of each board (one for the mixed). */
+export const CAMPO_POSTI: Record<
+  CategoriaTabellone,
+  "postiM" | "postiF" | "posti"
+> = {
   M: "postiM",
   F: "postiF",
+  X: "posti",
 };
 
-export type NuovaTappaValori = {
+/** Default maximum of the mixed board: 16 men and 16 women. */
+export const POSTI_MISTO_PREDEFINITI = 32;
+
+type ValoriComuni = {
   nome: string;
   luogo: string;
   /** `YYYY-MM-DD`, the single day of play. */
   data: string;
   /** Registration deadline, as an ISO instant. */
   scadenza: string;
-  postiM: number;
-  postiF: number;
 };
+
+/**
+ * A classic stage has a maximum per board (M and F); a mixed one a single,
+ * even maximum: half the seats for men, half for women.
+ */
+export type NuovaTappaValori =
+  | (ValoriComuni & { formato: "classico"; postiM: number; postiF: number })
+  | (ValoriComuni & { formato: "misto"; posti: number });
+
+export type { FormatoTappa };
 
 /** Result of `creaTappa`, the w-admin-tappa-nuova server action. */
 export type NuovaTappaFormState =
@@ -74,14 +92,15 @@ export const NUOVA_TAPPA_MESSAGES = {
   dataNonValida: "Data non valida.",
   scadenzaNonValida: "Data e ora non valide.",
   posti: `Inserisci un numero intero tra ${POSTI_MIN} e ${POSTI_MAX}.`,
+  postiDispari: "Nel misto i posti sono pari: metà uomini e metà donne.",
+  formato: "Scegli il formato della tappa.",
 } as const;
 
 /** Warning shown next to a maximum that leaves incomplete groups. */
 export function avvisoGironiMessage(
   posti: number,
   dimensione: number,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): string {
-  const tabellone = categoria === "M" ? "maschile" : "femminile";
-  return `Tabellone ${tabellone}: con ${posti} iscritti i gironi da ${dimensione} non sono completi in tutte le fasi.`;
+  return `Tabellone ${TABELLONE_NOME[categoria]}: con ${posti} iscritti i gironi da ${dimensione} non sono completi in tutte le fasi.`;
 }

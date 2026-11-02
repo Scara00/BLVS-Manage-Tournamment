@@ -9,6 +9,22 @@ export type Ruolo = (typeof RUOLI)[number];
 export const CATEGORIE = ["M", "F"] as const;
 export type Categoria = (typeof CATEGORIE)[number];
 
+/**
+ * Category of a board: M and F for a classic stage, X for the single board
+ * of a mixed King & Queen stage (teams of one man and one woman). X is
+ * never a player's category.
+ */
+export const CATEGORIE_TABELLONE = ["M", "F", "X"] as const;
+export type CategoriaTabellone = (typeof CATEGORIE_TABELLONE)[number];
+
+/**
+ * Format of a stage, chosen at creation and then fixed: `classico` has the
+ * M and F boards, `misto` one X board where half the seats are for men and
+ * half for women.
+ */
+export const FORMATI_TAPPA = ["classico", "misto"] as const;
+export type FormatoTappa = (typeof FORMATI_TAPPA)[number];
+
 export const STATI_TAPPA = [
   "bozza",
   "iscrizioni_aperte",
@@ -87,6 +103,8 @@ export type Tappa = {
   data_inizio: string;
   data_fine: string;
   stato: StatoTappa;
+  /** Fixed at creation (`tappe_formato_fisso`). */
+  formato: FormatoTappa;
   iscrizioni_aprono_il: string | null;
   iscrizioni_chiudono_il: string | null;
   /** When registrations closed (set by the DB on the change of state). */
@@ -116,8 +134,11 @@ export type Tappa = {
 export type Tabellone = {
   id: string;
   tappa_id: string;
-  categoria: Categoria;
-  /** Seats on this board (one category of the stage); maximum registrations, never below the active ones. */
+  categoria: CategoriaTabellone;
+  /**
+   * Seats on this board; maximum registrations, never below the active
+   * ones. On a mixed (X) board it is even: half for men, half for women.
+   */
   posti: number;
   /** Gold/Silver phase, set by the admin; null until then. */
   fase: FaseTabellone | null;

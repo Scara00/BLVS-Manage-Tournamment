@@ -2,13 +2,13 @@
 
 import { TriangleAlertIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { REGOLA_GIRONI, type RegolaGironi } from "@/lib/tappe/gironi";
 import { avvisoGironiMessage } from "@/lib/tappe/nuova/types";
 
 type AvvisoGironiProps = {
   id: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** The maximum to warn about; `null` when there is nothing to say. */
   posti: number | null;
   onUsa: (posti: number) => void;

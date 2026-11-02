@@ -7,7 +7,7 @@ import {
   DATI_VUOTI,
   type DatiClassificaGenerale,
 } from "@/lib/classifica-generale/dati";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone, FormatoTappa } from "@/lib/db/types";
 import {
   classificaTappaDemo,
   getDemoTabelloneLive,
@@ -34,7 +34,7 @@ import {
  */
 export async function readClassificaTappa(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<ClassificaTappa | null> {
   if (!readSupabaseEnv()) return classificaTappaDemo(tappaId, categoria);
   return leggiClassificaTappa(await createClient(), tappaId, categoria);
@@ -46,20 +46,30 @@ const VUOTA: ClassificaTappa = {
   puntiProvvisori: true,
 };
 
-type TappaLetta = { id: string; nome: string; stagione: number | null };
+type TappaLetta = {
+  id: string;
+  nome: string;
+  stagione: number | null;
+  formato: FormatoTappa;
+};
 
 /** A non-draft stage, or null (drafts and missing stages look the same). */
 async function leggiTappa(tappaId: string): Promise<TappaLetta | null> {
   if (!readSupabaseEnv()) {
     const tappa = getDemoTappaGestione(tappaId);
     if (!tappa || tappa.row.stato === "bozza") return null;
-    return { id: tappa.row.id, nome: tappa.row.nome, stagione: null };
+    return {
+      id: tappa.row.id,
+      nome: tappa.row.nome,
+      stagione: null,
+      formato: "classico",
+    };
   }
   if (!isUuid(tappaId)) return null;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("tappe")
-    .select("id, nome, stagione")
+    .select("id, nome, stagione, formato")
     .eq("id", tappaId)
     .neq("stato", "bozza")
     .maybeSingle<TappaLetta>();
@@ -75,7 +85,7 @@ async function leggiTappa(tappaId: string): Promise<TappaLetta | null> {
  */
 async function classificaPerGiocatore(
   tappa: TappaLetta,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<ClassificaTappa> {
   if (!readSupabaseEnv()) {
     return classificaTappaDemo(tappa.id, categoria) ?? VUOTA;
@@ -88,7 +98,15 @@ async function classificaPerGiocatore(
   if (error) throw new Error(`classifica di tappa: ${error.message}`);
   const dati = (data as DatiClassificaGenerale | null) ?? DATI_VUOTI;
   if (!dati.tappe.some((t) => t.id === tappa.id)) return VUOTA;
-  return classificaTappaDaDati(dati, tappa.id).classifica;
+  const { classifica } = classificaTappaDaDati(dati, tappa.id);
+  // The mixed board gives no points to the overall standing.
+  return categoria === "X"
+    ? {
+        ...classifica,
+        senzaPunti: true,
+        righe: classifica.righe.map((r) => ({ ...r, punti: null })),
+      }
+    : classifica;
 }
 
 const ULTIME_KEY = Symbol.for("blvs.classificaTappa.ultime");
@@ -113,7 +131,7 @@ export function ultimaClassificaTappa(id: string): StageStandings | undefined {
 /** One board's stage standing in its live shape, recomputed now. */
 export async function calcolaStageStandings(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<StageStandings | null> {
   const tappa = await leggiTappa(tappaId);
   if (!tappa) return null;
@@ -128,7 +146,7 @@ export async function calcolaStageStandings(
 /** The live state of w-classifica-tappa: the bus plus one fresh standing. */
 export async function readClassificaTappaSync(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<LiveSync> {
   await connection();
   const standings = await calcolaStageStandings(tappaId, categoria);
@@ -157,25 +175,28 @@ export type VistaClassificaTappa =
   | {
       status: "ok";
       tappa: { id: string; nome: string };
-      categoria: Categoria;
+      categoria: CategoriaTabellone;
       /** Registration id of the signed-in player in this stage, or null. */
       me: string | null;
       /** The board the player is registered on, or null. */
-      meCategoria: Categoria | null;
+      meCategoria: CategoriaTabellone | null;
       standingsId: string;
       sync: LiveSync;
     };
 
 type IscrizionePropria = {
   id: string;
-  tabelloni: { categoria: Categoria } | { categoria: Categoria }[] | null;
+  tabelloni:
+    | { categoria: CategoriaTabellone }
+    | { categoria: CategoriaTabellone }[]
+    | null;
 };
 
 /** The signed-in player's registration in the stage and their category. */
 async function chiSono(tappaId: string): Promise<{
   me: string | null;
-  meCategoria: Categoria | null;
-  utente: Categoria | null;
+  meCategoria: CategoriaTabellone | null;
+  utente: CategoriaTabellone | null;
 }> {
   if (!readSupabaseEnv()) {
     // In the demo the player is the men's seat 1, as on w-live.
@@ -198,7 +219,7 @@ async function chiSono(tappaId: string): Promise<{
       .from("utenti")
       .select("categoria")
       .eq("id", user.id)
-      .maybeSingle<{ categoria: Categoria | null }>(),
+      .maybeSingle<{ categoria: CategoriaTabellone | null }>(),
   ]);
   const tabellone = Array.isArray(iscrizione?.tabelloni)
     ? iscrizione.tabelloni[0]
@@ -222,11 +243,14 @@ export async function readVistaClassificaTappa(
   const tappa = await leggiTappa(tappaId);
   if (!tappa) return { status: "notFound" };
   const chi = await chiSono(tappa.id);
+  // A mixed stage has one board, whatever was asked.
   const categoria =
-    parseCategoriaTappa(categoriaRichiesta) ??
-    chi.meCategoria ??
-    chi.utente ??
-    "M";
+    tappa.formato === "misto"
+      ? "X"
+      : (parseCategoriaTappa(categoriaRichiesta) ??
+        chi.meCategoria ??
+        chi.utente ??
+        "M");
   return {
     status: "ok",
     tappa: { id: tappa.id, nome: tappa.nome },

@@ -4,7 +4,11 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, StatoIscrizione } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+} from "@/lib/db/types";
 import { demoIscrittiTappa } from "@/lib/demo/iscritti-admin";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { toIscrittiTappaView } from "./format";
@@ -25,7 +29,12 @@ type IscrizioneDb = {
   created_at: string;
   tabellone_id: string;
   /** `email` is null on a deleted account (BLVS-53). */
-  utenti: { nome: string; cognome: string; email: string | null } | null;
+  utenti: {
+    nome: string;
+    cognome: string;
+    email: string | null;
+    categoria: Categoria | null;
+  } | null;
 };
 
 async function readFromDb(
@@ -46,13 +55,13 @@ async function readFromDb(
   if (error) throw new Error(`tappa: ${error.message}`);
   if (!data) return null;
   const { tabelloni, ...tappa } = data as unknown as TappaIscrittiRow & {
-    tabelloni: { id: string; categoria: Categoria; posti: number }[];
+    tabelloni: { id: string; categoria: CategoriaTabellone; posti: number }[];
   };
 
   const { data: iscrizioni, error: iscrizioniError } = await supabase
     .from("iscrizioni")
     .select(
-      "id, posto, stato, created_at, tabellone_id, utenti (nome, cognome, email)",
+      "id, posto, stato, created_at, tabellone_id, utenti (nome, cognome, email, categoria)",
     )
     .eq("tappa_id", id)
     .in("stato", ["in_attesa", "confermata"]);
@@ -69,6 +78,7 @@ async function readFromDb(
         stato: i.stato,
         created_at: i.created_at,
         categoria: cat,
+        categoriaGiocatore: i.utenti.categoria,
         nome: i.utenti.nome,
         cognome: i.utenti.cognome,
         email: i.utenti.email ?? "",

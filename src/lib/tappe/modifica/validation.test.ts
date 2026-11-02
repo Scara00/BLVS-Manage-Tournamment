@@ -13,6 +13,7 @@ const tappa: TappaModifica = {
   scadenza: "2027-06-24T20:00",
   stato: "iscrizioni_aperte",
   versione: 3,
+  formato: "classico",
   tabelloni: {
     M: { posti: 16, iscritti: 12 },
     F: { posti: 16, iscritti: 9 },

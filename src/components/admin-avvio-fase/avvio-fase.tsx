@@ -71,8 +71,9 @@ function focusOn(el: HTMLElement | null) {
   el.scrollIntoView?.({ block: "nearest" });
 }
 
-/** M/F switch: each board starts on its own. */
+/** M/F switch: each board starts on its own. A mixed stage has one board. */
 function SceltaTabellone({ view }: { view: AvvioFaseView }) {
+  if (view.categoria === "X") return null;
   return (
     <nav aria-label="Tabellone" className="flex flex-wrap gap-space-2">
       {CATEGORIE.map((c) => {

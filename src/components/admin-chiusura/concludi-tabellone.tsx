@@ -25,11 +25,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useOnline } from "@/hooks/use-online";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { CATEGORIA_NOME, CATEGORIA_SEGMENTO } from "@/lib/tappe/avvio/paths";
 import {
   CHIUSURA_MESSAGES,
   EFFETTO_CHIUSURA,
+  EFFETTO_CHIUSURA_MISTO,
 } from "@/lib/tappe/chiusura/format";
 import {
   initialConcludiTabelloneState,
@@ -40,7 +41,7 @@ import {
 type ConcludiTabelloneProps = {
   tappaId: string;
   tappaNome: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** The `concludiTabellone` server action (a fake in Storybook). */
   action: ConcludiTabelloneAction;
   /**
@@ -121,6 +122,8 @@ export function ConcludiTabellone({
   }, [state]);
 
   const categoriaLabel = CATEGORIA_NOME[categoria];
+  // The mixed board closes its stage standing only: no points.
+  const misto = categoria === "X";
   const errore = state.status === "error" && mostraErrore ? state : null;
 
   return (
@@ -147,13 +150,16 @@ export function ConcludiTabellone({
         </p>
       ) : concluso ? (
         <p data-testid="concludi-tabellone-esito" className="font-semibold">
-          Il tabellone {categoriaLabel} è concluso: i punti sono definitivi.
+          {misto
+            ? `Il tabellone ${categoriaLabel} è concluso: la classifica della tappa è definitiva.`
+            : `Il tabellone ${categoriaLabel} è concluso: i punti sono definitivi.`}
         </p>
       ) : (
         <>
           <p>
-            Le finali sono giocate. Concludi il tabellone {categoriaLabel} per
-            rendere definitivi i punti della tappa.
+            {misto
+              ? `Le finali sono giocate. Concludi il tabellone ${categoriaLabel} per rendere definitiva la classifica della tappa.`
+              : `Le finali sono giocate. Concludi il tabellone ${categoriaLabel} per rendere definitivi i punti della tappa.`}
           </p>
           {nota ? (
             <p id={`${ids}-nota`} className="font-semibold">
@@ -202,14 +208,15 @@ export function ConcludiTabellone({
                     Concludere il tabellone {categoriaLabel}?
                   </AlertDialogTitle>
                   <AlertDialogDescription>
-                    {nomeNelDialog}. {EFFETTO_CHIUSURA}
+                    {nomeNelDialog}.{" "}
+                    {misto ? EFFETTO_CHIUSURA_MISTO : EFFETTO_CHIUSURA}
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogBody className="flex flex-col gap-stack-sm">
                   <p>
-                    La fase del tabellone diventa «Conclusa». Una correzione
-                    successiva resta possibile, ma chiede una conferma esplicita
-                    con l&apos;elenco dei punti che cambiano.
+                    {misto
+                      ? "La fase del tabellone diventa «Conclusa». Una correzione successiva resta possibile, ma chiede una conferma esplicita."
+                      : "La fase del tabellone diventa «Conclusa». Una correzione successiva resta possibile, ma chiede una conferma esplicita con l'elenco dei punti che cambiano."}
                   </p>
                   {errore ? (
                     <div

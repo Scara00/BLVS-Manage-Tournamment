@@ -11,6 +11,7 @@ import {
 import {
   CATEGORIE,
   type Categoria,
+  type CategoriaTabellone,
   type Ruolo,
   type StatoIscrizione,
   type StatoTappa,
@@ -146,7 +147,7 @@ type IscrizioneDb = {
   id: string;
   stato: StatoIscrizione;
   posto: number | null;
-  tabelloni: { categoria: Categoria } | null;
+  tabelloni: { categoria: CategoriaTabellone } | null;
   tappe: {
     id: string;
     nome: string;

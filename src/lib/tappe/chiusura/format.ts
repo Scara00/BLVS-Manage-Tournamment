@@ -6,6 +6,10 @@ import type { BloccoChiusura } from "./regole";
 export const EFFETTO_CHIUSURA =
   "I punti diventano definitivi e la classifica generale si aggiorna.";
 
+/** The same for the mixed board, which gives no points. */
+export const EFFETTO_CHIUSURA_MISTO =
+  "La classifica della tappa diventa definitiva. Il misto non assegna punti alla classifica generale.";
+
 export const CHIUSURA_MESSAGES = {
   concluso: "Il tabellone è già concluso.",
   fase: "Il tabellone si conclude dopo le finali gold e silver.",
@@ -45,7 +49,14 @@ export function descriviBlocco(blocco: BloccoChiusura): string {
 export function messaggioChiusura(
   categoriaLabel: string,
   tappaConclusa: boolean,
+  { misto = false }: { misto?: boolean } = {},
 ): string {
+  if (misto) {
+    const base = `Tabellone ${categoriaLabel} concluso: la classifica della tappa è definitiva.`;
+    return tappaConclusa
+      ? `${base} La tappa è conclusa e si può archiviare.`
+      : base;
+  }
   const base = `Tabellone ${categoriaLabel} concluso: i punti sono definitivi.`;
   return tappaConclusa
     ? `${base} Entrambi i tabelloni sono conclusi: la tappa è conclusa e si può archiviare.`

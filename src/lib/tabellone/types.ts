@@ -1,5 +1,5 @@
 import type {
-  Categoria,
+  CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   FaseTabellone,
@@ -72,7 +72,7 @@ export type GironeTabellone = {
 };
 
 export type BoardTabellone = {
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   faseGioco: FaseGioco | null;
   conclusoIl: string | null;
   fase: FaseDelTabellonePasso;

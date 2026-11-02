@@ -1,4 +1,5 @@
 import { BodyReader } from "@/lib/api/validation";
+import { isFormatoTappa } from "@/lib/tappe/formato";
 import {
   romeLocalToDate,
   romeStartOfDay,
@@ -75,19 +76,36 @@ export function validaNuovaTappa(
     }
   }
 
-  const postiM = posti(reader, reader.text("postiM", { max: 4 }), "postiM");
-  const postiF = posti(reader, reader.text("postiF", { max: 4 }), "postiF");
+  // Without a choice the stage is classic, as before the mixed format.
+  const formatoRaw = body.formato ?? "classico";
+  const formato = isFormatoTappa(formatoRaw) ? formatoRaw : null;
+  if (!formato) reader.errors.formato ??= M.formato;
+
+  let postiM: number | undefined;
+  let postiF: number | undefined;
+  let postiMisto: number | undefined;
+  if (formato === "misto") {
+    postiMisto = posti(reader, reader.text("posti", { max: 4 }), "posti");
+    if (postiMisto !== undefined && postiMisto % 2 !== 0) {
+      reader.errors.posti ??= M.postiDispari;
+    }
+  } else if (formato === "classico") {
+    postiM = posti(reader, reader.text("postiM", { max: 4 }), "postiM");
+    postiF = posti(reader, reader.text("postiF", { max: 4 }), "postiF");
+  }
 
   if (!reader.ok) return { ok: false, fields: reader.errors };
+  const comuni = {
+    nome: nome!,
+    luogo: luogo!,
+    data: data!,
+    scadenza: scadenza!.toISOString(),
+  };
   return {
     ok: true,
-    values: {
-      nome: nome!,
-      luogo: luogo!,
-      data: data!,
-      scadenza: scadenza!.toISOString(),
-      postiM: postiM!,
-      postiF: postiF!,
-    },
+    values:
+      formato === "misto"
+        ? { ...comuni, formato, posti: postiMisto! }
+        : { ...comuni, formato: "classico", postiM: postiM!, postiF: postiF! },
   };
 }

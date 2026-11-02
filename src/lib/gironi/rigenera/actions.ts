@@ -4,7 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { rigeneraDemoGironi } from "@/lib/demo/rigenera-gironi";
 import { readTabelloneId } from "@/lib/gironi/editor/read";
 import { readSupabaseEnv } from "@/lib/supabase/env";
@@ -20,10 +20,11 @@ import {
   type PunteggioPerso,
   type RigeneraState,
 } from "./types";
+import { isCategoriaTabellone } from "@/lib/tappe/formato";
 
 type Richiesta = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   conferma: boolean;
   attesi: number;
 };
@@ -33,7 +34,7 @@ function leggiRichiesta(formData: FormData): Richiesta | null {
   const categoria = formData.get("categoria");
   const attesi = Number(formData.get("attesi"));
   if (typeof tappaId !== "string" || tappaId === "") return null;
-  if (categoria !== "M" && categoria !== "F") return null;
+  if (!isCategoriaTabellone(categoria)) return null;
   if (!Number.isInteger(attesi) || attesi < 0) return null;
   return {
     tappaId,

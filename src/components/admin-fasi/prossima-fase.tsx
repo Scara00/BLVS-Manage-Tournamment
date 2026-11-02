@@ -45,6 +45,11 @@ import {
   gironiPath,
 } from "@/lib/tappe/avvio/paths";
 import { adminLivePath } from "@/lib/tappe/live-admin/paths";
+import {
+  SceltaFinali,
+  sceltaCompleta,
+  type SceltaFinaliStato,
+} from "./scelta-finali";
 
 type ProssimaFaseProps = {
   view: ProssimaFaseView;
@@ -131,6 +136,8 @@ export function ProssimaFase({
   initialState = initialProssimaFaseState,
 }: ProssimaFaseProps) {
   const [open, setOpen] = useState(defaultOpen);
+  // Mixed finals composed by hand: the admin's picks per final.
+  const [scelta, setScelta] = useState<SceltaFinaliStato>({});
   const online = useOnline(
     forceOffline === undefined ? undefined : !forceOffline,
   );
@@ -231,6 +238,95 @@ export function ProssimaFase({
     case "non_componibile":
       corpo = <p className="font-semibold">{view.messaggio}</p>;
       break;
+    case "manuale": {
+      const finali = view.scelta ?? [];
+      const completa = sceltaCompleta(finali, scelta);
+      corpo = (
+        <div className="flex flex-col gap-stack-sm">
+          <p>{M.sceltaFinali}</p>
+          <SceltaFinali
+            finali={finali}
+            scelta={scelta}
+            onChange={setScelta}
+            disabled={pending}
+          />
+          <AlertDialog
+            open={open}
+            onOpenChange={(next) => {
+              if (!pending) setOpen(next);
+            }}
+          >
+            <AlertDialogTrigger
+              render={
+                <Button
+                  className="max-w-full self-start"
+                  disabled={!online || !completa}
+                  disabledReason={
+                    offlineReason ??
+                    (completa
+                      ? null
+                      : "Completa prima ogni finale: metà uomini e metà donne.")
+                  }
+                />
+              }
+            >
+              {AZIONE.finali}
+            </AlertDialogTrigger>
+            <AlertDialogContent className="max-w-xl">
+              <form
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  if (!online || pending) return;
+                  const formData = new FormData(event.currentTarget);
+                  startTransition(() => formAction(formData));
+                }}
+                className="contents"
+              >
+                <input type="hidden" name="tappaId" value={view.tappa.id} />
+                <input
+                  type="hidden"
+                  name="categoria"
+                  value={CATEGORIA_SEGMENTO[view.categoria]}
+                />
+                <input type="hidden" name="tipo" value={view.tipo} />
+                <input type="hidden" name="manuale" value="1" />
+                {finali.flatMap((f) =>
+                  (scelta[f.fase] ?? []).map((id) => (
+                    <input
+                      key={`${f.fase}-${id}`}
+                      type="hidden"
+                      name={f.fase}
+                      value={id}
+                    />
+                  )),
+                )}
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {`Generare le finali del ${tabellone}?`}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Si creano le finali con i giocatori scelti e le loro partite
+                    da giocare; il tabellone passa a «Finali» e le pagine live
+                    lo mostrano.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Annulla</AlertDialogCancel>
+                  <AlertDialogAction
+                    type="submit"
+                    loading={pending}
+                    loadingText="Salvataggio…"
+                  >
+                    Genera
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </AlertDialogContent>
+          </AlertDialog>
+        </div>
+      );
+      break;
+    }
     case "proposta":
       corpo = (
         <div className="flex flex-col items-start gap-space-2">
@@ -284,7 +380,9 @@ export function ProssimaFase({
         <div className="flex flex-col gap-stack-sm">
           <p>
             {view.tipo === "gold_silver"
-              ? "Dalle classifiche dei gironi iniziali: 1° e 2° di ogni girone vanno nei gironi gold, 3° e 4° nei silver. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
+              ? view.categoria === "X"
+                ? "Dalle classifiche dei gironi iniziali: il miglior uomo e la miglior donna di ogni girone vanno nei gironi gold, gli altri due nei silver, sempre 2 uomini e 2 donne per girone. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
+                : "Dalle classifiche dei gironi iniziali: 1° e 2° di ogni girone vanno nei gironi gold, 3° e 4° nei silver. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
               : "Dalle classifiche dei gironi gold e silver: i migliori di ogni girone giocano la finale del loro colore."}
           </p>
           {view.avvisi.length > 0 ? (

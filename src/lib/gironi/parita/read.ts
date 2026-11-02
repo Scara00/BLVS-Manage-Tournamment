@@ -1,6 +1,6 @@
 import "server-only";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoDatiParita } from "@/lib/demo/parita";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { leggiDatiParitaTabellone } from "./dati";
@@ -15,7 +15,7 @@ import type { ParitaGirone } from "./types";
  */
 export async function readParitaTabellone(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<ParitaGirone[]> {
   if (!readSupabaseEnv()) {
     return (getDemoDatiParita(tappaId, categoria) ?? []).map((g) =>

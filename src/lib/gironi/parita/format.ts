@@ -3,7 +3,7 @@
  * values of each criterion, the explicit «Scambia ↕» swap, the reason and
  * the text announcing the new order.
  */
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import {
   classificaGirone,
   CRITERI,
@@ -27,6 +27,7 @@ import {
   type ParitaGirone,
   type ParitaVista,
 } from "./types";
+import { isCategoriaTabellone } from "@/lib/tappe/formato";
 
 /** A stored decision with its reason (`spareggi_girone`). */
 export type DecisioneParita = {
@@ -37,7 +38,7 @@ export type DecisioneParita = {
 
 export type DatiParitaGirone = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
   gironeNome: string;
   giocatori: readonly GiocatorePari[];
@@ -221,7 +222,7 @@ export function componiMotivo(motivo: MotivoParita, note: string): string {
 
 export type RichiestaParita = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
   firma: string;
   ordine: string[];
@@ -245,7 +246,7 @@ export function leggiRichiestaParita(
     .getAll("ordine")
     .filter((v): v is string => typeof v === "string" && v !== "");
   if (!tappaId || !gironeId || !firma) return null;
-  if (categoria !== "M" && categoria !== "F") return null;
+  if (!isCategoriaTabellone(categoria)) return null;
   if (ordine.length < 2) return null;
   return {
     tappaId,

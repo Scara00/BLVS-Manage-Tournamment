@@ -4,11 +4,10 @@ import { CheckCircle2Icon } from "lucide-react";
 import { useId } from "react";
 import { AvvisoGironi } from "@/components/admin-tappe";
 import { Tape } from "@/components/scoreboard";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 import { REGOLA_GIRONI, gironiCompleti } from "@/lib/tappe/gironi";
 import { POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
-
-const TABELLONE = { M: "maschile", F: "femminile" } as const;
 
 /** A maximum the groups warning applies to (out-of-range is an error). */
 export function postiDaAvvisare(raw: string): number | null {
@@ -19,12 +18,14 @@ export function postiDaAvvisare(raw: string): number | null {
 }
 
 type GironiPanelProps = {
+  /** The boards of the stage: M and F, or the mixed one. */
+  categorie?: readonly CategoriaTabellone[];
   /** The maximums as typed in the form, per board. */
-  posti: Record<Categoria, string>;
+  posti: Partial<Record<CategoriaTabellone, string>>;
   /** Active registrations per board: «Usa N» never proposes less. */
-  iscritti: Record<Categoria, number>;
+  iscritti: Partial<Record<CategoriaTabellone, number>>;
   /** «Usa N»: puts N into that board's maximum. */
-  onUsa: (categoria: Categoria, posti: number) => void;
+  onUsa: (categoria: CategoriaTabellone, posti: number) => void;
 };
 
 /**
@@ -32,13 +33,17 @@ type GironiPanelProps = {
  * both boards. It sits before the form in the DOM, so on phones it comes
  * first; from `lg` it moves into a side column.
  */
-export function GironiPanel({ posti, iscritti, onUsa }: GironiPanelProps) {
+export function GironiPanel({
+  categorie = ["M", "F"],
+  posti,
+  iscritti,
+  onUsa,
+}: GironiPanelProps) {
   const base = useId();
-  const avvisi = {
-    M: postiDaAvvisare(posti.M),
-    F: postiDaAvvisare(posti.F),
-  };
-  const tuttiCompleti = avvisi.M === null && avvisi.F === null;
+  const avvisi = Object.fromEntries(
+    categorie.map((c) => [c, postiDaAvvisare(posti[c] ?? "")]),
+  ) as Partial<Record<CategoriaTabellone, number | null>>;
+  const tuttiCompleti = categorie.every((c) => avvisi[c] === null);
 
   return (
     <section
@@ -61,25 +66,29 @@ export function GironiPanel({ posti, iscritti, onUsa }: GironiPanelProps) {
           Con questi massimi i gironi sono completi in tutte le fasi.
         </p>
       ) : null}
-      {(["M", "F"] as const).map((categoria) => (
+      {categorie.map((categoria) => (
         <AvvisoGironi
           key={categoria}
           id={`${base}-${categoria}`}
           categoria={categoria}
-          posti={avvisi[categoria]}
+          posti={avvisi[categoria] ?? null}
           onUsa={(proposta) => onUsa(categoria, proposta)}
           regola={{
             ...REGOLA_GIRONI,
             proposte: REGOLA_GIRONI.proposte.filter(
-              (proposta) => proposta >= iscritti[categoria],
+              (proposta) => proposta >= (iscritti[categoria] ?? 0),
             ),
           }}
         />
       ))}
       <p className="text-sm text-muted-foreground">
-        Tabellone {TABELLONE.M}:{" "}
-        <span className="font-mono">{posti.M || "—"}</span> · tabellone{" "}
-        {TABELLONE.F}: <span className="font-mono">{posti.F || "—"}</span>
+        {categorie.map((categoria, i) => (
+          <span key={categoria}>
+            {i > 0 ? " · " : null}
+            {i === 0 ? "Tabellone" : "tabellone"} {TABELLONE_NOME[categoria]}:{" "}
+            <span className="font-mono">{posti[categoria] || "—"}</span>
+          </span>
+        ))}
       </p>
     </section>
   );

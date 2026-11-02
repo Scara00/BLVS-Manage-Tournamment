@@ -99,7 +99,14 @@ export function GiocatoreRiga({
           className="size-5 shrink-0 text-muted-foreground"
         />
       ) : null}
-      <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">{nome}</span>
+      <span className="min-w-0 flex-1 [overflow-wrap:anywhere]">
+        {nome}
+        {giocatore.categoria ? (
+          <span className="ms-space-2 text-sm font-semibold text-muted-foreground">
+            {giocatore.categoria === "M" ? "Uomo" : "Donna"}
+          </span>
+        ) : null}
+      </span>
       {drag.modificabile ? (
         <Button
           variant="secondary"

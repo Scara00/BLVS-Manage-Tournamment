@@ -4,7 +4,12 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, FaseGioco, StatoIscrizione } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  FaseGioco,
+  StatoIscrizione,
+} from "@/lib/db/types";
 import { getDemoConclusoIl } from "@/lib/demo/admin-live";
 import {
   chiudiDemoScadute,
@@ -60,12 +65,27 @@ export async function readTappeAdmin(): Promise<TappaAdminItem[]> {
 
 type TabelloneDb = {
   id: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   fase_gioco: FaseGioco | null;
   concluso_il: string | null;
-  iscrizioni: { stato: StatoIscrizione }[];
+  iscrizioni: {
+    stato: StatoIscrizione;
+    utenti: { categoria: Categoria | null } | null;
+  }[];
   partite: { fase: string }[];
 };
+
+/** Confirmed players of a mixed board, per category. */
+function confermatePerCategoria(
+  iscrizioni: TabelloneDb["iscrizioni"],
+): Record<Categoria, number> {
+  const conta = { M: 0, F: 0 };
+  for (const i of iscrizioni) {
+    const categoria = i.utenti?.categoria;
+    if (i.stato === "confermata" && categoria) conta[categoria] += 1;
+  }
+  return conta;
+}
 
 async function readFromDb(
   supabase: SupabaseClient,
@@ -74,7 +94,7 @@ async function readFromDb(
   const { data, error } = await supabase
     .from("tappe")
     .select(
-      `${TAPPA_GESTIONE_COLUMNS}, tabelloni (id, categoria, fase_gioco, concluso_il, iscrizioni (stato), partite (fase))`,
+      `${TAPPA_GESTIONE_COLUMNS}, tabelloni (id, categoria, fase_gioco, concluso_il, iscrizioni (stato, utenti (categoria)), partite (fase))`,
     )
     .eq("id", id)
     .maybeSingle();
@@ -89,6 +109,8 @@ async function readFromDb(
     tabelloni: tabelloni.map((t) => ({
       categoria: t.categoria,
       confermate: t.iscrizioni.filter((i) => i.stato === "confermata").length,
+      confermatePerCategoria:
+        t.categoria === "X" ? confermatePerCategoria(t.iscrizioni) : undefined,
       inAttesa: t.iscrizioni.filter((i) => i.stato === "in_attesa").length,
       fasiPartite: t.partite.map((p) => p.fase),
       faseGioco: t.fase_gioco,

@@ -4,7 +4,7 @@ import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoGironi } from "@/lib/demo/gironi-editor";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { toComposizione, type GironiEditorJson } from "./format";
@@ -18,7 +18,7 @@ import {
 export async function readTabelloneId(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<string | null> {
   const { data, error } = await supabase
     .from("tabelloni")

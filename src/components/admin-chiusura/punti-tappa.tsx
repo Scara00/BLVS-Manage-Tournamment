@@ -46,6 +46,42 @@ const columns: ResponsiveTableColumn<RigaClassificaTappa>[] = [
 ];
 
 /**
+ * The mixed board's stage standing: places only, it gives no points to the
+ * overall standing.
+ */
+function ClassificaMista({ righe }: { righe: readonly RigaClassificaTappa[] }) {
+  return (
+    <section
+      aria-labelledby="punti-tappa-titolo"
+      className="flex min-w-0 flex-col gap-stack-sm [overflow-wrap:anywhere]"
+      data-testid="punti-tappa"
+    >
+      <h2
+        id="punti-tappa-titolo"
+        className="font-heading text-xl font-semibold"
+      >
+        Classifica della tappa
+      </h2>
+      <p className="text-sm">
+        Il misto non assegna punti alla classifica generale.
+      </p>
+      {righe.length === 0 ? (
+        <p>La classifica si compone con le finali gold e silver.</p>
+      ) : (
+        <ResponsiveTable
+          caption="Classifica della tappa"
+          captionHidden
+          columns={columns.filter((c) => c.key !== "punti")}
+          rows={righe}
+          getRowKey={(r) => r.iscrizioneId}
+          emptyMessage="Nessun giocatore nelle finali."
+        />
+      )}
+    </section>
+  );
+}
+
+/**
  * «Punti della tappa» on w-admin-live (BLVS-40 standing): «Provvisori» on
  * tape until the board is concluded, then «Definitivi» (BLVS-43). The
  * state is always text, never colour alone.
@@ -57,6 +93,7 @@ export function PuntiTappa({
 }) {
   const righe = classifica?.righe ?? [];
   const provvisori = classifica?.puntiProvvisori ?? true;
+  if (classifica?.senzaPunti) return <ClassificaMista righe={righe} />;
   return (
     <section
       aria-labelledby="punti-tappa-titolo"

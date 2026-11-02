@@ -3,12 +3,11 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 import { gironiCompleti } from "@/lib/tappe/gironi";
 import { CAMPO_POSTI, POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
 import { AvvisoGironi } from "./avviso-gironi";
-
-const TABELLONE = { M: "maschile", F: "femminile" } as const;
 
 /** A maximum the groups warning applies to (out-of-range is an error). */
 function daAvvisare(raw: string): number | null {
@@ -19,7 +18,7 @@ function daAvvisare(raw: string): number | null {
 }
 
 type PostiFieldProps = {
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   defaultValue: number;
   error?: string;
   /** Changes when a local draft was put back into the form. */
@@ -60,8 +59,16 @@ export function PostiField({
 
   return (
     <Field
-      label={`Massimo iscritti · tabellone ${TABELLONE[categoria]}`}
-      hint={`Tra ${POSTI_MIN} e ${POSTI_MAX}. Vale solo per il tabellone ${TABELLONE[categoria]}.`}
+      label={
+        categoria === "X"
+          ? "Massimo giocatori · tabellone misto"
+          : `Massimo iscritti · tabellone ${TABELLONE_NOME[categoria]}`
+      }
+      hint={
+        categoria === "X"
+          ? `Numero pari tra ${POSTI_MIN} e ${POSTI_MAX}: metà posti agli uomini, metà alle donne (es. 32 = 16 + 16).`
+          : `Tra ${POSTI_MIN} e ${POSTI_MAX}. Vale solo per il tabellone ${TABELLONE_NOME[categoria]}.`
+      }
       required
       error={error}
       className="max-w-md"
@@ -73,7 +80,7 @@ export function PostiField({
         inputMode="numeric"
         min={POSTI_MIN}
         max={POSTI_MAX}
-        step={1}
+        step={categoria === "X" ? 2 : 1}
         defaultValue={defaultValue}
         className="max-w-40 font-mono"
         aria-describedby={avviso !== null ? avvisoId : undefined}

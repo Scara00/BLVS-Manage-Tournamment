@@ -1,4 +1,8 @@
-import type { Categoria, SetPunteggio, StatoPartita } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  SetPunteggio,
+  StatoPartita,
+} from "@/lib/db/types";
 import { partiteGirone } from "@/lib/tappe/avvio/regole";
 import type { EsitoModifica } from "@/lib/tappe/live-admin/dati";
 import { vincitore } from "@/lib/tappe/live-admin/format";
@@ -50,7 +54,7 @@ function chiusi(): Map<string, string> {
 /** When a demo board was concluded, or null while it is open. */
 export function getDemoConclusoIl(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): string | null {
   return chiusi().get(chiaveTabellone(tappaId, categoria)) ?? null;
 }
@@ -83,7 +87,10 @@ const RITOCCHI: Record<string, Record<string, Ritocco>> = {
   },
 };
 
-function creaPartite(tappaId: string, categoria: Categoria): PartitaLive[] {
+function creaPartite(
+  tappaId: string,
+  categoria: CategoriaTabellone,
+): PartitaLive[] {
   const ritocchi = RITOCCHI[chiaveTabellone(tappaId, categoria)] ?? {};
   return getDemoGironiGiocati(tappaId, categoria).flatMap((girone, i) =>
     partiteGirone(girone).map((p): PartitaLive => {
@@ -116,7 +123,7 @@ function creaPartite(tappaId: string, categoria: Categoria): PartitaLive[] {
 /** The live list of one board: null for an unknown stage. */
 export function getDemoTabelloneLive(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   adesso: Date,
 ): TabelloneLive | null {
   const tabellone = getDemoAvvioFase(tappaId, categoria);
@@ -146,7 +153,7 @@ export function getDemoTabelloneLive(
 
 function trova(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partitaId: string,
 ): { partita: PartitaLive } | { esito: EsitoModifica } {
   const letto = getDemoTabelloneLive(tappaId, categoria, now());
@@ -166,7 +173,7 @@ const copia = (p: PartitaLive): PartitaLive => ({ ...p, sets: [...p.sets] });
 /** Same rules as `cambiaStatoDb`. */
 export function cambiaStatoDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partitaId: string,
   operazione: OperazionePartita,
 ): EsitoModifica {
@@ -188,7 +195,7 @@ export function cambiaStatoDemo(
 /** Same rules as `salvaPunteggioDb`. */
 export function salvaPunteggioDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partitaId: string,
   versione: number,
   sets: SetPunteggio[],
@@ -233,7 +240,7 @@ export function salvaPunteggioDemo(
  */
 export function annullaPartitaDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partitaId: string,
 ): PartitaLive | null {
   const trovata = trova(tappaId, categoria, partitaId);
@@ -248,8 +255,12 @@ export function annullaPartitaDemo(
 /** The finals of a demo board, with the demo tie decisions (BLVS-38). */
 export function finaliTappaDemo(
   tappaId: string,
-  categoria: Categoria,
-): { finali: FinaleTappa[]; concluso: boolean } | null {
+  categoria: CategoriaTabellone,
+): {
+  finali: FinaleTappa[];
+  concluso: boolean;
+  senzaPunti?: boolean;
+} | null {
   const letto = getDemoTabelloneLive(tappaId, categoria, now());
   if (!letto) return null;
   return {
@@ -261,7 +272,7 @@ export function finaliTappaDemo(
 /** The stage standing of a demo board (BLVS-40), computed on read. */
 export function classificaTappaDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): ClassificaTappa | null {
   const dati = finaliTappaDemo(tappaId, categoria);
   return dati ? classificaTappa(dati) : null;
@@ -275,7 +286,7 @@ export type DemoChiusuraEsito =
 /** Same rules and effects as `concludi_tabellone` (BLVS-43). */
 export function concludiTabelloneDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   at: Date,
 ): DemoChiusuraEsito {
   const letto = getDemoTabelloneLive(tappaId, categoria, at);
@@ -322,7 +333,7 @@ export function concludiTabelloneDemo(
 /** Concludes a demo match with `sets` (BLVS-43 e2e fixtures). */
 export function impostaRisultatoLiveDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partitaId: string,
   sets: SetPunteggio[],
   stato: StatoPartita = "conclusa",

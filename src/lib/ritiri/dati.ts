@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type { AssenzaRegistrata, TipoRitiro } from "./types";
 
 type AssenzaRow = {
@@ -12,7 +12,7 @@ type AssenzaRow = {
 export async function leggiAssenze(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<AssenzaRegistrata[]> {
   const { data, error } = await supabase
     .from("assenze_partita")

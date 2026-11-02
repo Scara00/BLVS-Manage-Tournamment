@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { CATEGORIE } from "@/lib/db/types";
+import { CATEGORIE_TABELLONE } from "@/lib/db/types";
 import { partiteDaInserireLabel } from "@/lib/admin/tappe";
 import {
   contaDaInserire,
@@ -128,7 +128,7 @@ export function ElencoPunteggiView({ elenco }: { elenco: ElencoPunteggi }) {
           <p>La tappa non è in corso: i punteggi non si modificano da qui.</p>
         ) : null}
       </section>
-      {CATEGORIE.map((categoria) => {
+      {CATEGORIE_TABELLONE.map((categoria) => {
         const delTabellone = partite.filter((p) => p.categoria === categoria);
         if (delTabellone.length === 0) return null;
         return (

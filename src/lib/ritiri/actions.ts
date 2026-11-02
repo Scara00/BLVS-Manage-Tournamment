@@ -4,7 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { classificaDemo, getDemoPunteggi } from "@/lib/demo/punteggi";
 import { registraRitiroDemo } from "@/lib/demo/ritiri";
 import { leggiClassificaGirone } from "@/lib/gironi/classifica";
@@ -196,7 +196,7 @@ async function registraDb(
 
 function registraDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   dati: DatiRitiro,
   opzioni: OpzioniImpatto,
 ): Esito {
@@ -240,7 +240,7 @@ function registraDemo(
 async function pubblica(
   supabase: SupabaseClient | null,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partiteIds: readonly string[],
   cambio: string,
 ) {

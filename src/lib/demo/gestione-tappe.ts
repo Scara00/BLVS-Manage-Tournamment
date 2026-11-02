@@ -1,4 +1,4 @@
-import type { StatoTappa } from "@/lib/db/types";
+import type { CategoriaTabellone, StatoTappa } from "@/lib/db/types";
 import type {
   TabelloneRow,
   TappaGestioneRow,
@@ -144,7 +144,7 @@ export function getDemoTappaGestione(id: string): DemoTappaGestione | null {
  */
 export function aggiornaContiDemo(
   id: string,
-  categoria: "M" | "F",
+  categoria: CategoriaTabellone,
   conti: { confermate: number; inAttesa: number },
 ): void {
   const board = store()
@@ -207,7 +207,7 @@ export function aggiornaScadenzaDemo(id: string, chiudonoIl: Date): DemoEsito {
  */
 export function segnaFaseAvviataDemo(
   id: string,
-  categoria: "M" | "F",
+  categoria: CategoriaTabellone,
   partite: number,
 ): DemoEsito {
   const tappa = store().get(id);

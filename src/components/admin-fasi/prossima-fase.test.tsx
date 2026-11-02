@@ -125,4 +125,75 @@ describe("ProssimaFase (proposta gold/silver e finali)", () => {
     );
     expect(screen.getByRole("alert")).toHaveTextContent("Errore di prova");
   });
+
+  it("nel misto con troppi gironi fa scegliere 2 uomini + 2 donne per finale", async () => {
+    const user = userEvent.setup();
+    const action = vi.fn<ProssimaFaseAction>(async () => ({
+      status: "success",
+      message: "ok",
+      at: 1,
+    }));
+    const candidato = (id: string, categoria: "M" | "F") => ({
+      iscrizioneId: id,
+      nome: `Giocatore ${id}`,
+      provenienza:
+        categoria === "M" ? "Miglior uomo · Gold A" : "Miglior donna · Gold A",
+      categoria,
+      dettaglio: "2 vittorie · +11",
+    });
+    render(
+      <ProssimaFase
+        view={{
+          ...finaliPronte,
+          categoria: "X",
+          stato: "manuale",
+          anteprima: [],
+          scelta: [
+            {
+              fase: "finale_gold",
+              nome: "Finale gold",
+              perCategoria: 2,
+              candidati: [
+                candidato("m1", "M"),
+                candidato("m2", "M"),
+                candidato("m3", "M"),
+                candidato("f1", "F"),
+                candidato("f2", "F"),
+              ],
+            },
+          ],
+        }}
+        action={action}
+      />,
+    );
+    // Disabled but focusable, with the reason next to it.
+    const genera = () =>
+      screen.getByRole("button", { name: "Genera le finali" });
+    expect(genera()).toHaveAttribute("aria-disabled", "true");
+    expect(screen.getByText(/Completa prima ogni finale/)).toBeInTheDocument();
+
+    for (const nome of ["m1", "m2", "f1"]) {
+      await user.click(
+        screen.getByRole("checkbox", { name: `Giocatore ${nome}` }),
+      );
+    }
+    // Due uomini scelti: il terzo non si può più spuntare.
+    expect(
+      screen.getByRole("checkbox", { name: "Giocatore m3" }),
+    ).toHaveAttribute("aria-disabled", "true");
+    expect(genera()).toHaveAttribute("aria-disabled", "true");
+    await user.click(screen.getByRole("checkbox", { name: "Giocatore f2" }));
+    expect(genera()).not.toHaveAttribute("aria-disabled");
+
+    await user.click(genera());
+    const dialog = await screen.findByRole("alertdialog", {
+      name: "Generare le finali del tabellone misto?",
+    });
+    await user.click(within(dialog).getByRole("button", { name: "Genera" }));
+    await waitFor(() => expect(action).toHaveBeenCalledTimes(1));
+    const dati = action.mock.calls[0][1];
+    expect(dati.get("manuale")).toBe("1");
+    expect(dati.get("categoria")).toBe("x");
+    expect(dati.getAll("finale_gold")).toEqual(["m1", "m2", "f1", "f2"]);
+  });
 });

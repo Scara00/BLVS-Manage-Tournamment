@@ -21,9 +21,10 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Field, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { useFormDraft } from "@/lib/drafts/use-form-draft";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
+import { TABELLONE_NOME, categorieTabelloni } from "@/lib/tappe/formato";
 import { POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
 import { riepilogoTappa } from "@/lib/tappe/modifica/format";
 import {
@@ -44,18 +45,20 @@ import {
 } from "@/lib/tappe/modifica/validation";
 import { GironiPanel } from "./gironi-panel";
 
-const TABELLONE = { M: "maschile", F: "femminile" } as const;
-const CATEGORIE = ["M", "F"] as const;
-
 /** The form values of `tappa`, as the inputs hold them. */
 function valoriDi(tappa: TappaModifica): Record<CampoTappaModifica, string> {
+  const posti = (categoria: CategoriaTabellone) => {
+    const tabellone = tappa.tabelloni[categoria];
+    return tabellone ? String(tabellone.posti) : "";
+  };
   return {
     nome: tappa.nome,
     luogo: tappa.luogo,
     data: tappa.data,
     scadenza: tappa.scadenza,
-    postiM: String(tappa.tabelloni.M.posti),
-    postiF: String(tappa.tabelloni.F.posti),
+    postiM: posti("M"),
+    postiF: posti("F"),
+    posti: posti("X"),
   };
 }
 
@@ -75,8 +78,10 @@ function senza(
   return altri;
 }
 
-function postiDi(valori: Record<CampoTappaModifica, string>) {
-  return { M: valori.postiM, F: valori.postiF };
+function postiDi(
+  valori: Record<CampoTappaModifica, string>,
+): Record<CategoriaTabellone, string> {
+  return { M: valori.postiM, F: valori.postiF, X: valori.posti };
 }
 
 type TappaModificaFormProps = {
@@ -183,16 +188,22 @@ export function TappaModificaForm({
     }
   }
 
+  const categorie = categorieTabelloni(salvata.formato);
+  const iscrittiDi = (categoria: CategoriaTabellone) =>
+    salvata.tabelloni[categoria]?.iscritti ?? 0;
+
   /** Checks a board's maximum against its floor. */
-  function controllaPosti(categoria: Categoria, raw: string) {
+  function controllaPosti(categoria: CategoriaTabellone, raw: string) {
     const campo = CAMPO_POSTI_MODIFICA[categoria];
-    const errore = errorePosti(raw, salvata.tabelloni[categoria].iscritti);
+    const errore = errorePosti(raw, iscrittiDi(categoria), {
+      pari: categoria === "X",
+    });
     setErrori((attuali) =>
       errore ? { ...attuali, [campo]: errore } : senza(attuali, campo),
     );
   }
 
-  function usaPosti(categoria: Categoria, posti: number) {
+  function usaPosti(categoria: CategoriaTabellone, posti: number) {
     const input = formRef.current?.elements.namedItem(
       CAMPO_POSTI_MODIFICA[categoria],
     );
@@ -254,10 +265,12 @@ export function TappaModificaForm({
       {/* First in the DOM: above the form on phones, beside it from lg. */}
       <div className="lg:sticky lg:top-[calc(var(--app-topbar-h,0px)+1rem)] lg:order-last">
         <GironiPanel
+          categorie={categorie}
           posti={postiDi(valori)}
           iscritti={{
-            M: salvata.tabelloni.M.iscritti,
-            F: salvata.tabelloni.F.iscritti,
+            M: iscrittiDi("M"),
+            F: iscrittiDi("F"),
+            X: iscrittiDi("X"),
           }}
           onUsa={usaPosti}
         />
@@ -425,12 +438,12 @@ export function TappaModificaForm({
             />
           </Field>
 
-          {CATEGORIE.map((categoria) => (
+          {categorie.map((categoria) => (
             <PostiField
               key={categoria}
               categoria={categoria}
-              defaultValue={salvata.tabelloni[categoria].posti}
-              iscritti={salvata.tabelloni[categoria].iscritti}
+              defaultValue={salvata.tabelloni[categoria]?.posti ?? POSTI_MIN}
+              iscritti={iscrittiDi(categoria)}
               error={errori[CAMPO_POSTI_MODIFICA[categoria]]}
               onInput={aggiorna}
               onCommit={(raw) => controllaPosti(categoria, raw)}
@@ -484,7 +497,7 @@ export function TappaModificaForm({
 }
 
 type PostiFieldProps = {
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   defaultValue: number;
   iscritti: number;
   error?: string;
@@ -513,6 +526,7 @@ function PostiField({
   onInput,
   onCommit,
 }: PostiFieldProps) {
+  const misto = categoria === "X";
   const minimo = Math.max(POSTI_MIN, iscritti);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
@@ -524,18 +538,27 @@ function PostiField({
 
   return (
     <Field
-      label={`Massimo iscritti · tabellone ${TABELLONE[categoria]}`}
+      label={`Massimo iscritti · tabellone ${TABELLONE_NOME[categoria]}`}
       required
       error={error}
       hint={
-        <>
-          Iscritti attuali:{" "}
-          <span className="font-mono font-semibold text-foreground">
-            {iscritti}
-          </span>
-          . Il massimo va da <span className="font-mono">{minimo}</span> a{" "}
-          <span className="font-mono">{POSTI_MAX}</span>.
-        </>
+        misto ? (
+          <>
+            Numero pari: metà posti agli uomini, metà alle donne. Non scende
+            sotto <span className="font-mono">{minimo}</span> (il doppio della
+            metà più piena); al massimo{" "}
+            <span className="font-mono">{POSTI_MAX}</span>.
+          </>
+        ) : (
+          <>
+            Iscritti attuali:{" "}
+            <span className="font-mono font-semibold text-foreground">
+              {iscritti}
+            </span>
+            . Il massimo va da <span className="font-mono">{minimo}</span> a{" "}
+            <span className="font-mono">{POSTI_MAX}</span>.
+          </>
+        )
       }
       className="max-w-md"
     >
@@ -545,7 +568,7 @@ function PostiField({
         inputMode="numeric"
         min={minimo}
         max={POSTI_MAX}
-        step={1}
+        step={misto ? 2 : 1}
         defaultValue={defaultValue}
         className="max-w-40 font-mono"
         onInput={(event) => {

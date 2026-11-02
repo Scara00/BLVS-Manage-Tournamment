@@ -95,6 +95,7 @@ describe("toGestioneTappaView", () => {
       {
         categoria: "M",
         categoriaLabel: "Maschile",
+        quote: null,
         iscritti: 5,
         inAttesa: 0,
         fase: "Raccolta iscrizioni",
@@ -103,6 +104,7 @@ describe("toGestioneTappaView", () => {
       {
         categoria: "F",
         categoriaLabel: "Femminile",
+        quote: null,
         iscritti: 2,
         inAttesa: 1,
         fase: "Raccolta iscrizioni",

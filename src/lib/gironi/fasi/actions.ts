@@ -3,7 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { generaFinaliDemo, proponiGoldSilverDemo } from "@/lib/demo/avvio-fase";
 import { publishPhaseStarted } from "@/lib/live/publish";
 import { readSupabaseEnv } from "@/lib/supabase/env";
@@ -18,7 +18,9 @@ import {
   proponiFinali,
   proponiGoldSilver,
   proposta,
+  verificaSceltaFinali,
   type EsitoProposta,
+  type FinaleDaComporre,
 } from "./qualificazione";
 import { datiDemoProssimaFase, leggiDatiProssimaFase } from "./read";
 import {
@@ -57,17 +59,29 @@ async function sessioneAdmin(): Promise<SupabaseClient | null> {
   return user.supabase;
 }
 
-/** The proposal, recomputed on the server: the client never sends it. */
-function calcola(tipo: TipoProssimaFase, dati: DatiProssimaFase) {
+/** The admin's picks for mixed finals composed by hand. */
+type SceltaFinali = Partial<Record<FinaleDaComporre["fase"], string[]>>;
+
+/**
+ * The proposal, recomputed on the server: the client never sends it. Only
+ * mixed finals composed by hand use the admin's picks (`scelta`), checked
+ * here against the candidates recomputed on the server.
+ */
+function calcola(
+  tipo: TipoProssimaFase,
+  dati: DatiProssimaFase,
+  scelta: SceltaFinali | null = null,
+) {
   const atteso =
     tipo === "gold_silver" ? "gironi_iniziali" : "gironi_gold_silver";
   if (dati.faseGioco !== atteso || (tipo === "gold_silver" && dati.proposta)) {
     throw new ErroreFase("conflict", M.conflict);
   }
+  const opzioni = { misto: dati.categoria === "X" };
   const esito: EsitoProposta =
     tipo === "gold_silver"
-      ? proponiGoldSilver(dati.gironi)
-      : proponiFinali(dati.gironi);
+      ? proponiGoldSilver(dati.gironi, undefined, opzioni)
+      : proponiFinali(dati.gironi, undefined, opzioni);
   switch (esito.esito) {
     case "in_corso":
       throw new ErroreFase("blocked", M.inCorso);
@@ -75,6 +89,12 @@ function calcola(tipo: TipoProssimaFase, dati: DatiProssimaFase) {
       throw new ErroreFase("blocked", M.parita);
     case "non_componibile":
       throw new ErroreFase("blocked", esito.messaggio);
+    case "manuale": {
+      if (!scelta) throw new ErroreFase("blocked", M.sceltaFinali);
+      const verificata = verificaSceltaFinali(esito.finali, scelta);
+      if (!verificata.ok) throw new ErroreFase("blocked", verificata.messaggio);
+      return verificata.gironi;
+    }
     case "ok":
       return esito.gironi;
   }
@@ -104,12 +124,13 @@ async function salva(
   supabase: SupabaseClient | null,
   tipo: TipoProssimaFase,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
+  scelta: SceltaFinali | null,
 ): Promise<{ partite: number; tappaNome: string }> {
   if (!supabase) {
     const dati = datiDemoProssimaFase(tappaId, categoria);
     if (!dati) throw new ErroreFase("conflict", M.conflict);
-    const gironi = calcola(tipo, dati).map((g) => ({
+    const gironi = calcola(tipo, dati, scelta).map((g) => ({
       fase: g.fase,
       nome: g.nome,
       iscrizioni: g.giocatori.map((p) => p.iscrizioneId),
@@ -127,7 +148,7 @@ async function salva(
 
   const dati = await leggiDatiProssimaFase(supabase, tappaId, categoria, tipo);
   if (!dati) throw new ErroreFase("conflict", M.conflict);
-  const gironi = proposta(calcola(tipo, dati));
+  const gironi = proposta(calcola(tipo, dati, scelta));
   if (tipo === "gold_silver") {
     const { error } = await supabase.rpc("proponi_gironi_gold_silver", {
       p_tabellone: dati.tabelloneId,
@@ -142,6 +163,19 @@ async function salva(
   });
   if (error) throw erroreDb(error);
   return { partite: (data as unknown[]).length, tappaNome: dati.tappa.nome };
+}
+
+/** The picks of a form that composes mixed finals by hand, or null. */
+function sceltaDi(formData: FormData): SceltaFinali | null {
+  if (formData.get("manuale") !== "1") return null;
+  const ids = (campo: string) =>
+    formData
+      .getAll(campo)
+      .filter((v): v is string => typeof v === "string" && v !== "");
+  return {
+    finale_gold: ids("finale_gold"),
+    finale_silver: ids("finale_silver"),
+  };
 }
 
 /**
@@ -167,7 +201,7 @@ export async function proponiProssimaFase(
   let esito: { partite: number; tappaNome: string };
   try {
     const supabase = await sessioneAdmin();
-    esito = await salva(supabase, tipo, tappaId, categoria);
+    esito = await salva(supabase, tipo, tappaId, categoria, sceltaDi(formData));
     if (tipo === "finali") {
       publishPhaseStarted({
         id: `${tappaId}:${categoria}`,

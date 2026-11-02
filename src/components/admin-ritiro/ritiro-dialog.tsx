@@ -30,7 +30,7 @@ import {
 import { Field, Fieldset, focusFirstInvalid } from "@/components/ui/field";
 import { RadioCard, RadioCardGroup } from "@/components/ui/radio-card";
 import { Select } from "@/components/ui/select";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type { SceltaImpatto } from "@/lib/punteggi/correzione/types";
 import {
   anteprimaRitiro,
@@ -69,7 +69,7 @@ const DESCRIZIONE_TIPO: Record<TipoRitiro, string> = {
 
 export type RitiroDialogProps = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   girone: { id: string; nome: string };
   /** The group's matches (live: the newest the page has). */
   partite: readonly PartitaLive[];

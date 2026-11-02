@@ -8,6 +8,7 @@ import { LiveLoading, LiveTappaSessioneScaduta } from "@/components/live";
 import { FASE_GIRONE_LABEL } from "@/lib/gironi/fasi/fase";
 import { readLiveGirone } from "@/lib/live/girone-read";
 import { gironeTappaHref, liveTappaHref } from "@/lib/tappe/paths";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 
 export const metadata: Metadata = { title: "Girone" };
 
@@ -59,7 +60,7 @@ async function GironeContent({
       title={girone.nome}
       eyebrow={live.tappa.nome}
       description={`${FASE_GIRONE_LABEL[girone.fase]} · ${
-        girone.categoria === "M" ? "maschile" : "femminile"
+        TABELLONE_NOME[girone.categoria]
       }. Risultati e classifica si aggiornano da soli.`}
     >
       <div className="flex flex-col gap-stack-lg">

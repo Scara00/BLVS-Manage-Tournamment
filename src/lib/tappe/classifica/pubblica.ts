@@ -1,5 +1,5 @@
 import "server-only";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getLiveBus } from "@/lib/live/bus";
 import { publishStageStandings } from "@/lib/live/publish";
 import { cambioClassificaTappa, idClassificaTappa } from "./live";
@@ -17,7 +17,7 @@ import { calcolaStageStandings, ultimaClassificaTappa } from "./read";
  */
 export async function pubblicaClassificaTappa(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<void> {
   try {
     const id = idClassificaTappa(tappaId, categoria);

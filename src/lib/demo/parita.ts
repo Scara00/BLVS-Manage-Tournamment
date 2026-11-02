@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import {
   ordineValido,
   paritaPerfette,
@@ -44,7 +44,7 @@ function store(): Store {
 /** Every group of a demo board with its matches and decisions. */
 export function getDemoDatiParita(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): DatiParitaGirone[] | null {
   const tabellone = getDemoAvvioFase(tappaId, categoria);
   if (!tabellone) return null;
@@ -93,7 +93,7 @@ export function risolviParitaDemo({
   motivo,
 }: {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
   firma: string;
   ordine: readonly string[];
@@ -147,7 +147,7 @@ export function risolviParitaDemo({
  */
 export function creaDemoParita(): {
   id: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
 } {
   const id = creaDemoAvvioFase("pronta");

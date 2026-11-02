@@ -1,5 +1,6 @@
 import type {
   Categoria,
+  CategoriaTabellone,
   FasePartita,
   StatoIscrizione,
   Tappa,
@@ -20,13 +21,14 @@ import {
   formatScadenza,
   type Posti,
 } from "./format";
+import { FORMATO_DESCRIZIONE, QUOTA_LABEL } from "./formato";
 
 // ---------------------------------------------------------------------------
 // w-tappa: the stage detail with its two boards
 // ---------------------------------------------------------------------------
 
 export const DETTAGLIO_TAPPA_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, ritrovo, ritrovo_alle, programma, annullabile_fino_al";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, ritrovo, ritrovo_alle, programma, annullabile_fino_al, formato";
 
 /** A row of `public.tappe` as the detail reads it. */
 export type DettaglioTappaRow = Pick<
@@ -43,9 +45,14 @@ export type DettaglioTappaRow = Pick<
   | "ritrovo_alle"
   | "programma"
   | "annullabile_fino_al"
->;
+> &
+  // Absent in demo rows: a classic stage.
+  Partial<Pick<Tappa, "formato">>;
 
-/** A row of RPC `public.tabelloni_tappa(p_tappa)`. */
+/**
+ * A row of RPC `public.tabelloni_tappa(p_tappa)`. A mixed board comes as
+ * two rows, M and F, each with its half of the seats.
+ */
 export type TabelloneTappaRow = {
   categoria: Categoria;
   posti: number;
@@ -61,18 +68,20 @@ export type IscrizionePropria = {
   id: string;
   posto: number | null;
   stato: StatoIscrizione;
-  categoria: Categoria;
+  /** The board of the registration: M, F or X (mixed). */
+  categoria: CategoriaTabellone;
   /** Already placed in a group: cancelling is refused (BLVS-51). */
   inGirone?: boolean;
 };
 
-export const CATEGORIA_LABEL: Record<Categoria, string> = {
+export const CATEGORIA_LABEL: Record<CategoriaTabellone, string> = {
   M: "Maschile",
   F: "Femminile",
+  X: "Misto",
 };
 
-/** «nel maschile», «nel femminile». */
-export function nelTabellone(categoria: Categoria): string {
+/** «nel maschile», «nel femminile», «nel misto». */
+export function nelTabellone(categoria: CategoriaTabellone): string {
   return `nel ${CATEGORIA_LABEL[categoria].toLowerCase()}`;
 }
 
@@ -100,6 +109,10 @@ export type TappaDettaglio = {
   ritrovoAlle: string | null;
   programma: string | null;
   fase: FasePartita | null;
+  /** Mixed stage: one board, its two halves listed in `tabelloni`. */
+  misto: boolean;
+  /** One line on the format, for a mixed stage; null for a classic one. */
+  formatoTesto: string | null;
   tabelloni: TabelloneDettaglio[];
   categoria: Categoria | null;
   iscrizione: IscrizionePropria | null;
@@ -148,6 +161,7 @@ export function toTappaDettaglio(
     at: Date;
   },
 ): TappaDettaglio {
+  const misto = row.formato === "misto";
   const boards = [...tabelloni].sort((a, b) =>
     a.categoria.localeCompare(b.categoria),
   );
@@ -180,8 +194,8 @@ export function toTappaDettaglio(
     const n = own.prossimo_posto;
     azione =
       n && (liberi ?? 0) > 0
-        ? `Prendi il posto ${n} ${nelTabellone(categoria)}`
-        : `Prendi un posto ${nelTabellone(categoria)}`;
+        ? `Prendi il posto ${n} ${nelTabellone(misto ? "X" : categoria)}`
+        : `Prendi un posto ${nelTabellone(misto ? "X" : categoria)}`;
   }
 
   const fase =
@@ -210,6 +224,8 @@ export function toTappaDettaglio(
     ritrovoAlle: row.ritrovo_alle ? formatScadenza(row.ritrovo_alle) : null,
     programma: row.programma?.trim() || null,
     fase,
+    misto,
+    formatoTesto: misto ? FORMATO_DESCRIZIONE.misto : null,
     tabelloni: boards.map((b) => {
       const posti = {
         liberi: Math.max(0, b.posti - b.occupati),
@@ -217,7 +233,7 @@ export function toTappaDettaglio(
       };
       return {
         categoria: b.categoria,
-        label: CATEGORIA_LABEL[b.categoria],
+        label: misto ? QUOTA_LABEL[b.categoria] : CATEGORIA_LABEL[b.categoria],
         posti,
         postiTesto: descriviPosti(posti),
         statoTesto: statoTabellone(row.stato, posti),
@@ -276,7 +292,7 @@ export type IscrizioneConfermata = {
   tappaId: string;
   nome: string;
   posto: number | null;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   periodo: string;
   luogo: string;
   ritrovo: string | null;

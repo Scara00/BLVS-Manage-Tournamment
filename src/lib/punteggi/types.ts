@@ -1,5 +1,5 @@
 import type {
-  Categoria,
+  CategoriaTabellone,
   SetPunteggio,
   StatoPartita,
   StatoTappa,
@@ -27,7 +27,7 @@ export type ParzialePartita = {
 /** One group match as the score screens see it. */
 export type PartitaPunteggio = {
   id: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   gironeId: string;
   gironeNome: string;
   turno: number;

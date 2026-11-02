@@ -1,4 +1,5 @@
 import { formatPeriodoTappa } from "@/lib/tappe/format";
+import { TABELLONE_NOME, categorieTabelloni } from "@/lib/tappe/formato";
 import type { TappaModifica } from "./types";
 
 const LOCAL_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
@@ -27,7 +28,9 @@ export function riepilogoTappa(tappa: TappaModifica): [string, string][] {
     ["Luogo", tappa.luogo],
     ["Date", formatPeriodoTappa(tappa.data, tappa.dataFine)],
     ["Scadenza iscrizioni", formatScadenza(tappa.scadenza)],
-    ["Massimo tabellone maschile", String(tappa.tabelloni.M.posti)],
-    ["Massimo tabellone femminile", String(tappa.tabelloni.F.posti)],
+    ...categorieTabelloni(tappa.formato).map((c): [string, string] => [
+      `Massimo tabellone ${TABELLONE_NOME[c]}`,
+      String(tappa.tabelloni[c]?.posti ?? "—"),
+    ]),
   ];
 }

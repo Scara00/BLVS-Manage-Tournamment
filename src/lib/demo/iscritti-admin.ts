@@ -1,4 +1,8 @@
-import type { Categoria, StatoIscrizione } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+} from "@/lib/db/types";
 import { iscrittiModificabili } from "@/lib/iscrizioni/admin/format";
 import type {
   GiocatoreTrovato,
@@ -210,7 +214,7 @@ function postiDi(tappaId: string): number {
   return getDemoTappaGestione(tappaId)?.posti ?? POSTI_PREDEFINITI;
 }
 
-function scriviConti(tappaId: string, categoria: Categoria) {
+function scriviConti(tappaId: string, categoria: CategoriaTabellone) {
   const attive = (iscrizioniDi(tappaId) ?? []).filter(
     (i) => i.categoria === categoria && attiva(i),
   );

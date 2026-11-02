@@ -1,6 +1,7 @@
-import type { Categoria, FaseGioco } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseGioco } from "@/lib/db/types";
 import { FASE_GIOCO_LABEL } from "@/lib/gironi/fasi/fase";
 import type { ProblemaAvvio } from "./regole";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 
 /** Result of `avviaFase`; expected failures are values, never throws. */
 export type AvvioFaseState =
@@ -45,11 +46,11 @@ export const AVVIO_MESSAGES = {
 } as const;
 
 export function messaggioSuccesso(
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   partite: number,
   fase: FaseGioco = "gironi_iniziali",
 ): string {
-  const tabellone = categoria === "M" ? "maschile" : "femminile";
+  const tabellone = TABELLONE_NOME[categoria];
   const n = partite === 1 ? "1 partita creata" : `${partite} partite create`;
   return `${FASE_GIOCO_LABEL[fase]} avviati per il tabellone ${tabellone}: ${n}.`;
 }

@@ -1,7 +1,8 @@
+import { uominiDonne } from "@/lib/tappe/formato";
 import { REGOLA_GIRONI, type RegolaGironi } from "@/lib/tappe/gironi";
 import type { ComposizioneGironi } from "./types";
 
-export type CodiceControllo = "dimensione" | "doppioni" | "assegnati";
+export type CodiceControllo = "dimensione" | "misto" | "doppioni" | "assegnati";
 
 export type Controllo = {
   codice: CodiceControllo;
@@ -31,8 +32,22 @@ function giocatori(n: number) {
 export function controllaGironi(
   composizione: ComposizioneGironi,
   regola: RegolaGironi = REGOLA_GIRONI,
+  { misto = false }: { misto?: boolean } = {},
 ): ControlliGironi {
   const { dimensione } = regola;
+
+  // Mixed board: every full group is half men, half women.
+  const nonMisti = misto
+    ? composizione.gironi
+        .filter((g) => g.giocatori.length === dimensione)
+        .flatMap((g) => {
+          const uomini = g.giocatori.filter((p) => p.categoria === "M").length;
+          const donne = g.giocatori.filter((p) => p.categoria === "F").length;
+          return uomini === dimensione / 2 && donne === dimensione / 2
+            ? []
+            : [`${g.nome}: ${uominiDonne(uomini, donne)}.`];
+        })
+    : [];
 
   const fuoriMisura = composizione.gironi
     .filter((g) => g.giocatori.length !== dimensione)
@@ -77,6 +92,16 @@ export function controllaGironi(
       ok: fuoriMisura.length === 0,
       problemi: fuoriMisura,
     },
+    ...(misto
+      ? [
+          {
+            codice: "misto" as const,
+            titolo: `${uominiDonne(dimensione / 2, dimensione / 2)} per girone`,
+            ok: nonMisti.length === 0,
+            problemi: nonMisti,
+          },
+        ]
+      : []),
     {
       codice: "doppioni",
       titolo: "Nessun doppione",

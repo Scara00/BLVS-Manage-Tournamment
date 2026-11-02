@@ -56,6 +56,11 @@ function CategoriaCell({ categoria }: { categoria: AdminCategoria }) {
       // text «Completo» or «◆ SILVER» wrap inside a fifth of the table.
       className="flex min-w-0 flex-col items-start gap-space-1 [overflow-wrap:anywhere]"
     >
+      {categoria.misto ? (
+        <span className="text-sm font-semibold">
+          Misto · {categoria.categoria === "M" ? "uomini" : "donne"}
+        </span>
+      ) : null}
       {categoria.fase ? (
         <PhaseBadge phase={categoria.fase} className="max-w-full flex-wrap" />
       ) : (

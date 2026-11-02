@@ -1,5 +1,5 @@
 import type {
-  Categoria,
+  CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   FasePartita,
@@ -38,7 +38,7 @@ export type PartitaLive = {
 /** Everything w-admin-live reads for one board. */
 export type TabelloneLive = {
   tappa: { id: string; nome: string; stato: StatoTappa };
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** `tabelloni.id` (`<stage>:<M|F>` in the demo). */
   tabelloneId: string;
   faseGioco: FaseGioco | null;
@@ -50,6 +50,9 @@ export type TabelloneLive = {
 };
 
 /** `<stage id>:<M|F>`: the board's key on the live channel. */
-export function chiaveTabellone(tappaId: string, categoria: Categoria): string {
+export function chiaveTabellone(
+  tappaId: string,
+  categoria: CategoriaTabellone,
+): string {
   return `${tappaId}:${categoria}`;
 }

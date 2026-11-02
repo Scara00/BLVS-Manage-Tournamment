@@ -1,3 +1,4 @@
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type { SetPunteggio } from "@/lib/db/types";
 import type { ClassificaGirone } from "@/lib/gironi/classifica";
 import type { GroupStandings, LiveMatch } from "@/lib/live/types";
@@ -120,7 +121,7 @@ export function toGroupStandings(
   girone: { id: string; nome: string },
   classifica: ClassificaGirone,
   nomi: ReadonlyMap<string, string>,
-  board?: { stageId: string; category: "M" | "F" },
+  board?: { stageId: string; category: CategoriaTabellone },
   /** BLVS-42: «Ritirato», «Assente in 1 partita», by registration id. */
   note?: ReadonlyMap<string, string>,
 ): GroupStandings {

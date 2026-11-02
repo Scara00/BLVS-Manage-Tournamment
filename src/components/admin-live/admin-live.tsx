@@ -121,8 +121,9 @@ function usePartiteCorrenti(view: TabelloneLive): {
   return { partite: view.partite, adesso: new Date(view.lettoIl) };
 }
 
-/** M/F switch: one board at a time. */
+/** M/F switch: one board at a time. A mixed stage has only its board. */
 function SceltaTabellone({ view }: { view: TabelloneLive }) {
+  if (view.categoria === "X") return null;
   return (
     <nav aria-label="Tabellone" className="flex flex-wrap gap-space-2">
       {CATEGORIE.map((c) => {

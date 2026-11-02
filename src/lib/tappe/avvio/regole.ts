@@ -1,10 +1,12 @@
 import type {
   Categoria,
+  CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   StatoTappa,
 } from "@/lib/db/types";
 import { FASE_GIOCO_LABEL, faseDopo } from "@/lib/gironi/fasi/fase";
+import { uominiDonne } from "@/lib/tappe/formato";
 
 /**
  * Rules for starting the group phase of one board. Mirror of
@@ -31,6 +33,7 @@ export const REGOLA_AVVIO: RegolaAvvio = {
 export const REGOLE_BLOCCO = [
   "nessun_girone",
   "girone_non_da_4",
+  "girone_non_misto",
   "doppione",
   "non_assegnato",
 ] as const;
@@ -45,7 +48,10 @@ export type ProblemaAvvio = {
   regola: RegolaBlocco;
   gironeId: string | null;
   gironeNome: string | null;
-  /** Player count (girone_non_da_4) or «Cognome Nome» (the others). */
+  /**
+   * Player count (girone_non_da_4), «uomini:donne» (girone_non_misto) or
+   * «Cognome Nome» (the others).
+   */
   dettaglio: string | null;
 };
 
@@ -56,6 +62,8 @@ export type GiocatoreAvvio = {
   lettera: string;
   nome: string;
   cognome: string;
+  /** The player's category; needed on a mixed board (2 men + 2 women). */
+  categoria?: Categoria;
 };
 
 export type GironeAvvio = {
@@ -75,7 +83,7 @@ export type IscrittoFuori = {
 /** What the start screen reads for one board. */
 export type TabelloneAvvio = {
   tappa: { id: string; nome: string; stato: StatoTappa };
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   tabelloneId: string;
   faseGioco: FaseGioco | null;
   /**
@@ -112,11 +120,13 @@ function nomeCompleto(g: { nome: string; cognome: string }): string {
 
 /** Same rules, order and output as `controlli_avvio_fase`. */
 export function controllaAvvio(
-  tabellone: Pick<TabelloneAvvio, "gironi" | "nonAssegnati">,
+  tabellone: Pick<TabelloneAvvio, "gironi" | "nonAssegnati"> &
+    Partial<Pick<TabelloneAvvio, "categoria">>,
   regola: RegolaAvvio = REGOLA_AVVIO,
 ): ProblemaAvvio[] {
   const problemi: ProblemaAvvio[] = [];
   const { gironi, nonAssegnati } = tabellone;
+  const misto = tabellone.categoria === "X";
 
   if (gironi.length === 0) {
     problemi.push({
@@ -135,6 +145,22 @@ export function controllaAvvio(
         gironeNome: g.nome,
         dettaglio: String(g.giocatori.length),
       });
+    }
+  }
+
+  if (misto) {
+    for (const g of gironi) {
+      if (g.giocatori.length !== regola.dimensione) continue;
+      const uomini = g.giocatori.filter((p) => p.categoria === "M").length;
+      const donne = g.giocatori.filter((p) => p.categoria === "F").length;
+      if (uomini !== regola.dimensione / 2) {
+        problemi.push({
+          regola: "girone_non_misto",
+          gironeId: g.id,
+          gironeNome: g.nome,
+          dettaglio: `${uomini}:${donne}`,
+        });
+      }
     }
   }
 
@@ -189,6 +215,7 @@ export function controlloDi(regola: RegolaBlocco): ChiaveControllo {
   switch (regola) {
     case "nessun_girone":
     case "girone_non_da_4":
+    case "girone_non_misto":
       return "gironi";
     case "doppione":
       return "doppioni";
@@ -227,6 +254,12 @@ export function messaggioProblema(
       const giocatori = n === 1 ? "1 giocatore" : `${n} giocatori`;
       return `${problema.gironeNome}: ha ${giocatori} invece di ${regola.dimensione}.`;
     }
+    case "girone_non_misto": {
+      const [uomini = 0, donne = 0] = (problema.dettaglio ?? "")
+        .split(":")
+        .map(Number);
+      return `${problema.gironeNome}: ha ${uominiDonne(uomini, donne)} invece di ${uominiDonne(regola.dimensione / 2, regola.dimensione / 2)}.`;
+    }
     case "doppione":
       return `${problema.gironeNome}: ${problema.dettaglio} è anche in un altro girone.`;
     case "non_assegnato":
@@ -236,12 +269,21 @@ export function messaggioProblema(
 
 /**
  * The King/Queen rotation of a group of 4: everyone partners each of the
- * other three once. Same table as `avvia_fase`.
+ * other three once. Same table as `crea_partite_girone`.
  */
 export const ROTAZIONE = [
   { turno: 1, a: ["A", "B"], b: ["C", "D"] },
   { turno: 2, a: ["A", "C"], b: ["B", "D"] },
   { turno: 3, a: ["A", "D"], b: ["B", "C"] },
+] as const;
+
+/**
+ * The mixed rotation (men A, B; women C, D): every team is a man and a
+ * woman, so only two matches. Same table as `crea_partite_girone`.
+ */
+export const ROTAZIONE_MISTA = [
+  { turno: 1, a: ["A", "C"], b: ["B", "D"] },
+  { turno: 2, a: ["A", "D"], b: ["B", "C"] },
 ] as const;
 
 export type PartitaAnteprima = {
@@ -251,12 +293,15 @@ export type PartitaAnteprima = {
 };
 
 /** The matches the start will create for one group (none if not of 4). */
-export function partiteGirone(girone: GironeAvvio): PartitaAnteprima[] {
+export function partiteGirone(
+  girone: GironeAvvio,
+  misto = false,
+): PartitaAnteprima[] {
   if (girone.giocatori.length !== 4) return [];
   const per = new Map(girone.giocatori.map((g) => [g.lettera, g]));
   const prendi = (lettere: readonly string[]) =>
     lettere.map((l) => per.get(l)).filter((g) => g !== undefined);
-  return ROTAZIONE.map(({ turno, a, b }) => ({
+  return (misto ? ROTAZIONE_MISTA : ROTAZIONE).map(({ turno, a, b }) => ({
     turno,
     squadraA: prendi(a),
     squadraB: prendi(b),
@@ -270,12 +315,17 @@ export type RiepilogoAvvio = {
 };
 
 export function riepilogoAvvio(
-  tabellone: Pick<TabelloneAvvio, "gironi">,
+  tabellone: Pick<TabelloneAvvio, "gironi"> &
+    Partial<Pick<TabelloneAvvio, "categoria">>,
 ): RiepilogoAvvio {
+  const misto = tabellone.categoria === "X";
   return {
     gironi: tabellone.gironi.length,
     giocatori: tabellone.gironi.reduce((n, g) => n + g.giocatori.length, 0),
-    partite: tabellone.gironi.reduce((n, g) => n + partiteGirone(g).length, 0),
+    partite: tabellone.gironi.reduce(
+      (n, g) => n + partiteGirone(g, misto).length,
+      0,
+    ),
   };
 }
 

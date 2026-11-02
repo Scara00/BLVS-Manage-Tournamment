@@ -1,7 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import type { Ref } from "react";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { linkProblema } from "@/lib/tappe/avvio/paths";
 import {
   messaggioProblema,
@@ -20,7 +20,7 @@ export function ErroriAvvio({
   headingRef,
 }: {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   problemi: readonly ProblemaAvvio[];
   headingRef?: Ref<HTMLHeadingElement>;
 }) {

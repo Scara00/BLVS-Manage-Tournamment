@@ -8,17 +8,26 @@ import {
   useActionState,
   useEffect,
   useRef,
+  useState,
   type FormEvent,
 } from "react";
 import { Tape } from "@/components/scoreboard";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Field, focusFirstInvalid } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { RadioCard, RadioCardGroup } from "@/components/ui/radio-card";
 import { useToast } from "@/components/ui/toast";
 import { useFormDraft } from "@/lib/drafts/use-form-draft";
+import type { FormatoTappa } from "@/lib/db/types";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
 import {
+  FORMATO_DESCRIZIONE,
+  FORMATO_LABEL,
+  isFormatoTappa,
+} from "@/lib/tappe/formato";
+import {
   NUOVA_TAPPA_PATH,
+  POSTI_MISTO_PREDEFINITI,
   POSTI_PREDEFINITI,
   initialNuovaTappaFormState,
   type NuovaTappaAction,
@@ -31,8 +40,10 @@ type NuovaTappaFormProps = {
   action: NuovaTappaAction;
   /** Starting state, e.g. to show server errors in Storybook. */
   initialState?: NuovaTappaFormState;
-  /** Starting maximum of each board. */
-  posti?: { M: number; F: number };
+  /** Starting maximum of each board (X: the mixed one). */
+  posti?: { M: number; F: number; X?: number };
+  /** Starting format. */
+  formato?: FormatoTappa;
 };
 
 function Avviso({
@@ -62,17 +73,21 @@ function Avviso({
 }
 
 /**
- * w-admin-tappa-nuova: name, place, day, registration deadline (Europe/Rome)
- * and the maximum of each board. The stage is created in draft with its two
- * independent boards, M and F. Errors sit under each field and focus moves
- * to the first one; a maximum with incomplete groups only warns.
+ * w-admin-tappa-nuova: format, name, place, day, registration deadline
+ * (Europe/Rome) and the maximum of each board. A classic stage is created
+ * in draft with its two independent boards, M and F; a mixed King & Queen
+ * stage with a single board and one even maximum, half men and half women.
+ * Errors sit under each field and focus moves to the first one; a maximum
+ * with incomplete groups only warns.
  */
 export function NuovaTappaForm({
   action,
   initialState = initialNuovaTappaFormState,
   posti = { M: POSTI_PREDEFINITI, F: POSTI_PREDEFINITI },
+  formato: formatoIniziale = "classico",
 }: NuovaTappaFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
+  const [formato, setFormato] = useState<FormatoTappa>(formatoIniziale);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const toast = useToast();
@@ -81,6 +96,13 @@ export function NuovaTappaForm({
     label: "Nuova tappa",
     path: NUOVA_TAPPA_PATH,
   });
+
+  // A restored draft may carry the other format: follow it.
+  useEffect(() => {
+    if (!restoredAt || !formRef.current) return;
+    const salvato = new FormData(formRef.current).get("formato");
+    if (isFormatoTappa(salvato)) setFormato(salvato);
+  }, [restoredAt]);
 
   useEffect(() => {
     if (state.status === "error" && formRef.current) {
@@ -131,6 +153,28 @@ export function NuovaTappaForm({
 
       {avviso ? <Avviso state={avviso} /> : null}
 
+      <RadioCardGroup
+        legend="Formato"
+        name="formato"
+        required
+        hint="Si sceglie ora e non si cambia più."
+        error={fields.formato}
+        value={formato}
+        onValueChange={(value) => {
+          if (isFormatoTappa(value)) setFormato(value);
+        }}
+        className="max-w-md"
+      >
+        {(["classico", "misto"] as const).map((f) => (
+          <RadioCard
+            key={f}
+            value={f}
+            title={FORMATO_LABEL[f]}
+            description={FORMATO_DESCRIZIONE[f]}
+          />
+        ))}
+      </RadioCardGroup>
+
       <Field label="Nome" required error={fields.nome} className="max-w-md">
         <Input name="nome" maxLength={120} autoComplete="off" />
       </Field>
@@ -165,25 +209,47 @@ export function NuovaTappaForm({
 
       <fieldset className="m-0 flex min-w-0 flex-col gap-stack p-0">
         <legend className="mb-space-2 p-0 font-heading text-xl font-semibold">
-          Tabelloni
+          {formato === "misto" ? "Tabellone" : "Tabelloni"}
         </legend>
-        <p className="max-w-prose">
-          La tappa nasce <strong>in bozza</strong> con due tabelloni
-          indipendenti, maschile (M) e femminile (F), ciascuno con il suo
-          massimo di iscritti.
-        </p>
-        <PostiField
-          categoria="M"
-          defaultValue={posti.M}
-          error={fields.postiM}
-          restoredAt={restoredAt}
-        />
-        <PostiField
-          categoria="F"
-          defaultValue={posti.F}
-          error={fields.postiF}
-          restoredAt={restoredAt}
-        />
+        {formato === "misto" ? (
+          <>
+            <p className="max-w-prose">
+              La tappa nasce <strong>in bozza</strong> con un solo tabellone
+              misto: ogni squadra è un uomo e una donna, che ruotano nei gironi
+              da 2 uomini e 2 donne. Il massimo è pari e si divide a metà tra
+              uomini e donne.
+            </p>
+            <PostiField
+              key="X"
+              categoria="X"
+              defaultValue={posti.X ?? POSTI_MISTO_PREDEFINITI}
+              error={fields.posti}
+              restoredAt={restoredAt}
+            />
+          </>
+        ) : (
+          <>
+            <p className="max-w-prose">
+              La tappa nasce <strong>in bozza</strong> con due tabelloni
+              indipendenti, maschile (M) e femminile (F), ciascuno con il suo
+              massimo di iscritti.
+            </p>
+            <PostiField
+              key="M"
+              categoria="M"
+              defaultValue={posti.M}
+              error={fields.postiM}
+              restoredAt={restoredAt}
+            />
+            <PostiField
+              key="F"
+              categoria="F"
+              defaultValue={posti.F}
+              error={fields.postiF}
+              restoredAt={restoredAt}
+            />
+          </>
+        )}
       </fieldset>
 
       <div className="flex flex-wrap items-center gap-space-3">

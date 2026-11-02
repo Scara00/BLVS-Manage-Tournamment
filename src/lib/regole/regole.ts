@@ -27,7 +27,7 @@ import {
   spiegaRegolaSet,
   type RegolaSet,
 } from "@/lib/punteggi/regola";
-import { REGOLA_AVVIO } from "@/lib/tappe/avvio/regole";
+import { REGOLA_AVVIO, ROTAZIONE_MISTA } from "@/lib/tappe/avvio/regole";
 import { PUNTI_PER_POSIZIONE } from "@/lib/tappe/classifica/punti";
 import {
   REGOLE_APERTE,
@@ -79,6 +79,8 @@ export type Sezione<T> = { daConfermare: boolean; contenuto: T };
 
 export type RegoleCircuito = {
   formato: Sezione<PassoFormato[]>;
+  /** The mixed King & Queen stage: how it differs from the classic one. */
+  misto: Sezione<string[]>;
   set: Sezione<string>;
   spareggiGirone: Sezione<string[]>;
   punti: Sezione<RigaPunti[]>;
@@ -112,6 +114,17 @@ function passiFormato(c: ConfigRegole): PassoFormato[] {
   );
 }
 
+/** The mixed King & Queen stage, paragraph by paragraph. */
+export function regoleMisto(c: ConfigRegole = CONFIG_REGOLE): string[] {
+  const meta = c.giocatoriGirone / 2;
+  return [
+    "Alcune tappe sono King & Queen misto: un solo tabellone dove ogni squadra è sempre un uomo e una donna. Il numero massimo di giocatori è diviso a metà, metà posti agli uomini e metà alle donne.",
+    `I gironi sono da ${meta} uomini e ${meta} donne e giocano ${ROTAZIONE_MISTA.length} partite: a ogni partita si cambia compagno, così ognuno fa coppia una volta con ciascuno dei due giocatori dell'altra categoria.`,
+    "Le fasi sono le stesse: il miglior uomo e la miglior donna di ogni girone iniziale vanno nei gironi Gold, gli altri due nei Silver; poi le finali Gold e Silver, sempre metà uomini e metà donne. Fino a 2 gironi per colore in finale vanno il miglior uomo e la miglior donna di ogni girone; con più gironi i finalisti li sceglie l'organizzazione.",
+    "La tappa mista ha la sua classifica ma non assegna punti alla classifica generale.",
+  ];
+}
+
 function righePunti(punti: ConfigRegole["punti"]): RigaPunti[] {
   const posti = Math.max(punti.gold.length, punti.silver.length);
   return Array.from({ length: posti }, (_, i) => ({
@@ -130,6 +143,10 @@ export function regoleDelCircuito(
     formato: {
       daConfermare: aperta("formato"),
       contenuto: passiFormato(config),
+    },
+    misto: {
+      daConfermare: aperta("formato"),
+      contenuto: regoleMisto(config),
     },
     set: {
       daConfermare: aperta("set"),

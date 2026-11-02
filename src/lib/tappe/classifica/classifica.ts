@@ -69,6 +69,11 @@ export type ClassificaTappa = {
   righe: RigaClassificaTappa[];
   stato: StatoClassificaTappa;
   puntiProvvisori: boolean;
+  /**
+   * A mixed board gives no points to the overall standing: every `punti`
+   * is null and the screens leave the column out.
+   */
+  senzaPunti?: boolean;
 };
 
 type Posto = {
@@ -251,9 +256,12 @@ const ordineFase = (fase: FaseTabellone | null) =>
 export function classificaTappa({
   finali,
   concluso,
+  senzaPunti = false,
 }: {
   finali: readonly FinaleTappa[];
   concluso: boolean;
+  /** Mixed board: places only, no points. */
+  senzaPunti?: boolean;
 }): ClassificaTappa {
   const puntiProvvisori = !concluso;
   const ordinate = [...finali].sort(
@@ -277,7 +285,7 @@ export function classificaTappa({
         posizioneFase: posto.posizione,
         posizioneDefinitiva: posto.definitiva,
         punti:
-          finale.fase === null
+          finale.fase === null || senzaPunti
             ? null
             : puntiPerPosizione(finale.fase, posto.posizione),
         puntiProvvisori,
@@ -296,5 +304,7 @@ export function classificaTappa({
         : righe.every((r) => r.posizioneDefinitiva)
           ? "definitiva"
           : "in_corso";
-  return { righe, stato, puntiProvvisori };
+  return senzaPunti
+    ? { righe, stato, puntiProvvisori, senzaPunti }
+    : { righe, stato, puntiProvvisori };
 }

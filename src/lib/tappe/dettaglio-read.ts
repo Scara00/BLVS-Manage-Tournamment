@@ -4,7 +4,11 @@ import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria, StatoIscrizione } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoIscrizione,
+} from "@/lib/db/types";
 import {
   DEMO_GIOCATORE_COOKIE,
   demoDettaglioTappa,
@@ -96,7 +100,7 @@ async function leggiTappa(id: string): Promise<Lettura> {
           id: string;
           posto: number | null;
           stato: StatoIscrizione;
-          tabelloni: { categoria: Categoria } | null;
+          tabelloni: { categoria: CategoriaTabellone } | null;
           girone_iscrizioni: { girone_id: string }[] | null;
         }>(),
     ]);

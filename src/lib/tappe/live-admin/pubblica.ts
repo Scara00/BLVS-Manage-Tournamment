@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { pubblicaClassificaGenerale } from "@/lib/classifica-generale/pubblica";
-import { CATEGORIE, type Categoria } from "@/lib/db/types";
+import { CATEGORIE_TABELLONE, type CategoriaTabellone } from "@/lib/db/types";
 import { getDemoTabelloneLive } from "@/lib/demo/admin-live";
 import { publishBoardMatches, publishPendingScores } from "@/lib/live/publish";
 import { pubblicaGironiTappa } from "@/lib/tabellone/pubblica";
@@ -17,7 +17,7 @@ type Sorgente = { supabase: SupabaseClient | null };
 function leggi(
   { supabase }: Sorgente,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   adesso: Date,
 ): Promise<TabelloneLive | null> | TabelloneLive | null {
   return supabase
@@ -37,15 +37,15 @@ function leggi(
 export async function pubblicaTabellone(
   sorgente: Sorgente,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   cambio: string | null,
 ): Promise<void> {
   try {
     const adesso = now();
     const letti = await Promise.all(
-      CATEGORIE.map((c) => leggi(sorgente, tappaId, c, adesso)),
+      CATEGORIE_TABELLONE.map((c) => leggi(sorgente, tappaId, c, adesso)),
     );
-    const tabellone = letti[CATEGORIE.indexOf(categoria)];
+    const tabellone = letti[CATEGORIE_TABELLONE.indexOf(categoria)];
     if (!tabellone) return;
     publishBoardMatches({
       id: chiaveTabellone(tappaId, categoria),

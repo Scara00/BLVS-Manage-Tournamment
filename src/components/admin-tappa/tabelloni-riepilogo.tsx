@@ -8,7 +8,24 @@ import { gironiEditorPath } from "@/lib/gironi/editor/types";
 import type { TabelloneView } from "@/lib/tappe/gestione-format";
 
 const columns: ResponsiveTableColumn<TabelloneView>[] = [
-  { key: "categoriaLabel", header: "Tabellone", rowHeader: true, width: "25%" },
+  {
+    key: "categoriaLabel",
+    header: "Tabellone",
+    rowHeader: true,
+    width: "25%",
+    // Mixed board: the confirmed players of each half under the name.
+    render: (row) =>
+      row.quote ? (
+        <span className="flex flex-col">
+          <span>{row.categoriaLabel}</span>
+          <span className="text-sm font-normal text-muted-foreground">
+            {row.quote}
+          </span>
+        </span>
+      ) : (
+        row.categoriaLabel
+      ),
+  },
   {
     key: "iscritti",
     header: "Iscritti confermati",
@@ -41,7 +58,7 @@ function colonnaGironi(tappaId: string): ResponsiveTableColumn<TabelloneView> {
   };
 }
 
-/** Per board (M/F): confirmed and pending registrations, and its phase. */
+/** Per board (M/F, or the mixed one): registrations and phase. */
 export function TabelloniRiepilogo({
   tappaId,
   tabelloni,

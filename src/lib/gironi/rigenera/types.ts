@@ -1,4 +1,4 @@
-import type { Categoria, StatoPartita } from "@/lib/db/types";
+import type { CategoriaTabellone, StatoPartita } from "@/lib/db/types";
 
 /** One set of a group match: points of team A and team B. */
 export type SetPunteggio = { a: number; b: number };
@@ -65,7 +65,7 @@ export type RigeneraAction = (
 /** What the regeneration button needs to know about its board. */
 export type RigenerazioneTabellone = {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   punteggi: PunteggioPerso[];
 };
 

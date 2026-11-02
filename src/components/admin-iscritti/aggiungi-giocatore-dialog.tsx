@@ -78,13 +78,35 @@ type AggiungiGiocatoreDialogProps = {
 /** Why a found player cannot be added, or null. */
 function motivoBlocco(
   giocatore: GiocatoreTrovato,
-  pieni: ReadonlySet<Categoria>,
+  pieni: ReadonlyMap<Categoria, string>,
 ): string | null {
   if (giocatore.iscritto) return "Già iscritto a questa tappa.";
   if (!giocatore.categoria) return "Non ha ancora scelto la categoria.";
-  if (pieni.has(giocatore.categoria))
-    return `Tabellone ${CATEGORIA_TABELLONE[giocatore.categoria].toLowerCase()} al completo.`;
-  return null;
+  return pieni.get(giocatore.categoria) ?? null;
+}
+
+/**
+ * The player categories with no seat left, with the reason: a full board,
+ * or a full half of the mixed board.
+ */
+function categoriePiene(
+  tabelloni: readonly IscrittiTabelloneView[],
+): Map<Categoria, string> {
+  const pieni = new Map<Categoria, string>();
+  for (const t of tabelloni) {
+    if (t.categoria === "X") {
+      for (const q of t.quote) {
+        if (q.pieno)
+          pieni.set(q.categoria, `Posti ${q.label.toLowerCase()} al completo.`);
+      }
+    } else if (t.pieno) {
+      pieni.set(
+        t.categoria,
+        `Tabellone ${CATEGORIA_TABELLONE[t.categoria].toLowerCase()} al completo.`,
+      );
+    }
+  }
+  return pieni;
 }
 
 function testoStato(ricerca: Ricerca): string {
@@ -269,10 +291,8 @@ export function AggiungiGiocatoreDialog({
     startTransition(() => formAction(formData));
   }
 
-  const pieni = new Set(
-    tabelloni.filter((t) => t.pieno).map((t) => t.categoria),
-  );
-  const tuttiPieni = tabelloni.length > 0 && pieni.size === tabelloni.length;
+  const pieni = categoriePiene(tabelloni);
+  const tuttiPieni = tabelloni.length > 0 && tabelloni.every((t) => t.pieno);
   const errore = state.status === "error" && mostraErrore ? state : null;
   const giocatori =
     ricerca.stato === "esito" && ricerca.esito.status === "ok"

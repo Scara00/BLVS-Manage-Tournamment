@@ -1,4 +1,4 @@
-import type { Categoria, FaseTabellone } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseTabellone } from "@/lib/db/types";
 import { announcementFor } from "./announce";
 import type {
   GroupStandings,
@@ -17,7 +17,7 @@ import type {
 export type LiveMe = string | null;
 
 /** Gold/Silver of each board; missing until the admin sets it. */
-export type FasiTabelloni = Partial<Record<Categoria, FaseTabellone>>;
+export type FasiTabelloni = Partial<Record<CategoriaTabellone, FaseTabellone>>;
 
 export type VistaLive = {
   /** The player's own matches: in progress, then to play, then played. */

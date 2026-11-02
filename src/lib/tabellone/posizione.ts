@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { CATEGORIA_NOME } from "@/lib/tappe/avvio/paths";
 import { LIVELLO_DELLA_FASE, ORDINE_LIVELLI } from "./fasi";
 import { latoDelTaglio } from "./taglio";
@@ -17,7 +17,7 @@ export type MiaPosizione =
   | { stato: "senza_girone" }
   | {
       stato: "in_girone";
-      categoria: Categoria;
+      categoria: CategoriaTabellone;
       girone: GironeTabellone;
       riga: RigaTabellone;
       /** «2°», «2° a pari merito», or «–» before any result. */
@@ -116,6 +116,6 @@ export function gironiPerLivello(board: BoardTabellone): {
 }
 
 /** «Tabellone maschile». */
-export function titoloBoard(categoria: Categoria): string {
+export function titoloBoard(categoria: CategoriaTabellone): string {
   return `Tabellone ${CATEGORIA_NOME[categoria]}`;
 }

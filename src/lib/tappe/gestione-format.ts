@@ -1,6 +1,14 @@
-import type { Categoria, FaseGioco, StatoTappa, Tappa } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  FaseGioco,
+  FormatoTappa,
+  StatoTappa,
+  Tappa,
+} from "@/lib/db/types";
 import { FASE_TABELLONE_LABEL, faseDelTabellone } from "@/lib/gironi/fasi/fase";
 import { formatPeriodoTappa, STATO_TAPPA_LABEL } from "./format";
+import { FORMATO_LABEL, QUOTA_NOME, TABELLONE_LABEL } from "./formato";
 import {
   confrontoOraDopo,
   COPY_TRANSIZIONE,
@@ -31,16 +39,20 @@ export type TappaGestioneRow = Pick<
   | "iscrizioni_chiudono_il"
   | "iscrizioni_chiuse_il"
   | "chiusura_automatica"
->;
+> &
+  // Absent in rows read before the mixed format: a classic stage.
+  Partial<Pick<Tappa, "formato">>;
 
 export const TAPPA_GESTIONE_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, formato";
 
 /** Per board: registrations by state and the phases of its matches. */
 export type TabelloneRow = {
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   confermate: number;
   inAttesa: number;
+  /** Mixed board: confirmed players per category. */
+  confermatePerCategoria?: Readonly<Record<Categoria, number>>;
   /** `partite.fase` of every match of the board. */
   fasiPartite: readonly string[];
   /** `tabelloni.fase_gioco` (BLVS-29/39), when known. */
@@ -77,8 +89,10 @@ export type TransizioneView = CopyTransizione & {
 };
 
 export type TabelloneView = {
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   categoriaLabel: string;
+  /** Mixed board: «6 uomini · 5 donne» confirmed. */
+  quote: string | null;
   iscritti: number;
   inAttesa: number;
   fase: string;
@@ -93,6 +107,8 @@ export type GestioneTappaView = {
   periodo: string;
   stato: StatoTappa;
   statoLabel: string;
+  formato: FormatoTappa;
+  formatoLabel: string;
   flusso: PassoFlusso[];
   /** For states after the flow (in corso, conclusa, annullata). */
   notaStato: string | null;
@@ -105,9 +121,20 @@ export type GestioneTappaView = {
   tabelloni: TabelloneView[];
 };
 
-export const CATEGORIA_TABELLONE: Record<Categoria, string> = {
-  M: "Maschile",
-  F: "Femminile",
+export const CATEGORIA_TABELLONE: Record<CategoriaTabellone, string> =
+  TABELLONE_LABEL;
+
+/** «6 uomini · 5 donne». */
+export function descriviQuote(
+  perCategoria: Readonly<Record<Categoria, number>>,
+): string {
+  return `${perCategoria.M} ${QUOTA_NOME.M} · ${perCategoria.F} ${QUOTA_NOME.F}`;
+}
+
+const ORDINE_TABELLONI: Record<CategoriaTabellone, number> = {
+  M: 0,
+  F: 1,
+  X: 2,
 };
 
 const FASE_PARTITA: Record<string, string> = {
@@ -287,6 +314,8 @@ export function toGestioneTappaView(
     periodo: formatPeriodoTappa(row.data_inizio, row.data_fine),
     stato: row.stato,
     statoLabel: STATO_TAPPA_LABEL[row.stato],
+    formato: row.formato ?? "classico",
+    formatoLabel: FORMATO_LABEL[row.formato ?? "classico"],
     flusso: flussoDi(row.stato),
     notaStato: NOTA_STATO[row.stato] ?? null,
     scadenza: scadenzaDi(row, at),
@@ -297,12 +326,15 @@ export function toGestioneTappaView(
       : "",
     transizione: transizioneDi(row, at),
     tabelloni: [...tabelloni]
-      .sort((x, y) =>
-        x.categoria === y.categoria ? 0 : x.categoria === "M" ? -1 : 1,
+      .sort(
+        (x, y) => ORDINE_TABELLONI[x.categoria] - ORDINE_TABELLONI[y.categoria],
       )
       .map((t) => ({
         categoria: t.categoria,
         categoriaLabel: CATEGORIA_TABELLONE[t.categoria],
+        quote: t.confermatePerCategoria
+          ? descriviQuote(t.confermatePerCategoria)
+          : null,
         iscritti: t.confermate,
         inAttesa: t.inAttesa,
         fase: faseTabellone(row.stato, t.fasiPartite, t),

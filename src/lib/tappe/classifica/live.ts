@@ -3,56 +3,59 @@
  * the one short sentence said per update. Pure: used by the publisher,
  * the page and the tests.
  */
-import { CATEGORIE, type Categoria, type FaseTabellone } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseTabellone } from "@/lib/db/types";
 import type {
   LiveEvent,
   StageStandingRow,
   StageStandings,
 } from "@/lib/live/types";
 import type { ClassificaTappa } from "./classifica";
+import { TABELLONE_NOME, isCategoriaTabellone } from "@/lib/tappe/formato";
 import { PUNTI_PER_POSIZIONE } from "./punti";
 
-const CATEGORIA: Record<Categoria, string> = {
-  M: "maschile",
-  F: "femminile",
-};
+const CATEGORIA: Record<CategoriaTabellone, string> = TABELLONE_NOME;
 
 export const FASE_FINALE_LABEL: Record<FaseTabellone, string> = {
   gold: "Finale gold",
   silver: "Finale silver",
 };
 
-/** `<stage id>:<M|F>`: the live id of one board's stage standing. */
+/** `<stage id>:<M|F|X>`: the live id of one board's stage standing. */
 export function idClassificaTappa(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): string {
   return `${tappaId}:${categoria}`;
 }
 
-/** Parses `<stage id>:<M|F>` (the snapshot route's `?classificaTappa=`). */
+/** Parses `<stage id>:<M|F|X>` (the snapshot route's `?classificaTappa=`). */
 export function parseIdClassificaTappa(
   id: string,
-): { tappaId: string; categoria: Categoria } | null {
+): { tappaId: string; categoria: CategoriaTabellone } | null {
   const i = id.lastIndexOf(":");
   if (i <= 0) return null;
-  const categoria = id.slice(i + 1) as Categoria;
-  if (!CATEGORIE.includes(categoria)) return null;
+  const categoria = id.slice(i + 1);
+  if (!isCategoriaTabellone(categoria)) return null;
   return { tappaId: id.slice(0, i), categoria };
 }
 
-/** «M»/«F» from a query value (also «m»/«f»), or null. */
-export function parseCategoriaTappa(valore: unknown): Categoria | null {
+/** «M»/«F»/«X» from a query value (also lowercase), or null. */
+export function parseCategoriaTappa(
+  valore: unknown,
+): CategoriaTabellone | null {
   const v = typeof valore === "string" ? valore.toUpperCase() : null;
-  return CATEGORIE.includes(v as Categoria) ? (v as Categoria) : null;
+  return isCategoriaTabellone(v) ? v : null;
 }
 
-export function titoloClassificaTappa(categoria: Categoria): string {
+export function titoloClassificaTappa(categoria: CategoriaTabellone): string {
   return `Classifica di tappa ${CATEGORIA[categoria]}`;
 }
 
 /** «Tappa 1 · Jesolo, maschile». */
-export function etichettaTabellone(nome: string, categoria: Categoria): string {
+export function etichettaTabellone(
+  nome: string,
+  categoria: CategoriaTabellone,
+): string {
   return `${nome}, ${CATEGORIA[categoria]}`;
 }
 
@@ -66,7 +69,7 @@ export function toStageStandings(
     change = null,
   }: {
     tappaId: string;
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     nome: string;
     change?: string | null;
   },

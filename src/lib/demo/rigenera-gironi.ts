@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type {
   ComposizioneGironi,
   GiocatoreGirone,
@@ -25,12 +25,12 @@ function store(): Store {
   return (g[STORE_KEY] ??= new Map());
 }
 
-const chiave = (tappaId: string, categoria: Categoria) =>
+const chiave = (tappaId: string, categoria: CategoriaTabellone) =>
   `${tappaId}:${categoria}`;
 
 export function getDemoPunteggiPersi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): PunteggioPerso[] {
   return structuredClone(store().get(chiave(tappaId, categoria)) ?? []);
 }
@@ -85,7 +85,7 @@ export function creaDemoRigenerazione({
 }: {
   punteggi?: number;
   giocatori?: number;
-}): { id: string; categoria: Categoria } {
+}): { id: string; categoria: CategoriaTabellone } {
   const board = creaDemoGironi({ giocatori, bloccata: punteggi > 0 });
   const editor = getDemoGironi(board.id, board.categoria)!;
   store().set(
@@ -127,7 +127,7 @@ export type EsitoDemoRigenerazione =
 
 export function rigeneraDemoGironi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   { conferma, attesi }: { conferma: boolean; attesi: number },
 ): EsitoDemoRigenerazione {
   if (!getDemoGironi(tappaId, categoria)) return { esito: "nonTrovato" };

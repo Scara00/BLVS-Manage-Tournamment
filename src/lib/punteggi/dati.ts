@@ -5,7 +5,7 @@
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
-  Categoria,
+  CategoriaTabellone,
   SetPunteggio,
   StatoPartita,
   StatoTappa,
@@ -21,7 +21,7 @@ type GiocatoreRow = { iscrizione_id: string; nome: string; cognome: string };
 
 export type PartitaPunteggioRow = {
   partita_id: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   girone_id: string;
   girone_nome: string;
   turno: number;

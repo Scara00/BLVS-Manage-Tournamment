@@ -3,7 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import {
   classificaTappaDemo,
   concludiTabelloneDemo,
@@ -150,6 +150,7 @@ export async function concludiTabellone(
     message: messaggioChiusura(
       CATEGORIA_NOME[categoria].toLowerCase(),
       tappaConclusa,
+      { misto: categoria === "X" },
     ),
     tappaConclusa,
     at,
@@ -167,7 +168,7 @@ type EsitoDb =
 async function concludiDb(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<EsitoDb> {
   const adesso = now();
   const [tabellone, classifica] = await Promise.all([

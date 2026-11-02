@@ -1,4 +1,4 @@
-import type { Categoria, FaseGioco } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseGioco } from "@/lib/db/types";
 import { gironiPath } from "@/lib/tappe/avvio/paths";
 import {
   proponiFinali,
@@ -10,7 +10,7 @@ import type { ProssimaFaseView, TipoProssimaFase } from "./types";
 
 export type DatiProssimaFase = {
   tappa: { id: string; nome: string };
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   faseGioco: FaseGioco | null;
   /** A gold/silver proposal exists and isn't started. */
   proposta: boolean;
@@ -25,7 +25,7 @@ export type DatiProssimaFase = {
  */
 export function risolviParitaHref(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   gironeId: string,
 ): string {
   return `${gironiPath(tappaId, categoria)}#girone-${encodeURIComponent(gironeId)}`;
@@ -55,11 +55,15 @@ export function vistaProssimaFase(
   if (tipo === "gold_silver") {
     if (dati.faseGioco !== "gironi_iniziali") return null;
     if (dati.proposta) return { ...base, stato: "proposta" };
-    esito = proponiGoldSilver(dati.gironi);
+    esito = proponiGoldSilver(dati.gironi, undefined, {
+      misto: dati.categoria === "X",
+    });
   } else {
     if (dati.faseGioco === "finali") return { ...base, stato: "fatta" };
     if (dati.faseGioco !== "gironi_gold_silver") return null;
-    esito = proponiFinali(dati.gironi);
+    esito = proponiFinali(dati.gironi, undefined, {
+      misto: dati.categoria === "X",
+    });
   }
 
   switch (esito.esito) {
@@ -75,6 +79,8 @@ export function vistaProssimaFase(
       };
     case "non_componibile":
       return { ...base, stato: "non_componibile", messaggio: esito.messaggio };
+    case "manuale":
+      return { ...base, stato: "manuale", scelta: esito.finali };
     case "ok":
       return {
         ...base,

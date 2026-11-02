@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import {
   toPartitaGirone,
   type PartitaGironeRow,
@@ -55,7 +55,7 @@ function nomeCompleto(riga: GironeDb["girone_iscrizioni"][number]): string {
 export async function leggiDatiParitaTabellone(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<DatiParitaGirone[] | null> {
   const { data: tabellone, error: tabelloneError } = await supabase
     .from("tabelloni")

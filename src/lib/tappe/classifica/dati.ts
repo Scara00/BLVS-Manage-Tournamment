@@ -4,7 +4,11 @@
  * are visible to admins (and to each player for their own row only).
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { Categoria, FaseTabellone, StatoIscrizione } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  FaseTabellone,
+  StatoIscrizione,
+} from "@/lib/db/types";
 import {
   toPartitaGirone,
   type DecisioneSpareggio,
@@ -96,6 +100,8 @@ export function toFinaliTappa(dati: DatiFinali): FinaleTappa[] {
 export type FinaliTabellone = {
   finali: FinaleTappa[];
   concluso: boolean;
+  /** The mixed board: no points (`classificaTappa`). */
+  senzaPunti?: boolean;
 };
 
 /**
@@ -105,7 +111,7 @@ export type FinaliTabellone = {
 export async function leggiClassificaTappa(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<ClassificaTappa | null> {
   const dati = await leggiFinaliTappa(supabase, tappaId, categoria);
   return dati ? classificaTappa(dati) : null;
@@ -118,7 +124,7 @@ export async function leggiClassificaTappa(
 export async function leggiFinaliTappa(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<FinaliTabellone | null> {
   const tabellone = await supabase
     .from("tabelloni")
@@ -191,5 +197,6 @@ export async function leggiFinaliTappa(
       decisioni: decisioni.data as DatiFinali["decisioni"],
     }),
     concluso,
+    ...(categoria === "X" ? { senzaPunti: true } : {}),
   };
 }

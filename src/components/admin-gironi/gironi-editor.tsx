@@ -95,7 +95,9 @@ export function GironiEditor({
   /** Focus to move once «Sposta» has finished closing. */
   const fuocoDopoDialog = useRef<Fuoco | null>(null);
 
-  const esito = controllaGironi(composizione);
+  const esito = controllaGironi(composizione, undefined, {
+    misto: categoria === "X",
+  });
   const modificabile = !composizione.bloccata;
 
   useEffect(() => {

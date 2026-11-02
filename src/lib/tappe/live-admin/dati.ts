@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
-  Categoria,
+  CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   FasePartita,
@@ -94,7 +94,7 @@ function toPartita(row: PartitaDb): PartitaLive {
 export async function leggiTabelloneLive(
   supabase: SupabaseClient,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   adesso: Date,
 ): Promise<TabelloneLive | null> {
   const { data: tappa, error: tappaError } = await supabase
@@ -112,7 +112,7 @@ export async function leggiTabelloneLive(
     stato: StatoTappa;
     tabelloni: {
       id: string;
-      categoria: Categoria;
+      categoria: CategoriaTabellone;
       fase_gioco: FaseGioco | null;
       concluso_il: string | null;
     }[];
@@ -141,7 +141,7 @@ export async function leggiTabelloneLive(
 export async function leggiDovePartita(
   supabase: SupabaseClient,
   partitaId: string,
-): Promise<{ tappaId: string; categoria: Categoria } | null> {
+): Promise<{ tappaId: string; categoria: CategoriaTabellone } | null> {
   const { data, error } = await supabase
     .from("partite")
     .select("tabelloni (tappa_id, categoria)")
@@ -151,7 +151,10 @@ export async function leggiDovePartita(
   const tabellone = primo(
     (
       data as {
-        tabelloni: UnoOMolti<{ tappa_id: string; categoria: Categoria }>;
+        tabelloni: UnoOMolti<{
+          tappa_id: string;
+          categoria: CategoriaTabellone;
+        }>;
       } | null
     )?.tabelloni ?? null,
   );

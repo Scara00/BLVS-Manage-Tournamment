@@ -9,12 +9,16 @@ export type TappaCard = {
   place: string;
   date: string;
   stato: StatoTappa;
+  /** A mixed King & Queen stage (one board, man + woman teams). */
+  misto?: boolean;
 };
 
 export type TappaRow = Pick<
   Tappa,
   "id" | "nome" | "luogo" | "data_inizio" | "data_fine" | "stato"
->;
+> &
+  // Absent in demo rows: a classic stage.
+  Partial<Pick<Tappa, "formato">>;
 
 export const STATO_TAPPA_LABEL: Record<StatoTappa, string> = {
   bozza: "Bozza",
@@ -77,6 +81,7 @@ export function toTappaCard(row: TappaRow): TappaCard {
     place: row.luogo,
     date: formatPeriodoTappa(row.data_inizio, row.data_fine),
     stato: row.stato,
+    ...(row.formato === "misto" ? { misto: true } : {}),
   };
 }
 

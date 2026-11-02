@@ -3,6 +3,7 @@ import {
   type ModificaGironiInput,
   type OperazioneGironi,
 } from "./types";
+import { isCategoriaTabellone } from "@/lib/tappe/formato";
 
 const testo = (v: unknown): v is string =>
   typeof v === "string" && v.length > 0 && v.length <= 100;
@@ -40,7 +41,7 @@ export function leggiModificaGironi(v: unknown): ModificaGironiInput | null {
   const op = operazione(o.operazione);
   if (
     !testo(o.tappaId) ||
-    (o.categoria !== "M" && o.categoria !== "F") ||
+    !isCategoriaTabellone(o.categoria) ||
     !Number.isInteger(o.versione) ||
     (o.versione as number) < 0 ||
     !op

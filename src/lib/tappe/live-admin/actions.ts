@@ -3,7 +3,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
-import type { Categoria, SetPunteggio } from "@/lib/db/types";
+import type { CategoriaTabellone, SetPunteggio } from "@/lib/db/types";
 import {
   cambiaStatoDemo,
   finaliTappaDemo,
@@ -53,7 +53,11 @@ async function sessioneAdmin(): Promise<Sessione> {
   return { ok: true, supabase: user.supabase, utenteId: user.id };
 }
 
-type Campi = { tappaId: string; categoria: Categoria; partitaId: string };
+type Campi = {
+  tappaId: string;
+  categoria: CategoriaTabellone;
+  partitaId: string;
+};
 
 function leggiCampi(formData: FormData): Campi | null {
   const tappaId = String(formData.get("tappaId") ?? "");
@@ -287,10 +291,12 @@ async function correzioneConclusa(
     ? await leggiFinaliTappa(sessione.supabase, campi.tappaId, campi.categoria)
     : finaliTappaDemo(campi.tappaId, campi.categoria);
   const finali = dati?.finali ?? [];
-  const prima = classificaTappa({ finali, concluso: true });
+  const senzaPunti = dati?.senzaPunti ?? false;
+  const prima = classificaTappa({ finali, concluso: true, senzaPunti });
   const dopo = classificaTappa({
     finali: conSetsCorretti(finali, partita.id, sets),
     concluso: true,
+    senzaPunti,
   });
   const firma = firmaPunti(prima);
   const confermata = formData.get("conferma") === "1";

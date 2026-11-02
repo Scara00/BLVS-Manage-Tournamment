@@ -1,4 +1,4 @@
-import type { Categoria, FaseTabellone } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseTabellone } from "@/lib/db/types";
 import { composizioneDemo } from "@/lib/gironi/editor/fixtures";
 import { applicaOperazione } from "@/lib/gironi/editor/operazioni";
 import type {
@@ -20,21 +20,28 @@ type Store = Map<string, EditorGironi>;
 const STORE_KEY = Symbol.for("blvs.demo.gironiEditor");
 
 /** Demo boards have no Gold/Silver of their own: M plays Gold, F Silver. */
-const FASE_DEMO: Record<Categoria, FaseTabellone> = { M: "gold", F: "silver" };
+const FASE_DEMO: Record<CategoriaTabellone, FaseTabellone> = {
+  M: "gold",
+  F: "silver",
+  X: "gold",
+};
 
 function store(): Store {
   const g = globalThis as unknown as Record<symbol, Store | undefined>;
   return (g[STORE_KEY] ??= new Map());
 }
 
-const chiave = (tappaId: string, categoria: Categoria) =>
+const chiave = (tappaId: string, categoria: CategoriaTabellone) =>
   `${tappaId}:${categoria}`;
 
 function copy(editor: EditorGironi): EditorGironi {
   return structuredClone(editor);
 }
 
-function seed(tappaId: string, categoria: Categoria): EditorGironi | null {
+function seed(
+  tappaId: string,
+  categoria: CategoriaTabellone,
+): EditorGironi | null {
   const tappa = getDemoTappaGestione(tappaId);
   if (!tappa) return null;
   const board = tappa.tabelloni.find((t) => t.categoria === categoria);
@@ -52,7 +59,7 @@ function seed(tappaId: string, categoria: Categoria): EditorGironi | null {
 
 export function getDemoGironi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): EditorGironi | null {
   const key = chiave(tappaId, categoria);
   let editor = store().get(key);
@@ -72,7 +79,7 @@ export type EsitoDemoGironi =
 /** Saves one change, as the RPCs do: version check, then +1. */
 export function modificaDemoGironi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   versione: number,
   operazione: OperazioneGironi,
 ): EsitoDemoGironi {
@@ -111,7 +118,7 @@ export function creaDemoGironi({
   gironi?: number;
   fase?: FaseTabellone | null;
   bloccata?: boolean;
-}): { id: string; categoria: Categoria } {
+}): { id: string; categoria: CategoriaTabellone } {
   const id = `e2e-gironi-${crypto.randomUUID()}`;
   store().set(chiave(id, "M"), {
     tappa: { id, nome: `Tappa di prova ${id.slice(11, 17)}` },
@@ -133,7 +140,7 @@ export function creaDemoGironi({
  */
 export function sostituisciDemoGironi(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   cambia: (attuale: ComposizioneGironi) => ComposizioneGironi,
 ): ComposizioneGironi | null {
   if (!getDemoGironi(tappaId, categoria)) return null;

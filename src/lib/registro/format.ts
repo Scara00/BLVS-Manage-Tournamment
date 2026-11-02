@@ -1,5 +1,5 @@
 import type { TipoEventoRegistro, ValoreRegistro } from "@/lib/audit";
-import { CATEGORIE, type Categoria } from "@/lib/db/types";
+import { CATEGORIE_TABELLONE, type CategoriaTabellone } from "@/lib/db/types";
 import { romeToday } from "@/lib/time/rome-local";
 import { formatServerTime } from "@/lib/time/server-time";
 import type {
@@ -37,9 +37,10 @@ export function tipoVoce(tipo: TipoEventoRegistro): TipoVoceView {
 
 export const VUOTO = "—";
 
-const CATEGORIA_LABEL: Record<Categoria, string> = {
+const CATEGORIA_LABEL: Record<CategoriaTabellone, string> = {
   M: "Maschile",
   F: "Femminile",
+  X: "Misto",
 };
 
 type Oggetto = { [key: string]: ValoreRegistro };
@@ -102,8 +103,8 @@ function testoLibero(valore: ValoreRegistro | null | undefined): string {
 
 function categoriaTesto(valore: ValoreRegistro | undefined): string {
   if (typeof valore !== "string") return VUOTO;
-  return (CATEGORIE as readonly string[]).includes(valore)
-    ? CATEGORIA_LABEL[valore as Categoria]
+  return (CATEGORIE_TABELLONE as readonly string[]).includes(valore)
+    ? CATEGORIA_LABEL[valore as CategoriaTabellone]
     : valore;
 }
 
@@ -256,7 +257,7 @@ export function riepilogoValori(
       return {
         prima: [
           posto === null ? "Iscritto" : `Posto ${posto}`,
-          categoria === "M" || categoria === "F"
+          categoria === "M" || categoria === "F" || categoria === "X"
             ? categoriaTesto(categoria)
             : null,
         ]
@@ -273,7 +274,7 @@ export function riepilogoValori(
       return {
         prima: "Aperto",
         dopo: [
-          categoria === "M" || categoria === "F"
+          categoria === "M" || categoria === "F" || categoria === "X"
             ? `Concluso · ${categoriaTesto(categoria)}`
             : "Concluso",
           punti

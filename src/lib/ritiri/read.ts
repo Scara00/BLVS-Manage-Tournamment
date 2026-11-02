@@ -1,7 +1,7 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getCurrentUser } from "@/lib/auth/session";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import { getDemoAssenze } from "@/lib/demo/ritiri";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { leggiAssenze } from "./dati";
@@ -15,7 +15,7 @@ import type { AssenzaRegistrata } from "./types";
  */
 export async function readAssenzeTabellone(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<AssenzaRegistrata[]> {
   if (!readSupabaseEnv()) return getDemoAssenze(tappaId, categoria);
   try {
@@ -35,7 +35,7 @@ export async function readAssenzeTabellone(
 export async function leggiNoteAssenze(
   supabase: SupabaseClient | null,
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): Promise<Map<string, string>> {
   try {
     const assenze = supabase

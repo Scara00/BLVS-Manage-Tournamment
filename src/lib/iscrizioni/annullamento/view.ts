@@ -1,4 +1,5 @@
-import type { Categoria, StatoIscrizione } from "@/lib/db/types";
+import type { CategoriaTabellone, StatoIscrizione } from "@/lib/db/types";
+import { TABELLONE_NOME } from "@/lib/tappe/formato";
 import { formatScadenza } from "@/lib/tappe/format";
 import {
   conseguenzeAnnullamento,
@@ -8,9 +9,9 @@ import {
   type TappaAnnullabile,
 } from "./regola";
 
-/** «nel maschile», «nel femminile» (kept here: `dettaglio.ts` imports us). */
-function nelTabellone(categoria: Categoria): string {
-  return categoria === "M" ? "nel maschile" : "nel femminile";
+/** «nel maschile», «nel misto» (kept here: `dettaglio.ts` imports us). */
+function nelTabellone(categoria: CategoriaTabellone): string {
+  return `nel ${TABELLONE_NOME[categoria]}`;
 }
 
 /**
@@ -24,7 +25,7 @@ export type AnnullamentoView = {
   /** Stage name, e.g. «Tappa 2 · Rimini». */
   tappa: string;
   posto: number | null;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   possibile: boolean;
   motivo: MotivoNonAnnullabile | null;
   /** «21 giugno, 23:59»: the last moment to cancel (Europe/Rome). */
@@ -51,7 +52,7 @@ export function toAnnullamentoView(
     tappaId: string;
     nome: string;
     posto: number | null;
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     stato: StatoIscrizione;
     inGirone: boolean;
     tappa: TappaAnnullabile;

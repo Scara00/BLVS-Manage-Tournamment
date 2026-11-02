@@ -1,5 +1,5 @@
 import type {
-  Categoria,
+  CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   StatoTappa,
@@ -30,7 +30,7 @@ export type GironeDati = {
   id: string;
   nome: string;
   fase: FaseGirone;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** Registration ids of its players, shown even before any match. */
   giocatori: readonly string[];
   /** Null when the group has no match yet. */
@@ -41,7 +41,7 @@ export type GironeDati = {
 export type DatiTabellone = {
   tappa: { id: string; nome: string; stato: StatoTappa };
   tabelloni: readonly {
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     faseGioco: FaseGioco | null;
     conclusoIl: string | null;
   }[];
@@ -168,7 +168,7 @@ export type RpcTabellone = {
   tappa: { id: string; nome: string; stato: StatoTappa };
   tabelloni: {
     id: string;
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
     fase_gioco: FaseGioco | null;
     concluso_il: string | null;
   }[];

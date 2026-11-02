@@ -1,4 +1,4 @@
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import type {
   ImpattoFase,
   SceltaImpatto,
@@ -37,7 +37,7 @@ function store(): Store {
 /** The absences recorded on one demo board. */
 export function getDemoAssenze(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
 ): AssenzaRegistrata[] {
   return [...(store().get(chiaveTabellone(tappaId, categoria)) ?? [])];
 }
@@ -67,7 +67,7 @@ export type DemoRitiroEsito =
 /** Same checks and effects as `registra_ritiro_assenza` («annulla» rule). */
 export function registraRitiroDemo(
   tappaId: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   dati: DatiRitiro,
   {
     scelta = null,

@@ -1,8 +1,11 @@
 import {
   CATEGORIE,
+  CATEGORIE_TABELLONE,
+  type Categoria,
   type StatoIscrizione,
   type StatoTappa,
 } from "@/lib/db/types";
+import { postiPerQuota } from "@/lib/tappe/formato";
 import { CATEGORIA_TABELLONE } from "@/lib/tappe/gestione-format";
 import { formatPeriodoTappa } from "@/lib/tappe/format";
 import { getServerTimeParts } from "@/lib/time/server-time";
@@ -77,8 +80,22 @@ function perPosto(a: IscrittoRow, b: IscrittoRow): number {
   return a.created_at.localeCompare(b.created_at);
 }
 
+const CATEGORIA_GIOCATORE: Record<Categoria, string> = {
+  M: "Uomo",
+  F: "Donna",
+};
+
+const QUOTA_LABEL: Record<Categoria, string> = {
+  M: "Uomini",
+  F: "Donne",
+};
+
 function toIscrittoView(row: IscrittoRow): IscrittoView {
   return {
+    categoriaLabel:
+      row.categoria === "X" && row.categoriaGiocatore
+        ? CATEGORIA_GIOCATORE[row.categoriaGiocatore]
+        : null,
     id: row.id,
     posto: row.posto,
     nome: nomeCompleto(row),
@@ -97,32 +114,56 @@ export function toTabelloneView(
   tabellone: TabelloneIscrittiRow,
   rows: readonly IscrittoRow[],
 ): IscrittiTabelloneView {
-  const iscritti = rows
+  const attivi = rows
     .filter((r) => r.categoria === tabellone.categoria)
     .filter((r) => ATTIVI.includes(r.stato))
-    .sort(perPosto)
-    .map(toIscrittoView);
+    .sort(perPosto);
+  const iscritti = attivi.map(toIscrittoView);
   const occupati = iscritti.length;
+  // Mixed board: half the seats per category, each filling on its own.
+  const quote =
+    tabellone.categoria === "X"
+      ? CATEGORIE.map((categoria) => {
+          const posti = postiPerQuota(tabellone.posti);
+          const n = attivi.filter(
+            (r) => r.categoriaGiocatore === categoria,
+          ).length;
+          return {
+            categoria,
+            label: QUOTA_LABEL[categoria],
+            posti,
+            occupati: n,
+            liberiTesto: postiLiberiTesto(posti, n),
+            pieno: n >= posti,
+          };
+        })
+      : [];
   return {
     categoria: tabellone.categoria,
     label: CATEGORIA_TABELLONE[tabellone.categoria],
+    quote,
     posti: tabellone.posti,
     occupati,
     liberi: Math.max(0, tabellone.posti - occupati),
     liberiTesto: postiLiberiTesto(tabellone.posti, occupati),
-    pieno: occupati >= tabellone.posti,
+    pieno:
+      quote.length > 0
+        ? quote.every((q) => q.pieno)
+        : occupati >= tabellone.posti,
     iscritti,
   };
 }
 
-/** w-admin-iscritti: the stage and its two boards, M first. */
+/** w-admin-iscritti: the stage and its boards, M first (or the mixed one). */
 export function toIscrittiTappaView(
   tappa: TappaIscrittiRow,
   tabelloni: readonly TabelloneIscrittiRow[],
   rows: readonly IscrittoRow[],
 ): IscrittiTappaView {
   const ordinati = [...tabelloni].sort(
-    (a, b) => CATEGORIE.indexOf(a.categoria) - CATEGORIE.indexOf(b.categoria),
+    (a, b) =>
+      CATEGORIE_TABELLONE.indexOf(a.categoria) -
+      CATEGORIE_TABELLONE.indexOf(b.categoria),
   );
   return {
     id: tappa.id,

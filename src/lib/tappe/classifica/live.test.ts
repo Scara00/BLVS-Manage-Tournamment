@@ -129,7 +129,8 @@ describe("helper", () => {
     expect(parseIdClassificaTappa("e2e-x:Z")).toBeNull();
     expect(parseIdClassificaTappa(":M")).toBeNull();
     expect(parseCategoriaTappa("f")).toBe("F");
-    expect(parseCategoriaTappa("x")).toBeNull();
+    expect(parseCategoriaTappa("x")).toBe("X");
+    expect(parseCategoriaTappa("z")).toBeNull();
   });
 
   it("etichette dei punti", () => {

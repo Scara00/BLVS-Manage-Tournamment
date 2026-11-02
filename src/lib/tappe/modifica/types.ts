@@ -1,4 +1,8 @@
-import type { Categoria, StatoTappa } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  FormatoTappa,
+  StatoTappa,
+} from "@/lib/db/types";
 
 /** w-admin-tappa (BLVS-20), where the edit form leads back to. */
 export function tappaPath(id: string): string {
@@ -17,12 +21,18 @@ export const CAMPI_TAPPA_MODIFICA = [
   "scadenza",
   "postiM",
   "postiF",
+  "posti",
 ] as const;
 export type CampoTappaModifica = (typeof CAMPI_TAPPA_MODIFICA)[number];
 
-export const CAMPO_POSTI_MODIFICA: Record<Categoria, "postiM" | "postiF"> = {
+/** The field of each board's maximum; the mixed board has a single one. */
+export const CAMPO_POSTI_MODIFICA: Record<
+  CategoriaTabellone,
+  "postiM" | "postiF" | "posti"
+> = {
   M: "postiM",
   F: "postiF",
+  X: "posti",
 };
 
 /** States in which a stage can no longer be edited from this screen. */
@@ -35,7 +45,10 @@ export const STATI_NON_MODIFICABILI: readonly StatoTappa[] = [
 export type TabelloneModifica = {
   /** Maximum number of players on the board. */
   posti: number;
-  /** Active registrations (in attesa + confermate): the floor for `posti`. */
+  /**
+   * The floor for `posti`: the active registrations (in attesa +
+   * confermate). On the mixed board, twice the fuller half.
+   */
   iscritti: number;
 };
 
@@ -53,7 +66,9 @@ export type TappaModifica = {
   stato: StatoTappa;
   /** `tappe.versione` read with the data: sent back to detect conflicts. */
   versione: number;
-  tabelloni: Record<Categoria, TabelloneModifica>;
+  formato: FormatoTappa;
+  /** Classic: M and F; mixed: X only. */
+  tabelloni: Partial<Record<CategoriaTabellone, TabelloneModifica>>;
 };
 
 /** What the form submits, already parsed. */
@@ -63,6 +78,7 @@ export type TappaModificaValori = {
   data: string;
   /** ISO instant. */
   scadenza: string;
+  /** On a mixed stage both carry the single maximum (`p_posti_m` counts). */
   postiM: number;
   postiF: number;
 };
@@ -130,4 +146,5 @@ export const TAPPA_MODIFICA_MESSAGES = {
     "Quest'ora non esiste per il passaggio all'ora legale: scegline un'altra.",
   dataNonValida: "Data non valida.",
   scadenzaNonValida: "Data e ora non valide.",
+  postiDispari: "Nel misto i posti sono pari: metà uomini e metà donne.",
 } as const;

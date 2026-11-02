@@ -88,6 +88,11 @@ function columns(connesso: boolean): ResponsiveTableColumn<TappaGiocatore>[] {
       render: (t) => (
         <span className="flex flex-col items-start gap-space-1 [overflow-wrap:anywhere]">
           {t.name}
+          {t.misto ? (
+            <span className="text-sm font-semibold">
+              King &amp; Queen misto
+            </span>
+          ) : null}
           <Link
             href={tappaHref(t.id)}
             aria-label={`Vedi la tappa ${t.name}`}

@@ -1,4 +1,4 @@
-import type { Categoria, SetPunteggio } from "@/lib/db/types";
+import type { CategoriaTabellone, SetPunteggio } from "@/lib/db/types";
 import { impostaRisultatoLiveDemo } from "./admin-live";
 import { creaDemoTappaFinali } from "./avvio-fase";
 
@@ -32,7 +32,7 @@ const FINALI = ["finale_gold", "finale_silver"] as const;
 
 function giocaFinali(
   id: string,
-  categoria: Categoria,
+  categoria: CategoriaTabellone,
   scenario: ScenarioChiusura,
 ) {
   for (const fase of FINALI) {

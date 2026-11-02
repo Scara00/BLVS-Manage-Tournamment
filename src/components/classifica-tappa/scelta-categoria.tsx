@@ -1,21 +1,26 @@
 import Link from "next/link";
-import { CATEGORIE, type Categoria } from "@/lib/db/types";
+import { CATEGORIE, type CategoriaTabellone } from "@/lib/db/types";
 import { classificaTappaHref } from "@/lib/tappe/paths";
 import { cn } from "@/lib/utils";
 
-const CATEGORIA_LABEL: Record<Categoria, string> = {
+const CATEGORIA_LABEL: Record<CategoriaTabellone, string> = {
   M: "Maschile",
   F: "Femminile",
+  X: "Misto",
 };
 
-/** Category switch: two links, the current one marked (aria-current). */
+/**
+ * Category switch: two links, the current one marked (aria-current). A
+ * mixed stage has a single board: nothing to switch.
+ */
 export function SceltaCategoriaTappa({
   tappaId,
   categoria,
 }: {
   tappaId: string;
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
 }) {
+  if (categoria === "X") return null;
   return (
     <nav aria-label="Categoria">
       <ul className="flex flex-wrap gap-space-2">

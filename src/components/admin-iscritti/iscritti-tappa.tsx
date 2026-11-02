@@ -22,7 +22,7 @@ import {
 } from "@/components/responsive-table/responsive-table";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
-import type { Categoria } from "@/lib/db/types";
+import type { CategoriaTabellone } from "@/lib/db/types";
 import {
   initialModificaIscrittiState,
   type CercaGiocatoriAction,
@@ -66,7 +66,7 @@ type IscrittiTappaProps = {
 /** The message under a board's heading, after an action on one of its rows. */
 type Esito = { message: string; errore: boolean };
 
-function esitoId(categoria: Categoria) {
+function esitoId(categoria: CategoriaTabellone) {
   return `iscritti-esito-${categoria}`;
 }
 
@@ -101,6 +101,7 @@ function colonne(
         <span className="flex flex-col">
           <span>{row.nome}</span>
           <span className="font-sans text-sm font-normal text-muted-foreground">
+            {row.categoriaLabel ? `${row.categoriaLabel} · ` : null}
             {row.email}
           </span>
         </span>
@@ -194,6 +195,15 @@ function Tabellone({
         <span className="font-mono tabular-nums">{tabellone.occupati}</span>{" "}
         {tabellone.occupati === 1 ? "iscritto" : "iscritti"} su{" "}
         <span className="font-mono tabular-nums">{tabellone.posti}</span> posti
+        {tabellone.quote.map((q) => (
+          <span key={q.categoria} data-testid={`quota-${q.categoria}`}>
+            {" · "}
+            {q.label}{" "}
+            <span className="font-mono tabular-nums">{q.occupati}</span> su{" "}
+            <span className="font-mono tabular-nums">{q.posti}</span>
+            {q.pieno ? " (completo)" : null}
+          </span>
+        ))}
         {inAttesa > 0 ? (
           <>
             {" · "}
@@ -271,10 +281,12 @@ export function IscrittiTappa({
   const [target, setTarget] = useState<DaRimuovere | null>(() =>
     trova(rimuoviAperto),
   );
-  const [esiti, setEsiti] = useState<Partial<Record<Categoria, Esito>>>({});
+  const [esiti, setEsiti] = useState<
+    Partial<Record<CategoriaTabellone, Esito>>
+  >({});
   const [esitoTutte, setEsitoTutte] = useState<string | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
-  const categoriaTarget = useRef<Categoria | null>(null);
+  const categoriaTarget = useRef<CategoriaTabellone | null>(null);
   const toast = useToast();
   const inAttesa = tappa.tabelloni.reduce(
     (n, t) => n + inAttesaDi(t.iscritti),
@@ -290,7 +302,7 @@ export function IscrittiTappa({
   );
   const [inConferma, setInConferma] = useState<{
     id: string;
-    categoria: Categoria;
+    categoria: CategoriaTabellone;
   } | null>(null);
   const [confermaVista, setConfermaVista] = useState(statoConferma);
   if (statoConferma !== confermaVista) {
@@ -308,7 +320,7 @@ export function IscrittiTappa({
     }
   }
   const confermaGestita = useRef<ModificaIscrittiState | null>(null);
-  const categoriaConferma = useRef<Categoria | null>(null);
+  const categoriaConferma = useRef<CategoriaTabellone | null>(null);
   useEffect(() => {
     if (
       statoConferma.status === "idle" ||

@@ -28,6 +28,7 @@ const rimini: TappaModifica = {
   scadenza: "2027-06-24T20:00",
   stato: "iscrizioni_aperte",
   versione: 3,
+  formato: "classico",
   tabelloni: {
     M: { posti: 16, iscritti: 12 },
     F: { posti: 16, iscritti: 9 },
@@ -53,8 +54,14 @@ const salvaFinto: TappaModificaAction = async (_prev, formData) => {
       luogo: String(formData.get("luogo") ?? ""),
       versione: rimini.versione + 1,
       tabelloni: {
-        M: { ...rimini.tabelloni.M, posti: Number(formData.get("postiM")) },
-        F: { ...rimini.tabelloni.F, posti: Number(formData.get("postiF")) },
+        M: {
+          iscritti: rimini.tabelloni.M?.iscritti ?? 0,
+          posti: Number(formData.get("postiM")),
+        },
+        F: {
+          iscritti: rimini.tabelloni.F?.iscritti ?? 0,
+          posti: Number(formData.get("postiF")),
+        },
       },
     },
   };

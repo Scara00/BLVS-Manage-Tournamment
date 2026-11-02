@@ -1,7 +1,11 @@
 import "server-only";
 import { connection } from "next/server";
 import { isUuid } from "@/lib/api/validation";
-import { CATEGORIE, type Categoria, type FaseGirone } from "@/lib/db/types";
+import {
+  CATEGORIE_TABELLONE,
+  type CategoriaTabellone,
+  type FaseGirone,
+} from "@/lib/db/types";
 import { getDemoGironiGiocati } from "@/lib/demo/avvio-fase";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
@@ -10,7 +14,7 @@ import type { LiveMe } from "./tappa";
 import { readLiveTappa } from "./tappa-read";
 import type { LiveSync } from "./types";
 
-export type GironeLive = GironeInfo & { categoria: Categoria };
+export type GironeLive = GironeInfo & { categoria: CategoriaTabellone };
 
 export type LiveGironePagina =
   | { status: "notFound" }
@@ -25,7 +29,7 @@ export type LiveGironePagina =
 
 /** Demo groups: the played groups of the started demo boards. */
 function demoGirone(tappaId: string, gironeId: string): GironeLive | null {
-  for (const categoria of CATEGORIE) {
+  for (const categoria of CATEGORIE_TABELLONE) {
     const gironi = getDemoGironiGiocati(tappaId, categoria);
     const girone = gironi.find((g) => g.id === gironeId);
     if (!girone) continue;
@@ -47,7 +51,7 @@ type GironeRow = {
   nome: string;
   fase: FaseGirone;
   tabellone_id: string;
-  tabelloni: { tappa_id: string; categoria: Categoria } | null;
+  tabelloni: { tappa_id: string; categoria: CategoriaTabellone } | null;
 };
 
 /** The group, when it belongs to the stage (gironi are public, RLS). */

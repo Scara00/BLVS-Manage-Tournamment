@@ -1,4 +1,4 @@
-import type { Categoria, FaseGioco } from "@/lib/db/types";
+import type { CategoriaTabellone, FaseGioco } from "@/lib/db/types";
 import { FASE_GIOCO_LABEL } from "@/lib/gironi/fasi/fase";
 import { CATEGORIA_NOME } from "./paths";
 import {
@@ -19,7 +19,7 @@ import {
 /** Everything w-admin-avvio-fase shows for one board. */
 export type AvvioFaseView = {
   tappa: TabelloneAvvio["tappa"];
-  categoria: Categoria;
+  categoria: CategoriaTabellone;
   /** «Tabellone maschile». */
   tabelloneLabel: string;
   /** The phase this screen starts, and its name in lower case. */
@@ -54,7 +54,7 @@ export function toAvvioFaseView(
     problemi,
     anteprima: tabellone.gironi.map((girone) => ({
       girone,
-      partite: partiteGirone(girone),
+      partite: partiteGirone(girone, tabellone.categoria === "X"),
     })),
     nonDisponibile: avvioNonDisponibile(tabellone),
   };

@@ -1,3 +1,5 @@
+import type { CategoriaTabellone } from "@/lib/db/types";
+
 export const TAPPE_PATH = "/tappe";
 
 /** A stage's detail page (w-tappa), where the player registers. */
@@ -44,7 +46,10 @@ export function gironeTappaHref(id: string, gironeId: string): string {
  * The stage standing of a stage (w-classifica-tappa, BLVS-49), for one
  * category; without one the page picks the player's own.
  */
-export function classificaTappaHref(id: string, categoria?: "M" | "F"): string {
+export function classificaTappaHref(
+  id: string,
+  categoria?: CategoriaTabellone,
+): string {
   const base = `${tappaHref(id)}/classifica`;
   return categoria ? `${base}?categoria=${categoria}` : base;
 }
@@ -52,7 +57,7 @@ export function classificaTappaHref(id: string, categoria?: "M" | "F"): string {
 /** The live resync of one board's stage standing. */
 export function classificaTappaSnapshotUrl(
   id: string,
-  categoria: "M" | "F",
+  categoria: CategoriaTabellone,
 ): string {
   return `/api/live/snapshot?classificaTappa=${encodeURIComponent(`${id}:${categoria}`)}`;
 }
