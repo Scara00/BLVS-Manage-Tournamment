@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1793202543.3556669,
-    "ast_hash": "68dbfd39b1838d54a3b51e159885a594",
+    "mtime": 1793636645.4699728,
+    "ast_hash": "c0d0c8d7a4ed97422717ea91fdb30722",
     "semantic_hash": ""
   },
   "playwright.config.ts": {
@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
-    "mtime": 1793089009.8104699,
-    "ast_hash": "b72ef3549dcc0d5cf92f0aacc2a733c7",
+    "mtime": 1793637165.1415854,
+    "ast_hash": "cb3c7b246dbcf2978c0c375f08d2f30c",
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "src/proxy.ts": {
-    "mtime": 1793270120.522341,
-    "ast_hash": "694559c3d38100ec5ad2d05c1cd8285d",
+    "mtime": 1793637077.7887566,
+    "ast_hash": "29cad788d81ae6d06e14a0c3d43f3fea",
     "semantic_hash": ""
   },
   ".prettierrc.json": {
@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "src/proxy.test.ts": {
-    "mtime": 1793101307.6959963,
-    "ast_hash": "0b9c997061bbfdee685513b510eba7fb",
+    "mtime": 1793637071.139366,
+    "ast_hash": "602a52fc13bd5c09c37dd7367dadd536",
     "semantic_hash": ""
   },
   ".github/pull_request_template.md": {
@@ -5720,8 +5720,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1793629043.970609,
-    "ast_hash": "67d44d7f682af8c2f9e2708e17cd1a1d",
+    "mtime": 1793637053.5201135,
+    "ast_hash": "c934d3daf222e84bf55324e82c01beec",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {
@@ -5922,6 +5922,26 @@
   "src/components/admin-fasi/scelta-finali.tsx": {
     "mtime": 1793629043.9348595,
     "ast_hash": "dfd8383f4dfdeabbd8eaecfaf54a3320",
+    "semantic_hash": ""
+  },
+  "src/app/manifest.ts": {
+    "mtime": 1793637053.2577136,
+    "ast_hash": "5cca802e89ef3f33439baf222ad2e29e",
+    "semantic_hash": ""
+  },
+  "public/icon-192.png": {
+    "mtime": 1793637053.0766516,
+    "ast_hash": "4d536b0ffe7a029e1b1df25536220bc5",
+    "semantic_hash": ""
+  },
+  "public/icon-512.png": {
+    "mtime": 1793637053.0770116,
+    "ast_hash": "f77f4e8ae2d89e992d44f27af6d85b45",
+    "semantic_hash": ""
+  },
+  "src/app/apple-icon.png": {
+    "mtime": 1793637053.073918,
+    "ast_hash": "867be8c862699624ae51b5506f46ecf7",
     "semantic_hash": ""
   }
 }

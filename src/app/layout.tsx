@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: { default: "BLVS – Manage Tournament", template: "%s · BLVS" },
   description:
     "Gestisci tornei, squadre, calendari e risultati in un unico posto.",
+  // Label under the icon on the iOS home screen. `capable: false` keeps the
+  // shortcut opening in Safari (Next would otherwise add web-app-capable).
+  appleWebApp: { title: "BLVS", capable: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

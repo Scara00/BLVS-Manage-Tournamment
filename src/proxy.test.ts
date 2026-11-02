@@ -1,11 +1,12 @@
 // @vitest-environment node
 import { NextRequest } from "next/server";
+import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const updateSession = vi.fn();
 vi.mock("@/lib/supabase/proxy", () => ({ updateSession }));
 
-const { proxy } = await import("./proxy");
+const { proxy, config } = await import("./proxy");
 
 describe("proxy", () => {
   afterEach(() => {
@@ -49,5 +50,21 @@ describe("proxy", () => {
       ),
     ).toBe("ok");
     expect(updateSession).toHaveBeenCalledTimes(2);
+  });
+
+  it("lascia passare senza sessione le icone e il manifest della home del telefono", () => {
+    const passa = (path: string) =>
+      unstable_doesMiddlewareMatch({
+        config,
+        url: `https://example.com${path}`,
+      });
+    for (const path of [
+      "/favicon.ico",
+      "/apple-icon.png",
+      "/icon-512.png",
+      "/manifest.webmanifest",
+    ])
+      expect(passa(path), path).toBe(false);
+    expect(passa("/")).toBe(true);
   });
 });
