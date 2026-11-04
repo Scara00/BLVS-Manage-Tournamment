@@ -23,6 +23,7 @@ import {
   demoGiocatoriAdmin,
   demoIscrizioniGiocatore,
 } from "@/lib/demo/giocatori-admin";
+import { emailVisibile } from "@/lib/iscrizioni/admin/format";
 import { filtriRicerca } from "@/lib/iscrizioni/admin/search";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { effettiDaRpc, type EffettiRpc } from "./effetti";
@@ -62,7 +63,7 @@ function toGiocatore(u: UtenteDb): GiocatoreAdmin {
     id: u.id,
     nome: u.nome,
     cognome: u.cognome,
-    email: u.email ?? "",
+    email: emailVisibile(u.email ?? ""),
     categoria: u.categoria,
     ruolo: u.ruolo,
     daVerificare: u.categoria_verificata_il === null,

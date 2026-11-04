@@ -379,6 +379,15 @@ export const SCHERMATE: readonly Schermata[] = [
     ],
   },
   {
+    id: "w-admin-aggiungi-manuale",
+    titolo: "Aggiungi a mano (dialog)",
+    area: "admin",
+    storie: [
+      "admin-aggiungi-a-mano--vuoto",
+      "admin-aggiungi-a-mano--testo-200",
+    ],
+  },
+  {
     id: "w-admin-iscrizioni",
     titolo: "Iscrizioni (tutte le tappe)",
     area: "admin",

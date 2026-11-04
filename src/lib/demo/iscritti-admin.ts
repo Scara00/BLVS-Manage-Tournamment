@@ -3,7 +3,10 @@ import type {
   CategoriaTabellone,
   StatoIscrizione,
 } from "@/lib/db/types";
-import { iscrittiModificabili } from "@/lib/iscrizioni/admin/format";
+import {
+  DOMINIO_EMAIL_MANUALE,
+  iscrittiModificabili,
+} from "@/lib/iscrizioni/admin/format";
 import type {
   GiocatoreTrovato,
   IscrittoRow,
@@ -347,6 +350,23 @@ export function aggiungiDemoIscritto(
   store().iscrizioni.set(tappaId, [...altre, nuova]);
   scriviConti(tappaId, g.categoria);
   return { ok: true, row: toRow(nuova) };
+}
+
+/**
+ * `admin_iscrivi_giocatore_manuale()` on the demo data: the new player
+ * stays only if the registration goes through.
+ */
+export function aggiungiDemoIscrittoManuale(
+  tappaId: string,
+  dati: { nome: string; cognome: string; categoria: Categoria },
+  at: Date,
+): DemoEsitoIscritti {
+  const id = `demo-manuale-${crypto.randomUUID()}`;
+  const { giocatori } = store();
+  giocatori.push({ ...dati, id, email: `${id}@${DOMINIO_EMAIL_MANUALE}` });
+  const esito = aggiungiDemoIscritto(tappaId, id, at);
+  if (!esito.ok) giocatori.pop();
+  return esito;
 }
 
 /**

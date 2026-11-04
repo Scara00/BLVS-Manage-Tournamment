@@ -17,6 +17,13 @@ function renderIscritti(
     message: "Rossetti Lorenzo ora ha il posto 7.",
     at: 1,
   }));
+  const aggiungiManuale = vi.fn<ModificaIscrittiAction>(
+    async (_prev, data) => ({
+      status: "success",
+      message: `${String(data.get("cognome"))} ${String(data.get("nome"))} ora ha il posto 7.`,
+      at: Date.now(),
+    }),
+  );
   const rimuovi = vi.fn<ModificaIscrittiAction>(async () => ({
     status: "success",
     message: "Iscrizione di Rossi Luca rimossa: il posto 1 è di nuovo libero.",
@@ -38,6 +45,7 @@ function renderIscritti(
       <IscrittiTappa
         tappa={iscrittiDemo()}
         aggiungi={aggiungi}
+        aggiungiManuale={aggiungiManuale}
         rimuovi={rimuovi}
         conferma={conferma}
         cerca={cerca}
@@ -46,7 +54,7 @@ function renderIscritti(
       <Toaster />
     </ToastProvider>,
   );
-  return { aggiungi, rimuovi, conferma, cerca };
+  return { aggiungi, aggiungiManuale, rimuovi, conferma, cerca };
 }
 
 function tabellone(nome: string) {
@@ -308,5 +316,88 @@ describe("IscrittiTappa (w-admin-iscritti)", () => {
     await waitFor(() => expect(dialog).not.toBeInTheDocument());
     expect(rimuovi).not.toHaveBeenCalled();
     await waitFor(() => expect(trigger).toHaveFocus());
+  });
+});
+
+describe("Aggiungi a mano (w-admin-aggiungi-manuale)", () => {
+  async function apri() {
+    const user = userEvent.setup();
+    await user.click(screen.getByRole("button", { name: "Aggiungi a mano" }));
+    const dialog = await screen.findByRole("dialog", {
+      name: "Aggiungi a mano",
+    });
+    return { user, dialog: within(dialog) };
+  }
+
+  it("resta aperta per il prossimo: svuota i nomi e tiene la categoria", async () => {
+    const { aggiungiManuale } = renderIscritti();
+    const { user, dialog } = await apri();
+    const nome = dialog.getByRole("textbox", { name: /^Nome/ });
+    const cognome = dialog.getByRole("textbox", { name: /^Cognome/ });
+
+    await user.type(nome, " Mario ");
+    await user.type(cognome, "Verdi");
+    await user.click(dialog.getByRole("radio", { name: "Maschile" }));
+    await user.click(dialog.getByRole("button", { name: "Aggiungi" }));
+
+    await waitFor(() =>
+      expect(dialog.getByRole("status")).toHaveTextContent(
+        /ora ha il posto 7\.$/,
+      ),
+    );
+    const dati = aggiungiManuale.mock.calls[0][1];
+    expect(Object.fromEntries(dati)).toMatchObject({
+      tappaId: iscrittiDemo().id,
+      cognome: "Verdi",
+      categoria: "M",
+    });
+    expect(nome).toHaveValue("");
+    expect(cognome).toHaveValue("");
+    await waitFor(() => expect(nome).toHaveFocus());
+    expect(dialog.getByRole("radio", { name: "Maschile" })).toBeChecked();
+  });
+
+  it("segnala i campi mancanti, parte dal primo e non chiama il server", async () => {
+    const { aggiungiManuale } = renderIscritti();
+    const { user, dialog } = await apri();
+
+    await user.click(dialog.getByRole("button", { name: "Aggiungi" }));
+
+    expect(dialog.getByText("Inserisci il nome.")).toBeInTheDocument();
+    expect(dialog.getByText("Inserisci il cognome.")).toBeInTheDocument();
+    expect(dialog.getByText("Scegli la categoria.")).toBeInTheDocument();
+    expect(dialog.getByRole("textbox", { name: /^Nome/ })).toHaveFocus();
+    expect(aggiungiManuale).not.toHaveBeenCalled();
+  });
+
+  it("mostra il rifiuto del server e lo toglie quando si corregge", async () => {
+    const posti =
+      "Posti esauriti in questo tabellone: libera un posto prima di aggiungere.";
+    renderIscritti({
+      aggiungiManuale: async () => ({
+        status: "error",
+        reason: "invalid",
+        message: posti,
+        at: 1,
+      }),
+    });
+    const { user, dialog } = await apri();
+    await user.type(dialog.getByRole("textbox", { name: /^Nome/ }), "Mario");
+    await user.type(dialog.getByRole("textbox", { name: /^Cognome/ }), "Verdi");
+    await user.click(dialog.getByRole("radio", { name: "Femminile" }));
+    await user.click(dialog.getByRole("button", { name: "Aggiungi" }));
+
+    expect(await dialog.findByRole("alert")).toHaveTextContent(posti);
+    // Nothing is lost: the admin picks the other board and resubmits.
+    expect(dialog.getByRole("textbox", { name: /^Nome/ })).toHaveValue("Mario");
+    await user.click(dialog.getByRole("radio", { name: "Maschile" }));
+    expect(dialog.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("non c'è su una tappa in sola lettura", () => {
+    renderIscritti({ tappa: iscrittiDemo({ stato: "in_corso" }) });
+    expect(
+      screen.queryByRole("button", { name: "Aggiungi a mano" }),
+    ).not.toBeInTheDocument();
   });
 });

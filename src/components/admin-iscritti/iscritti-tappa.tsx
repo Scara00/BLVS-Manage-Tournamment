@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import type { CategoriaTabellone } from "@/lib/db/types";
+import { SENZA_ACCOUNT } from "@/lib/iscrizioni/admin/messages";
 import {
   initialModificaIscrittiState,
   type CercaGiocatoriAction,
@@ -38,6 +39,7 @@ import {
   AggiungiGiocatoreDialog,
   type Ricerca,
 } from "./aggiungi-giocatore-dialog";
+import { AggiungiManualeDialog } from "./aggiungi-manuale-dialog";
 import { ConfermaTutteDialog } from "./conferma-tutte-dialog";
 import { EsportaCsv } from "./esporta-csv";
 import {
@@ -50,6 +52,7 @@ type IscrittiTappaProps = {
   tappa: IscrittiTappaView;
   /** Server actions, passed in by the page (fakes in Storybook). */
   aggiungi: ModificaIscrittiAction;
+  aggiungiManuale: ModificaIscrittiAction;
   rimuovi: ModificaIscrittiAction;
   conferma: ModificaIscrittiAction;
   cerca: CercaGiocatoriAction;
@@ -102,7 +105,7 @@ function colonne(
           <span>{row.nome}</span>
           <span className="font-sans text-sm font-normal text-muted-foreground">
             {row.categoriaLabel ? `${row.categoriaLabel} · ` : null}
-            {row.email}
+            {row.email || SENZA_ACCOUNT}
           </span>
         </span>
       ),
@@ -253,7 +256,8 @@ function Tabellone({
 /**
  * w-admin-iscritti: the active registrants of a stage per board (seat,
  * name, date in mono), the free seats in words, «Aggiungi giocatore»
- * (w-admin-aggiungi-giocatore), «Conferma» on each pending registration
+ * (w-admin-aggiungi-giocatore), «Aggiungi a mano» for someone with no
+ * account (w-admin-aggiungi-manuale), «Conferma» on each pending registration
  * and «Conferma tutte» (only confirmed ones go into the groups), «Rimuovi»
  * behind a confirmation and the CSV export. Cancelled, archived, running
  * and finished stages are read-only; the export stays.
@@ -261,6 +265,7 @@ function Tabellone({
 export function IscrittiTappa({
   tappa,
   aggiungi,
+  aggiungiManuale,
   rimuovi,
   conferma,
   cerca,
@@ -427,6 +432,12 @@ export function IscrittiTappa({
               initialRicerca={ricercaIniziale}
               // One primary action: confirming, while anyone is pending.
               triggerVariant={inAttesa > 0 ? "secondary" : "primary"}
+            />
+          ) : null}
+          {tappa.modificabile ? (
+            <AggiungiManualeDialog
+              tappaId={tappa.id}
+              action={aggiungiManuale}
             />
           ) : null}
           <EsportaCsv tappa={tappa} />

@@ -31,10 +31,15 @@ import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import type { Categoria } from "@/lib/db/types";
-import { nomeCompleto, risultatiTesto } from "@/lib/iscrizioni/admin/format";
+import {
+  emailVisibile,
+  nomeCompleto,
+  risultatiTesto,
+} from "@/lib/iscrizioni/admin/format";
 import {
   ISCRITTI_MESSAGES,
   RICERCA_MIN_CARATTERI,
+  SENZA_ACCOUNT,
 } from "@/lib/iscrizioni/admin/messages";
 import { iscrittiPath } from "@/lib/iscrizioni/admin/paths";
 import { paroleRicerca } from "@/lib/iscrizioni/admin/search";
@@ -146,7 +151,9 @@ function Risultato({
     >
       <div className="flex min-w-0 flex-1 basis-48 flex-col [overflow-wrap:anywhere]">
         <span className="font-heading font-semibold">{nome}</span>
-        <span className="text-sm text-muted-foreground">{giocatore.email}</span>
+        <span className="text-sm text-muted-foreground">
+          {emailVisibile(giocatore.email) || SENZA_ACCOUNT}
+        </span>
         <span className="text-sm">
           {giocatore.categoria
             ? CATEGORIA_TABELLONE[giocatore.categoria]

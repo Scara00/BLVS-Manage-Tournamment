@@ -365,3 +365,178 @@ describe("admin_conferma_iscrizioni()", () => {
     expect(await statoDi(sua)).toBe("in_attesa");
   });
 });
+
+describe("admin_iscrivi_giocatore_manuale()", () => {
+  function aggiungiManuale(
+    admin: string,
+    tappa: string,
+    nome: string | null = "Mario",
+    cognome: string | null = "Verdi",
+    categoria: string | null = "M",
+  ) {
+    return call<Riga & { utente_id: string; tabellone_id: string }>(
+      admin,
+      "select * from public.admin_iscrivi_giocatore_manuale($1, $2, $3, $4)",
+      [tappa, nome, cognome, categoria],
+    );
+  }
+
+  async function accountManuali() {
+    const { rows } = await db.query<{ n: number }>(
+      `select count(*)::int as n from auth.users
+       where email like '%@manuale.blvs.invalid'`,
+    );
+    return rows[0].n;
+  }
+
+  it("crea il giocatore e lo iscrive confermato al primo posto libero", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    await aggiungi(admin, tappa, await createPlayer("F"));
+    const result = await aggiungiManuale(admin, tappa, " Mario ", " Verdi ");
+    expect(result).toMatchObject({
+      ok: true,
+      row: { posto: 1, stato: "confermata" },
+    });
+    if (!result.ok) return;
+
+    const { rows } = await db.query(
+      `select u.nome, u.cognome, u.categoria, u.ruolo, t.categoria as tabellone
+       from utenti u, tabelloni t
+       where u.id = $1 and t.id = $2`,
+      [result.row.utente_id, result.row.tabellone_id],
+    );
+    expect(rows[0]).toEqual({
+      nome: "Mario",
+      cognome: "Verdi",
+      categoria: "M",
+      ruolo: "giocatore",
+      tabellone: "M",
+    });
+  });
+
+  it("l'account non può accedere e non ha consensi", async () => {
+    const admin = await createAdmin();
+    const result = await aggiungiManuale(admin, await createStage());
+    if (!result.ok) throw new Error(result.error.message);
+    const id = result.row.utente_id;
+
+    const { rows } = await db.query<{
+      email: string;
+      encrypted_password: string;
+    }>("select email, encrypted_password from auth.users where id = $1", [id]);
+    expect(rows[0]).toEqual({
+      email: `${id}@manuale.blvs.invalid`,
+      encrypted_password: "",
+    });
+    const identita = await db.query(
+      "select 1 from auth.identities where user_id = $1",
+      [id],
+    );
+    expect(identita.rows).toHaveLength(0);
+    const consensi = await db.query(
+      "select 1 from consensi where utente_id = $1",
+      [id],
+    );
+    expect(consensi.rows).toHaveLength(0);
+  });
+
+  it("due giocatori con lo stesso nome sono due persone diverse", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    await aggiungiManuale(admin, tappa);
+    const secondo = await aggiungiManuale(admin, tappa);
+    expect(secondo).toMatchObject({ ok: true, row: { posto: 2 } });
+    expect(await attivi(tappa)).toBe(2);
+  });
+
+  it("su una tappa mista rispetta la metà dei posti della categoria", async () => {
+    const admin = await createAdmin();
+    const tappa = await asRole(db, "authenticated", admin, async () => {
+      const { rows } = await db.query<{ id: string }>(
+        "select crea_tappa_mista('K&Q', 'Jesolo', '2099-07-01', '2099-06-30 20:00+02', 4) as id",
+      );
+      return rows[0].id;
+    });
+    await aggiungiManuale(admin, tappa);
+    await aggiungiManuale(admin, tappa);
+    expect(await aggiungiManuale(admin, tappa)).toMatchObject({
+      ok: false,
+      error: { hint: "posti_esauriti" },
+    });
+    expect(
+      await aggiungiManuale(admin, tappa, "Anna", "Neri", "F"),
+    ).toMatchObject({ ok: true });
+  });
+
+  it("se l'iscrizione è rifiutata non resta nessun account", async () => {
+    const admin = await createAdmin();
+    const piena = await createStage({ posti: 1 });
+    await aggiungi(admin, piena, await createPlayer());
+    expect(await aggiungiManuale(admin, piena)).toMatchObject({
+      ok: false,
+      error: { code: "23514", hint: "posti_esauriti" },
+    });
+
+    const inCorso = await createStage({ stato: "in_corso" });
+    expect(await aggiungiManuale(admin, inCorso)).toMatchObject({
+      ok: false,
+      error: { hint: "tappa_non_iscrivibile" },
+    });
+    expect(await accountManuali()).toBe(0);
+  });
+
+  it.each([
+    ["nome vuoto", "   ", "Verdi", "M"],
+    ["cognome mancante", "Mario", null, "M"],
+    ["categoria mancante", "Mario", "Verdi", null],
+    ["nome troppo lungo", "x".repeat(101), "Verdi", "M"],
+  ])(
+    "rifiuta i dati non validi: %s",
+    async (_caso, nome, cognome, categoria) => {
+      const admin = await createAdmin();
+      const tappa = await createStage();
+      expect(
+        await aggiungiManuale(admin, tappa, nome, cognome, categoria),
+      ).toMatchObject({
+        ok: false,
+        error: { code: "23514", hint: "dati_giocatore_non_validi" },
+      });
+      expect(await accountManuali()).toBe(0);
+    },
+  );
+
+  it("solo l'admin può chiamarla, e l'anonimo non la vede", async () => {
+    const tappa = await createStage();
+    const giocatore = await createPlayer();
+    expect(await aggiungiManuale(giocatore, tappa)).toMatchObject({
+      ok: false,
+      error: { code: "42501" },
+    });
+    await expect(
+      asRole(db, "anon", null, () =>
+        db.query(
+          "select public.admin_iscrivi_giocatore_manuale($1, 'Mario', 'Verdi', 'M')",
+          [tappa],
+        ),
+      ),
+    ).rejects.toMatchObject({ code: "42501" });
+    expect(await accountManuali()).toBe(0);
+    expect(await attivi(tappa)).toBe(0);
+  });
+
+  it("eliminando l'utente Auth se ne va anche il giocatore", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    const result = await aggiungiManuale(admin, tappa);
+    if (!result.ok) throw new Error(result.error.message);
+    await db.query("delete from auth.users where id = $1", [
+      result.row.utente_id,
+    ]);
+    expect(await attivi(tappa)).toBe(0);
+    const { rows } = await db.query("select 1 from utenti where id = $1", [
+      result.row.utente_id,
+    ]);
+    expect(rows).toHaveLength(0);
+  });
+});

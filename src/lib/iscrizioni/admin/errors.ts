@@ -11,6 +11,7 @@ const PER_HINT: Record<string, string> = {
   posti_esauriti: ISCRITTI_MESSAGES.postiEsauriti,
   categoria_mancante: ISCRITTI_MESSAGES.categoriaMancante,
   giocatore_non_trovato: ISCRITTI_MESSAGES.giocatoreNonTrovato,
+  dati_giocatore_non_validi: ISCRITTI_MESSAGES.datiManualiNonValidi,
   iscrizione_non_trovata: ISCRITTI_MESSAGES.iscrizioneNonTrovata,
   tappa_non_iscrivibile: ISCRITTI_MESSAGES.nonModificabile,
   tappa_annullata: ISCRITTI_MESSAGES.annullata,
@@ -18,8 +19,9 @@ const PER_HINT: Record<string, string> = {
 };
 
 /**
- * Maps an error of `admin_iscrivi_giocatore()`, `admin_rimuovi_iscrizione()`
- * and `admin_conferma_iscrizioni()` (their hints) onto the copy shown.
+ * Maps an error of `admin_iscrivi_giocatore()`,
+ * `admin_iscrivi_giocatore_manuale()`, `admin_rimuovi_iscrizione()` and
+ * `admin_conferma_iscrizioni()` (their hints) onto the copy shown.
  */
 export function erroreDaDb(error: DbError): ErroreIscritti {
   const known = error.hint ? PER_HINT[error.hint] : undefined;

@@ -4,8 +4,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { refresh } from "next/cache";
 import { isUuid } from "@/lib/api/validation";
 import { getCurrentUser, type CurrentUser } from "@/lib/auth/session";
+import { CATEGORIE, type Categoria } from "@/lib/db/types";
 import {
   aggiungiDemoIscritto,
+  aggiungiDemoIscrittoManuale,
   cercaDemoGiocatori,
   confermaDemoIscritti,
   rimuoviDemoIscritto,
@@ -19,6 +21,7 @@ import {
   confermataMessage,
   confermateMessage,
   ISCRITTI_MESSAGES,
+  NOME_MAX_CARATTERI,
   RICERCA_MAX_RISULTATI,
   rimossoMessage,
 } from "./messages";
@@ -122,6 +125,83 @@ export async function aggiungiIscritto(
     );
   } catch (error) {
     console.error("[iscritti] aggiunta non riuscita", error);
+    return fallimento({
+      reason: "network",
+      message: ISCRITTI_MESSAGES.network,
+    });
+  }
+}
+
+function isCategoria(value: string): value is Categoria {
+  return CATEGORIE.some((categoria) => categoria === value);
+}
+
+/**
+ * w-admin-aggiungi-manuale: registers someone with no account, from name,
+ * surname and category. `admin_iscrivi_giocatore_manuale()` creates the
+ * player and the registration in one transaction, with the rules of
+ * `admin_iscrivi_giocatore()`: a refused registration leaves no account.
+ */
+export async function aggiungiIscrittoManuale(
+  _prev: ModificaIscrittiState,
+  formData: FormData,
+): Promise<ModificaIscrittiState> {
+  const sessione = await sessioneAdmin();
+  if (!sessione.ok) {
+    return fallimento({
+      reason: sessione.reason,
+      message: ISCRITTI_MESSAGES[sessione.reason],
+    });
+  }
+  const tappaId = text(formData.get("tappaId"));
+  const nome = text(formData.get("nome")).trim();
+  const cognome = text(formData.get("cognome")).trim();
+  const categoria = text(formData.get("categoria"));
+  if (
+    !nome ||
+    !cognome ||
+    nome.length > NOME_MAX_CARATTERI ||
+    cognome.length > NOME_MAX_CARATTERI ||
+    !isCategoria(categoria)
+  ) {
+    return fallimento({
+      reason: "invalid",
+      message: ISCRITTI_MESSAGES.datiManualiNonValidi,
+    });
+  }
+
+  if (!sessione.supabase) {
+    const esito = aggiungiDemoIscrittoManuale(
+      tappaId,
+      { nome, cognome, categoria },
+      now(),
+    );
+    if (!esito.ok) return fallimento(erroreDaDemo(esito));
+    return successo(aggiuntoMessage(nomeCompleto(esito.row), esito.row.posto));
+  }
+
+  if (!isUuid(tappaId)) {
+    return fallimento({
+      reason: "invalid",
+      message: ISCRITTI_MESSAGES.tappaNonTrovata,
+    });
+  }
+  try {
+    const { data, error } = await sessione.supabase
+      .rpc("admin_iscrivi_giocatore_manuale", {
+        p_tappa: tappaId,
+        p_nome: nome,
+        p_cognome: cognome,
+        p_categoria: categoria,
+      })
+      .select("posto")
+      .single<{ posto: number | null }>();
+    if (error) return fallimento(erroreDaDb(error));
+    return successo(
+      aggiuntoMessage(nomeCompleto({ nome, cognome }), data.posto),
+    );
+  } catch (error) {
+    console.error("[iscritti] aggiunta a mano non riuscita", error);
     return fallimento({
       reason: "network",
       message: ISCRITTI_MESSAGES.network,

@@ -1,7 +1,7 @@
 -- BLVS-25 · Iscritti gestiti dall'admin: massimo, unicità, posto liberato.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(6);
+select plan(9);
 
 insert into auth.users (id, email, raw_user_meta_data, email_confirmed_at) values
   ('d0000000-0000-4000-8000-000000000001', 'admin@example.test', '{"categoria":"M"}', now()),
@@ -51,6 +51,29 @@ select is(
     'd0000000-0000-4000-8000-000000001001', 'd0000000-0000-4000-8000-000000000003')),
   1,
   'il posto liberato torna disponibile'
+);
+
+-- Sul vero `auth.users`: il profilo nasce dal trigger, un rifiuto non lascia
+-- nessun account.
+select throws_ok(
+  $$ select public.admin_iscrivi_giocatore_manuale(
+    'd0000000-0000-4000-8000-000000001001', 'Mario', 'Verdi', 'M') $$,
+  '23514',
+  'Posti esauriti in questo tabellone.',
+  'a mano valgono gli stessi posti'
+);
+update public.tabelloni set posti = 2
+where tappa_id = 'd0000000-0000-4000-8000-000000001001';
+select is(
+  (select posto from public.admin_iscrivi_giocatore_manuale(
+    'd0000000-0000-4000-8000-000000001001', 'Mario', 'Verdi', 'M')),
+  2,
+  'chi non ha un account entra al primo posto libero'
+);
+select is(
+  (select cognome from public.utenti where email like '%@manuale.blvs.invalid'),
+  'Verdi',
+  'il profilo nasce dal trigger su auth.users'
 );
 
 set local request.jwt.claims to '{"sub": "d0000000-0000-4000-8000-000000000002", "role": "authenticated"}';

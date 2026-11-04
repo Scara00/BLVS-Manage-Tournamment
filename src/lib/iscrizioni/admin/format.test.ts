@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  DOMINIO_EMAIL_MANUALE,
+  emailVisibile,
   formatIscrittoIl,
   iscrittiModificabili,
   postiLiberiTesto,
@@ -107,5 +109,12 @@ describe("risultatiTesto", () => {
     expect(risultatiTesto(0)).toBe("Nessun giocatore trovato.");
     expect(risultatiTesto(1)).toBe("1 giocatore trovato.");
     expect(risultatiTesto(7)).toBe("7 giocatori trovati.");
+  });
+});
+
+describe("emailVisibile", () => {
+  it("nasconde solo l'indirizzo generato per chi è aggiunto a mano", () => {
+    expect(emailVisibile(`abc@${DOMINIO_EMAIL_MANUALE}`)).toBe("");
+    expect(emailVisibile("mario@example.it")).toBe("mario@example.it");
   });
 });

@@ -33,6 +33,75 @@ function tabellone(page: Page, nome: string) {
   return page.getByRole("region", { name: nome });
 }
 
+test("aggiunta a mano di più giocatori senza account", async ({
+  page,
+  request,
+}) => {
+  const id = await creaTappa(request, { stato: "iscrizioni_chiuse", posti: 7 });
+  await apriIscritti(page, id);
+  // By test id: an open dialog hides the page from the accessibility tree.
+  const m = page.getByTestId("tabellone-M");
+  await expect(m.getByTestId("posti-liberi")).toHaveText("2 POSTI LIBERI");
+
+  const trigger = page.getByRole("button", { name: "Aggiungi a mano" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "Aggiungi a mano" });
+  await expect(dialog).toBeVisible();
+  await waitForAnimations(page);
+  await expectNoA11yViolations(page);
+
+  const nome = dialog.getByRole("textbox", { name: /^Nome/ });
+  const cognome = dialog.getByRole("textbox", { name: /^Cognome/ });
+  const esito = dialog.getByRole("status");
+
+  // Only the names change from one player to the next.
+  await nome.fill("Mario");
+  await cognome.fill("Verdi");
+  await dialog.getByRole("radio", { name: "Maschile" }).click();
+  await dialog.getByRole("button", { name: "Aggiungi" }).click();
+  await expect(esito).toHaveText("Verdi Mario ora ha il posto 6.");
+  await expect(nome).toBeFocused();
+  await expect(m.getByTestId("posti-liberi")).toHaveText("1 POSTO LIBERO");
+
+  await page.keyboard.type("Paolo");
+  await page.keyboard.press("Tab");
+  await page.keyboard.type("Neri");
+  await page.keyboard.press("Enter");
+  await expect(esito).toHaveText("Neri Paolo ora ha il posto 7.");
+  await expect(m.getByTestId("posti-liberi")).toHaveText("NESSUN POSTO LIBERO");
+
+  // Board full: refused, and the names stay to pick another category.
+  await nome.fill("Ugo");
+  await cognome.fill("Blu");
+  await page.keyboard.press("Enter");
+  await expect(dialog.getByRole("alert")).toHaveText(/Posti esauriti/);
+  await expect(nome).toHaveValue("Ugo");
+  await expectNoA11yViolations(page);
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  const riga = m.getByText("Verdi Mario").filter({ visible: true });
+  await expect(riga).toBeVisible();
+  await expect(
+    m.getByText("Senza account").filter({ visible: true }),
+  ).toHaveCount(2);
+  await expect(page.getByText("@manuale.blvs.invalid")).toHaveCount(0);
+
+  // A real player from now on: the search finds them for the next stage.
+  await page.getByRole("button", { name: "Aggiungi giocatore" }).click();
+  const ricerca = page.getByRole("dialog", { name: "Aggiungi giocatore" });
+  await ricerca.getByRole("searchbox").fill("verdi mario");
+  // The demo store is shared by the parallel projects: namesakes are other
+  // people, so pick the one registered to this stage.
+  await expect(
+    ricerca.getByRole("button", {
+      name: "Aggiungi Verdi Mario",
+      description: "Già iscritto a questa tappa.",
+    }),
+  ).toBeVisible();
+});
+
 test("aggiunta di un giocatore da tastiera, anche a iscrizioni chiuse", async ({
   page,
   request,

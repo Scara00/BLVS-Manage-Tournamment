@@ -11,6 +11,7 @@ export const ISCRITTI_MESSAGES = {
   categoriaMancante:
     "Il giocatore non ha ancora scelto la categoria nel profilo.",
   giocatoreNonTrovato: "Giocatore non trovato.",
+  datiManualiNonValidi: "Servono nome, cognome e categoria del giocatore.",
   iscrizioneNonTrovata:
     "L'iscrizione non c'è più: forse è già stata rimossa. Ricarica la pagina.",
   tappaNonTrovata: "Tappa non trovata.",
@@ -20,11 +21,17 @@ export const ISCRITTI_MESSAGES = {
   archiviata: "La tappa è archiviata: consultabile ma non modificabile.",
 } as const;
 
+/** Stands in for the address of a player added by hand. */
+export const SENZA_ACCOUNT = "Senza account";
+
 /** Shortest query the player search runs. */
 export const RICERCA_MIN_CARATTERI = 2;
 
 /** Most results the search returns. */
 export const RICERCA_MAX_RISULTATI = 20;
+
+/** Longest name or surname, as in `utenti`. */
+export const NOME_MAX_CARATTERI = 100;
 
 export function aggiuntoMessage(nome: string, posto: number | null): string {
   return posto === null

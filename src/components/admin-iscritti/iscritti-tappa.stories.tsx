@@ -53,6 +53,7 @@ function Schermata({
               <IscrittiTappa
                 tappa={tappa}
                 aggiungi={azioneFinta}
+                aggiungiManuale={azioneFinta}
                 rimuovi={azioneFinta}
                 conferma={azioneFinta}
                 cerca={cercaFinta}

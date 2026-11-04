@@ -6,6 +6,7 @@ import { TappaModificaSessioneScaduta } from "@/components/admin-tappa-modifica"
 import { PageContainer } from "@/components/layout/page-container";
 import {
   aggiungiIscritto,
+  aggiungiIscrittoManuale,
   cercaGiocatori,
   confermaIscritti,
   rimuoviIscritto,
@@ -32,6 +33,7 @@ async function IscrittiContent({ id }: { id: string }) {
     <IscrittiTappa
       tappa={lettura.tappa}
       aggiungi={aggiungiIscritto}
+      aggiungiManuale={aggiungiIscrittoManuale}
       rimuovi={rimuoviIscritto}
       conferma={confermaIscritti}
       cerca={cercaGiocatori}
@@ -47,7 +49,7 @@ export default function IscrittiTappaPage({
     <PageContainer
       title="Iscritti"
       eyebrow="Amministrazione · Tappe"
-      description="Gli iscritti di ogni tabellone con posto e data. Conferma le iscrizioni in attesa (nei gironi entrano solo quelle confermate), aggiungi un giocatore registrato anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
+      description="Gli iscritti di ogni tabellone con posto e data. Conferma le iscrizioni in attesa (nei gironi entrano solo quelle confermate), aggiungi un giocatore registrato o, a mano, uno senza account anche a iscrizioni chiuse, rimuovi un iscritto o esporta l'elenco in CSV."
     >
       <Suspense
         fallback={<GestioneTappaLoading testo="Caricamento degli iscritti…" />}

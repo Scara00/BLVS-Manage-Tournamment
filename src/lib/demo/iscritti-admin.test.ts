@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { creaDemoTappa, getDemoTappaGestione } from "./gestione-tappe";
 import {
   aggiungiDemoIscritto,
+  aggiungiDemoIscrittoManuale,
   cercaDemoGiocatori,
   confermaDemoIscritti,
   demoIscrittiTappa,
@@ -64,6 +65,33 @@ describe("iscritti demo (stesse regole di admin_iscrivi_giocatore)", () => {
       ok: false,
       motivo: "categoriaMancante",
     });
+  });
+
+  it("aggiunge a mano un giocatore nuovo, che poi si trova con la ricerca", () => {
+    const id = tappa();
+    const esito = aggiungiDemoIscrittoManuale(
+      id,
+      { nome: "Mario", cognome: "Zzverdi", categoria: "M" },
+      AT,
+    );
+    expect(esito).toMatchObject({
+      ok: true,
+      row: { posto: 6, stato: "confermata", cognome: "Zzverdi" },
+    });
+    expect(cercaDemoGiocatori(id, ["zzverdi"], 10)).toMatchObject([
+      { nome: "Mario", categoria: "M", iscritto: true },
+    ]);
+  });
+
+  it("a mano oltre il massimo non crea il giocatore", () => {
+    const id = tappa(5);
+    const esito = aggiungiDemoIscrittoManuale(
+      id,
+      { nome: "Mario", cognome: "Zzrifiutato", categoria: "M" },
+      AT,
+    );
+    expect(esito).toEqual({ ok: false, motivo: "postiEsauriti" });
+    expect(cercaDemoGiocatori(id, ["zzrifiutato"], 10)).toEqual([]);
   });
 
   it("la rimozione libera il posto, che va al prossimo aggiunto", () => {

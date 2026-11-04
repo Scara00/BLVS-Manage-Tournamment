@@ -72,6 +72,18 @@ export function nomeCompleto(row: { nome: string; cognome: string }): string {
   return `${row.cognome} ${row.nome}`.trim();
 }
 
+/**
+ * Reserved domain (RFC 2606) of the address generated for a player added
+ * by hand: nothing is ever delivered there. Mirrors
+ * `admin_iscrivi_giocatore_manuale()`.
+ */
+export const DOMINIO_EMAIL_MANUALE = "manuale.blvs.invalid";
+
+/** The address to show: none for a player added by hand. */
+export function emailVisibile(email: string): string {
+  return email.endsWith(`@${DOMINIO_EMAIL_MANUALE}`) ? "" : email;
+}
+
 /** Seat first (no seat last), then registration time. */
 function perPosto(a: IscrittoRow, b: IscrittoRow): number {
   const pa = a.posto ?? Number.POSITIVE_INFINITY;
@@ -99,7 +111,7 @@ function toIscrittoView(row: IscrittoRow): IscrittoView {
     id: row.id,
     posto: row.posto,
     nome: nomeCompleto(row),
-    email: row.email,
+    email: emailVisibile(row.email),
     iscrittoIl: row.created_at,
     iscrittoIlTesto: formatIscrittoIl(row.created_at),
     stato: row.stato,

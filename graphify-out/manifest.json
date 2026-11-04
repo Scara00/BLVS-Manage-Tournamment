@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793629225.847263,
-    "ast_hash": "267b66dbd25db2f7c49bf178770653fa",
+    "mtime": 1793821212.0088995,
+    "ast_hash": "4797c66f10c7d39b7599a65a4be6c70f",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
@@ -2775,13 +2775,13 @@
     "semantic_hash": ""
   },
   "e2e/admin-iscritti.spec.ts": {
-    "mtime": 1793112103.5932665,
-    "ast_hash": "377b0c6c2a4420d229f0e4649e0fde35",
+    "mtime": 1793821469.7644215,
+    "ast_hash": "3f44023a9397bb96131db1433f785428",
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/iscritti/page.tsx": {
-    "mtime": 1793270822.6606436,
-    "ast_hash": "17fb7bfca87dcf755fc33b20d5efb69f",
+    "mtime": 1793821212.0081975,
+    "ast_hash": "5a5154ce58fd61a08fc0c4264bb25b41",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/aggiungi-giocatore-dialog.stories.tsx": {
@@ -2790,8 +2790,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/aggiungi-giocatore-dialog.tsx": {
-    "mtime": 1793620544.288377,
-    "ast_hash": "c3cc22fdc79590ce08d753196a10c3a9",
+    "mtime": 1793821212.0078897,
+    "ast_hash": "4fce01343daed65dbc46f0b17997169a",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/esporta-csv.tsx": {
@@ -2800,23 +2800,23 @@
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/index.ts": {
-    "mtime": 1793112103.6143055,
-    "ast_hash": "e9b85a0bfb0881e42df8d9ac0bb7f190",
+    "mtime": 1793821212.0071535,
+    "ast_hash": "487a0bcbdbb0e938e5678a0ac2491808",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/iscritti-tappa.stories.tsx": {
-    "mtime": 1793270843.8406296,
-    "ast_hash": "c5a389f2c7e9b1acaf84fdbfd808f6c5",
+    "mtime": 1793821252.27513,
+    "ast_hash": "612d6cdfe7a7000339100a0a47c6fbc2",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/iscritti-tappa.test.tsx": {
-    "mtime": 1793270882.3599312,
-    "ast_hash": "8c476aded3e5cc950e60b287e23d8129",
+    "mtime": 1793821262.1921277,
+    "ast_hash": "455981156f886cb51e6a66c4e9c3109f",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/iscritti-tappa.tsx": {
-    "mtime": 1793620544.3110123,
-    "ast_hash": "9c08952551e3eff6f170da09d228eacd",
+    "mtime": 1793821262.2165983,
+    "ast_hash": "068c12fed5d07c959cac674f40cef902",
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/rimuovi-iscritto-dialog.tsx": {
@@ -2835,23 +2835,23 @@
     "semantic_hash": ""
   },
   "src/lib/demo/iscritti-admin.test.ts": {
-    "mtime": 1793270920.4624064,
-    "ast_hash": "d3eb2da66dc450835b3dacdba361bfb7",
+    "mtime": 1793821252.2756827,
+    "ast_hash": "59dabb566dec4cf9a0da06073f251c55",
     "semantic_hash": ""
   },
   "src/lib/demo/iscritti-admin.ts": {
-    "mtime": 1793620674.288254,
-    "ast_hash": "bb7e4d7029c676324ce5bf1063137ef6",
+    "mtime": 1793821133.969324,
+    "ast_hash": "0f32cb73cee02820ba9be85f6a181271",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/actions.ts": {
-    "mtime": 1793270674.625965,
-    "ast_hash": "5c98242c3e7cbb0a9c76b2decbb03fdf",
+    "mtime": 1793821133.9689276,
+    "ast_hash": "6c56b60e1689265af5d66543b01d675b",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/admin-iscritti.db.test.ts": {
-    "mtime": 1793270629.761879,
-    "ast_hash": "54a6dbf8a95cbbc17ecf8e1f0fb3403d",
+    "mtime": 1793821262.2602677,
+    "ast_hash": "da4bbe250793e2a12c7b02ceebcc19ae",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/csv.test.ts": {
@@ -2865,23 +2865,23 @@
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/errors.ts": {
-    "mtime": 1793270659.0305092,
-    "ast_hash": "a54edcc64949dd2e01a18c1ba440ae72",
+    "mtime": 1793821133.9681673,
+    "ast_hash": "211e681285d50469243be420fb990651",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/format.test.ts": {
-    "mtime": 1793112103.626849,
-    "ast_hash": "a28cf678aa3d268768ac1d8543c0416e",
+    "mtime": 1793821261.769653,
+    "ast_hash": "30898403e72bf7584b1e2ea5c52bc4e9",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/format.ts": {
-    "mtime": 1793620508.1404424,
-    "ast_hash": "309ae8bb49a223c2303e006a4bf33b31",
+    "mtime": 1793821133.9683456,
+    "ast_hash": "7f084581dbd62de9b85ee1d6fc046343",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/messages.ts": {
-    "mtime": 1793270659.0302992,
-    "ast_hash": "60f536d4d0d4bca80bdd62471fce687a",
+    "mtime": 1793821212.0076869,
+    "ast_hash": "343a2d7fadf179ea3bbf0ca7b1ec153b",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/paths.ts": {
@@ -2915,8 +2915,8 @@
     "semantic_hash": ""
   },
   "supabase/tests/database/admin_iscritti.test.sql": {
-    "mtime": 1793112103.6348083,
-    "ast_hash": "e269901b9e682e59ec9675de938d2d11",
+    "mtime": 1793821431.8470964,
+    "ast_hash": "8b58ae3c4c148e4971d2674f20ccfffc",
     "semantic_hash": ""
   },
   "e2e/admin-avvio-fase.spec.ts": {
@@ -5625,8 +5625,8 @@
     "semantic_hash": ""
   },
   "src/lib/giocatori/admin/read.ts": {
-    "mtime": 1793621252.7310483,
-    "ast_hash": "4d88a48f30fcdce03c4000e0cd730f1b",
+    "mtime": 1793821212.0083973,
+    "ast_hash": "f846b3a77be5974ce43f42408d8f0834",
     "semantic_hash": ""
   },
   "src/lib/giocatori/admin/types.ts": {
@@ -5720,8 +5720,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1793637053.5201135,
-    "ast_hash": "c934d3daf222e84bf55324e82c01beec",
+    "mtime": 1793637368.5796905,
+    "ast_hash": "af83eea22208989aa4aa65bacdc1159c",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {
@@ -5735,8 +5735,8 @@
     "semantic_hash": ""
   },
   "e2e/a11y/schermate.ts": {
-    "mtime": 1793202543.344431,
-    "ast_hash": "844398aa5fd331098e6b96396323a384",
+    "mtime": 1793821262.3398194,
+    "ast_hash": "ecf5fb6f69b343aa0543ceff7918d3eb",
     "semantic_hash": ""
   },
   "e2e/storybook-schermate.spec.ts": {
@@ -5942,6 +5942,26 @@
   "src/app/apple-icon.png": {
     "mtime": 1793637053.073918,
     "ast_hash": "867be8c862699624ae51b5506f46ecf7",
+    "semantic_hash": ""
+  },
+  "src/components/admin-iscritti/aggiungi-manuale-dialog.stories.tsx": {
+    "mtime": 1793821211.9927635,
+    "ast_hash": "2a1be76fa80fe0d752483ef1838040f1",
+    "semantic_hash": ""
+  },
+  "src/components/admin-iscritti/aggiungi-manuale-dialog.tsx": {
+    "mtime": 1793821262.1613696,
+    "ast_hash": "19ddc953154debf1944779e01038c421",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261104100000_giocatore_manuale.sql": {
+    "mtime": 1793821066.8435946,
+    "ast_hash": "0955fc08c507ca91b476328267847748",
+    "semantic_hash": ""
+  },
+  "e2e/supabase/aggiunta-manuale.spec.ts": {
+    "mtime": 1793822045.7805061,
+    "ast_hash": "44c10a2a0f5f411d84bc6aeecb097541",
     "semantic_hash": ""
   }
 }
