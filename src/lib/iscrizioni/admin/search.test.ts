@@ -16,7 +16,7 @@ describe("paroleRicerca", () => {
 describe("filtriRicerca", () => {
   it("una condizione or per parola, su nome, cognome ed email", () => {
     expect(filtriRicerca(["rossi"])).toEqual([
-      'nome.ilike."%rossi%",cognome.ilike."%rossi%",email.ilike."%rossi%"',
+      'nome.ilike."%rossi%",cognome.ilike."%rossi%",and(email.ilike."%rossi%",email.not.ilike."%@manuale.blvs.invalid")',
     ]);
   });
 

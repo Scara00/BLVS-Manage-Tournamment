@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793821212.0088995,
-    "ast_hash": "4797c66f10c7d39b7599a65a4be6c70f",
+    "mtime": 1793828237.0667589,
+    "ast_hash": "0aaf8c652fdfb94859578aebcce961d6",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
@@ -2775,8 +2775,8 @@
     "semantic_hash": ""
   },
   "e2e/admin-iscritti.spec.ts": {
-    "mtime": 1793821469.7644215,
-    "ast_hash": "3f44023a9397bb96131db1433f785428",
+    "mtime": 1793828587.6793218,
+    "ast_hash": "49508bd2241c800e376c6decea05a481",
     "semantic_hash": ""
   },
   "src/app/admin/(protetta)/tappe/[id]/iscritti/page.tsx": {
@@ -2835,13 +2835,13 @@
     "semantic_hash": ""
   },
   "src/lib/demo/iscritti-admin.test.ts": {
-    "mtime": 1793821252.2756827,
-    "ast_hash": "59dabb566dec4cf9a0da06073f251c55",
+    "mtime": 1793828180.344556,
+    "ast_hash": "9c4e35748cc4198504a4d264c1bae562",
     "semantic_hash": ""
   },
   "src/lib/demo/iscritti-admin.ts": {
-    "mtime": 1793821133.969324,
-    "ast_hash": "0f32cb73cee02820ba9be85f6a181271",
+    "mtime": 1793828237.0647757,
+    "ast_hash": "7e6b4c8db84aa37aae90f35c6e0208cb",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/actions.ts": {
@@ -2850,8 +2850,8 @@
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/admin-iscritti.db.test.ts": {
-    "mtime": 1793821262.2602677,
-    "ast_hash": "da4bbe250793e2a12c7b02ceebcc19ae",
+    "mtime": 1793828360.4678462,
+    "ast_hash": "67147d5cddec3627cb4b515466693c88",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/csv.test.ts": {
@@ -2895,13 +2895,13 @@
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/search.test.ts": {
-    "mtime": 1793112103.6278512,
-    "ast_hash": "44b67d44a5ed384ed8025bcc4681c41c",
+    "mtime": 1793828180.3441653,
+    "ast_hash": "7a581322bb6c75ea668e8ae8e39b199d",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/search.ts": {
-    "mtime": 1793112103.6280262,
-    "ast_hash": "831e139b83877b327119f4882597ef78",
+    "mtime": 1793828237.065026,
+    "ast_hash": "c3c7e39eee6625b03f06f4c8a0bf3ddf",
     "semantic_hash": ""
   },
   "src/lib/iscrizioni/admin/types.ts": {
@@ -5950,8 +5950,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-iscritti/aggiungi-manuale-dialog.tsx": {
-    "mtime": 1793821262.1613696,
-    "ast_hash": "19ddc953154debf1944779e01038c421",
+    "mtime": 1793828237.0654633,
+    "ast_hash": "14c9d6400a75058ccf0eb7fe3b06c1e6",
     "semantic_hash": ""
   },
   "supabase/migrations/20261104100000_giocatore_manuale.sql": {
@@ -5960,8 +5960,13 @@
     "semantic_hash": ""
   },
   "e2e/supabase/aggiunta-manuale.spec.ts": {
-    "mtime": 1793822045.7805061,
-    "ast_hash": "44c10a2a0f5f411d84bc6aeecb097541",
+    "mtime": 1793828237.0663743,
+    "ast_hash": "bf66dee0660658e3ab58a113659464e9",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20261104200000_giocatore_manuale_riuso.sql": {
+    "mtime": 1793828237.0521574,
+    "ast_hash": "f42945222147f9d9b0151739dbf46d00",
     "semantic_hash": ""
   }
 }

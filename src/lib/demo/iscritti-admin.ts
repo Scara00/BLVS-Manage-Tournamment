@@ -5,6 +5,7 @@ import type {
 } from "@/lib/db/types";
 import {
   DOMINIO_EMAIL_MANUALE,
+  emailVisibile,
   iscrittiModificabili,
 } from "@/lib/iscrizioni/admin/format";
 import type {
@@ -262,7 +263,7 @@ export function cercaDemoGiocatori(
   return store()
     .giocatori.filter((g) =>
       cerca.every((q) =>
-        [g.nome, g.cognome, g.email].some((v) =>
+        [g.nome, g.cognome, emailVisibile(g.email)].some((v) =>
           v.toLocaleLowerCase("it").includes(q),
         ),
       ),
@@ -353,17 +354,35 @@ export function aggiungiDemoIscritto(
 }
 
 /**
- * `admin_iscrivi_giocatore_manuale()` on the demo data: the new player
- * stays only if the registration goes through.
+ * `admin_iscrivi_giocatore_manuale()` on the demo data: same name, surname
+ * and category is the same player; a new one stays only if the registration
+ * goes through.
  */
 export function aggiungiDemoIscrittoManuale(
   tappaId: string,
   dati: { nome: string; cognome: string; categoria: Categoria },
   at: Date,
 ): DemoEsitoIscritti {
-  const id = `demo-manuale-${crypto.randomUUID()}`;
   const { giocatori } = store();
-  giocatori.push({ ...dati, id, email: `${id}@${DOMINIO_EMAIL_MANUALE}` });
+  const uguale = (a: string, b: string) =>
+    a.toLocaleLowerCase("it") === b.trim().toLocaleLowerCase("it");
+  const esistente = giocatori.find(
+    (g) =>
+      g.email.endsWith(`@${DOMINIO_EMAIL_MANUALE}`) &&
+      g.categoria === dati.categoria &&
+      uguale(g.nome, dati.nome) &&
+      uguale(g.cognome, dati.cognome),
+  );
+  if (esistente) return aggiungiDemoIscritto(tappaId, esistente.id, at);
+
+  const id = `demo-manuale-${crypto.randomUUID()}`;
+  giocatori.push({
+    id,
+    nome: dati.nome.trim(),
+    cognome: dati.cognome.trim(),
+    categoria: dati.categoria,
+    email: `${id}@${DOMINIO_EMAIL_MANUALE}`,
+  });
   const esito = aggiungiDemoIscritto(tappaId, id, at);
   if (!esito.ok) giocatori.pop();
   return esito;

@@ -441,13 +441,79 @@ describe("admin_iscrivi_giocatore_manuale()", () => {
     expect(consensi.rows).toHaveLength(0);
   });
 
-  it("due giocatori con lo stesso nome sono due persone diverse", async () => {
+  it("stesso nome e categoria sono la stessa persona, anche in un'altra tappa", async () => {
+    const admin = await createAdmin();
+    const prima = await aggiungiManuale(admin, await createStage());
+    const seconda = await aggiungiManuale(
+      admin,
+      await createStage(),
+      "  MARIO ",
+      "verdi",
+    );
+    expect(seconda).toMatchObject({ ok: true, row: { posto: 1 } });
+    if (!prima.ok || !seconda.ok) throw new Error("iscrizione rifiutata");
+    expect(seconda.row.utente_id).toBe(prima.row.utente_id);
+    expect(await accountManuali()).toBe(1);
+  });
+
+  it("due volte nella stessa tappa è un doppione, non un secondo giocatore", async () => {
     const admin = await createAdmin();
     const tappa = await createStage();
     await aggiungiManuale(admin, tappa);
-    const secondo = await aggiungiManuale(admin, tappa);
-    expect(secondo).toMatchObject({ ok: true, row: { posto: 2 } });
-    expect(await attivi(tappa)).toBe(2);
+    expect(await aggiungiManuale(admin, tappa)).toMatchObject({
+      ok: false,
+      error: { code: "23505", hint: "gia_iscritto" },
+    });
+    expect(await attivi(tappa)).toBe(1);
+    expect(await accountManuali()).toBe(1);
+  });
+
+  it("chi era stato rimosso rientra con lo stesso account", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    const prima = await aggiungiManuale(admin, tappa);
+    if (!prima.ok) throw new Error(prima.error.message);
+    await rimuovi(admin, prima.row.id);
+    const seconda = await aggiungiManuale(admin, tappa);
+    expect(seconda).toMatchObject({
+      ok: true,
+      row: { utente_id: prima.row.utente_id, stato: "confermata" },
+    });
+    expect(await accountManuali()).toBe(1);
+  });
+
+  it("l'altra categoria è un'altra persona", async () => {
+    const admin = await createAdmin();
+    const tappa = await createStage();
+    await aggiungiManuale(admin, tappa, "Andrea", "Verdi", "M");
+    const donna = await aggiungiManuale(admin, tappa, "Andrea", "Verdi", "F");
+    expect(donna).toMatchObject({ ok: true, row: { posto: 1 } });
+    expect(await accountManuali()).toBe(2);
+  });
+
+  it("non si aggancia a un account vero con lo stesso nome", async () => {
+    const admin = await createAdmin();
+    const vero = await createAuthUser(db, {
+      email: "mario.verdi@example.it",
+      categoria: "M",
+      meta: { nome: "Mario", cognome: "Verdi" },
+    });
+    const result = await aggiungiManuale(admin, await createStage());
+    if (!result.ok) throw new Error(result.error.message);
+    expect(result.row.utente_id).not.toBe(vero);
+    expect(await accountManuali()).toBe(1);
+  });
+
+  it("l'admin lo vede in utenti, come la ricerca di Aggiungi giocatore", async () => {
+    const admin = await createAdmin();
+    await aggiungiManuale(admin, await createStage());
+    const trovati = await call<{ nome: string }>(
+      admin,
+      `select nome from public.utenti
+       where nome ilike $1 or cognome ilike $1 or email ilike $1`,
+      ["%verdi%"],
+    );
+    expect(trovati).toMatchObject({ ok: true, row: { nome: "Mario" } });
   });
 
   it("su una tappa mista rispetta la metà dei posti della categoria", async () => {
@@ -458,9 +524,9 @@ describe("admin_iscrivi_giocatore_manuale()", () => {
       );
       return rows[0].id;
     });
-    await aggiungiManuale(admin, tappa);
-    await aggiungiManuale(admin, tappa);
-    expect(await aggiungiManuale(admin, tappa)).toMatchObject({
+    await aggiungiManuale(admin, tappa, "Mario");
+    await aggiungiManuale(admin, tappa, "Luigi");
+    expect(await aggiungiManuale(admin, tappa, "Ugo")).toMatchObject({
       ok: false,
       error: { hint: "posti_esauriti" },
     });

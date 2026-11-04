@@ -76,6 +76,8 @@ test("aggiunta a mano di più giocatori senza account", async ({
   await page.keyboard.press("Enter");
   await expect(dialog.getByRole("alert")).toHaveText(/Posti esauriti/);
   await expect(nome).toHaveValue("Ugo");
+  // The refresh after the last success streams the title back in.
+  await expect(page).toHaveTitle("Iscritti · Amministrazione · BLVS");
   await expectNoA11yViolations(page);
 
   await page.keyboard.press("Escape");
@@ -88,18 +90,26 @@ test("aggiunta a mano di più giocatori senza account", async ({
   ).toHaveCount(2);
   await expect(page.getByText("@manuale.blvs.invalid")).toHaveCount(0);
 
-  // A real player from now on: the search finds them for the next stage.
+  // Typing the same player again is no second player.
+  await trigger.click();
+  await nome.fill("mario");
+  await cognome.fill("VERDI");
+  await dialog.getByRole("radio", { name: "Maschile" }).click();
+  await dialog.getByRole("button", { name: "Aggiungi" }).click();
+  await expect(dialog.getByRole("alert")).toHaveText(/già iscritto/);
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+
+  // The search finds them for the next stage, once.
   await page.getByRole("button", { name: "Aggiungi giocatore" }).click();
   const ricerca = page.getByRole("dialog", { name: "Aggiungi giocatore" });
   await ricerca.getByRole("searchbox").fill("verdi mario");
-  // The demo store is shared by the parallel projects: namesakes are other
-  // people, so pick the one registered to this stage.
   await expect(
     ricerca.getByRole("button", {
       name: "Aggiungi Verdi Mario",
       description: "Già iscritto a questa tappa.",
     }),
-  ).toBeVisible();
+  ).toHaveCount(1);
 });
 
 test("aggiunta di un giocatore da tastiera, anche a iscrizioni chiuse", async ({

@@ -83,6 +83,33 @@ describe("iscritti demo (stesse regole di admin_iscrivi_giocatore)", () => {
     ]);
   });
 
+  it("a mano con lo stesso nome e categoria riusa il giocatore", () => {
+    const dati = { nome: "Zzriuso", cognome: "Verdi", categoria: "M" } as const;
+    aggiungiDemoIscrittoManuale(tappa(), dati, AT);
+    const id = tappa();
+    const esito = aggiungiDemoIscrittoManuale(
+      id,
+      { ...dati, nome: " zzRIUSO " },
+      AT,
+    );
+    expect(esito).toMatchObject({ ok: true });
+    expect(cercaDemoGiocatori(id, ["zzriuso"], 10)).toHaveLength(1);
+    expect(aggiungiDemoIscrittoManuale(id, dati, AT)).toEqual({
+      ok: false,
+      motivo: "giaIscritto",
+    });
+  });
+
+  it("la ricerca non guarda l'email generata per chi è aggiunto a mano", () => {
+    const id = tappa();
+    aggiungiDemoIscrittoManuale(
+      id,
+      { nome: "Zzsolonome", cognome: "Verdi", categoria: "M" },
+      AT,
+    );
+    expect(cercaDemoGiocatori(id, ["zzsolonome", "manuale"], 10)).toEqual([]);
+  });
+
   it("a mano oltre il massimo non crea il giocatore", () => {
     const id = tappa(5);
     const esito = aggiungiDemoIscrittoManuale(

@@ -1,3 +1,4 @@
+import { DOMINIO_EMAIL_MANUALE } from "./format";
 import { RICERCA_MIN_CARATTERI } from "./messages";
 
 /** The words of a search, trimmed; empty when it is too short to run. */
@@ -19,11 +20,13 @@ function quoted(value: string): string {
 
 /**
  * One PostgREST `or` filter per word: each word must be in the name, the
- * surname or the email, so «rossi luca» finds Luca Rossi.
+ * surname or the email, so «rossi luca» finds Luca Rossi. The address
+ * generated for a player added by hand does not count: «ma» would match
+ * every one of them.
  */
 export function filtriRicerca(parole: readonly string[]): string[] {
   return parole.map((parola) => {
     const valore = quoted(likePattern(parola));
-    return `nome.ilike.${valore},cognome.ilike.${valore},email.ilike.${valore}`;
+    return `nome.ilike.${valore},cognome.ilike.${valore},and(email.ilike.${valore},email.not.ilike."%@${DOMINIO_EMAIL_MANUALE}")`;
   });
 }

@@ -113,4 +113,13 @@ test("l'admin aggiunge a mano chi non ha un account, fino al massimo", async ({
     elenco.getByText("Senza account").filter({ visible: true }),
   ).toBeVisible();
   await expect(page.getByText("@manuale.blvs.invalid")).toHaveCount(0);
+
+  // The real search: a player added by hand is found like any other.
+  await page.getByRole("button", { name: "Aggiungi giocatore" }).click();
+  const ricerca = page.getByRole("dialog", { name: "Aggiungi giocatore" });
+  await ricerca.getByRole("searchbox").fill(cognome);
+  await expect(ricerca.getByRole("status")).toHaveText("1 giocatore trovato.");
+  await expect(
+    ricerca.getByRole("button", { name: `Aggiungi ${cognome} Mario` }),
+  ).toBeVisible();
 });

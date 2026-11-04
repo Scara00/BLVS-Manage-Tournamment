@@ -153,7 +153,9 @@ export function AggiungiManualeDialog({
             <DialogDescription>
               Per chi non ha un account: va nel tabellone della sua categoria,
               al primo posto libero, con l&apos;iscrizione già confermata. Non
-              può accedere all&apos;app e non riceve email.
+              può accedere all&apos;app e non riceve email. Se l&apos;hai già
+              aggiunto a mano in un&apos;altra tappa, con lo stesso nome e la
+              stessa categoria, viene iscritto lui: non si crea un doppione.
             </DialogDescription>
           </DialogHeader>
           <DialogBody className="flex flex-col gap-stack-sm">
