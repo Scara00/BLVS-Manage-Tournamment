@@ -520,12 +520,15 @@ describe("admin_iscrivi_giocatore_manuale()", () => {
     const admin = await createAdmin();
     const tappa = await asRole(db, "authenticated", admin, async () => {
       const { rows } = await db.query<{ id: string }>(
-        "select crea_tappa_mista('K&Q', 'Jesolo', '2099-07-01', '2099-06-30 20:00+02', 4) as id",
+        "select crea_tappa_mista('K&Q', 'Jesolo', '2099-07-01', '2099-06-30 20:00+02', 8) as id",
       );
       return rows[0].id;
     });
-    await aggiungiManuale(admin, tappa, "Mario");
-    await aggiungiManuale(admin, tappa, "Luigi");
+    for (const nome of ["Mario", "Luigi", "Paolo", "Piero"]) {
+      expect(await aggiungiManuale(admin, tappa, nome)).toMatchObject({
+        ok: true,
+      });
+    }
     expect(await aggiungiManuale(admin, tappa, "Ugo")).toMatchObject({
       ok: false,
       error: { hint: "posti_esauriti" },

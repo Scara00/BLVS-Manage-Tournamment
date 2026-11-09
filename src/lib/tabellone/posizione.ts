@@ -1,4 +1,4 @@
-import type { CategoriaTabellone } from "@/lib/db/types";
+import type { Categoria, CategoriaTabellone } from "@/lib/db/types";
 import { CATEGORIA_NOME } from "@/lib/tappe/avvio/paths";
 import { LIVELLO_DELLA_FASE, ORDINE_LIVELLI } from "./fasi";
 import { latoDelTaglio } from "./taglio";
@@ -33,12 +33,23 @@ export function posizioneBreve(riga: Pick<RigaTabellone, "position" | "pari">) {
   return riga.pari ? `${riga.position}=` : String(riga.position);
 }
 
-/** «2°», «2° a pari merito» or «–»: the place in words. */
+const TRA: Record<Categoria, string> = {
+  M: " tra gli uomini",
+  F: " tra le donne",
+};
+
+/**
+ * «2°», «2° a pari merito» or «–»: the place in words; on a mixed board
+ * «2° tra gli uomini», «1° tra le donne».
+ */
 export function posizioneEstesa(
-  riga: Pick<RigaTabellone, "position" | "pari">,
+  riga: Pick<RigaTabellone, "position" | "pari" | "category">,
 ) {
   if (riga.position === null) return "–";
-  return riga.pari ? `${riga.position}° a pari merito` : `${riga.position}°`;
+  const tra = riga.category ? TRA[riga.category] : "";
+  return riga.pari
+    ? `${riga.position}° a pari merito${tra}`
+    : `${riga.position}°${tra}`;
 }
 
 /** The text of a row's side of the line, worded for the player. */

@@ -18,6 +18,7 @@ import { toGroupStandings } from "@/lib/punteggi/format";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { leggiDatiParitaTabellone } from "./dati";
 import {
+  categorieParita,
   annuncioOrdine,
   componiMotivo,
   erroriMotivo,
@@ -94,7 +95,7 @@ async function pubblica(dati: DatiParitaGirone | undefined) {
     const classifica = classificaGirone(
       dati.giocatori.map((g) => g.iscrizioneId),
       dati.partite,
-      { decisioni: dati.decisioni },
+      { decisioni: dati.decisioni, categorie: categorieParita(dati) },
     );
     publishGroupStandings(
       toGroupStandings(

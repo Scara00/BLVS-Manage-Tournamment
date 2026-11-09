@@ -63,9 +63,15 @@ export function descriviRisultato(
   return `${a} ${punti.a} – ${punti.b} ${b}`;
 }
 
-/** «Girone A · turno 2», plus the court when one is set. */
+/**
+ * «Girone A · turno 2», plus the court when one is set. On the mixed board
+ * two matches share a turn, so the teams follow.
+ */
 export function descriviPartita(partita: PartitaPunteggio): string {
-  const base = `${partita.gironeNome} · turno ${partita.turno}`;
+  const turno = `${partita.gironeNome} · turno ${partita.turno}`;
+  const { a, b } = coppie(partita);
+  const base =
+    partita.categoria === "X" ? `${turno} · ${a} contro ${b}` : turno;
   return partita.campo ? `${base} · campo ${partita.campo}` : base;
 }
 
@@ -131,6 +137,7 @@ export function toGroupStandings(
     ...board,
     rows: classifica.righe.map((r) => ({
       position: r.posizione,
+      ...(r.categoria ? { category: r.categoria } : {}),
       playerId: r.iscrizioneId,
       pair: nomi.get(r.iscrizioneId) ?? r.iscrizioneId,
       ...(note?.get(r.iscrizioneId) ? { note: note.get(r.iscrizioneId) } : {}),

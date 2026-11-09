@@ -1,4 +1,5 @@
 import { BadgeTu, PuntiProvvisori } from "@/components/classifica-generale";
+import { TRA_CATEGORIA, titoloMisto } from "@/lib/tappe/formato";
 import type { StageStandings } from "@/lib/live/types";
 import {
   FASE_FINALE_LABEL,
@@ -26,8 +27,14 @@ export function LaTuaTappa({
   const pari =
     riga !== undefined &&
     (standings?.rows ?? []).some(
-      (r) => r.playerId !== riga.playerId && r.position === riga.position,
+      (r) =>
+        r.playerId !== riga.playerId &&
+        r.position === riga.position &&
+        r.category === riga.category,
     );
+  const titolo = riga ? titoloMisto(riga) : null;
+  // The mixed board gives no points: the place is what counts.
+  const misto = standings?.category === "X";
 
   return (
     <section
@@ -49,9 +56,19 @@ export function LaTuaTappa({
               <dt className="text-sm text-foreground">Posizione</dt>
               <dd className="font-mono text-3xl font-semibold tabular-nums">
                 {riga.position}ª
+                {riga.category ? (
+                  <span className="ms-space-2 font-sans text-base font-normal">
+                    {TRA_CATEGORIA[riga.category].trim()}
+                  </span>
+                ) : null}
                 {pari ? (
                   <span className="ms-space-2 font-sans text-base font-normal">
                     pari merito
+                  </span>
+                ) : null}
+                {titolo ? (
+                  <span className="ms-space-2 bg-tape px-space-2 font-heading text-base font-semibold text-primary uppercase">
+                    {titolo}
                   </span>
                 ) : null}
               </dd>
@@ -64,29 +81,37 @@ export function LaTuaTappa({
                 </dd>
               </div>
             ) : null}
-            <div className="flex flex-col">
-              <dt className="text-sm text-foreground">Punti</dt>
-              <dd className="flex flex-wrap items-center gap-space-2">
-                <span className="font-mono text-3xl font-semibold tabular-nums">
-                  {riga.points ?? "–"}
-                </span>
-                {provvisori ? <PuntiProvvisori /> : null}
-              </dd>
-            </div>
+            {misto ? null : (
+              <div className="flex flex-col">
+                <dt className="text-sm text-foreground">Punti</dt>
+                <dd className="flex flex-wrap items-center gap-space-2">
+                  <span className="font-mono text-3xl font-semibold tabular-nums">
+                    {riga.points ?? "–"}
+                  </span>
+                  {provvisori ? <PuntiProvvisori /> : null}
+                </dd>
+              </div>
+            )}
           </dl>
           <p className="text-sm" data-testid="la-tua-tappa-punti">
-            {riga.points === null
-              ? "I punti arrivano quando si sa in quale finale giochi."
-              : provvisori
-                ? `${puntiRigaLabel(riga.points, true)}: diventano definitivi quando l'organizzazione chiude il tabellone.`
-                : `${puntiRigaLabel(riga.points, false)}: punti definitivi.`}
-            {riga.points !== null && !riga.definitive
+            {misto
+              ? "Il misto non assegna punti alla classifica generale: conta la posizione."
+              : riga.points === null
+                ? "I punti arrivano quando si sa in quale finale giochi."
+                : provvisori
+                  ? `${puntiRigaLabel(riga.points, true)}: diventano definitivi quando l'organizzazione chiude il tabellone.`
+                  : `${puntiRigaLabel(riga.points, false)}: punti definitivi.`}
+            {(misto || riga.points !== null) && !riga.definitive
               ? " La tua posizione non è ancora definitiva."
               : null}
           </p>
         </>
       ) : finaliIniziate ? (
-        <p>Non sei in finale: 0 punti in questa tappa.</p>
+        <p>
+          {misto
+            ? "Non sei in finale in questa tappa."
+            : "Non sei in finale: 0 punti in questa tappa."}
+        </p>
       ) : (
         <p>
           Le finali non sono ancora iniziate: i tuoi punti arrivano con le

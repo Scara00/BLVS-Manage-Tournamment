@@ -4,11 +4,16 @@
  * admins only), and saves an admin's order for a perfect tie.
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { StatoPartita } from "@/lib/db/types";
+import type {
+  Categoria,
+  CategoriaTabellone,
+  StatoPartita,
+} from "@/lib/db/types";
 import {
   classificaGirone,
   ordineValido,
   paritaPerfette,
+  type CategorieGirone,
   type ClassificaGirone,
   type DecisioneSpareggio,
   type PartitaGirone,
@@ -44,6 +49,19 @@ export type DatiGirone = {
   iscrizioni: string[];
   partite: PartitaGirone[];
   decisioni: DecisioneSpareggio[];
+  /** Mixed board only: men and women are ranked apart. */
+  categorie?: CategorieGirone;
+};
+
+type UnoOMolti<T> = T | T[] | null;
+
+function primo<T>(valore: UnoOMolti<T>): T | null {
+  return Array.isArray(valore) ? (valore[0] ?? null) : valore;
+}
+
+type IscrittoGironeRow = {
+  iscrizione_id: string;
+  iscrizioni: UnoOMolti<{ utenti: UnoOMolti<{ categoria: Categoria | null }> }>;
 };
 
 /** A group's players, matches and stored decisions; null when it's gone. */
@@ -52,10 +70,14 @@ export async function leggiDatiGirone(
   gironeId: string,
 ): Promise<DatiGirone | null> {
   const [girone, iscritti, partite, decisioni] = await Promise.all([
-    supabase.from("gironi").select("id").eq("id", gironeId).maybeSingle(),
+    supabase
+      .from("gironi")
+      .select("id, tabelloni(categoria)")
+      .eq("id", gironeId)
+      .maybeSingle(),
     supabase
       .from("girone_iscrizioni")
-      .select("iscrizione_id")
+      .select("iscrizione_id, iscrizioni(utenti(categoria))")
       .eq("girone_id", gironeId)
       .order("iscrizione_id"),
     supabase
@@ -73,13 +95,29 @@ export async function leggiDatiGirone(
     if (error) throw new Error(`classifica girone: ${error.message}`);
   }
   if (!girone.data) return null;
+  const righe = iscritti.data as IscrittoGironeRow[];
+  const tabellone = primo(
+    (girone.data as { tabelloni: UnoOMolti<{ categoria: CategoriaTabellone }> })
+      .tabelloni,
+  );
   return {
-    iscrizioni: (iscritti.data as { iscrizione_id: string }[]).map(
-      (r) => r.iscrizione_id,
-    ),
+    iscrizioni: righe.map((r) => r.iscrizione_id),
     partite: (partite.data as PartitaGironeRow[]).map(toPartitaGirone),
     decisioni: decisioni.data as DecisioneSpareggio[],
+    ...(tabellone?.categoria === "X"
+      ? { categorie: categorieIscritti(righe) }
+      : {}),
   };
+}
+
+/** The category of each registration (those RLS hides are left out). */
+function categorieIscritti(righe: readonly IscrittoGironeRow[]) {
+  const categorie: Record<string, Categoria> = {};
+  for (const r of righe) {
+    const categoria = primo(primo(r.iscrizioni)?.utenti ?? null)?.categoria;
+    if (categoria) categorie[r.iscrizione_id] = categoria;
+  }
+  return categorie;
 }
 
 /** The standing of `gironeId`, or null when the group doesn't exist. */
@@ -91,6 +129,7 @@ export async function leggiClassificaGirone(
   if (!dati) return null;
   return classificaGirone(dati.iscrizioni, dati.partite, {
     decisioni: dati.decisioni,
+    categorie: dati.categorie,
   });
 }
 
@@ -156,9 +195,12 @@ export async function risolviParitaGirone(
   // tie, not only the open ones.
   const dati = await leggiDatiGirone(supabase, gironeId);
   const parita = dati
-    ? paritaPerfette(dati.iscrizioni, dati.partite).find(
-        (p) => p.firma === firma,
-      )
+    ? paritaPerfette(
+        dati.iscrizioni,
+        dati.partite,
+        undefined,
+        dati.categorie,
+      ).find((p) => p.firma === firma)
     : undefined;
   if (!parita) {
     return {

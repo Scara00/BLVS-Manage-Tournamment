@@ -7,7 +7,11 @@ import {
   DATI_VUOTI,
   type DatiClassificaGenerale,
 } from "@/lib/classifica-generale/dati";
-import type { CategoriaTabellone, FormatoTappa } from "@/lib/db/types";
+import type {
+  CategoriaTabellone,
+  FormatoTappa,
+  StatoTappa,
+} from "@/lib/db/types";
 import {
   classificaTappaDemo,
   getDemoTabelloneLive,
@@ -18,6 +22,7 @@ import type { LiveSync, StageStandings } from "@/lib/live/types";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { now } from "@/lib/time/server-time";
+import { FILTRO_TAPPA_VISIBILE, inProva } from "../prova";
 import type { ClassificaTappa } from "./classifica";
 import { leggiClassificaTappa } from "./dati";
 import {
@@ -51,30 +56,39 @@ type TappaLetta = {
   nome: string;
   stagione: number | null;
   formato: FormatoTappa;
+  /** A «tappa di prova» (a draft only admins see). */
+  prova?: boolean;
 };
 
-/** A non-draft stage, or null (drafts and missing stages look the same). */
+/**
+ * A non-draft stage, or null (drafts and missing stages look the same).
+ * A «tappa di prova» is read too: RLS shows that draft to admins only.
+ */
 async function leggiTappa(tappaId: string): Promise<TappaLetta | null> {
   if (!readSupabaseEnv()) {
     const tappa = getDemoTappaGestione(tappaId);
-    if (!tappa || tappa.row.stato === "bozza") return null;
+    const prova = inProva(tappa?.row ?? { stato: "bozza" });
+    if (!tappa || (tappa.row.stato === "bozza" && !prova)) return null;
     return {
       id: tappa.row.id,
       nome: tappa.row.nome,
       stagione: null,
       formato: "classico",
+      ...(prova ? { prova } : {}),
     };
   }
   if (!isUuid(tappaId)) return null;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("tappe")
-    .select("id, nome, stagione, formato")
+    .select("id, nome, stagione, formato, stato, prova")
     .eq("id", tappaId)
-    .neq("stato", "bozza")
-    .maybeSingle<TappaLetta>();
+    .or(FILTRO_TAPPA_VISIBILE)
+    .maybeSingle<TappaLetta & { stato: StatoTappa }>();
   if (error) throw new Error(`tappa: ${error.message}`);
-  return data;
+  if (!data) return null;
+  const { stato, prova, ...tappa } = data;
+  return inProva({ stato, prova }) ? { ...tappa, prova: true } : tappa;
 }
 
 /**
@@ -91,6 +105,13 @@ async function classificaPerGiocatore(
     return classificaTappaDemo(tappa.id, categoria) ?? VUOTA;
   }
   const supabase = await createClient();
+  // A test draft is not in the overall standing: its finals are read as
+  // the admin reads them (only admins can see the draft).
+  if (tappa.prova) {
+    const classifica =
+      (await leggiClassificaTappa(supabase, tappa.id, categoria)) ?? VUOTA;
+    return senzaPuntiSeMisto(classifica, categoria);
+  }
   const { data, error } = await supabase.rpc("classifica_generale_dati", {
     p_categoria: categoria,
     p_stagione: tappa.stagione,
@@ -98,8 +119,17 @@ async function classificaPerGiocatore(
   if (error) throw new Error(`classifica di tappa: ${error.message}`);
   const dati = (data as DatiClassificaGenerale | null) ?? DATI_VUOTI;
   if (!dati.tappe.some((t) => t.id === tappa.id)) return VUOTA;
-  const { classifica } = classificaTappaDaDati(dati, tappa.id);
-  // The mixed board gives no points to the overall standing.
+  const { classifica } = classificaTappaDaDati(dati, tappa.id, {
+    misto: categoria === "X",
+  });
+  return senzaPuntiSeMisto(classifica, categoria);
+}
+
+/** The mixed board gives no points to the overall standing. */
+function senzaPuntiSeMisto(
+  classifica: ClassificaTappa,
+  categoria: CategoriaTabellone,
+): ClassificaTappa {
   return categoria === "X"
     ? {
         ...classifica,

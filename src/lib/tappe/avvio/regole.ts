@@ -6,7 +6,11 @@ import type {
   StatoTappa,
 } from "@/lib/db/types";
 import { FASE_GIOCO_LABEL, faseDopo } from "@/lib/gironi/fasi/fase";
-import { uominiDonne } from "@/lib/tappe/formato";
+import {
+  GIRONE_MISTO_DIMENSIONE,
+  GIRONE_MISTO_PER_CATEGORIA,
+  uominiDonne,
+} from "@/lib/tappe/formato";
 
 /**
  * Rules for starting the group phase of one board. Mirror of
@@ -28,6 +32,17 @@ export const REGOLA_AVVIO: RegolaAvvio = {
   dimensione: 4,
   ammettiResto: false,
 };
+
+/** A mixed board: groups of 4 men + 4 women (migration 20261108100000). */
+export const REGOLA_AVVIO_MISTA: RegolaAvvio = {
+  ...REGOLA_AVVIO,
+  dimensione: GIRONE_MISTO_DIMENSIONE,
+};
+
+/** The start rule of a board: the mixed one has groups of 8. */
+export function regolaAvvio(categoria?: CategoriaTabellone): RegolaAvvio {
+  return categoria === "X" ? REGOLA_AVVIO_MISTA : REGOLA_AVVIO;
+}
 
 /** The rule keys returned by `controlli_avvio_fase`. */
 export const REGOLE_BLOCCO = [
@@ -62,7 +77,7 @@ export type GiocatoreAvvio = {
   lettera: string;
   nome: string;
   cognome: string;
-  /** The player's category; needed on a mixed board (2 men + 2 women). */
+  /** The player's category; needed on a mixed board (4 men + 4 women). */
   categoria?: Categoria;
 };
 
@@ -82,7 +97,8 @@ export type IscrittoFuori = {
 
 /** What the start screen reads for one board. */
 export type TabelloneAvvio = {
-  tappa: { id: string; nome: string; stato: StatoTappa };
+  /** `stato` is the playing state: a test draft plays as in progress. */
+  tappa: { id: string; nome: string; stato: StatoTappa; prova?: boolean };
   categoria: CategoriaTabellone;
   tabelloneId: string;
   faseGioco: FaseGioco | null;
@@ -122,7 +138,7 @@ function nomeCompleto(g: { nome: string; cognome: string }): string {
 export function controllaAvvio(
   tabellone: Pick<TabelloneAvvio, "gironi" | "nonAssegnati"> &
     Partial<Pick<TabelloneAvvio, "categoria">>,
-  regola: RegolaAvvio = REGOLA_AVVIO,
+  regola: RegolaAvvio = regolaAvvio(tabellone.categoria),
 ): ProblemaAvvio[] {
   const problemi: ProblemaAvvio[] = [];
   const { gironi, nonAssegnati } = tabellone;
@@ -203,13 +219,16 @@ export function controllaAvvio(
   return problemi;
 }
 
-/** The three checks shown on one row: groups of 4, no doubles, all assigned. */
+/** The three checks shown on one row: full groups, no doubles, all assigned. */
 export const CONTROLLI = [
   { chiave: "gironi", label: "Gironi da 4" },
   { chiave: "doppioni", label: "Nessun doppione" },
   { chiave: "assegnati", label: "Tutti gli iscritti assegnati" },
 ] as const;
 export type ChiaveControllo = (typeof CONTROLLI)[number]["chiave"];
+
+/** The label of the group check on a mixed board. */
+const GIRONI_MISTI_LABEL = `Gironi da ${uominiDonne(GIRONE_MISTO_PER_CATEGORIA, GIRONE_MISTO_PER_CATEGORIA)}`;
 
 export function controlloDi(regola: RegolaBlocco): ChiaveControllo {
   switch (regola) {
@@ -234,10 +253,16 @@ export type ControlloView = {
 
 export function controlliView(
   problemi: readonly ProblemaAvvio[],
+  misto = false,
 ): ControlloView[] {
   return CONTROLLI.map(({ chiave, label }) => {
     const n = problemi.filter((p) => controlloDi(p.regola) === chiave).length;
-    return { chiave, label, ok: n === 0, problemi: n };
+    return {
+      chiave,
+      label: misto && chiave === "gironi" ? GIRONI_MISTI_LABEL : label,
+      ok: n === 0,
+      problemi: n,
+    };
   });
 }
 
@@ -278,30 +303,41 @@ export const ROTAZIONE = [
 ] as const;
 
 /**
- * The mixed rotation (men A, B; women C, D): every team is a man and a
- * woman, so only two matches. Same table as `crea_partite_girone`.
+ * The mixed rotation (men A-D, women E-H): 8 matches in 4 turns of 2 played
+ * at the same time; every man partners each woman once. Same table as
+ * `public.rotazione_girone(true)`.
  */
 export const ROTAZIONE_MISTA = [
-  { turno: 1, a: ["A", "C"], b: ["B", "D"] },
-  { turno: 2, a: ["A", "D"], b: ["B", "C"] },
+  { turno: 1, a: ["A", "E"], b: ["B", "F"] },
+  { turno: 1, a: ["C", "G"], b: ["D", "H"] },
+  { turno: 2, a: ["A", "F"], b: ["C", "H"] },
+  { turno: 2, a: ["B", "G"], b: ["D", "E"] },
+  { turno: 3, a: ["A", "G"], b: ["D", "F"] },
+  { turno: 3, a: ["B", "H"], b: ["C", "E"] },
+  { turno: 4, a: ["A", "H"], b: ["B", "E"] },
+  { turno: 4, a: ["C", "F"], b: ["D", "G"] },
 ] as const;
 
 export type PartitaAnteprima = {
+  /** 1, 2, 3…: the match in the group's order (two per turn when mixed). */
+  numero: number;
   turno: number;
   squadraA: GiocatoreAvvio[];
   squadraB: GiocatoreAvvio[];
 };
 
-/** The matches the start will create for one group (none if not of 4). */
+/** The matches the start will create for one group (none if not full). */
 export function partiteGirone(
   girone: GironeAvvio,
   misto = false,
 ): PartitaAnteprima[] {
-  if (girone.giocatori.length !== 4) return [];
+  const dimensione = misto ? GIRONE_MISTO_DIMENSIONE : REGOLA_AVVIO.dimensione;
+  if (girone.giocatori.length !== dimensione) return [];
   const per = new Map(girone.giocatori.map((g) => [g.lettera, g]));
   const prendi = (lettere: readonly string[]) =>
     lettere.map((l) => per.get(l)).filter((g) => g !== undefined);
-  return (misto ? ROTAZIONE_MISTA : ROTAZIONE).map(({ turno, a, b }) => ({
+  return (misto ? ROTAZIONE_MISTA : ROTAZIONE).map(({ turno, a, b }, i) => ({
+    numero: i + 1,
     turno,
     squadraA: prendi(a),
     squadraB: prendi(b),
@@ -329,18 +365,27 @@ export function riepilogoAvvio(
   };
 }
 
-/** Letters A, B, C… in the order `giocatori_girone` uses. */
+const ORDINE_CATEGORIA: Record<Categoria, number> = { M: 0, F: 1 };
+
+/**
+ * Letters A, B, C… in the order `giocatori_girone` uses: on a mixed board
+ * (players with a category) the men first, then the women.
+ */
 export function assegnaLettere<
   T extends {
     nome: string;
     cognome: string;
     posto: number | null;
     iscrizioneId: string;
+    categoria?: Categoria;
   },
 >(giocatori: readonly T[]): (T & { lettera: string })[] {
   return [...giocatori]
     .sort(
       (x, y) =>
+        (x.categoria && y.categoria
+          ? ORDINE_CATEGORIA[x.categoria] - ORDINE_CATEGORIA[y.categoria]
+          : 0) ||
         (x.posto ?? Number.POSITIVE_INFINITY) -
           (y.posto ?? Number.POSITIVE_INFINITY) ||
         x.cognome.localeCompare(y.cognome) ||

@@ -316,16 +316,18 @@ function Titolo({ id, children }: { id: string; children: ReactNode }) {
 /** One group: black header with Gold/Silver mark and «3/4» counter. */
 export function GironeCard({
   girone,
+  dimensione = REGOLA_GIRONI.dimensione,
   drag,
   onElimina,
   extra,
 }: {
   girone: GironeEditor;
+  /** Players of a full group: 8 on a mixed board (4 men + 4 women). */
+  dimensione?: number;
   drag: DragHandlers;
   onElimina: () => void;
   extra?: ReactNode;
 }) {
-  const { dimensione } = REGOLA_GIRONI;
   const n = girone.giocatori.length;
   return (
     <Riquadro

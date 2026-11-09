@@ -18,6 +18,7 @@ import {
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { now } from "@/lib/time/server-time";
+import { FILTRO_TAPPA_VISIBILE, inProva } from "@/lib/tappe/prova";
 import { getLiveBus } from "./bus";
 import { soloTappa, type FasiTabelloni, type LiveMe } from "./tappa";
 import type { GroupStandings, LiveMatch, LiveSync } from "./types";
@@ -147,7 +148,8 @@ export async function readLiveTappa(tappaId: string): Promise<LiveTappa> {
   await connection();
   if (!readSupabaseEnv()) {
     const tappa = getDemoTappaGestione(tappaId);
-    if (!tappa || tappa.row.stato === "bozza") return { status: "notFound" };
+    if (!tappa || (tappa.row.stato === "bozza" && !inProva(tappa.row)))
+      return { status: "notFound" };
     const sync = await readLiveTappaSync(tappaId);
     return {
       status: "ok",
@@ -165,7 +167,7 @@ export async function readLiveTappa(tappaId: string): Promise<LiveTappa> {
       .from("tappe")
       .select("id, nome")
       .eq("id", tappaId)
-      .neq("stato", "bozza")
+      .or(FILTRO_TAPPA_VISIBILE)
       .maybeSingle<{ id: string; nome: string }>(),
     supabase
       .from("tabelloni")

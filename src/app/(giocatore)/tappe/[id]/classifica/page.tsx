@@ -21,7 +21,7 @@ const primo = (v: string | string[] | undefined) =>
 /**
  * Cache Components needs one sample to prerender the shell (AppShell reads
  * the pathname). Other ids render on request; drafts and unknown ids are a
- * real 404 from the proxy (`rewriteTappaNonTrovata`).
+ * real 404 from the proxy (`controllaTappa`).
  */
 export function generateStaticParams() {
   return [{ id: "jesolo" }];

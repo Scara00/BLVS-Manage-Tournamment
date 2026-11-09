@@ -116,6 +116,33 @@ describe("inCampoAdesso", () => {
     ]).map((m) => m.id);
     expect(ids.sort()).toEqual(["a2", "b3"]);
   });
+
+  it("misto: le due partite del turno, in corso o da giocare", () => {
+    const ids = inCampoAdesso([
+      match("x1", { groupId: "x", state: "in_corso", round: 1 }),
+      match("x2", { groupId: "x", state: "in_corso", round: 1 }),
+      match("x3", { groupId: "x", state: "programmata", round: 2 }),
+      match("y3", { groupId: "y", state: "programmata", round: 2 }),
+      match("y4", { groupId: "y", state: "programmata", round: 2 }),
+      match("y5", { groupId: "y", state: "programmata", round: 3 }),
+    ]).map((m) => m.id);
+    expect(ids.sort()).toEqual(["x1", "x2", "y3", "y4"]);
+  });
+
+  it("misto: la mia partita non nasconde l'altra dello stesso turno", () => {
+    const vista = vistaLive(
+      {
+        matches: [
+          match("mia", { casa: [ME, "x2"], round: 1 }),
+          match("accanto", { round: 1, court: "Campo 2" }),
+        ],
+        groups: [],
+      },
+      ME,
+    );
+    expect(vista.mie.map((m) => m.id)).toEqual(["mia"]);
+    expect(vista.inCampo.map((m) => m.id)).toEqual(["accanto"]);
+  });
 });
 
 describe("vistaLive", () => {

@@ -5,16 +5,23 @@ import { useId } from "react";
 import { AvvisoGironi } from "@/components/admin-tappe";
 import { Tape } from "@/components/scoreboard";
 import type { CategoriaTabellone } from "@/lib/db/types";
-import { TABELLONE_NOME } from "@/lib/tappe/formato";
-import { REGOLA_GIRONI, gironiCompleti } from "@/lib/tappe/gironi";
+import { POSTI_MISTO_MULTIPLO, TABELLONE_NOME } from "@/lib/tappe/formato";
+import { gironiCompleti, regolaGironi } from "@/lib/tappe/gironi";
 import { POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
 
-/** A maximum the groups warning applies to (out-of-range is an error). */
-export function postiDaAvvisare(raw: string): number | null {
+/**
+ * A maximum the groups warning applies to (out-of-range, or a mixed one
+ * that is not a multiple of 8, is an error).
+ */
+export function postiDaAvvisare(
+  raw: string,
+  categoria: CategoriaTabellone = "M",
+): number | null {
   if (!/^\d+$/.test(raw.trim())) return null;
   const posti = Number(raw);
   if (posti < POSTI_MIN || posti > POSTI_MAX) return null;
-  return gironiCompleti(posti) ? null : posti;
+  if (categoria === "X" && posti % POSTI_MISTO_MULTIPLO !== 0) return null;
+  return gironiCompleti(posti, regolaGironi(categoria)) ? null : posti;
 }
 
 type GironiPanelProps = {
@@ -41,7 +48,7 @@ export function GironiPanel({
 }: GironiPanelProps) {
   const base = useId();
   const avvisi = Object.fromEntries(
-    categorie.map((c) => [c, postiDaAvvisare(posti[c] ?? "")]),
+    categorie.map((c) => [c, postiDaAvvisare(posti[c] ?? "", c)]),
   ) as Partial<Record<CategoriaTabellone, number | null>>;
   const tuttiCompleti = categorie.every((c) => avvisi[c] === null);
 
@@ -74,8 +81,8 @@ export function GironiPanel({
           posti={avvisi[categoria] ?? null}
           onUsa={(proposta) => onUsa(categoria, proposta)}
           regola={{
-            ...REGOLA_GIRONI,
-            proposte: REGOLA_GIRONI.proposte.filter(
+            ...regolaGironi(categoria),
+            proposte: regolaGironi(categoria).proposte.filter(
               (proposta) => proposta >= (iscritti[categoria] ?? 0),
             ),
           }}

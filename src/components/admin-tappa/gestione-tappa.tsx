@@ -20,6 +20,7 @@ import {
 import type {
   CambioStatoAction,
   CambioStatoState,
+  ProvaAction,
   ScadenzaAction,
 } from "@/lib/tappe/gestione-state";
 import { CambioStato } from "./cambio-stato";
@@ -30,6 +31,7 @@ import { StatoFlusso } from "./stato-flusso";
 import { ArchiviaTappa } from "@/components/admin/archivia-tappa";
 import type { ArchiviaTappaAction } from "@/lib/tappe/annullamento/state";
 import { TabelloniRiepilogo } from "./tabelloni-riepilogo";
+import { TappaDiProva } from "./tappa-di-prova";
 
 export const ADMIN_TAPPE_PATH = "/admin/tappe";
 
@@ -43,6 +45,8 @@ type GestioneTappaProps = {
    * are concluded or the stage is cancelled.
    */
   archivia?: ArchiviaTappaAction;
+  /** «Tappa di prova» on/off (a draft played end to end, unpublished). */
+  impostaProva?: ProvaAction;
   /** Storybook: open the confirmation, force offline, starting state. */
   dialogAperto?: boolean;
   offline?: boolean;
@@ -81,6 +85,7 @@ export function GestioneTappa({
   cambiaStato,
   aggiornaScadenza,
   archivia,
+  impostaProva,
   dialogAperto,
   offline,
   statoIniziale,
@@ -181,6 +186,16 @@ export function GestioneTappa({
 
       <TabelloniRiepilogo tappaId={tappa.id} tabelloni={tappa.tabelloni} />
 
+      {impostaProva ? (
+        <TappaDiProva
+          tappaId={tappa.id}
+          stato={tappa.stato}
+          prova={tappa.prova}
+          action={impostaProva}
+          offline={offline}
+        />
+      ) : null}
+
       {archivia &&
       (tappa.stato === "in_corso" ||
         tappa.stato === "conclusa" ||
@@ -201,11 +216,11 @@ export function GestioneTappa({
 
       <AvvioFaseLinks
         tappaId={tappa.id}
-        stato={tappa.stato}
+        stato={tappa.statoGioco}
         tabelloni={tappa.tabelloni}
       />
 
-      <PunteggiLink tappaId={tappa.id} stato={tappa.stato} />
+      <PunteggiLink tappaId={tappa.id} stato={tappa.statoGioco} />
 
       <Link
         href={ADMIN_TAPPE_PATH}

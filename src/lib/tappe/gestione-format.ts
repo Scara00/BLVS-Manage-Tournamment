@@ -6,6 +6,7 @@ import type {
   StatoTappa,
   Tappa,
 } from "@/lib/db/types";
+import { statoDiGioco } from "@/lib/tappe/prova";
 import { FASE_TABELLONE_LABEL, faseDelTabellone } from "@/lib/gironi/fasi/fase";
 import { formatPeriodoTappa, STATO_TAPPA_LABEL } from "./format";
 import { FORMATO_LABEL, QUOTA_NOME, TABELLONE_LABEL } from "./formato";
@@ -41,10 +42,10 @@ export type TappaGestioneRow = Pick<
   | "chiusura_automatica"
 > &
   // Absent in rows read before the mixed format: a classic stage.
-  Partial<Pick<Tappa, "formato">>;
+  Partial<Pick<Tappa, "formato" | "prova">>;
 
 export const TAPPA_GESTIONE_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, formato";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, iscrizioni_chiuse_il, chiusura_automatica, formato, prova";
 
 /** Per board: registrations by state and the phases of its matches. */
 export type TabelloneRow = {
@@ -107,6 +108,13 @@ export type GestioneTappaView = {
   periodo: string;
   stato: StatoTappa;
   statoLabel: string;
+  /** Tappa di prova: switched on (it acts only while a draft). */
+  prova: boolean;
+  /**
+   * The state the group features check: a test draft plays like a stage
+   * in progress (src/lib/tappe/prova.ts).
+   */
+  statoGioco: StatoTappa;
   formato: FormatoTappa;
   formatoLabel: string;
   flusso: PassoFlusso[];
@@ -314,6 +322,8 @@ export function toGestioneTappaView(
     periodo: formatPeriodoTappa(row.data_inizio, row.data_fine),
     stato: row.stato,
     statoLabel: STATO_TAPPA_LABEL[row.stato],
+    prova: row.prova === true,
+    statoGioco: statoDiGioco(row),
     formato: row.formato ?? "classico",
     formatoLabel: FORMATO_LABEL[row.formato ?? "classico"],
     flusso: flussoDi(row.stato),

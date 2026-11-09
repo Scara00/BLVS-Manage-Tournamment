@@ -1,7 +1,7 @@
 import type { APIRequestContext, BrowserContext, Page } from "@playwright/test";
 
 /**
- * BLVS-56 · the 56 screens of the WCAG 2.2 AA report (docs/a11y-report.md).
+ * BLVS-56 · the 57 screens of the WCAG 2.2 AA report (docs/a11y-report.md).
  * One entry per screen: how the e2e suite reaches it (app route on the demo
  * data, or the Storybook story for dialogs and signed-in states the demo
  * can't show), whether its controls are used courtside, and any axe rule

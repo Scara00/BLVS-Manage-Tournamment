@@ -1,4 +1,4 @@
-import type { CategoriaTabellone } from "@/lib/db/types";
+import type { Categoria, CategoriaTabellone } from "@/lib/db/types";
 import type { CriterioSpareggio } from "@/lib/gironi/classifica";
 
 /** A tied player, by registration (one registration is one player). */
@@ -6,6 +6,8 @@ export type GiocatorePari = {
   iscrizioneId: string;
   /** «Nome Cognome», never truncated. */
   nome: string;
+  /** Mixed board only: men and women are ranked apart. */
+  categoria?: Categoria;
 };
 
 /** One tie-break criterion and the value each tied player has in it. */
@@ -20,8 +22,10 @@ export type CriterioPari = {
 export type ParitaVista = {
   /** `ParitaPerfetta.firma`: the decision applies only while it matches. */
   firma: string;
-  /** 1-based place the tied players share. */
+  /** 1-based place the tied players share (within `categoria` if mixed). */
   posizione: number;
+  /** Mixed board only: the tie is among men or among women. */
+  categoria?: Categoria;
   /** The admin's order when decided, otherwise the standing's order. */
   giocatori: GiocatorePari[];
   criteri: CriterioPari[];

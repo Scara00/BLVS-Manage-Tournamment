@@ -1,4 +1,5 @@
 import "server-only";
+import { POSTI_MISTO_MULTIPLO } from "@/lib/tappe/formato";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { forbidden } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth/session";
@@ -38,7 +39,10 @@ async function iscritti(supabase: SupabaseClient, tabelloneId: string) {
   return Number(data ?? 0);
 }
 
-/** The floor of a mixed board's maximum: twice its fuller half. */
+/**
+ * The floor of a mixed board's maximum: twice its fuller half, up to the
+ * next multiple of 8 (the only maximums a mixed board takes).
+ */
 async function minimoMisto(supabase: SupabaseClient, tabelloneId: string) {
   const quote = await Promise.all(
     (["M", "F"] as const).map(async (categoria) => {
@@ -50,7 +54,8 @@ async function minimoMisto(supabase: SupabaseClient, tabelloneId: string) {
       return Number(data ?? 0);
     }),
   );
-  return 2 * Math.max(...quote);
+  const doppio = 2 * Math.max(...quote);
+  return Math.ceil(doppio / POSTI_MISTO_MULTIPLO) * POSTI_MISTO_MULTIPLO;
 }
 
 /**

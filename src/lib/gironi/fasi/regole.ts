@@ -1,3 +1,5 @@
+import { GIRONE_MISTO_DIMENSIONE } from "@/lib/tappe/formato";
+
 /**
  * How players move on after the initial groups (BLVS-39). Mirror of
  * `public.regola_qualificazione()` and `public.regola_finali()` (migration
@@ -20,3 +22,11 @@ export const REGOLA_QUALIFICAZIONE: RegolaQualificazione = {
 export type RegolaFinali = { giocatori: number };
 
 export const REGOLA_FINALI: RegolaFinali = { giocatori: 4 };
+
+/**
+ * A mixed final is a group of 4 men + 4 women, like every mixed group.
+ * Mirror of `public.genera_finali()` (migration 20261108100000).
+ */
+export const REGOLA_FINALI_MISTA: RegolaFinali = {
+  giocatori: GIRONE_MISTO_DIMENSIONE,
+};

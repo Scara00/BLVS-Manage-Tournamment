@@ -54,25 +54,29 @@ const STATE_ORDER: Record<NonNullable<LiveMatch["state"]>, number> = {
 };
 
 /**
- * What is on court now: a King/Queen group of 4 plays one match at a time,
- * so each group shows its match in progress, or else its next one to play
- * (lowest round). Matches without a state (older publishers) are live.
+ * What is on court now, per group: its matches in progress, or else the
+ * matches of its next turn to play (lowest round). A classic group of 4
+ * plays one match per turn, a mixed group of 4 + 4 two at the same time.
+ * Matches without a state (older publishers) are live.
  */
 export function inCampoAdesso(matches: readonly LiveMatch[]): LiveMatch[] {
-  const perGirone = new Map<string, LiveMatch>();
+  const senzaStato: LiveMatch[] = [];
+  const perGirone = new Map<string, LiveMatch[]>();
   for (const m of matches) {
-    const state = m.state ?? "in_corso";
-    if (state !== "in_corso" && state !== "programmata") continue;
     if (m.state === undefined) {
-      perGirone.set(`${m.groupId}:${m.id}`, m);
+      senzaStato.push(m);
       continue;
     }
-    const current = perGirone.get(m.groupId);
-    if (!current || ordinaMiePartite([m, current])[0] === m) {
-      perGirone.set(m.groupId, m);
-    }
+    if (m.state !== "in_corso" && m.state !== "programmata") continue;
+    perGirone.set(m.groupId, [...(perGirone.get(m.groupId) ?? []), m]);
   }
-  return [...perGirone.values()];
+  const inCampo = [...perGirone.values()].flatMap((delGirone) => {
+    const inCorso = delGirone.filter((m) => m.state === "in_corso");
+    if (inCorso.length > 0) return inCorso;
+    const turno = Math.min(...delGirone.map((m) => m.round ?? 0));
+    return delGirone.filter((m) => (m.round ?? 0) === turno);
+  });
+  return [...senzaStato, ...inCampo];
 }
 
 function byCourt(a: LiveMatch, b: LiveMatch): number {

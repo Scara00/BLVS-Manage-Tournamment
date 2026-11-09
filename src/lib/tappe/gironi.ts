@@ -1,3 +1,9 @@
+import type { CategoriaTabellone } from "@/lib/db/types";
+import {
+  GIRONE_MISTO_DIMENSIONE,
+  GIRONE_MISTO_PER_CATEGORIA,
+} from "@/lib/tappe/formato";
+
 /**
  * Rule for «gironi completi»: every phase splits its players into groups of
  * `dimensione`, and the best `qualificati` of each group move on, until a
@@ -19,6 +25,21 @@ export const REGOLA_GIRONI: RegolaGironi = {
   qualificati: 2,
   proposte: [16, 32],
 };
+
+/**
+ * A mixed board: groups of 4 men + 4 women, the best 2 men and 2 women of
+ * each go to gold (migration 20261108100000_misto_gironi_4_4).
+ */
+export const REGOLA_GIRONI_MISTA: RegolaGironi = {
+  dimensione: GIRONE_MISTO_DIMENSIONE,
+  qualificati: GIRONE_MISTO_PER_CATEGORIA,
+  proposte: [16, 32],
+};
+
+/** The group rule of a board. */
+export function regolaGironi(categoria?: CategoriaTabellone): RegolaGironi {
+  return categoria === "X" ? REGOLA_GIRONI_MISTA : REGOLA_GIRONI;
+}
 
 export type FasiGironi = {
   /** Whether every phase is made only of full groups. */

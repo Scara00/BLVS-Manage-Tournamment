@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { useOnline } from "@/hooks/use-online";
 import { annuncioModifica } from "@/lib/gironi/editor/annunci";
 import { controllaGironi } from "@/lib/gironi/editor/controlli";
+import { regolaGironi } from "@/lib/tappe/gironi";
 import { applicaOperazione } from "@/lib/gironi/editor/operazioni";
 import {
   CATEGORIA_LABEL,
@@ -95,7 +96,8 @@ export function GironiEditor({
   /** Focus to move once «Sposta» has finished closing. */
   const fuocoDopoDialog = useRef<Fuoco | null>(null);
 
-  const esito = controllaGironi(composizione, undefined, {
+  const regola = regolaGironi(categoria);
+  const esito = controllaGironi(composizione, regola, {
     misto: categoria === "X",
   });
   const modificabile = !composizione.bloccata;
@@ -153,7 +155,9 @@ export function GironiEditor({
         switch (r.status) {
           case "ok":
             setComposizione(r.composizione);
-            setAnnuncio(annuncioModifica(prima, r.composizione, operazione));
+            setAnnuncio(
+              annuncioModifica(prima, r.composizione, operazione, categoria),
+            );
             break;
           case "conflict":
           case "bloccata":
@@ -267,6 +271,7 @@ export function GironiEditor({
               <GironeCard
                 key={girone.id}
                 girone={girone}
+                dimensione={regola.dimensione}
                 drag={drag}
                 extra={extraGironi?.[girone.id]}
                 onElimina={() =>
@@ -340,6 +345,7 @@ export function GironiEditor({
 
       <SpostaDialog
         composizione={composizione}
+        dimensione={regola.dimensione}
         open={sposta.open}
         iscrizioneId={sposta.iscrizioneId}
         apertura={sposta.apertura}

@@ -1,4 +1,5 @@
 import type {
+  Categoria,
   CategoriaTabellone,
   FaseGioco,
   FaseGirone,
@@ -46,8 +47,13 @@ export type RigaTabellone = {
   /** Registration id (`iscrizioni.id`). */
   playerId: string;
   name: string;
-  /** 1-based; null while the group has no concluded match. */
+  /**
+   * 1-based; null while the group has no concluded match. On a mixed board
+   * within `category` (1st man, 1st woman).
+   */
   position: number | null;
+  /** Mixed board only: men and women are ranked apart. */
+  category?: Categoria;
   /** In an open perfect tie: shown as «2=». */
   pari: boolean;
   /** BLVS-42: «Ritirato», «Assente in 1 partita». */

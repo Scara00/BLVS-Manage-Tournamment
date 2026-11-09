@@ -5,6 +5,7 @@
  */
 import type { SetPunteggio, StatoPartita } from "@/lib/db/types";
 import {
+  categorieDa,
   classificaGirone,
   type ClassificaGirone,
   type PartitaGirone,
@@ -164,11 +165,20 @@ export function classificaRitiro(
   regola: RegolaRitiro = REGOLA_RITIRO,
 ): { prima: ClassificaGirone; dopo: ClassificaGirone } {
   const iscrizioni = giocatoriGirone(partite).map((g) => g.iscrizioneId);
+  // Mixed board: men and women ranked apart, as everywhere else.
+  const opzioni = partite.some((p) => p.misto)
+    ? {
+        categorie: categorieDa(
+          partite.flatMap((p) => [...p.squadraA, ...p.squadraB]),
+        ),
+      }
+    : {};
   return {
-    prima: classificaGirone(iscrizioni, partite.map(daPartitaLive)),
+    prima: classificaGirone(iscrizioni, partite.map(daPartitaLive), opzioni),
     dopo: classificaGirone(
       iscrizioni,
       partiteDopoRitiro(partite, iscrizioneId, scelte, regola),
+      opzioni,
     ),
   };
 }

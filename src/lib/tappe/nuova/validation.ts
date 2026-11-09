@@ -1,5 +1,5 @@
 import { BodyReader } from "@/lib/api/validation";
-import { isFormatoTappa } from "@/lib/tappe/formato";
+import { POSTI_MISTO_MULTIPLO, isFormatoTappa } from "@/lib/tappe/formato";
 import {
   romeLocalToDate,
   romeStartOfDay,
@@ -86,8 +86,8 @@ export function validaNuovaTappa(
   let postiMisto: number | undefined;
   if (formato === "misto") {
     postiMisto = posti(reader, reader.text("posti", { max: 4 }), "posti");
-    if (postiMisto !== undefined && postiMisto % 2 !== 0) {
-      reader.errors.posti ??= M.postiDispari;
+    if (postiMisto !== undefined && postiMisto % POSTI_MISTO_MULTIPLO !== 0) {
+      reader.errors.posti ??= M.postiMisto;
     }
   } else if (formato === "classico") {
     postiM = posti(reader, reader.text("postiM", { max: 4 }), "postiM");

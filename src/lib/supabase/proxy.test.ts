@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const getClaims = vi.fn();
@@ -61,6 +61,41 @@ describe("updateSession", () => {
     expect(req.cookies.get("sb-auth")?.value).toBe("new-token");
     expect(res.cookies.get("sb-auth")?.value).toBe("new-token");
     expect(res.headers.get("cache-control")).toBe("private, no-store");
+  });
+
+  it("controllaPagina decide dopo il refresh: la risposta sostituisce la pagina e tiene i cookie", async () => {
+    createServerClient.mockImplementation((_url, _key, { cookies }) => ({
+      auth: {
+        getClaims: getClaims.mockImplementation(async () => {
+          cookies.setAll(
+            [{ name: "sb-auth", value: "new-token", options: { path: "/" } }],
+            { "Cache-Control": "private, no-store" },
+          );
+          return { data: { claims: { sub: "u1" } }, error: null };
+        }),
+      },
+    }));
+    const updateSession = await loadUpdateSession();
+    const req = () =>
+      new NextRequest("http://localhost/tappe/x", {
+        headers: { cookie: "sb-auth=old-token" },
+      });
+
+    const controllaPagina = vi.fn(async () =>
+      NextResponse.rewrite(new URL("http://localhost/_tappa-non-trovata")),
+    );
+    const nascosta = await updateSession(req(), { controllaPagina });
+    expect(controllaPagina).toHaveBeenCalledWith(expect.anything(), true);
+    expect(nascosta.headers.get("x-middleware-rewrite")).toBe(
+      "http://localhost/_tappa-non-trovata",
+    );
+    expect(nascosta.cookies.get("sb-auth")?.value).toBe("new-token");
+    expect(nascosta.headers.get("cache-control")).toBe("private, no-store");
+
+    const visibile = await updateSession(req(), {
+      controllaPagina: async () => null,
+    });
+    expect(visibile.headers.get("x-middleware-next")).toBe("1");
   });
 
   it("registra gli errori di refresh ma non quelli di sessione assente", async () => {

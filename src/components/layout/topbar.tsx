@@ -7,7 +7,9 @@ import { TopbarHeight } from "./topbar-height";
 
 /**
  * Black brand bar (banner landmark). Sticky from `md` only: on phones it
- * scrolls away so it never eats the viewport at large text sizes.
+ * scrolls away so it never eats the viewport at large text sizes. It wraps
+ * at every width, so at 200% text nothing is pushed off screen
+ * (`TopbarHeight` follows its real height).
  */
 export function Topbar({
   nav,
@@ -39,7 +41,7 @@ export function Topbar({
       <TopbarHeight />
       <div
         className={cn(
-          "mx-auto flex min-h-(--spacing-space-8) w-full flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:flex-nowrap md:px-inset-lg",
+          "mx-auto flex min-h-(--spacing-space-8) w-full flex-wrap items-center gap-x-space-5 gap-y-space-2 px-inset py-space-2 md:px-inset-lg",
           !fullBleed && "max-w-frame",
         )}
       >

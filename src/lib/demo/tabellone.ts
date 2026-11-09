@@ -6,6 +6,7 @@ import { classificaDemo } from "./punteggi";
 import { getDemoAssenze } from "./ritiri";
 import type { DatiTabellone, GironeDati } from "@/lib/tabellone/dati";
 import { noteAssenze } from "@/lib/ritiri/format";
+import { inProva } from "@/lib/tappe/prova";
 
 /**
  * w-tabellone's data from the in-memory demo stores (no Supabase env):
@@ -15,7 +16,8 @@ import { noteAssenze } from "@/lib/ritiri/format";
  */
 export function getDemoDatiTabellone(tappaId: string): DatiTabellone | null {
   const tappa = getDemoTappaGestione(tappaId);
-  if (!tappa || tappa.row.stato === "bozza") return null;
+  if (!tappa || (tappa.row.stato === "bozza" && !inProva(tappa.row)))
+    return null;
   const nomi = new Map<string, string>();
   const note = new Map<string, string>();
   const gironi: GironeDati[] = [];

@@ -62,14 +62,30 @@ describe("vistaGirone", () => {
       },
       "g1",
     );
-    expect(vista.inCorso?.id).toBe("t2");
+    expect(vista.inCorso.map((m) => m.id)).toEqual(["t2"]);
     expect(vista.altre.map((m) => m.id)).toEqual(["t1", "t3"]);
     expect(vista.standing?.label).toBe("Girone A");
   });
 
-  it("nessuna partita in corso: null", () => {
+  it("misto: le due partite dello stesso turno sono entrambe in evidenza", () => {
+    const vista = vistaGirone(
+      {
+        matches: [
+          match("p3", { round: 2 }),
+          match("p2", { round: 1, state: "in_corso" }),
+          match("p1", { round: 1, state: "in_corso" }),
+        ],
+        groups: [],
+      },
+      "g1",
+    );
+    expect(vista.inCorso.map((m) => m.id)).toEqual(["p1", "p2"]);
+    expect(vista.altre.map((m) => m.id)).toEqual(["p3"]);
+  });
+
+  it("nessuna partita in corso: elenco vuoto", () => {
     const vista = vistaGirone({ matches: [match("t1")], groups: [] }, "g1");
-    expect(vista.inCorso).toBeNull();
+    expect(vista.inCorso).toEqual([]);
     expect(vista.standing).toBeNull();
   });
 });

@@ -92,7 +92,8 @@ export const NUOVA_TAPPA_MESSAGES = {
   dataNonValida: "Data non valida.",
   scadenzaNonValida: "Data e ora non valide.",
   posti: `Inserisci un numero intero tra ${POSTI_MIN} e ${POSTI_MAX}.`,
-  postiDispari: "Nel misto i posti sono pari: metà uomini e metà donne.",
+  postiMisto:
+    "Nel misto i posti sono un multiplo di 8 (8, 16, 24…): gironi da 4 uomini e 4 donne.",
   formato: "Scegli il formato della tappa.",
 } as const;
 

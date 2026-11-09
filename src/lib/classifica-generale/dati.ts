@@ -92,6 +92,8 @@ function nomeCompleto(
 export function classificaTappaDaDati(
   dati: DatiTabellone,
   tappaId: string,
+  /** Mixed board: men and women rank apart (King and Queen). */
+  { misto = false }: { misto?: boolean } = {},
 ): {
   classifica: ClassificaTappa;
   iscrizioni: DatiClassificaGenerale["iscrizioni"];
@@ -100,21 +102,28 @@ export function classificaTappaDaDati(
   const gironi = dati.gironi.filter((g) => g.tappa_id === tappaId);
   const idGironi = new Set(gironi.map((g) => g.id));
   const iscrizioni = dati.iscrizioni.filter((i) => i.tappa_id === tappaId);
-  const finali = toFinaliTappa({
-    gironi,
-    membri: dati.membri.filter((m) => idGironi.has(m.girone_id)),
-    partite: dati.partite.filter(
-      (p) => p.girone_id !== null && idGironi.has(p.girone_id),
-    ),
-    iscrizioni: iscrizioni.map((i) => ({
-      id: i.id,
-      stato: i.stato,
-      utente: i.anonimo
-        ? { nome: NOME_ANONIMO, cognome: "" }
-        : { nome: i.nome, cognome: i.cognome },
-    })),
-    decisioni: dati.decisioni.filter((d) => idGironi.has(d.girone_id)),
-  });
+  const finali = toFinaliTappa(
+    {
+      gironi,
+      membri: dati.membri.filter((m) => idGironi.has(m.girone_id)),
+      partite: dati.partite.filter(
+        (p) => p.girone_id !== null && idGironi.has(p.girone_id),
+      ),
+      iscrizioni: iscrizioni.map((i) => ({
+        id: i.id,
+        stato: i.stato,
+        utente: i.anonimo
+          ? { nome: NOME_ANONIMO, cognome: "" }
+          : {
+              nome: i.nome,
+              cognome: i.cognome,
+              categoria: i.categoria_attuale ?? null,
+            },
+      })),
+      decisioni: dati.decisioni.filter((d) => idGironi.has(d.girone_id)),
+    },
+    { misto },
+  );
   return {
     classifica: classificaTappa({ finali, concluso: tappa?.concluso ?? false }),
     iscrizioni,

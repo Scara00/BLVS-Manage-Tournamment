@@ -24,7 +24,11 @@ import { useToast } from "@/components/ui/toast";
 import type { CategoriaTabellone } from "@/lib/db/types";
 import { useFormDraft } from "@/lib/drafts/use-form-draft";
 import { sessionExpiredHref } from "@/lib/navigation/auth-paths";
-import { TABELLONE_NOME, categorieTabelloni } from "@/lib/tappe/formato";
+import {
+  POSTI_MISTO_MULTIPLO,
+  TABELLONE_NOME,
+  categorieTabelloni,
+} from "@/lib/tappe/formato";
 import { POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
 import { riepilogoTappa } from "@/lib/tappe/modifica/format";
 import {
@@ -196,7 +200,7 @@ export function TappaModificaForm({
   function controllaPosti(categoria: CategoriaTabellone, raw: string) {
     const campo = CAMPO_POSTI_MODIFICA[categoria];
     const errore = errorePosti(raw, iscrittiDi(categoria), {
-      pari: categoria === "X",
+      misto: categoria === "X",
     });
     setErrori((attuali) =>
       errore ? { ...attuali, [campo]: errore } : senza(attuali, campo),
@@ -527,7 +531,7 @@ function PostiField({
   onCommit,
 }: PostiFieldProps) {
   const misto = categoria === "X";
-  const minimo = Math.max(POSTI_MIN, iscritti);
+  const minimo = Math.max(misto ? POSTI_MISTO_MULTIPLO : POSTI_MIN, iscritti);
   const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   useEffect(() => () => clearTimeout(timer.current), []);
 
@@ -544,9 +548,10 @@ function PostiField({
       hint={
         misto ? (
           <>
-            Numero pari: metà posti agli uomini, metà alle donne. Non scende
-            sotto <span className="font-mono">{minimo}</span> (il doppio della
-            metà più piena); al massimo{" "}
+            Multiplo di 8: metà posti agli uomini, metà alle donne, per gironi
+            da 4 uomini e 4 donne. Non scende sotto{" "}
+            <span className="font-mono">{minimo}</span> (gli iscritti della metà
+            più piena, per due); al massimo{" "}
             <span className="font-mono">{POSTI_MAX}</span>.
           </>
         ) : (
@@ -568,7 +573,7 @@ function PostiField({
         inputMode="numeric"
         min={minimo}
         max={POSTI_MAX}
-        step={misto ? 2 : 1}
+        step={misto ? POSTI_MISTO_MULTIPLO : 1}
         defaultValue={defaultValue}
         className="max-w-40 font-mono"
         onInput={(event) => {

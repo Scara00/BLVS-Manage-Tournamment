@@ -12,7 +12,7 @@ import { waitForAnimations } from "./storybook-helpers";
  */
 
 test.describe("inventario", () => {
-  test("56 schermate, id unici, ognuna raggiungibile o in attesa", async ({}, testInfo) => {
+  test("57 schermate, id unici, ognuna raggiungibile o in attesa", async ({}, testInfo) => {
     // The inventory for `npm run a11y:report` (one per project is enough).
     await testInfo.attach("inventario", {
       contentType: "application/json",
@@ -31,7 +31,7 @@ test.describe("inventario", () => {
         ),
       ),
     });
-    expect(SCHERMATE).toHaveLength(56);
+    expect(SCHERMATE).toHaveLength(57);
     const ids = SCHERMATE.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);
     for (const s of SCHERMATE) {

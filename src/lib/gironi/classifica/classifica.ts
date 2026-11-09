@@ -5,7 +5,7 @@
  * The only stored state is the admin's order for a perfect tie
  * (`spareggi_girone`), tied to the tie's `firma`.
  */
-import type { StatoPartita } from "@/lib/db/types";
+import { CATEGORIE, type Categoria, type StatoPartita } from "@/lib/db/types";
 import {
   REGOLA_CLASSIFICA,
   type CriterioSpareggio,
@@ -39,8 +39,13 @@ export type DecisioneSpareggio = {
 };
 
 export type RigaClassifica = StatisticheGiocatore & {
-  /** 1-based; players in an open perfect tie share it. */
+  /**
+   * 1-based; players in an open perfect tie share it. On a mixed board it
+   * counts within `categoria` (1st man, 1st woman…).
+   */
   posizione: number;
+  /** Mixed board only: the player's category, ranked apart. */
+  categoria?: Categoria;
   /**
    * What settled this player's place among those level with them: a
    * criterion, the admin, or null while the tie is open (or when nobody
@@ -54,6 +59,8 @@ export type RigaClassifica = StatisticheGiocatore & {
 export type ParitaPerfetta = {
   /** Tied registrations, in the input order. */
   iscrizioni: string[];
+  /** Mixed board only: a tie is always between players of one category. */
+  categoria?: Categoria;
   /** Fingerprint of the tie; a decision applies only while it matches. */
   firma: string;
   posizione: number;
@@ -249,9 +256,47 @@ function gironeTerminato(partite: readonly PartitaGirone[]): boolean {
   return valide > 0;
 }
 
+/** Player categories by registration id, for a mixed board. */
+export type CategorieGirone = Readonly<Record<string, Categoria>>;
+
+/** The categories of players that carry one (the others are left out). */
+export function categorieDa(
+  giocatori: Iterable<{ iscrizioneId: string; categoria?: Categoria | null }>,
+): CategorieGirone {
+  const categorie: Record<string, Categoria> = {};
+  for (const g of giocatori) {
+    if (g.categoria) categorie[g.iscrizioneId] = g.categoria;
+  }
+  return categorie;
+}
+
+/**
+ * The players ranked together: everyone, or on a mixed board the men, then
+ * the women (the order of the group letters), then anyone without a
+ * category (not expected: they still get a place).
+ */
+function gruppiDaClassificare(
+  stats: readonly StatisticheGiocatore[],
+  categorie: CategorieGirone | undefined,
+): { categoria?: Categoria; giocatori: StatisticheGiocatore[] }[] {
+  if (!categorie) return [{ giocatori: [...stats] }];
+  const gruppi: { categoria?: Categoria; giocatori: StatisticheGiocatore[] }[] =
+    CATEGORIE.map((categoria) => ({
+      categoria,
+      giocatori: stats.filter((s) => categorie[s.iscrizioneId] === categoria),
+    }));
+  gruppi.push({
+    giocatori: stats.filter((s) => !categorie[s.iscrizioneId]),
+  });
+  return gruppi.filter((g) => g.giocatori.length > 0);
+}
+
 /**
  * The standing of one group. `decisioni` are the stored admin orders; one
  * applies only to the tie with the same `firma` and the same players.
+ * With `categorie` (mixed board) men and women are ranked apart, as they
+ * qualify apart: each has places from 1, a tie is only between players of
+ * the same category, and head-to-head counts only among them.
  */
 export function classificaGirone(
   iscrizioni: readonly string[],
@@ -259,55 +304,65 @@ export function classificaGirone(
   {
     regola = REGOLA_CLASSIFICA,
     decisioni = [],
+    categorie,
   }: {
     regola?: RegolaClassifica;
     decisioni?: readonly DecisioneSpareggio[];
+    categorie?: CategorieGirone;
   } = {},
 ): ClassificaGirone {
   const stats = statisticheGirone(iscrizioni, partite);
-  const blocchi = ordina(
-    stats,
-    regola.criteri,
-    partiteValide(partite),
-    0,
-    null,
-  );
+  const valide = partiteValide(partite);
   const perFirma = new Map(decisioni.map((d) => [d.firma, d.ordine]));
 
   const righe: RigaClassifica[] = [];
   const parita: ParitaPerfetta[] = [];
-  for (const blocco of blocchi) {
-    const posizione = righe.length + 1;
-    if (blocco.giocatori.length === 1) {
-      righe.push({
-        ...blocco.giocatori[0],
-        posizione,
-        decisoDa: blocco.decisoDa,
-        daRisolvere: false,
-      });
-      continue;
-    }
-    const firma = firmaParita(blocco.giocatori);
-    const ordine = perFirma.get(firma);
-    if (ordine && ordineValido(ordine, blocco.giocatori)) {
-      const perId = new Map(blocco.giocatori.map((s) => [s.iscrizioneId, s]));
-      ordine.forEach((id, i) => {
+  for (const gruppo of gruppiDaClassificare(stats, categorie)) {
+    const blocchi = ordina(gruppo.giocatori, regola.criteri, valide, 0, null);
+    const inizio = righe.length;
+    const categoria = gruppo.categoria ? { categoria: gruppo.categoria } : {};
+    for (const blocco of blocchi) {
+      const posizione = righe.length - inizio + 1;
+      if (blocco.giocatori.length === 1) {
         righe.push({
-          ...perId.get(id)!,
-          posizione: posizione + i,
-          decisoDa: "admin",
+          ...blocco.giocatori[0],
+          posizione,
+          ...categoria,
+          decisoDa: blocco.decisoDa,
           daRisolvere: false,
         });
+        continue;
+      }
+      const firma = firmaParita(blocco.giocatori);
+      const ordine = perFirma.get(firma);
+      if (ordine && ordineValido(ordine, blocco.giocatori)) {
+        const perId = new Map(blocco.giocatori.map((s) => [s.iscrizioneId, s]));
+        ordine.forEach((id, i) => {
+          righe.push({
+            ...perId.get(id)!,
+            posizione: posizione + i,
+            ...categoria,
+            decisoDa: "admin",
+            daRisolvere: false,
+          });
+        });
+        continue;
+      }
+      parita.push({
+        iscrizioni: blocco.giocatori.map((s) => s.iscrizioneId),
+        ...categoria,
+        firma,
+        posizione,
       });
-      continue;
-    }
-    parita.push({
-      iscrizioni: blocco.giocatori.map((s) => s.iscrizioneId),
-      firma,
-      posizione,
-    });
-    for (const s of blocco.giocatori) {
-      righe.push({ ...s, posizione, decisoDa: null, daRisolvere: true });
+      for (const s of blocco.giocatori) {
+        righe.push({
+          ...s,
+          posizione,
+          ...categoria,
+          decisoDa: null,
+          daRisolvere: true,
+        });
+      }
     }
   }
 
@@ -322,14 +377,16 @@ export function classificaGirone(
 /**
  * Every perfect tie of a group, decided or not: the standing with no admin
  * decision applied. Re-deciding a tie (BLVS-38) looks it up here, since a
- * decided tie no longer appears in `ClassificaGirone.parita`.
+ * decided tie no longer appears in `ClassificaGirone.parita`. Pass the
+ * same `categorie` as the standing (mixed board).
  */
 export function paritaPerfette(
   iscrizioni: readonly string[],
   partite: readonly PartitaGirone[],
   regola: RegolaClassifica = REGOLA_CLASSIFICA,
+  categorie?: CategorieGirone,
 ): ParitaPerfetta[] {
-  return classificaGirone(iscrizioni, partite, { regola }).parita;
+  return classificaGirone(iscrizioni, partite, { regola, categorie }).parita;
 }
 
 /**

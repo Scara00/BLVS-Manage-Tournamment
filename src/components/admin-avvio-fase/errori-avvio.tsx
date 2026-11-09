@@ -5,6 +5,7 @@ import type { CategoriaTabellone } from "@/lib/db/types";
 import { linkProblema } from "@/lib/tappe/avvio/paths";
 import {
   messaggioProblema,
+  regolaAvvio,
   type ProblemaAvvio,
 } from "@/lib/tappe/avvio/regole";
 
@@ -49,7 +50,7 @@ export function ErroriAvvio({
           >
             <span>
               <span className="sr-only">Errore: </span>
-              {messaggioProblema(p)}
+              {messaggioProblema(p, regolaAvvio(categoria))}
             </span>
             <Link
               href={linkProblema(tappaId, categoria, p)}

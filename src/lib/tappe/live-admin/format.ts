@@ -166,10 +166,17 @@ export function partiteInCorso(partite: readonly PartitaLive[]): PartitaLive[] {
   return partite.filter((p) => p.stato === "in_corso").sort(perGironeETurno);
 }
 
-/** «Girone A · turno 2», or «Finale · turno 1» without a group. */
+/**
+ * «Girone A · turno 2», or «Finale · turno 1» without a group. On the
+ * mixed board two matches share a turn, so the teams follow:
+ * «Girone A · turno 2 · Rossi e Bianchi contro Verdi e Neri».
+ */
 export function descriviPartita(partita: PartitaLive): string {
   const dove = partita.gironeNome ?? FASE_PARTITA_LABEL[partita.fase];
-  return `${dove} · turno ${partita.turno}`;
+  const base = `${dove} · turno ${partita.turno}`;
+  return partita.misto
+    ? `${base} · ${squadraLabel(partita.squadraA)} contro ${squadraLabel(partita.squadraB)}`
+    : base;
 }
 
 /** «Rossi e Bianchi». */

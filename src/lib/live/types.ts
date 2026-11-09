@@ -53,7 +53,10 @@ export type LiveMatch = {
 };
 
 export type GroupStandingRow = {
+  /** 1-based; on a mixed board within `category` (1st man, 1st woman). */
   position: number;
+  /** Mixed board only: men and women are ranked apart. */
+  category?: Categoria;
   /** A pair, or one player in King/Queen standings. */
   pair: string;
   /** Registration id of the player (King/Queen standings, BLVS-36). */
@@ -215,8 +218,13 @@ export type StageStandingRow = {
   name: string;
   /** The final the player is in; null while unknown. */
   phase: "gold" | "silver" | null;
-  /** Place in the category standing; tied players share it. */
+  /**
+   * Place in the category standing; tied players share it. On a mixed
+   * board within `category` (1st man = King, 1st woman = Queen).
+   */
   position: number;
+  /** Mixed board only: men and women are ranked apart. */
+  category?: Categoria;
   /** Place inside the final, which sets the points. */
   phasePosition: number;
   /** Points of that place; null while the final's phase is unknown. */

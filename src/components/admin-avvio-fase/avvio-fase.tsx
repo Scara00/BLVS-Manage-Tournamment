@@ -364,6 +364,7 @@ export function AvvioFase({
       <AnteprimaPartite
         anteprima={view.anteprima}
         titolo={view.avviata ? "Partite create" : "Anteprima delle partite"}
+        misto={view.categoria === "X"}
       />
 
       <Link

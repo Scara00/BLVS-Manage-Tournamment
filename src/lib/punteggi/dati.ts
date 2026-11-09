@@ -3,8 +3,10 @@
  * the admin check of `partite_punteggio_tappa` apply). Shared by the pages
  * and the server actions.
  */
+import { inProva, statoDiGioco } from "@/lib/tappe/prova";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  Categoria,
   CategoriaTabellone,
   SetPunteggio,
   StatoPartita,
@@ -17,7 +19,13 @@ import type {
   PartitaPunteggio,
 } from "./types";
 
-type GiocatoreRow = { iscrizione_id: string; nome: string; cognome: string };
+type GiocatoreRow = {
+  iscrizione_id: string;
+  nome: string;
+  cognome: string;
+  /** Since migration 20261108110000. */
+  categoria?: Categoria | null;
+};
 
 export type PartitaPunteggioRow = {
   partita_id: string;
@@ -38,6 +46,7 @@ function giocatore(row: GiocatoreRow): GiocatorePartita {
     iscrizioneId: row.iscrizione_id,
     nome: row.nome,
     cognome: row.cognome,
+    ...(row.categoria ? { categoria: row.categoria } : {}),
   };
 }
 
@@ -100,7 +109,7 @@ export async function leggiPunteggi(
   const [tappa, partite] = await Promise.all([
     supabase
       .from("tappe")
-      .select("id, nome, stato")
+      .select("id, nome, stato, prova")
       .eq("id", tappaId)
       .maybeSingle(),
     supabase.rpc("partite_punteggio_tappa", {
@@ -111,7 +120,12 @@ export async function leggiPunteggi(
   if (tappa.error) throw new Error(`tappa: ${tappa.error.message}`);
   if (partite.error) throw partite.error;
   if (!tappa.data) return null;
-  const row = tappa.data as { id: string; nome: string; stato: StatoTappa };
+  const row = tappa.data as {
+    id: string;
+    nome: string;
+    stato: StatoTappa;
+    prova?: boolean;
+  };
   const lette = (partite.data as PartitaPunteggioRow[]).map(toPartitaPunteggio);
   const inCorso = lette.filter((p) => p.stato === "in_corso").map((p) => p.id);
   let parziali: ParzialeRow[] = [];
@@ -124,7 +138,13 @@ export async function leggiPunteggi(
     parziali = (data ?? []) as ParzialeRow[];
   }
   return {
-    tappa: { id: row.id, nome: row.nome, stato: row.stato },
+    tappa: {
+      id: row.id,
+      nome: row.nome,
+      // A test draft is played like a stage in progress.
+      stato: statoDiGioco(row),
+      ...(inProva(row) ? { prova: true } : {}),
+    },
     partite: conParziali(lette, parziali),
   };
 }

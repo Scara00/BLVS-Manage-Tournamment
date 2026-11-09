@@ -17,9 +17,11 @@ import {
 } from "@/lib/demo/tappa-dettaglio";
 import { demoTappeGiocatore } from "@/lib/demo/tournament";
 import { readProfiloRow } from "@/lib/profilo/read";
+import { getDemoTappaGestione } from "@/lib/demo/gestione-tappe";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { now } from "@/lib/time/server-time";
+import { FILTRO_TAPPA_VISIBILE, inProva, statoDiGioco } from "./prova";
 import {
   DETTAGLIO_TAPPA_COLUMNS,
   iscrizioneAttiva,
@@ -43,12 +45,21 @@ type Lettura = {
 /**
  * Everything the detail needs. A draft or a missing stage throws
  * `notFound()` for everyone: drafts never reach the player pages (RLS
- * hides them from players anyway). Without Supabase env it reads the demo.
+ * hides them from players anyway). The exception is a «tappa di prova»,
+ * which RLS shows to admins only: it reads as a stage in progress.
+ * Without Supabase env it reads the demo.
  */
 async function leggiTappa(id: string): Promise<Lettura> {
   if (!readSupabaseEnv()) {
-    const row = demoDettaglioTappa(id);
-    if (!row || row.stato === "bozza") notFound();
+    const letta = demoDettaglioTappa(id);
+    const prova = inProva({
+      stato: letta?.stato ?? "bozza",
+      prova: getDemoTappaGestione(id)?.row.prova,
+    });
+    if (!letta || (letta.stato === "bozza" && !prova)) notFound();
+    const row = prova
+      ? { ...letta, stato: statoDiGioco({ ...letta, prova }), prova }
+      : letta;
     const giocatore = (await cookies()).get(DEMO_GIOCATORE_COOKIE)?.value;
     const posto = demoPostoPreso(giocatore, id);
     return {
@@ -75,7 +86,7 @@ async function leggiTappa(id: string): Promise<Lettura> {
       .from("tappe")
       .select(DETTAGLIO_TAPPA_COLUMNS)
       .eq("id", id)
-      .neq("stato", "bozza")
+      .or(FILTRO_TAPPA_VISIBILE)
       .maybeSingle<DettaglioTappaRow>(),
     supabase.rpc("tabelloni_tappa", { p_tappa: id }),
   ]);
@@ -118,8 +129,9 @@ async function leggiTappa(id: string): Promise<Lettura> {
     }
   }
 
+  const prova = inProva(tappa.data);
   return {
-    row: tappa.data,
+    row: { ...tappa.data, stato: statoDiGioco(tappa.data), prova },
     tabelloni: tabelloni.data as TabelloneTappaRow[],
     categoria,
     iscrizione,

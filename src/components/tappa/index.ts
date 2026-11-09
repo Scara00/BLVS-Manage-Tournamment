@@ -1,3 +1,4 @@
+export { AvvisoTappaProva } from "./avviso-tappa-prova";
 export { IscrizioneConfermataView } from "./iscrizione-confermata";
 export { PrendiPostoForm, type PrendiPostoAction } from "./prendi-posto-form";
 export { TappaDettaglioView } from "./tappa-dettaglio";

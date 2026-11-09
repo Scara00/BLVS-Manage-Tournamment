@@ -1,5 +1,6 @@
 "use client";
 
+import { CLASSIFICA_CATEGORIA, righePerCategoria } from "@/lib/tappe/formato";
 import { useCallback } from "react";
 import { LiveAnnouncer } from "@/components/live/live-announcer";
 import { LiveBarConnected } from "@/components/live/live-bar";
@@ -121,11 +122,22 @@ function LiveGironeBody({
         >
           In campo adesso
         </h2>
-        <PartitaInEvidenza
-          match={vista.inCorso}
-          me={me}
-          reducedMotion={reducedMotion}
-        />
+        {vista.inCorso.length === 0 ? (
+          <PartitaInEvidenza
+            match={null}
+            me={me}
+            reducedMotion={reducedMotion}
+          />
+        ) : (
+          vista.inCorso.map((match) => (
+            <PartitaInEvidenza
+              key={match.id}
+              match={match}
+              me={me}
+              reducedMotion={reducedMotion}
+            />
+          ))
+        )}
       </section>
 
       <section
@@ -141,13 +153,32 @@ function LiveGironeBody({
           </h2>
           {colore ? <PhaseBadge phase={colore} /> : null}
         </div>
-        <ClassificaGirone
-          label={girone.nome}
-          rows={rows}
-          linea={lineaDiTaglio(girone, rows)}
-          me={me}
-          reducedMotion={reducedMotion}
-        />
+        {righePerCategoria(rows).map(({ categoria, rows: delGruppo }) =>
+          categoria ? (
+            // Mixed board: men and women ranked apart, each with its line.
+            <div key={categoria} className="flex flex-col gap-stack-sm">
+              <h3 className="font-heading text-lg font-semibold">
+                {CLASSIFICA_CATEGORIA[categoria]}
+              </h3>
+              <ClassificaGirone
+                label={`${girone.nome} · ${CLASSIFICA_CATEGORIA[categoria].toLowerCase()}`}
+                rows={delGruppo}
+                linea={lineaDiTaglio(girone, delGruppo)}
+                me={me}
+                reducedMotion={reducedMotion}
+              />
+            </div>
+          ) : (
+            <ClassificaGirone
+              key="tutti"
+              label={girone.nome}
+              rows={delGruppo}
+              linea={lineaDiTaglio(girone, delGruppo)}
+              me={me}
+              reducedMotion={reducedMotion}
+            />
+          ),
+        )}
       </section>
 
       <section

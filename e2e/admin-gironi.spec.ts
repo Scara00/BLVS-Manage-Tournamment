@@ -112,6 +112,8 @@ test("tutto da tastiera: sposta, scambia, aggiungi ed elimina un girone", async 
     dialog.getByRole("radio", { name: /Marco Rossi/ }),
   ).toBeChecked();
   await page.keyboard.press("Enter");
+  // Like the move above: Tab during the fade-out would stay in the dialog.
+  await expect(dialog).toBeHidden();
   await expect(annuncio).toHaveText(/^Scambiati Giulia Bianchi e Marco Rossi/);
   await expect(girone(page, "Girone A")).toContainText("Giulia Bianchi");
   await expect(girone(page, "Girone B")).toContainText("Marco Rossi");

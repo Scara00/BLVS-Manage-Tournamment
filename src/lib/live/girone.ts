@@ -1,5 +1,9 @@
-import type { FaseGirone } from "@/lib/db/types";
-import { REGOLA_FINALI, REGOLA_QUALIFICAZIONE } from "@/lib/gironi/fasi/regole";
+import type { CategoriaTabellone, FaseGirone } from "@/lib/db/types";
+import {
+  REGOLA_FINALI,
+  REGOLA_FINALI_MISTA,
+  REGOLA_QUALIFICAZIONE,
+} from "@/lib/gironi/fasi/regole";
 import { annuncioPartita, mioLato, type LiveMe } from "./tappa";
 import type {
   GroupStandingRow,
@@ -26,12 +30,17 @@ export type GironeInfo = {
    * `REGOLA_FINALI.giocatori / n` players to the final.
    */
   gironiDellaFase: number;
+  /** The board: on the mixed one men and women are ranked apart. */
+  categoria?: CategoriaTabellone;
 };
 
 export type VistaGirone = {
   standing: GroupStandings | null;
-  /** The match being played now, or null. */
-  inCorso: LiveMatch | null;
+  /**
+   * The matches being played now: none, one, or two at once in a mixed
+   * group of 4 + 4.
+   */
+  inCorso: LiveMatch[];
   /** Every other match of the group, by round. */
   altre: LiveMatch[];
 };
@@ -48,12 +57,12 @@ export function vistaGirone(
   const partite = data.matches
     .filter((m) => m.groupId === gironeId)
     .sort(byRound);
-  // A King/Queen group plays one match at a time.
-  const inCorso = partite.find((m) => m.state === "in_corso") ?? null;
+  // A classic group plays one match at a time, a mixed one two per turn.
+  const inCorso = partite.filter((m) => m.state === "in_corso");
   return {
     standing: data.groups.find((g) => g.id === gironeId) ?? null,
     inCorso,
-    altre: partite.filter((m) => m !== inCorso),
+    altre: partite.filter((m) => !inCorso.includes(m)),
   };
 }
 
@@ -89,12 +98,18 @@ export function etichettaFascia(fascia: FasciaTaglio): string {
  * The cut line of a group (R-39): initial groups split gold from silver
  * (`REGOLA_QUALIFICAZIONE`); a gold or silver group marks the places that
  * reach its final (`REGOLA_FINALI`, top 4/n of n groups). Finals have no
- * line. Null when there is nothing to split.
+ * line. Null when there is nothing to split. On a mixed board pass the
+ * rows of one category: the line is per category (the best 2 men and 2
+ * women to gold, 4/n of each to the final).
  */
 export function lineaDiTaglio(
-  girone: Pick<GironeInfo, "fase" | "gironiDellaFase">,
+  girone: Pick<GironeInfo, "fase" | "gironiDellaFase" | "categoria">,
   rows: readonly Pick<GroupStandingRow, "position">[],
 ): LineaDiTaglio | null {
+  const finale =
+    girone.categoria === "X"
+      ? REGOLA_FINALI_MISTA.giocatori / 2
+      : REGOLA_FINALI.giocatori;
   let dopo: number;
   let sopra: FasciaTaglio;
   let sotto: FasciaTaglio | null;
@@ -105,8 +120,8 @@ export function lineaDiTaglio(
     sotto = REGOLA_QUALIFICAZIONE.silver.length > 0 ? SILVER : null;
   } else if (girone.fase === "gold" || girone.fase === "silver") {
     const n = Math.max(1, girone.gironiDellaFase);
-    if (REGOLA_FINALI.giocatori % n !== 0) return null;
-    dopo = REGOLA_FINALI.giocatori / n;
+    if (finale % n !== 0) return null;
+    dopo = finale / n;
     sopra = girone.fase === "gold" ? FINALE_GOLD : FINALE_SILVER;
     sotto = null;
   } else {

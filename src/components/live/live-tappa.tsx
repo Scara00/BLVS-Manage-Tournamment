@@ -1,5 +1,6 @@
 "use client";
 
+import { CLASSIFICA_CATEGORIA, righePerCategoria } from "@/lib/tappe/formato";
 import { AlertCircleIcon } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useRef } from "react";
@@ -380,19 +381,36 @@ export function MioGirone({
         data-testid="live-mio-girone"
         className="[&_[data-mia=true]]:bg-tape-soft [&_dt]:text-foreground"
       >
-        <ResponsiveTable
-          caption={`Classifica ${group.label}`}
-          captionHidden
-          columns={columns}
-          rows={group.rows}
-          getRowKey={(row) => row.playerId ?? row.pair}
-          rowAttributes={(row) => ({
-            ...liveRowAttributes(row.playerId ?? row.pair, row),
-            ...(row.playerId === me ? { "data-mia": "true" } : {}),
-          })}
-          cardBadgeKey="position"
-          emptyMessage="Nessun giocatore nel girone."
-        />
+        {righePerCategoria(group.rows).map(({ categoria, rows }) => (
+          // Mixed board: men and women ranked apart, one table each.
+          <div
+            key={categoria ?? "tutti"}
+            className="flex flex-col gap-space-2 [&+&]:mt-stack"
+          >
+            {categoria ? (
+              <h3 className="font-heading text-lg font-semibold">
+                {CLASSIFICA_CATEGORIA[categoria]}
+              </h3>
+            ) : null}
+            <ResponsiveTable
+              caption={
+                categoria
+                  ? `Classifica ${group.label} · ${CLASSIFICA_CATEGORIA[categoria].toLowerCase()}`
+                  : `Classifica ${group.label}`
+              }
+              captionHidden
+              columns={columns}
+              rows={rows}
+              getRowKey={(row) => row.playerId ?? row.pair}
+              rowAttributes={(row) => ({
+                ...liveRowAttributes(row.playerId ?? row.pair, row),
+                ...(row.playerId === me ? { "data-mia": "true" } : {}),
+              })}
+              cardBadgeKey="position"
+              emptyMessage="Nessun giocatore nel girone."
+            />
+          </div>
+        ))}
       </div>
       <p>
         <Link

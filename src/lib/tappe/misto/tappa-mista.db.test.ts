@@ -115,7 +115,7 @@ describe("tappa mista: creazione e formato", () => {
     expect(tabelloni.rows).toEqual([{ categoria: "X", posti: 32 }]);
   });
 
-  it("rifiuta un massimo dispari o fuori intervallo", async () => {
+  it("rifiuta un massimo che non è un multiplo di 8 o fuori intervallo", async () => {
     const chiama = (posti: number) =>
       comeAdmin(() =>
         db.query(
@@ -123,9 +123,10 @@ describe("tappa mista: creazione e formato", () => {
           [posti],
         ),
       );
-    expect((await errore(chiama(15))).hint).toBe("posti_dispari");
-    expect((await errore(chiama(2))).hint).toBe("posti");
-    expect((await errore(chiama(258))).hint).toBe("posti");
+    expect((await errore(chiama(12))).hint).toBe("posti_misto");
+    expect((await errore(chiama(15))).hint).toBe("posti_misto");
+    expect((await errore(chiama(4))).hint).toBe("posti");
+    expect((await errore(chiama(264))).hint).toBe("posti");
   });
 
   it("solo un admin crea una tappa mista", async () => {
@@ -177,20 +178,25 @@ describe("tappa mista: creazione e formato", () => {
 
 describe("tappa mista: iscrizioni con metà posti per categoria", () => {
   it("uomini e donne entrano nello stesso tabellone, ognuno nella sua metà", async () => {
-    const tappa = await createMixedStage(4);
+    const tappa = await createMixedStage(8);
     const [tabellone] = await tabelloneDi(tappa);
 
-    const m1 = await iscriviti(await createPlayer("M"), tappa);
-    const m2 = await iscriviti(await createPlayer("M"), tappa);
-    const m3 = await iscriviti(await createPlayer("M"), tappa);
+    const uomini = [];
+    for (let i = 0; i < 5; i++) {
+      uomini.push(await iscriviti(await createPlayer("M"), tappa));
+    }
     const f1 = await iscriviti(await createPlayer("F"), tappa);
 
-    expect(m1).toMatchObject({ ok: true, row: { posto: 1 } });
-    expect(m2).toMatchObject({ ok: true, row: { posto: 2 } });
-    expect(m3).toMatchObject({ ok: false, error: { hint: "posti_esauriti" } });
+    expect(uomini.slice(0, 4).map((r) => r.ok && r.row.posto)).toEqual([
+      1, 2, 3, 4,
+    ]);
+    expect(uomini[4]).toMatchObject({
+      ok: false,
+      error: { hint: "posti_esauriti" },
+    });
     expect(f1).toMatchObject({
       ok: true,
-      row: { posto: 3, tabellone_id: tabellone.id },
+      row: { posto: 5, tabellone_id: tabellone.id },
     });
   });
 
@@ -224,24 +230,24 @@ describe("tappa mista: iscrizioni con metà posti per categoria", () => {
   });
 
   it("una metà piena non ha più un prossimo posto", async () => {
-    const tappa = await createMixedStage(4);
-    await iscriviti(await createPlayer("F"), tappa);
-    await iscriviti(await createPlayer("F"), tappa);
+    const tappa = await createMixedStage(8);
+    for (let i = 0; i < 4; i++) {
+      await iscriviti(await createPlayer("F"), tappa);
+    }
     const { rows } = await db.query<{
       categoria: string;
       prossimo_posto: number | null;
     }>("select categoria, prossimo_posto from tabelloni_tappa($1)", [tappa]);
     expect(rows).toEqual([
-      { categoria: "M", prossimo_posto: 3 },
+      { categoria: "M", prossimo_posto: 5 },
       { categoria: "F", prossimo_posto: null },
     ]);
   });
 
   it("l'admin iscrive nel misto rispettando la metà della categoria", async () => {
-    const tappa = await createMixedStage(4);
-    const f1 = await createPlayer("F");
-    const f2 = await createPlayer("F");
-    const f3 = await createPlayer("F");
+    const tappa = await createMixedStage(8);
+    const donne = [];
+    for (let i = 0; i < 5; i++) donne.push(await createPlayer("F"));
     const iscrivi = (utente: string) =>
       comeAdmin(() =>
         db.query("select * from admin_iscrivi_giocatore($1, $2)", [
@@ -249,31 +255,31 @@ describe("tappa mista: iscrizioni con metà posti per categoria", () => {
           utente,
         ]),
       );
-    await iscrivi(f1);
-    await iscrivi(f2);
-    expect((await errore(iscrivi(f3))).hint).toBe("posti_esauriti");
+    for (const donna of donne.slice(0, 4)) await iscrivi(donna);
+    expect((await errore(iscrivi(donne[4]))).hint).toBe("posti_esauriti");
     await iscrivi(await createPlayer("M"));
   });
 
-  it("il massimo resta pari e non scende sotto la metà più piena", async () => {
-    const tappa = await createMixedStage(8);
-    for (let i = 0; i < 3; i++) await registerConfirmed(tappa, "M");
+  it("il massimo resta un multiplo di 8 e non scende sotto la metà più piena", async () => {
+    const tappa = await createMixedStage(16);
+    for (let i = 0; i < 5; i++) await registerConfirmed(tappa, "M");
     await registerConfirmed(tappa, "F");
     const cambia = (posti: number) =>
       db.query("update tabelloni set posti = $2 where tappa_id = $1", [
         tappa,
         posti,
       ]);
-    expect((await errore(cambia(7))).hint).toBe("posti_dispari");
-    const sotto = await errore(cambia(4));
+    expect((await errore(cambia(12))).hint).toBe("posti_misto");
+    const sotto = await errore(cambia(8));
     expect(sotto.hint).toBe("posti_sotto_iscritti");
-    await cambia(6);
+    await cambia(24);
   });
 });
 
-describe("tappa mista: gironi 2 uomini + 2 donne", () => {
+describe("tappa mista: gironi 4 uomini + 4 donne", () => {
   type Riga = {
     girone: string;
+    partita: string;
     turno: number;
     squadra: "A" | "B";
     categoria: "M" | "F";
@@ -282,8 +288,8 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
 
   async function partite(tappa: string) {
     const { rows } = await db.query<Riga>(
-      `select g.id as girone, p.turno, pg.squadra, u.categoria,
-              pg.iscrizione_id as iscrizione
+      `select g.id as girone, p.id as partita, p.turno, pg.squadra,
+              u.categoria, pg.iscrizione_id as iscrizione
        from gironi g
        join tabelloni tb on tb.id = g.tabellone_id
        join partite p on p.girone_id = g.id
@@ -291,47 +297,60 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
        join iscrizioni i on i.id = pg.iscrizione_id
        join utenti u on u.id = i.utente_id
        where tb.tappa_id = $1
-       order by g.posizione, p.turno, pg.squadra`,
+       order by g.posizione, p.turno, p.id, pg.squadra`,
       [tappa],
     );
     return rows;
   }
 
-  function verificaMiste(righe: Riga[]) {
-    const squadre = new Map<string, string[]>();
+  function per<T>(righe: readonly T[], chiave: (r: T) => string) {
+    const mappa = new Map<string, T[]>();
     for (const r of righe) {
-      const chiave = `${r.girone}:${r.turno}:${r.squadra}`;
-      squadre.set(chiave, [...(squadre.get(chiave) ?? []), r.categoria]);
+      mappa.set(chiave(r), [...(mappa.get(chiave(r)) ?? []), r]);
     }
-    for (const categorie of squadre.values()) {
-      expect(categorie.sort()).toEqual(["F", "M"]);
-    }
-    // Ognuno fa coppia con ciascuno dell'altra categoria del girone.
-    const compagni = new Map<string, Set<string>>();
-    const perSquadra = new Map<string, Riga[]>();
-    for (const r of righe) {
-      const chiave = `${r.girone}:${r.turno}:${r.squadra}`;
-      perSquadra.set(chiave, [...(perSquadra.get(chiave) ?? []), r]);
-    }
-    for (const [a, b] of perSquadra.values()) {
-      compagni.set(
-        a.iscrizione,
-        (compagni.get(a.iscrizione) ?? new Set()).add(b.iscrizione),
-      );
-      compagni.set(
-        b.iscrizione,
-        (compagni.get(b.iscrizione) ?? new Set()).add(a.iscrizione),
-      );
-    }
-    for (const set of compagni.values()) expect(set.size).toBe(2);
+    return mappa;
   }
 
-  it("genera_gironi: gironi 2+2, due partite con coppie miste, esclusi segnalati", async () => {
-    const tappa = await createMixedStage(16, "iscrizioni_chiuse");
-    for (let i = 0; i < 5; i++) await registerConfirmed(tappa, "M");
-    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "F");
+  /**
+   * Every group: 8 matches in turni 1-4, two per turno; every team one man
+   * and one woman; every player on court once per turno (4 matches), with
+   * each player of the other category of the group as partner once.
+   */
+  function verificaRotazione(righe: Riga[]) {
+    for (const delGirone of per(righe, (r) => r.girone).values()) {
+      const perPartita = per(delGirone, (r) => r.partita);
+      expect(perPartita.size).toBe(8);
+      const turni = per([...perPartita.values()], (p) => String(p[0].turno));
+      expect([...turni.keys()].sort()).toEqual(["1", "2", "3", "4"]);
+      for (const partiteTurno of turni.values()) {
+        expect(partiteTurno).toHaveLength(2);
+        const inCampo = partiteTurno.flat().map((r) => r.iscrizione);
+        expect(new Set(inCampo).size).toBe(8);
+      }
 
-    const { rows } = await comeAdmin(() =>
+      const compagni = new Map<string, Set<string>>();
+      for (const squadra of per(
+        delGirone,
+        (r) => `${r.partita}:${r.squadra}`,
+      ).values()) {
+        expect(squadra.map((r) => r.categoria).sort()).toEqual(["F", "M"]);
+        const [a, b] = squadra;
+        compagni.set(
+          a.iscrizione,
+          (compagni.get(a.iscrizione) ?? new Set()).add(b.iscrizione),
+        );
+        compagni.set(
+          b.iscrizione,
+          (compagni.get(b.iscrizione) ?? new Set()).add(a.iscrizione),
+        );
+      }
+      expect(compagni.size).toBe(8);
+      for (const set of compagni.values()) expect(set.size).toBe(4);
+    }
+  }
+
+  async function genera(tappa: string) {
+    return comeAdmin(() =>
       db.query<{
         categoria: string;
         gironi: number;
@@ -339,8 +358,16 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
         esclusi: unknown[];
       }>("select * from genera_gironi($1)", [tappa]),
     );
+  }
+
+  it("genera_gironi: gironi 4+4, 8 partite in 4 turni, esclusi segnalati", async () => {
+    const tappa = await createMixedStage(16, "iscrizioni_chiuse");
+    for (let i = 0; i < 9; i++) await registerConfirmed(tappa, "M");
+    for (let i = 0; i < 8; i++) await registerConfirmed(tappa, "F");
+
+    const { rows } = await genera(tappa);
     expect(rows).toHaveLength(1);
-    expect(rows[0]).toMatchObject({ categoria: "X", gironi: 2, partite: 4 });
+    expect(rows[0]).toMatchObject({ categoria: "X", gironi: 2, partite: 16 });
     expect(rows[0].esclusi).toHaveLength(1);
 
     const composizione = await db.query<{ m: number; f: number }>(
@@ -356,22 +383,29 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
       [tappa],
     );
     expect(composizione.rows).toEqual([
-      { m: 2, f: 2 },
-      { m: 2, f: 2 },
+      { m: 4, f: 4 },
+      { m: 4, f: 4 },
     ]);
     const righe = await partite(tappa);
-    expect(righe).toHaveLength(2 * 2 * 4);
-    verificaMiste(righe);
+    expect(righe).toHaveLength(2 * 8 * 4);
+    verificaRotazione(righe);
   });
 
-  it("giocatori_girone mette prima gli uomini", async () => {
+  it("con meno di 4 uomini o 4 donne non nasce nessun girone", async () => {
+    const tappa = await createMixedStage(16, "iscrizioni_chiuse");
+    for (let i = 0; i < 3; i++) await registerConfirmed(tappa, "M");
+    for (let i = 0; i < 8; i++) await registerConfirmed(tappa, "F");
+    const { rows } = await genera(tappa);
+    expect(rows[0]).toMatchObject({ gironi: 0, partite: 0 });
+    expect(rows[0].esclusi).toHaveLength(11);
+  });
+
+  it("giocatori_girone mette prima i 4 uomini (A-D), poi le 4 donne (E-H)", async () => {
     const tappa = await createMixedStage(8, "iscrizioni_chiuse");
-    // Le donne prendono i posti più bassi: l'ordine resta comunque M, M, F, F.
-    await registerConfirmed(tappa, "F");
-    await registerConfirmed(tappa, "F");
-    await registerConfirmed(tappa, "M");
-    await registerConfirmed(tappa, "M");
-    await comeAdmin(() => db.query("select * from genera_gironi($1)", [tappa]));
+    // Le donne prendono i posti più bassi: l'ordine resta comunque M, poi F.
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "F");
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "M");
+    await genera(tappa);
     const { rows } = await comeAdmin(() =>
       db.query<{ lettera: string; categoria: string }>(
         `select gg.lettera, gg.categoria
@@ -382,32 +416,19 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
         [tappa],
       ),
     );
-    expect(rows).toEqual([
-      { lettera: "A", categoria: "M" },
-      { lettera: "B", categoria: "M" },
-      { lettera: "C", categoria: "F" },
-      { lettera: "D", categoria: "F" },
-    ]);
+    expect(rows.map((r) => `${r.lettera}${r.categoria}`).join(" ")).toBe(
+      "AM BM CM DM EF FF GF HF",
+    );
   });
 
-  it("avvia_fase crea 2 partite per girone e blocca un girone non 2+2", async () => {
-    const tappa = await createMixedStage(8, "iscrizioni_chiuse");
-    const m = [
-      await registerConfirmed(tappa, "M"),
-      await registerConfirmed(tappa, "M"),
-      await registerConfirmed(tappa, "M"),
-      await registerConfirmed(tappa, "M"),
-    ];
-    const f = [
-      await registerConfirmed(tappa, "F"),
-      await registerConfirmed(tappa, "F"),
-      await registerConfirmed(tappa, "F"),
-      await registerConfirmed(tappa, "F"),
-    ];
+  it("avvia_fase crea 8 partite per girone e blocca un girone non 4+4", async () => {
+    const tappa = await createMixedStage(16, "iscrizioni_chiuse");
+    for (let i = 0; i < 8; i++) await registerConfirmed(tappa, "M");
+    for (let i = 0; i < 8; i++) await registerConfirmed(tappa, "F");
     const [tabellone] = await tabelloneDi(tappa);
-    await comeAdmin(() => db.query("select * from genera_gironi($1)", [tappa]));
+    await genera(tappa);
 
-    // Scambio a mano: un girone con 3 uomini e 1 donna.
+    // Scambio a mano: un girone con 5 uomini e 3 donne.
     const gironi = await db.query<{ id: string }>(
       "select id from gironi where tabellone_id = $1 order by posizione",
       [tabellone.id],
@@ -425,14 +446,13 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
       ).rows;
     const uomo2 = (await membri(g2)).find((r) => r.categoria === "M")!;
     const donna1 = (await membri(g1)).find((r) => r.categoria === "F")!;
-    await db.query(
-      "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [g1, uomo2.iscrizione_id],
-    );
-    await db.query(
-      "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [g2, donna1.iscrizione_id],
-    );
+    const sposta = (girone: string, iscrizione: string) =>
+      db.query(
+        "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
+        [girone, iscrizione],
+      );
+    await sposta(g1, uomo2.iscrizione_id);
+    await sposta(g2, donna1.iscrizione_id);
 
     const controlli = await comeAdmin(() =>
       db.query<{ regola: string; dettaglio: string }>(
@@ -441,32 +461,105 @@ describe("tappa mista: gironi 2 uomini + 2 donne", () => {
       ),
     );
     expect(controlli.rows).toEqual([
-      { regola: "girone_non_misto", dettaglio: "3:1" },
-      { regola: "girone_non_misto", dettaglio: "1:3" },
+      { regola: "girone_non_misto", dettaglio: "5:3" },
+      { regola: "girone_non_misto", dettaglio: "3:5" },
     ]);
     const bloccato = await errore(
       comeAdmin(() => db.query("select * from avvia_fase($1)", [tabellone.id])),
     );
     expect(bloccato.hint).toBe("avvio_bloccato");
 
-    // Rimesso a posto, la fase parte con 2 partite per girone.
-    await db.query(
-      "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [g2, uomo2.iscrizione_id],
-    );
-    await db.query(
-      "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [g1, donna1.iscrizione_id],
-    );
+    // Rimesso a posto, la fase parte con 8 partite per girone.
+    await sposta(g2, uomo2.iscrizione_id);
+    await sposta(g1, donna1.iscrizione_id);
     const avviate = await comeAdmin(() =>
       db.query<{ turno: number }>("select * from avvia_fase($1)", [
         tabellone.id,
       ]),
     );
-    expect(avviate.rows.map((r) => r.turno)).toEqual([1, 2, 1, 2]);
-    verificaMiste(await partite(tappa));
-    expect(m).toHaveLength(4);
-    expect(f).toHaveLength(4);
+    const turniGirone = [1, 1, 2, 2, 3, 3, 4, 4];
+    expect(avviate.rows.map((r) => r.turno)).toEqual([
+      ...turniGirone,
+      ...turniGirone,
+    ]);
+    verificaRotazione(await partite(tappa));
+  });
+
+  it("un girone da 4 non basta più nel misto", async () => {
+    const tappa = await createMixedStage(8, "iscrizioni_chiuse");
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "M");
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "F");
+    const [tabellone] = await tabelloneDi(tappa);
+    await genera(tappa);
+    const [girone] = (
+      await db.query<{ id: string }>(
+        "select id from gironi where tabellone_id = $1",
+        [tabellone.id],
+      )
+    ).rows;
+    await db.query(
+      `delete from girone_iscrizioni where iscrizione_id in (
+         select iscrizione_id from girone_iscrizioni gi
+         join iscrizioni i on i.id = gi.iscrizione_id
+         join utenti u on u.id = i.utente_id
+         where gi.girone_id = $1 and u.categoria = 'M' limit 2
+       )`,
+      [girone.id],
+    );
+    await db.query(
+      `delete from girone_iscrizioni where iscrizione_id in (
+         select iscrizione_id from girone_iscrizioni gi
+         join iscrizioni i on i.id = gi.iscrizione_id
+         join utenti u on u.id = i.utente_id
+         where gi.girone_id = $1 and u.categoria = 'F' limit 2
+       )`,
+      [girone.id],
+    );
+    const controlli = await comeAdmin(() =>
+      db.query<{ regola: string; dettaglio: string | null }>(
+        "select regola, dettaglio from controlli_avvio_fase($1) where regola = 'girone_non_da_4'",
+        [tabellone.id],
+      ),
+    );
+    expect(controlli.rows).toEqual([
+      { regola: "girone_non_da_4", dettaglio: "4" },
+    ]);
+  });
+
+  it("il girone classico resta da 4 con 3 partite, una per turno", async () => {
+    const { rows: tappe } = await db.query<{ id: string }>(
+      `insert into tappe (nome, luogo, data_inizio, data_fine, stato,
+         iscrizioni_chiudono_il)
+       values ('Classica', 'Spiaggia', '2099-06-10', '2099-06-10',
+         'iscrizioni_chiuse', '2099-06-01 23:59+02')
+       returning id`,
+    );
+    const tappa = tappe[0].id;
+    for (let i = 0; i < 4; i++) {
+      const utente = await createPlayer("M");
+      await db.query(
+        `insert into iscrizioni (tappa_id, tabellone_id, utente_id, stato)
+         select $1, id, $2, 'confermata' from tabelloni
+         where tappa_id = $1 and categoria = 'M'`,
+        [tappa, utente],
+      );
+    }
+    await genera(tappa);
+    const { rows } = await db.query<{ turno: number; giocatori: number }>(
+      `select p.turno, count(pg.*)::int as giocatori
+       from partite p
+       join tabelloni tb on tb.id = p.tabellone_id
+       join partita_giocatori pg on pg.partita_id = p.id
+       where tb.tappa_id = $1
+       group by p.id, p.turno
+       order by p.turno`,
+      [tappa],
+    );
+    expect(rows).toEqual([
+      { turno: 1, giocatori: 4 },
+      { turno: 2, giocatori: 4 },
+      { turno: 3, giocatori: 4 },
+    ]);
   });
 });
 
@@ -484,9 +577,8 @@ describe("tappa mista: fuori dalla classifica generale", () => {
 describe("tappa mista: editor e finali", () => {
   it("gironi_editor dà la categoria dei giocatori solo nel misto", async () => {
     const tappa = await createMixedStage(8, "iscrizioni_chiuse");
-    for (const c of ["M", "M", "F", "F"] as const) {
-      await registerConfirmed(tappa, c);
-    }
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "M");
+    for (let i = 0; i < 4; i++) await registerConfirmed(tappa, "F");
     const [tabellone] = await tabelloneDi(tappa);
     await comeAdmin(() => db.query("select * from genera_gironi($1)", [tappa]));
     const { rows } = await comeAdmin(() =>
@@ -496,23 +588,23 @@ describe("tappa mista: editor e finali", () => {
     );
     expect(
       rows[0].e.gironi[0].giocatori.map((g) => g.categoria).sort(),
-    ).toEqual(["F", "F", "M", "M"]);
+    ).toEqual(["F", "F", "F", "F", "M", "M", "M", "M"]);
   });
 
-  it("genera_finali vuole finali da 2 uomini + 2 donne e crea 2 partite", async () => {
-    const tappa = await createMixedStage(8, "in_corso");
+  it("genera_finali vuole finali da 4 uomini + 4 donne e crea 8 partite", async () => {
+    const tappa = await createMixedStage(16, "in_corso");
     const m = [];
     const f = [];
-    for (let i = 0; i < 4; i++) m.push(await registerConfirmed(tappa, "M"));
-    for (let i = 0; i < 4; i++) f.push(await registerConfirmed(tappa, "F"));
+    for (let i = 0; i < 8; i++) m.push(await registerConfirmed(tappa, "M"));
+    for (let i = 0; i < 8; i++) f.push(await registerConfirmed(tappa, "F"));
     const [tabellone] = await tabelloneDi(tappa);
     const id = (p: { iscrizione: string }) => p.iscrizione;
 
-    // Un girone gold sbilanciato (3 uomini + 1 donna) e uno silver, giocati.
+    // Un girone gold sbilanciato (5 uomini + 3 donne) e uno silver, giocati.
     const gironi: Record<string, string> = {};
     for (const [fase, membri] of [
-      ["gold", [m[0], m[1], m[2], f[0]]],
-      ["silver", [m[3], f[1], f[2], f[3]]],
+      ["gold", [...m.slice(0, 5), ...f.slice(0, 3)]],
+      ["silver", [...m.slice(5), ...f.slice(3)]],
     ] as const) {
       const g = await db.query<{ id: string }>(
         `insert into gironi (tabellone_id, nome, posizione, fase)
@@ -537,7 +629,7 @@ describe("tappa mista: editor e finali", () => {
       [tabellone.id],
     );
 
-    const genera = (gold: string[], silver: string[]) =>
+    const generaFinali = (gold: string[], silver: string[]) =>
       comeAdmin(() =>
         db.query<{ turno: number }>("select * from genera_finali($1, $2)", [
           tabellone.id,
@@ -548,29 +640,39 @@ describe("tappa mista: editor e finali", () => {
         ]),
       );
 
-    // Tutti arrivano dal girone giusto, ma la finale gold è 3 + 1.
+    // Una finale da 4 come prima non basta più.
+    const corta = await errore(
+      generaFinali(
+        [m[0], m[1], f[0], f[1]].map(id),
+        [m[5], m[6], f[3], f[4]].map(id),
+      ),
+    );
+    expect(corta.hint).toBe("finale_non_valida");
+
+    // Tutti arrivano dal girone giusto, ma la finale gold è 5 + 3.
     const sbagliata = await errore(
-      genera(
-        [m[0], m[1], m[2], f[0]].map(id),
-        [m[3], f[1], f[2], f[3]].map(id),
+      generaFinali(
+        [...m.slice(0, 5), ...f.slice(0, 3)].map(id),
+        [...m.slice(5), ...f.slice(3)].map(id),
       ),
     );
     expect(sbagliata.hint).toBe("finale_non_valida");
     expect(sbagliata.message).toContain("metà uomini e metà donne");
 
-    // Rimessi 2 + 2 (m2 ↔ f1), le finali nascono con 2 partite ciascuna.
+    // Rimessi 4 + 4 (m4 ↔ f3), le finali nascono con 8 partite ciascuna.
     await db.query(
       "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [gironi.silver, id(m[2])],
+      [gironi.silver, id(m[4])],
     );
     await db.query(
       "update girone_iscrizioni set girone_id = $1 where iscrizione_id = $2",
-      [gironi.gold, id(f[1])],
+      [gironi.gold, id(f[3])],
     );
-    const finali = await genera(
-      [m[0], m[1], f[0], f[1]].map(id),
-      [m[2], m[3], f[2], f[3]].map(id),
+    const finali = await generaFinali(
+      [...m.slice(0, 4), ...f.slice(0, 4)].map(id),
+      [...m.slice(4), ...f.slice(4)].map(id),
     );
-    expect(finali.rows.map((r) => r.turno)).toEqual([1, 2, 1, 2]);
+    const turni = [1, 1, 2, 2, 3, 3, 4, 4];
+    expect(finali.rows.map((r) => r.turno)).toEqual([...turni, ...turni]);
   });
 });

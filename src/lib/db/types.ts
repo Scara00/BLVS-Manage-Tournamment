@@ -105,6 +105,11 @@ export type Tappa = {
   stato: StatoTappa;
   /** Fixed at creation (`tappe_formato_fisso`). */
   formato: FormatoTappa;
+  /**
+   * Tappa di prova: a draft played like a stage in progress, unpublished
+   * (src/lib/tappe/prova.ts). Absent in rows read without it.
+   */
+  prova?: boolean;
   iscrizioni_aprono_il: string | null;
   iscrizioni_chiudono_il: string | null;
   /** When registrations closed (set by the DB on the change of state). */

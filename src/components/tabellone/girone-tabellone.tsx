@@ -1,5 +1,6 @@
 "use client";
 
+import { CLASSIFICA_CATEGORIA, righePerCategoria } from "@/lib/tappe/formato";
 import { useRef } from "react";
 import { NotaAssenza } from "@/components/live/nota-assenza";
 import {
@@ -56,11 +57,9 @@ export function GironeTabelloneCard({
   const Heading = livelloHeading;
   const titoloId = `${gironeAncora(girone.id)}-titolo`;
   const mia = girone.rows.find((r) => r.playerId === me);
-  const indiceTaglio = new Set(
-    girone.rows
-      .map((_, i) => i)
-      .filter((i) => ultimaSopra(girone.rows, i, girone.taglio)),
-  );
+  // Mixed board: men and women ranked apart, one table and line each.
+  const gruppi = righePerCategoria(girone.rows);
+  const misto = gruppi.some((g) => g.categoria !== null);
 
   const columns: ResponsiveTableColumn<RigaTabellone>[] = [
     {
@@ -130,22 +129,45 @@ export function GironeTabelloneCard({
         ref={ref}
         className="[&_[data-mia=true]]:bg-tape-soft [&_dt]:text-foreground [&_li[data-taglio=dopo]]:mb-space-3 [&_li[data-taglio=dopo]]:border-b-4 [&_li[data-taglio=dopo]]:border-b-tape [&_tr[data-taglio=dopo]]:border-b-4 [&_tr[data-taglio=dopo]]:border-b-tape"
       >
-        <ResponsiveTable
-          caption={`Classifica ${girone.nome}`}
-          captionHidden
-          columns={columns}
-          rows={girone.rows}
-          getRowKey={(row) => row.playerId}
-          rowAttributes={(row) => ({
-            ...liveRowAttributes(row.playerId, row),
-            ...(row.playerId === me ? { "data-mia": "true" } : {}),
-            ...(indiceTaglio.has(girone.rows.indexOf(row))
-              ? { "data-taglio": "dopo" }
-              : {}),
-          })}
-          cardBadgeKey="position"
-          emptyMessage="Nessun giocatore nel girone."
-        />
+        {gruppi.map(({ categoria, rows }) => {
+          const indiceTaglio = new Set(
+            rows
+              .map((_, i) => i)
+              .filter((i) => ultimaSopra(rows, i, girone.taglio)),
+          );
+          return (
+            <div
+              key={categoria ?? "tutti"}
+              className="flex flex-col gap-space-2 [&+&]:mt-space-4"
+            >
+              {categoria ? (
+                <p className="font-heading font-semibold">
+                  {CLASSIFICA_CATEGORIA[categoria]}
+                </p>
+              ) : null}
+              <ResponsiveTable
+                caption={
+                  categoria
+                    ? `Classifica ${girone.nome} · ${CLASSIFICA_CATEGORIA[categoria].toLowerCase()}`
+                    : `Classifica ${girone.nome}`
+                }
+                captionHidden
+                columns={columns}
+                rows={rows}
+                getRowKey={(row) => row.playerId}
+                rowAttributes={(row) => ({
+                  ...liveRowAttributes(row.playerId, row),
+                  ...(row.playerId === me ? { "data-mia": "true" } : {}),
+                  ...(indiceTaglio.has(rows.indexOf(row))
+                    ? { "data-taglio": "dopo" }
+                    : {}),
+                })}
+                cardBadgeKey="position"
+                emptyMessage="Nessun giocatore nel girone."
+              />
+            </div>
+          );
+        })}
       </div>
       {girone.taglio ? (
         <div className="flex flex-col gap-space-1 text-sm" data-testid="taglio">
@@ -155,8 +177,9 @@ export function GironeTabelloneCard({
               className="inline-block h-1 w-8 shrink-0 bg-tape"
             />
             <span>
-              Linea di taglio dopo il {girone.taglio.dopo}° posto: sopra{" "}
-              {girone.taglio.sopra}, sotto {girone.taglio.sotto}.
+              Linea di taglio dopo il {girone.taglio.dopo}° posto
+              {misto ? " di uomini e donne" : null}: sopra {girone.taglio.sopra}
+              , sotto {girone.taglio.sotto}.
             </span>
           </p>
           {mia && testoTaglio(girone, mia) ? (

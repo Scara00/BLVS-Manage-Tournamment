@@ -7,7 +7,7 @@
  * Queen group of 4 per phase): the gold final first, then the silver one.
  * Players knocked out earlier are not listed (client decision).
  */
-import type { FaseTabellone } from "@/lib/db/types";
+import { CATEGORIE, type Categoria, type FaseTabellone } from "@/lib/db/types";
 import {
   classificaGirone,
   REGOLA_CLASSIFICA,
@@ -25,6 +25,11 @@ export type GiocatoreFinale = {
   nome: string;
   /** Withdrawn (`iscrizioni.stato = 'ritirata'`): ranked last of the final. */
   ritirato: boolean;
+  /**
+   * Mixed board only: men and women are ranked apart, so the gold final
+   * crowns a King (1st man) and a Queen (1st woman).
+   */
+  categoria?: Categoria;
 };
 
 export type FinaleTappa = {
@@ -41,8 +46,13 @@ export type RigaClassificaTappa = {
   iscrizioneId: string;
   nome: string;
   fase: FaseTabellone | null;
-  /** 1-based place in the category standing; tied players share it. */
+  /**
+   * 1-based place in the category standing; tied players share it. On a
+   * mixed board within `categoria` (1st man = King, 1st woman = Queen).
+   */
   posizione: number;
+  /** Mixed board only: men and women are ranked apart. */
+  categoria?: Categoria;
   /** 1-based place inside its final, which sets the points. */
   posizioneFase: number;
   /** The place can no longer change, whatever the matches still to play. */
@@ -78,6 +88,8 @@ export type ClassificaTappa = {
 
 type Posto = {
   giocatore: GiocatoreFinale;
+  /** Mixed board only: the category this place counts in. */
+  categoria?: Categoria;
   posizione: number;
   definitiva: boolean;
   daRisolvere: boolean;
@@ -208,11 +220,42 @@ function assegnaPosti(
   return posti;
 }
 
-/** The places inside one final; withdrawn players come last. */
+/**
+ * The places inside one final; withdrawn players come last. On a mixed
+ * board men and women are placed apart, each from the 1st place.
+ */
 export function postiFinale(finale: FinaleTappa): Posto[] {
+  if (!finale.giocatori.some((g) => g.categoria)) {
+    return postiTra(finale, finale.giocatori);
+  }
+  return [
+    ...CATEGORIE.map((categoria) =>
+      finale.giocatori.filter((g) => g.categoria === categoria),
+    ),
+    finale.giocatori.filter((g) => !g.categoria),
+  ]
+    .filter((giocatori) => giocatori.length > 0)
+    .flatMap((giocatori) =>
+      postiTra(finale, giocatori).map((posto) => ({
+        ...posto,
+        ...(posto.giocatore.categoria
+          ? { categoria: posto.giocatore.categoria }
+          : {}),
+      })),
+    );
+}
+
+/**
+ * The places of `giocatori` inside the final, ranked among themselves
+ * (their own wins and head-to-head, as in the group standing).
+ */
+function postiTra(
+  finale: FinaleTappa,
+  giocatori: readonly GiocatoreFinale[],
+): Posto[] {
   const decisioni = finale.decisioni ?? [];
-  const attivi = finale.giocatori.filter((g) => !g.ritirato);
-  const ritirati = finale.giocatori.filter((g) => g.ritirato);
+  const attivi = giocatori.filter((g) => !g.ritirato);
+  const ritirati = giocatori.filter((g) => g.ritirato);
   const idAttivi = attivi.map((g) => g.iscrizioneId);
   const idRitirati = ritirati.map((g) => g.iscrizioneId);
 
@@ -246,6 +289,8 @@ export function postiFinale(finale: FinaleTappa): Posto[] {
 }
 
 const ORDINE_FASE: Record<FaseTabellone, number> = { gold: 0, silver: 1 };
+const ordineCategoria = (categoria: Categoria | undefined) =>
+  categoria === undefined ? 2 : CATEGORIE.indexOf(categoria);
 const ordineFase = (fase: FaseTabellone | null) =>
   fase === null ? 2 : ORDINE_FASE[fase];
 
@@ -269,10 +314,14 @@ export function classificaTappa({
   );
 
   const righe: RigaClassificaTappa[] = [];
-  let precedenti = 0;
+  // Places before this final: per category on a mixed board (the silver
+  // final's men go on from the gold final's men).
+  const precedenti = new Map<Categoria | null, number>();
+  const prima = (c: Categoria | undefined) => precedenti.get(c ?? null) ?? 0;
   for (const finale of ordinate) {
     const posti = postiFinale(finale).sort(
       (x, y) =>
+        ordineCategoria(x.categoria) - ordineCategoria(y.categoria) ||
         x.posizione - y.posizione ||
         x.giocatore.nome.localeCompare(y.giocatore.nome, "it"),
     );
@@ -281,7 +330,8 @@ export function classificaTappa({
         iscrizioneId: posto.giocatore.iscrizioneId,
         nome: posto.giocatore.nome,
         fase: finale.fase,
-        posizione: precedenti + posto.posizione,
+        posizione: prima(posto.categoria) + posto.posizione,
+        ...(posto.categoria ? { categoria: posto.categoria } : {}),
         posizioneFase: posto.posizione,
         posizioneDefinitiva: posto.definitiva,
         punti:
@@ -293,7 +343,9 @@ export function classificaTappa({
         daRisolvere: posto.daRisolvere,
       });
     }
-    precedenti += finale.giocatori.length;
+    for (const g of finale.giocatori) {
+      precedenti.set(g.categoria ?? null, prima(g.categoria) + 1);
+    }
   }
 
   const stato: StatoClassificaTappa =

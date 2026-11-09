@@ -3,7 +3,11 @@ import { Suspense } from "react";
 import { StagioneTappa } from "@/components/admin-stagione";
 import { GestioneTappa, GestioneTappaLoading } from "@/components/admin-tappa";
 import { PageContainer } from "@/components/layout/page-container";
-import { aggiornaScadenzaTappa, cambiaStatoTappa } from "@/lib/tappe/actions";
+import {
+  aggiornaScadenzaTappa,
+  cambiaStatoTappa,
+  impostaTappaProva,
+} from "@/lib/tappe/actions";
 import { archiviaTappa } from "@/lib/tappe/annullamento/actions";
 import { readGestioneTappa } from "@/lib/tappe/gestione";
 import { impostaStagioneTappa } from "@/lib/tappe/stagione/actions";
@@ -32,6 +36,7 @@ async function GestioneContent({ id }: { id: string }) {
         cambiaStato={cambiaStatoTappa}
         aggiornaScadenza={aggiornaScadenzaTappa}
         archivia={archiviaTappa}
+        impostaProva={impostaTappaProva}
       />
       {stagione ? (
         <StagioneTappa

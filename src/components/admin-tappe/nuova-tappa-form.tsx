@@ -216,8 +216,8 @@ export function NuovaTappaForm({
             <p className="max-w-prose">
               La tappa nasce <strong>in bozza</strong> con un solo tabellone
               misto: ogni squadra è un uomo e una donna, che ruotano nei gironi
-              da 2 uomini e 2 donne. Il massimo è pari e si divide a metà tra
-              uomini e donne.
+              da 4 uomini e 4 donne. Il massimo è un multiplo di 8 e si divide a
+              metà tra uomini e donne.
             </p>
             <PostiField
               key="X"

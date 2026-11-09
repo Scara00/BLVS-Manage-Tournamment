@@ -42,16 +42,30 @@ function Squadra({ giocatori }: { giocatori: readonly GiocatoreAvvio[] }) {
   );
 }
 
+/** «Turno 2»; with two matches per turn (mixed) «Partita 3 · turno 2». */
+function etichettaPartita(
+  partita: PartitaAnteprima,
+  partite: readonly PartitaAnteprima[],
+): string {
+  const stessoTurno = partite.filter((p) => p.turno === partita.turno);
+  return stessoTurno.length > 1
+    ? `Partita ${partita.numero} · turno ${partita.turno}`
+    : `Turno ${partita.turno}`;
+}
+
 /**
- * Per group: its players by letter, then the three matches of the
- * rotation with letters and surnames.
+ * Per group: its players by letter, then the matches of the rotation with
+ * letters and surnames (3 in a group of 4, 8 in a mixed group of 4 + 4).
  */
 export function AnteprimaPartite({
   anteprima,
   titolo = "Anteprima delle partite",
+  misto = false,
 }: {
   anteprima: readonly { girone: GironeAvvio; partite: PartitaAnteprima[] }[];
   titolo?: string;
+  /** Mixed board: a full group is 4 men + 4 women. */
+  misto?: boolean;
 }) {
   return (
     <section
@@ -93,7 +107,9 @@ export function AnteprimaPartite({
               </ul>
               {partite.length === 0 ? (
                 <p className="text-sm">
-                  Nessuna partita: il girone non ha 4 giocatori.
+                  {misto
+                    ? "Nessuna partita: il girone non ha 4 uomini e 4 donne."
+                    : "Nessuna partita: il girone non ha 4 giocatori."}
                 </p>
               ) : (
                 <ol
@@ -102,11 +118,11 @@ export function AnteprimaPartite({
                 >
                   {partite.map((p) => (
                     <li
-                      key={p.turno}
+                      key={p.numero}
                       className="flex flex-col gap-space-1 border-t border-neutral-200 pt-space-2"
                     >
                       <span className="font-mono text-sm font-semibold">
-                        Turno {p.turno}
+                        {etichettaPartita(p, partite)}
                       </span>
                       <span className="flex flex-wrap items-center gap-space-2">
                         <Squadra giocatori={p.squadraA} />

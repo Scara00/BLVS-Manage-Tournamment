@@ -26,6 +26,7 @@ import {
 import { RETURN_PARAM } from "@/lib/navigation/safe-return-path";
 import { isHttpsEnforced } from "@/lib/security/https";
 import { now } from "@/lib/time/server-time";
+import { AUTH_COOKIE, haCookieDiSessione } from "./auth-cookie";
 import { readSupabaseEnv } from "./env";
 
 let warnedMissingEnv = false;
@@ -43,9 +44,6 @@ function forbiddenAdminApi(): NextResponse {
   return NextResponse.json({ error: FORBIDDEN_MESSAGE }, { status: 403 });
 }
 
-/** Supabase auth cookie, possibly chunked: `sb-<ref>-auth-token[.N]`. */
-const AUTH_COOKIE = /^sb-.+-auth-token(?:\.\d+)?$/;
-
 /** Only page loads are redirected; actions and other methods pass through. */
 function isNavigation(request: NextRequest): boolean {
   return request.method === "GET" || request.method === "HEAD";
@@ -57,12 +55,34 @@ function redirectKeepingCookies(
   response: NextResponse,
   location: string,
 ): NextResponse {
-  const redirect = NextResponse.redirect(new URL(location, request.url));
-  response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
-  const cacheControl = response.headers.get("cache-control");
-  if (cacheControl) redirect.headers.set("cache-control", cacheControl);
-  return redirect;
+  return keepingCookies(
+    response,
+    NextResponse.redirect(new URL(location, request.url)),
+  );
 }
+
+/** `target` with the cookie changes and cache-control of `response`. */
+function keepingCookies(
+  response: NextResponse,
+  target: NextResponse,
+): NextResponse {
+  response.cookies.getAll().forEach((cookie) => target.cookies.set(cookie));
+  const cacheControl = response.headers.get("cache-control");
+  if (cacheControl) target.headers.set("cache-control", cacheControl);
+  return target;
+}
+
+export type OpzioniSessione = {
+  /**
+   * A page check that needs the (refreshed) session, e.g. a draft stage
+   * that only its admins may see. A response replaces the page (a 404
+   * rewrite) and keeps the cookie changes; null lets the page through.
+   */
+  controllaPagina?: (
+    supabase: SupabaseClient,
+    signedIn: boolean,
+  ) => Promise<NextResponse | null>;
+};
 
 /** Router prefetches are not the admin doing something. */
 function isPrefetch(request: NextRequest): boolean {
@@ -94,7 +114,10 @@ function movesAdminDeadline(
  * the rotated auth cookies to both the downstream render and the browser.
  * Server Components cannot write cookies, so this is where tokens get renewed.
  */
-export async function updateSession(request: NextRequest) {
+export async function updateSession(
+  request: NextRequest,
+  opzioni: OpzioniSessione = {},
+) {
   const env = readSupabaseEnv();
 
   if (!env) {
@@ -112,9 +135,7 @@ export async function updateSession(request: NextRequest) {
 
   // Read before the refresh, which may clear an expired session's cookies.
   // An empty auth cookie holds no session.
-  const hadSession = request.cookies
-    .getAll()
-    .some((cookie) => AUTH_COOKIE.test(cookie.name) && cookie.value !== "");
+  const hadSession = haCookieDiSessione(request);
 
   let response = NextResponse.next({ request });
 
@@ -162,6 +183,14 @@ export async function updateSession(request: NextRequest) {
         maxAge: 0,
       });
     }
+  }
+
+  if (opzioni.controllaPagina) {
+    const sostituta = await opzioni.controllaPagina(
+      supabase,
+      Boolean(data?.claims?.sub),
+    );
+    if (sostituta) return keepingCookies(response, sostituta);
   }
 
   if (isAdminApi(request) && !data?.claims?.sub) {

@@ -381,7 +381,7 @@ export function ProssimaFase({
           <p>
             {view.tipo === "gold_silver"
               ? view.categoria === "X"
-                ? "Dalle classifiche dei gironi iniziali: il miglior uomo e la miglior donna di ogni girone vanno nei gironi gold, gli altri due nei silver, sempre 2 uomini e 2 donne per girone. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
+                ? "Dalle classifiche dei gironi iniziali: i 2 migliori uomini e le 2 migliori donne di ogni girone vanno nei gironi gold, gli altri nei silver, sempre 4 uomini e 4 donne per girone. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
                 : "Dalle classifiche dei gironi iniziali: 1° e 2° di ogni girone vanno nei gironi gold, 3° e 4° nei silver. Dopo la proposta li controlli e li modifichi qui sotto, prima dell'avvio."
               : "Dalle classifiche dei gironi gold e silver: i migliori di ogni girone giocano la finale del loro colore."}
           </p>

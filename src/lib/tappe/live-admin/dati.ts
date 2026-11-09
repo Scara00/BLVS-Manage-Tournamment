@@ -1,5 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { inProva, statoDiGioco } from "@/lib/tappe/prova";
 import type {
+  Categoria,
   CategoriaTabellone,
   FaseGioco,
   FaseGirone,
@@ -33,6 +35,7 @@ type PartitaDb = {
   programmata_il: string | null;
   stato: StatoPartita;
   girone_id: string | null;
+  tabelloni?: UnoOMolti<{ categoria: CategoriaTabellone }>;
   gironi: UnoOMolti<{ nome: string; posizione: number; fase?: FaseGirone }>;
   punteggi: UnoOMolti<{ sets: SetPunteggio[]; versione: number }>;
   partita_giocatori: {
@@ -40,19 +43,25 @@ type PartitaDb = {
     iscrizione_id: string;
     iscrizioni: UnoOMolti<{
       posto: number | null;
-      utenti: UnoOMolti<{ nome: string; cognome: string }>;
+      utenti: UnoOMolti<{
+        nome: string;
+        cognome: string;
+        categoria?: Categoria | null;
+      }>;
     }>;
   }[];
 };
 
 const COLONNE_PARTITA = `id, fase, turno, campo, programmata_il, stato, girone_id,
+  tabelloni (categoria),
   gironi (nome, posizione, fase),
   punteggi (sets, versione),
-  partita_giocatori (squadra, iscrizione_id, iscrizioni (posto, utenti (nome, cognome)))`;
+  partita_giocatori (squadra, iscrizione_id, iscrizioni (posto, utenti (nome, cognome, categoria)))`;
 
 function toPartita(row: PartitaDb): PartitaLive {
   const girone = primo(row.gironi);
   const punteggio = primo(row.punteggi);
+  const misto = primo(row.tabelloni ?? null)?.categoria === "X";
   const squadra = (s: "A" | "B"): GiocatorePartita[] =>
     row.partita_giocatori
       .filter((g) => g.squadra === s)
@@ -63,14 +72,16 @@ function toPartita(row: PartitaDb): PartitaLive {
           iscrizioneId: g.iscrizione_id,
           nome: utente?.nome ?? "",
           cognome: utente?.cognome ?? "",
+          categoria: misto ? (utente?.categoria ?? null) : null,
           posto: iscrizione?.posto ?? 0,
         };
       })
       .sort((a, b) => a.posto - b.posto || a.cognome.localeCompare(b.cognome))
-      .map(({ iscrizioneId, nome, cognome }) => ({
+      .map(({ iscrizioneId, nome, cognome, categoria }) => ({
         iscrizioneId,
         nome,
         cognome,
+        ...(categoria ? { categoria } : {}),
       }));
   return {
     id: row.id,
@@ -87,6 +98,7 @@ function toPartita(row: PartitaDb): PartitaLive {
     squadraB: squadra("B"),
     sets: punteggio?.sets ?? [],
     versione: punteggio?.versione ?? 1,
+    ...(misto ? { misto: true } : {}),
   };
 }
 
@@ -100,7 +112,7 @@ export async function leggiTabelloneLive(
   const { data: tappa, error: tappaError } = await supabase
     .from("tappe")
     .select(
-      "id, nome, stato, tabelloni (id, categoria, fase_gioco, concluso_il)",
+      "id, nome, stato, prova, tabelloni (id, categoria, fase_gioco, concluso_il)",
     )
     .eq("id", tappaId)
     .maybeSingle();
@@ -110,6 +122,7 @@ export async function leggiTabelloneLive(
     id: string;
     nome: string;
     stato: StatoTappa;
+    prova?: boolean;
     tabelloni: {
       id: string;
       categoria: CategoriaTabellone;
@@ -127,7 +140,13 @@ export async function leggiTabelloneLive(
   if (error) throw new Error(`partite: ${error.message}`);
 
   return {
-    tappa: { id: row.id, nome: row.nome, stato: row.stato },
+    tappa: {
+      id: row.id,
+      nome: row.nome,
+      // A test draft is played like a stage in progress.
+      stato: statoDiGioco(row),
+      ...(inProva(row) ? { prova: true } : {}),
+    },
     categoria,
     tabelloneId: board.id,
     faseGioco: board.fase_gioco,

@@ -5,6 +5,7 @@
  */
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  Categoria,
   CategoriaTabellone,
   FaseTabellone,
   StatoIscrizione,
@@ -35,14 +36,17 @@ export function faseDellaFinale(
 
 export type GironeRow = { id: string; fase: string | null };
 
+type UtenteFinale = {
+  nome: string;
+  cognome: string;
+  categoria?: Categoria | null;
+};
+
 export type IscrizioneRow = {
   id: string;
   stato: StatoIscrizione;
   /** Many-to-one embed: PostgREST returns an object (or null under RLS). */
-  utente:
-    | { nome: string; cognome: string }
-    | { nome: string; cognome: string }[]
-    | null;
+  utente: UtenteFinale | UtenteFinale[] | null;
 };
 
 export type DatiFinali = {
@@ -64,8 +68,17 @@ function nomeIscrizione(row: IscrizioneRow | undefined, id: string): string {
  * members plus anyone who played one of its matches, so a withdrawn
  * player removed from the group still keeps the last place.
  */
-export function toFinaliTappa(dati: DatiFinali): FinaleTappa[] {
+export function toFinaliTappa(
+  dati: DatiFinali,
+  /** Mixed board: each player's category, so men and women rank apart. */
+  { misto = false }: { misto?: boolean } = {},
+): FinaleTappa[] {
   const iscrizioni = new Map(dati.iscrizioni.map((i) => [i.id, i]));
+  const categoriaDi = (id: string) => {
+    const row = iscrizioni.get(id);
+    const utente = Array.isArray(row?.utente) ? row.utente[0] : row?.utente;
+    return misto && utente?.categoria ? { categoria: utente.categoria } : {};
+  };
   return dati.gironi.flatMap((girone) => {
     const fase = faseDellaFinale(girone.fase);
     if (fase === undefined) return [];
@@ -86,6 +99,7 @@ export function toFinaliTappa(dati: DatiFinali): FinaleTappa[] {
           iscrizioneId: id,
           nome: nomeIscrizione(iscrizioni.get(id), id),
           ritirato: iscrizioni.get(id)?.stato === "ritirata",
+          ...categoriaDi(id),
         })),
         partite: partite.map(toPartitaGirone),
         decisioni: dati.decisioni
@@ -182,20 +196,23 @@ export async function leggiFinaliTappa(
   ];
   const iscrizioni = await supabase
     .from("iscrizioni")
-    .select("id, stato, utente:utenti(nome, cognome)")
+    .select("id, stato, utente:utenti(nome, cognome, categoria)")
     .in("id", ids);
   if (iscrizioni.error) {
     throw new Error(`classifica tappa: ${iscrizioni.error.message}`);
   }
 
   return {
-    finali: toFinaliTappa({
-      gironi: finali,
-      membri: righeMembri,
-      partite: righePartite,
-      iscrizioni: iscrizioni.data as IscrizioneRow[],
-      decisioni: decisioni.data as DatiFinali["decisioni"],
-    }),
+    finali: toFinaliTappa(
+      {
+        gironi: finali,
+        membri: righeMembri,
+        partite: righePartite,
+        iscrizioni: iscrizioni.data as IscrizioneRow[],
+        decisioni: decisioni.data as DatiFinali["decisioni"],
+      },
+      { misto: categoria === "X" },
+    ),
     concluso,
     ...(categoria === "X" ? { senzaPunti: true } : {}),
   };

@@ -15,7 +15,8 @@ select enum_has_labels(
   array[
     'inserimento_punteggio', 'correzione_punteggio', 'annullamento_punteggio',
     'ritiro', 'assenza', 'parita_risolta', 'rigenerazione_gironi',
-    'cambio_categoria', 'chiusura_tabellone', 'punteggio_parziale'
+    'cambio_categoria', 'chiusura_tabellone', 'punteggio_parziale',
+    'annullamento_iscrizione'
   ],
   'tutti i tipi di evento richiesti'
 );
@@ -81,12 +82,12 @@ select is(
      'a0000000-0000-4000-8000-000000000002'
    )),
   'a0000000-0000-4000-8000-000000000001'::uuid,
-  "con una sessione l'autore è l'utente, non quello passato"
+  'con una sessione l''autore è l''utente, non quello passato'
 );
 
 select throws_ok(
   $$ update public.registro set nota = 'x' $$,
-  '42501', null, "l'admin non può modificare il registro"
+  '42501', null, 'l''admin non può modificare il registro'
 );
 
 -- Giocatore: non scrive eventi.

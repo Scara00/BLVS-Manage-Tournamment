@@ -6,3 +6,4 @@ export { ScadenzaIscrizioni } from "./scadenza-iscrizioni";
 export { StatoTappaBadge } from "./stato-badge";
 export { StatoFlusso } from "./stato-flusso";
 export { TabelloniRiepilogo } from "./tabelloni-riepilogo";
+export { TappaDiProva } from "./tappa-di-prova";

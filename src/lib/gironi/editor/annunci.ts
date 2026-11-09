@@ -1,3 +1,5 @@
+import type { CategoriaTabellone } from "@/lib/db/types";
+import { regolaGironi } from "@/lib/tappe/gironi";
 import { controllaGironi } from "./controlli";
 import {
   nomeDestinazione,
@@ -61,6 +63,10 @@ export function annuncioModifica(
   prima: ComposizioneGironi,
   dopo: ComposizioneGironi,
   operazione: OperazioneGironi,
+  categoria?: CategoriaTabellone,
 ): string {
-  return `${descriviOperazione(prima, operazione)} ${controllaGironi(dopo).riepilogo}`;
+  const controlli = controllaGironi(dopo, regolaGironi(categoria), {
+    misto: categoria === "X",
+  });
+  return `${descriviOperazione(prima, operazione)} ${controlli.riepilogo}`;
 }

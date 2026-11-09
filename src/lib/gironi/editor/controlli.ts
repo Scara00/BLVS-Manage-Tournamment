@@ -1,5 +1,9 @@
 import { uominiDonne } from "@/lib/tappe/formato";
-import { REGOLA_GIRONI, type RegolaGironi } from "@/lib/tappe/gironi";
+import {
+  REGOLA_GIRONI,
+  REGOLA_GIRONI_MISTA,
+  type RegolaGironi,
+} from "@/lib/tappe/gironi";
 import type { ComposizioneGironi } from "./types";
 
 export type CodiceControllo = "dimensione" | "misto" | "doppioni" | "assegnati";
@@ -26,14 +30,16 @@ function giocatori(n: number) {
 
 /**
  * The three checks of the editor (R-24): every group has `dimensione`
- * players, nobody is in two places, every confirmed player is in a group.
+ * players (and on a mixed board half men, half women), nobody is in two places, every confirmed player is in a group.
  * They are warnings: the admin may keep an incomplete group.
  */
 export function controllaGironi(
   composizione: ComposizioneGironi,
-  regola: RegolaGironi = REGOLA_GIRONI,
+  regolaData?: RegolaGironi,
   { misto = false }: { misto?: boolean } = {},
 ): ControlliGironi {
+  // Without a rule the board's own: groups of 8 (4 + 4) on a mixed board.
+  const regola = regolaData ?? (misto ? REGOLA_GIRONI_MISTA : REGOLA_GIRONI);
   const { dimensione } = regola;
 
   // Mixed board: every full group is half men, half women.

@@ -9,6 +9,7 @@ import {
   aggiornaScadenzaDemo,
   cambiaStatoDemo,
   getDemoTappaGestione,
+  impostaProvaDemo,
   type DemoEsito,
 } from "@/lib/demo/gestione-tappe";
 import { readSupabaseEnv } from "@/lib/supabase/env";
@@ -17,6 +18,7 @@ import {
   GESTIONE_MESSAGES,
   type CambioStatoState,
   type MotivoErrore,
+  type ProvaState,
   type ScadenzaState,
 } from "./gestione-state";
 import {
@@ -273,6 +275,73 @@ export async function aggiornaScadenzaTappa(
     if (data.length === 0) return fail("conflict", GESTIONE_MESSAGES.conflict);
   } catch (error) {
     console.error("[tappe] scadenza non salvata", error);
+    return fail("network", GESTIONE_MESSAGES.network);
+  }
+  refresh();
+  return success;
+}
+
+/**
+ * «Tappa di prova» on or off. `admin_imposta_tappa_prova()` is the guard:
+ * admin only, on only for a draft; off always.
+ */
+export async function impostaTappaProva(
+  _prev: ProvaState,
+  formData: FormData,
+): Promise<ProvaState> {
+  const at = now();
+  const fail = (reason: MotivoErrore, message: string): ProvaState => ({
+    status: "error",
+    reason,
+    message,
+    at: at.getTime(),
+  });
+  const sessione = await sessioneAdmin();
+  if (!sessione.ok) {
+    return fail(sessione.reason, GESTIONE_MESSAGES[sessione.reason]);
+  }
+  const id = text(formData.get("tappaId"));
+  const prova = text(formData.get("prova")) === "true";
+  if (!id) return fail("conflict", GESTIONE_MESSAGES.conflict);
+  const success: ProvaState = {
+    status: "success",
+    message: prova
+      ? GESTIONE_MESSAGES.provaAttivata
+      : GESTIONE_MESSAGES.provaDisattivata,
+    at: at.getTime(),
+  };
+
+  if (!sessione.supabase) {
+    const esito = impostaProvaDemo(id, prova);
+    if (esito === "conflitto") {
+      return fail("invalid", GESTIONE_MESSAGES.provaSoloBozza);
+    }
+    const problema = esitoDemo(esito);
+    if (problema) return fail(problema.reason, problema.message);
+    refresh();
+    return success;
+  }
+
+  if (!isUuid(id)) return fail("conflict", GESTIONE_MESSAGES.conflict);
+  try {
+    const { error } = await sessione.supabase.rpc("admin_imposta_tappa_prova", {
+      p_tappa: id,
+      p_prova: prova,
+    });
+    if (error) {
+      if (error.hint === "prova_solo_bozza") {
+        return fail("invalid", GESTIONE_MESSAGES.provaSoloBozza);
+      }
+      if (error.code === "P0002") {
+        return fail("conflict", GESTIONE_MESSAGES.conflict);
+      }
+      if (motivoDb(error) === "network") {
+        console.error("[tappe] tappa di prova non salvata", error);
+      }
+      return fail(motivoDb(error), messaggioDb(error));
+    }
+  } catch (error) {
+    console.error("[tappe] tappa di prova non salvata", error);
     return fail("network", GESTIONE_MESSAGES.network);
   }
   refresh();

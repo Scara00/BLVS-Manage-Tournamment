@@ -4,6 +4,7 @@
  * BLVS-27's `classificaGirone`, run once with the saved score and once
  * with the new one, so the preview follows the same rules as the pages.
  */
+import { categorieDa } from "@/lib/gironi/classifica";
 import type { SetPunteggio } from "@/lib/db/types";
 import {
   classificaGirone,
@@ -73,6 +74,13 @@ export function classificaCon(
         ? toPartitaGirone(p, sets)
         : toPartitaGirone(p, p.sets),
     ),
+    partita.categoria === "X"
+      ? {
+          categorie: categorieDa(
+            partite.flatMap((p) => [...p.squadre.a, ...p.squadre.b]),
+          ),
+        }
+      : {},
   );
 }
 

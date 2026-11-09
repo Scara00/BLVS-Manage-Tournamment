@@ -17,7 +17,9 @@ const RPC_HINTS: Record<string, [CampoNuovaTappa, string]> = {
   scadenza_passata: ["scadenza", M.scadenzaPassata],
   scadenza_dopo_tappa: ["scadenza", M.scadenzaDopoTappa],
   posti: ["posti", M.posti],
-  posti_dispari: ["posti", M.postiDispari],
+  posti_misto: ["posti", M.postiMisto],
+  // Raised before migration 20261108100000 (even mixed maximum).
+  posti_dispari: ["posti", M.postiMisto],
 };
 
 /**

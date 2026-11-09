@@ -1,9 +1,12 @@
 import type {
+  Categoria,
   CategoriaTabellone,
   FaseGioco,
   FaseGirone,
   StatoTappa,
 } from "@/lib/db/types";
+import { REGOLA_FINALI_MISTA } from "@/lib/gironi/fasi/regole";
+import { type CategorieGirone, categorieDa } from "@/lib/gironi/classifica";
 import { coloreGirone, livelloGirone } from "@/lib/gironi/fasi/fase";
 import {
   classificaGirone,
@@ -35,6 +38,8 @@ export type GironeDati = {
   giocatori: readonly string[];
   /** Null when the group has no match yet. */
   classifica: ClassificaGirone | null;
+  /** Mixed board only: the players' categories (ranked apart). */
+  categorie?: CategorieGirone;
 };
 
 /** What w-tabellone is computed from: the DB read or the demo stores. */
@@ -54,10 +59,21 @@ export type DatiTabellone = {
 
 const nomi = new Intl.Collator("it", { sensitivity: "base" });
 
+const ORDINE_CATEGORIA = { M: 0, F: 1 } as const;
+
 function righe(girone: GironeDati, dati: DatiTabellone): RigaTabellone[] {
   const nome = (id: string) => dati.nomi.get(id) ?? id;
   const nota = (id: string) =>
     dati.note.get(id) ? { note: dati.note.get(id) } : {};
+  const categoriaDi = (id: string) => girone.categorie?.[id];
+  const conCategoria = (id: string) =>
+    categoriaDi(id) ? { category: categoriaDi(id) } : {};
+  // Mixed board: men first, then women; otherwise everyone together.
+  const perCategoria = (a: string, b: string) => {
+    const x = categoriaDi(a);
+    const y = categoriaDi(b);
+    return x && y ? ORDINE_CATEGORIA[x] - ORDINE_CATEGORIA[y] : 0;
+  };
   const giocato = girone.classifica?.righe.some((r) => r.giocate > 0) ?? false;
   if (!girone.classifica || !giocato) {
     const ids = new Set([
@@ -65,10 +81,11 @@ function righe(girone: GironeDati, dati: DatiTabellone): RigaTabellone[] {
       ...(girone.classifica?.righe.map((r) => r.iscrizioneId) ?? []),
     ]);
     return [...ids]
-      .sort((a, b) => nomi.compare(nome(a), nome(b)))
+      .sort((a, b) => perCategoria(a, b) || nomi.compare(nome(a), nome(b)))
       .map((id) => ({
         playerId: id,
         name: nome(id),
+        ...conCategoria(id),
         position: null,
         pari: false,
         ...nota(id),
@@ -86,6 +103,7 @@ function righe(girone: GironeDati, dati: DatiTabellone): RigaTabellone[] {
     ...girone.classifica.righe.map((r) => ({
       playerId: r.iscrizioneId,
       name: nome(r.iscrizioneId),
+      ...(r.categoria ? { category: r.categoria } : {}),
       position: r.posizione,
       pari: r.daRisolvere,
       ...nota(r.iscrizioneId),
@@ -134,7 +152,15 @@ export function vistaTabellone(
         livello: livelloGirone(g.fase),
         colore: coloreGirone(g.fase),
         stato: stato(g),
-        taglio: taglioGirone(g.fase, perColore(g.fase)),
+        taglio: taglioGirone(
+          g.fase,
+          perColore(g.fase),
+          undefined,
+          // Mixed board: the line is per category (4 + 4 finals).
+          t.categoria === "X"
+            ? { giocatori: REGOLA_FINALI_MISTA.giocatori / 2 }
+            : undefined,
+        ),
         rows: righe(g, dati),
       }))
       .map((g, i) => ({ g, i }))
@@ -182,7 +208,13 @@ export type RpcTabellone = {
   membri: { girone_id: string; iscrizione_id: string }[];
   partite: (PartitaGironeRow & { girone_id: string })[];
   decisioni: { girone_id: string; firma: string; ordine: string[] }[];
-  nomi: { iscrizione_id: string; nome: string; cognome: string }[];
+  nomi: {
+    iscrizione_id: string;
+    nome: string;
+    cognome: string;
+    /** Since migration 20261108110000; ranks a mixed group apart. */
+    categoria?: Categoria | null;
+  }[];
   assenze: { partita_id: string; iscrizione_id: string; tipo: TipoRitiro }[];
 };
 
@@ -194,6 +226,9 @@ export type RpcTabellone = {
  */
 export function datiDaRpc(rpc: RpcTabellone): DatiTabellone {
   const categoria = new Map(rpc.tabelloni.map((t) => [t.id, t.categoria]));
+  const categorie = categorieDa(
+    rpc.nomi.map((n) => ({ iscrizioneId: n.iscrizione_id, ...n })),
+  );
   const gironi: GironeDati[] = rpc.gironi.flatMap((g) => {
     const cat = categoria.get(g.tabellone_id);
     if (!cat) return [];
@@ -215,11 +250,13 @@ export function datiDaRpc(rpc: RpcTabellone): DatiTabellone {
         fase: g.fase,
         categoria: cat,
         giocatori,
+        ...(cat === "X" ? { categorie } : {}),
         classifica:
           partite.length === 0
             ? null
             : classificaGirone(giocatori, partite, {
                 decisioni: rpc.decisioni.filter((d) => d.girone_id === g.id),
+                ...(cat === "X" ? { categorie } : {}),
               }),
       },
     ];

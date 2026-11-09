@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Categoria, FaseGirone } from "@/lib/db/types";
-import { classificaGirone } from "@/lib/gironi/classifica";
+import type { RigaClassifica } from "@/lib/gironi/classifica";
 import {
   proponiFinali,
   proponiGoldSilver,
@@ -10,62 +10,64 @@ import {
   type GironeClassificato,
 } from "./qualificazione";
 
+const UOMINI = "ABCD";
+
 /**
- * A mixed group: men A, B and women C, D in the two mixed rounds
- * (A+C vs B+D, then A+D vs B+C). `vince` is the winning team of each
- * round, so the result decides who is the best man and the best woman.
+ * A played mixed group of 4 men (A-D) + 4 women (E-H). The standing is
+ * given directly, best first (`ordine`, by letter), so each test says who
+ * the best men and women are without inventing the 8 results.
  */
 function gironeMisto(
   nome: string,
   fase: FaseGirone = "iniziale",
-  vince: readonly ("A" | "B")[] = ["A", "A"],
+  ordine = "AEBFCGDH",
 ): GironeClassificato {
   const lettera = nome.at(-1)!;
   const id = (l: string) => `${fase}-${lettera}${l}`;
-  const iscrizioni = ["A", "B", "C", "D"].map(id);
-  const rotazione = [
-    [
-      ["A", "C"],
-      ["B", "D"],
-    ],
-    [
-      ["A", "D"],
-      ["B", "C"],
-    ],
-  ] as const;
-  const partite = rotazione.map(([a, b], t) => ({
-    id: `${nome}-t${t + 1}`,
-    stato: "conclusa" as const,
-    squadre: { A: a.map(id), B: b.map(id) },
-    sets: [vince[t] === "A" ? { a: 21, b: 15 + t } : { a: 15 + t, b: 21 }],
+  const righe: RigaClassifica[] = ordine.split("").map((l, i) => ({
+    iscrizioneId: id(l),
+    giocate: 4,
+    vinte: 4 - Math.floor(i / 2),
+    puntiFatti: 84 - i,
+    puntiSubiti: 70 + i,
+    differenza: 14 - 2 * i,
+    posizione: i + 1,
+    decisoDa: null,
+    daRisolvere: false,
   }));
-  const categorie: Record<string, Categoria> = {
-    [id("A")]: "M",
-    [id("B")]: "M",
-    [id("C")]: "F",
-    [id("D")]: "F",
-  };
+  const categorie: Record<string, Categoria> = Object.fromEntries(
+    "ABCDEFGH"
+      .split("")
+      .map((l) => [id(l), UOMINI.includes(l) ? "M" : "F"] as const),
+  );
   return {
     id: `g-${fase}-${lettera}`,
     nome,
     fase,
-    nomi: Object.fromEntries(iscrizioni.map((i) => [i, `Nome ${i}`])),
+    nomi: Object.fromEntries(
+      righe.map((r) => [r.iscrizioneId, `Nome ${r.iscrizioneId}`]),
+    ),
     categorie,
-    classifica: classificaGirone(iscrizioni, partite),
+    classifica: { righe, parita: [], stato: "completo" },
   };
 }
 
 const ids = (g: { giocatori: { iscrizioneId: string }[] }) =>
   g.giocatori.map((p) => p.iscrizioneId);
 
+/** The initial group a registration id comes from: `iniziale-<group><letter>`. */
+const gironeDi = (iscrizioneId: string) => iscrizioneId.split("-")[1][0];
+const categoriaDi = (iscrizioneId: string): Categoria =>
+  UOMINI.includes(iscrizioneId.at(-1)!) ? "M" : "F";
+
 describe("proponiGoldSilver nel misto", () => {
-  it("il miglior uomo e la miglior donna di ogni girone vanno in gold, gli altri in silver", () => {
-    // Girone A: A vince entrambe (A miglior uomo); C e D 1 vittoria a testa.
-    // Girone B: B vince entrambe.
+  it("i 2 migliori uomini e le 2 migliori donne vanno in gold, gli altri in silver", () => {
+    // Girone A: uomini A > B > C > D, donne E > F > G > H.
+    // Girone B: uomini B > A > D > C, donne F > E > H > G.
     const esito = proponiGoldSilver(
       [
-        gironeMisto("Girone A", "iniziale", ["A", "A"]),
-        gironeMisto("Girone B", "iniziale", ["B", "B"]),
+        gironeMisto("Girone A", "iniziale", "AEBFCGDH"),
+        gironeMisto("Girone B", "iniziale", "BFAEDHCG"),
       ],
       undefined,
       { misto: true },
@@ -73,38 +75,79 @@ describe("proponiGoldSilver nel misto", () => {
     expect(esito.esito).toBe("ok");
     if (esito.esito !== "ok") return;
     const [gold, silver] = esito.gironi;
+    expect(esito.gironi).toHaveLength(2);
     expect(gold.fase).toBe("gold");
     expect(silver.fase).toBe("silver");
-    // 2 men then 2 women in every group.
+    // 4 men then 4 women in every group.
     expect(ids(gold)).toEqual([
       "iniziale-AA",
       "iniziale-BB",
-      expect.stringMatching(/^iniziale-A[CD]$/),
-      expect.stringMatching(/^iniziale-B[CD]$/),
+      "iniziale-AB",
+      "iniziale-BA",
+      "iniziale-AE",
+      "iniziale-BF",
+      "iniziale-AF",
+      "iniziale-BE",
     ]);
-    expect(ids(silver).slice(0, 2)).toEqual(["iniziale-AB", "iniziale-BA"]);
+    expect(ids(silver)).toEqual([
+      "iniziale-AC",
+      "iniziale-BD",
+      "iniziale-AD",
+      "iniziale-BC",
+      "iniziale-AG",
+      "iniziale-BH",
+      "iniziale-AH",
+      "iniziale-BG",
+    ]);
     expect(esito.avvisi).toEqual([]);
-    expect(gold.giocatori[0].provenienza).toBe("Miglior uomo · Girone A");
+    expect(gold.giocatori.map((g) => g.provenienza).slice(0, 5)).toEqual([
+      "Miglior uomo · Girone A",
+      "Miglior uomo · Girone B",
+      "2° uomo · Girone A",
+      "2° uomo · Girone B",
+      "Miglior donna · Girone A",
+    ]);
   });
 
-  it("con 4 gironi i nuovi gironi restano 2 uomini + 2 donne", () => {
+  it("con 4 gironi ognuno manda un uomo e una donna a ogni girone gold", () => {
     const iniziali = ["A", "B", "C", "D"].map((l) =>
       gironeMisto(`Girone ${l}`),
     );
     const esito = proponiGoldSilver(iniziali, undefined, { misto: true });
     expect(esito.esito).toBe("ok");
     if (esito.esito !== "ok") return;
-    expect(esito.gironi).toHaveLength(4);
-    const categoria = (iscrizioneId: string) =>
-      iniziali.find((g) => g.categorie?.[iscrizioneId])!.categorie![
-        iscrizioneId
-      ];
+    expect(esito.gironi.map((g) => g.fase)).toEqual([
+      "gold",
+      "gold",
+      "silver",
+      "silver",
+    ]);
     for (const g of esito.gironi) {
-      expect(ids(g).map(categoria)).toEqual(["M", "M", "F", "F"]);
+      expect(ids(g).map(categoriaDi).join("")).toBe("MMMMFFFF");
+      for (const iniziale of ["A", "B", "C", "D"]) {
+        const daLi = ids(g).filter((i) => gironeDi(i) === iniziale);
+        expect(daLi.map(categoriaDi).sort()).toEqual(["F", "M"]);
+      }
     }
+    expect(esito.avvisi).toEqual([]);
   });
 
-  it("senza l'opzione resta la regola classica (1° e 2° in gold)", () => {
+  it("con un numero dispari di gironi l'ultimo resta da completare nell'editor", () => {
+    const esito = proponiGoldSilver(
+      ["A", "B", "C"].map((l) => gironeMisto(`Girone ${l}`)),
+      undefined,
+      { misto: true },
+    );
+    expect(esito.esito).toBe("ok");
+    if (esito.esito !== "ok") return;
+    const gold = esito.gironi.filter((g) => g.fase === "gold");
+    expect(gold.map((g) => g.giocatori.length)).toEqual([8, 4]);
+    expect(esito.avvisi).toContain(
+      `${gold[1].nome}: 4 giocatori invece di 8. Completalo nell'editor prima dell'avvio.`,
+    );
+  });
+
+  it("senza l'opzione resta la regola classica", () => {
     const esito = proponiGoldSilver([
       gironeMisto("Girone A"),
       gironeMisto("Girone B"),
@@ -114,14 +157,16 @@ describe("proponiGoldSilver nel misto", () => {
 });
 
 describe("proponiFinali nel misto", () => {
-  it("con 2 gironi gold, miglior uomo e miglior donna di ognuno", () => {
+  const gironi = (fase: "gold" | "silver", n: number) =>
+    ["A", "B", "C", "D"]
+      .slice(0, n)
+      .map((l) =>
+        gironeMisto(`${fase === "gold" ? "Gold" : "Silver"} ${l}`, fase),
+      );
+
+  it("con 2 gironi gold, i 2 migliori uomini e le 2 migliori donne di ognuno", () => {
     const esito = proponiFinali(
-      [
-        gironeMisto("Gold A", "gold", ["A", "A"]),
-        gironeMisto("Gold B", "gold", ["B", "B"]),
-        gironeMisto("Silver A", "silver"),
-        gironeMisto("Silver B", "silver"),
-      ],
+      [...gironi("gold", 2), ...gironi("silver", 2)],
       undefined,
       { misto: true },
     );
@@ -129,49 +174,74 @@ describe("proponiFinali nel misto", () => {
     if (esito.esito !== "ok") return;
     const [gold, silver] = esito.gironi;
     expect(gold.fase).toBe("finale_gold");
-    expect(ids(gold).slice(0, 2)).toEqual(["gold-AA", "gold-BB"]);
-    expect(gold.giocatori).toHaveLength(4);
+    expect(ids(gold)).toEqual([
+      "gold-AA",
+      "gold-BA",
+      "gold-AB",
+      "gold-BB",
+      "gold-AE",
+      "gold-BE",
+      "gold-AF",
+      "gold-BF",
+    ]);
     expect(silver.fase).toBe("finale_silver");
+    expect(silver.giocatori).toHaveLength(8);
   });
 
-  it("con 1 girone gold, i suoi 2 uomini e 2 donne", () => {
-    const esito = proponiFinali([gironeMisto("Gold A", "gold")], undefined, {
-      misto: true,
-    });
+  it("con 1 girone gold, i suoi 4 uomini e 4 donne", () => {
+    const esito = proponiFinali(gironi("gold", 1), undefined, { misto: true });
     expect(esito.esito).toBe("ok");
     if (esito.esito !== "ok") return;
     expect(esito.gironi).toHaveLength(1);
-    expect(esito.gironi[0].giocatori).toHaveLength(4);
+    expect(ids(esito.gironi[0]).map(categoriaDi).join("")).toBe("MMMMFFFF");
   });
 
-  it("con 4 gironi gold i finalisti li sceglie l'admin, da un elenco per finale", () => {
+  it("con 4 gironi gold, il miglior uomo e la miglior donna di ognuno", () => {
+    const esito = proponiFinali(gironi("gold", 4), undefined, { misto: true });
+    expect(esito.esito).toBe("ok");
+    if (esito.esito !== "ok") return;
+    expect(ids(esito.gironi[0])).toEqual([
+      "gold-AA",
+      "gold-BA",
+      "gold-CA",
+      "gold-DA",
+      "gold-AE",
+      "gold-BE",
+      "gold-CE",
+      "gold-DE",
+    ]);
+  });
+
+  it("con 3 gironi gold i finalisti li sceglie l'admin, da un elenco per finale", () => {
     const esito = proponiFinali(
-      [
-        ...["A", "B", "C", "D"].map((l) => gironeMisto(`Gold ${l}`, "gold")),
-        ...["A", "B", "C", "D"].map((l) =>
-          gironeMisto(`Silver ${l}`, "silver"),
-        ),
-      ],
+      [...gironi("gold", 3), ...gironi("silver", 3)],
       undefined,
       { misto: true },
     );
     expect(esito.esito).toBe("manuale");
     if (esito.esito !== "manuale") return;
     const [gold, silver] = esito.finali;
-    expect(gold).toMatchObject({ fase: "finale_gold", perCategoria: 2 });
+    expect(gold).toMatchObject({ fase: "finale_gold", perCategoria: 4 });
     expect(silver.fase).toBe("finale_silver");
     // Tutti i giocatori dei gironi gold: prima gli uomini, i migliori davanti.
-    expect(gold.candidati).toHaveLength(16);
+    expect(gold.candidati).toHaveLength(24);
     expect(gold.candidati.slice(0, 4).map((c) => c.provenienza)).toEqual([
       "Miglior uomo · Gold A",
       "Miglior uomo · Gold B",
       "Miglior uomo · Gold C",
-      "Miglior uomo · Gold D",
+      "2° uomo · Gold A",
     ]);
-    expect(gold.candidati[0].dettaglio).toBe("2 vittorie · +11");
+    expect(gold.candidati[0].dettaglio).toBe("4 vittorie · +14");
     expect(gold.candidati.map((c) => c.categoria).join("")).toBe(
-      "MMMMMMMMFFFFFFFF",
+      "M".repeat(12) + "F".repeat(12),
     );
+  });
+
+  it("senza l'opzione resta la finale classica da 4", () => {
+    const esito = proponiFinali(gironi("gold", 1));
+    expect(esito.esito).toBe("ok");
+    if (esito.esito !== "ok") return;
+    expect(esito.gironi[0].giocatori).toHaveLength(4);
   });
 });
 
@@ -191,50 +261,56 @@ describe("verificaSceltaFinali", () => {
     nome: `Nome ${id}`,
     provenienza: "Miglior uomo · Gold A",
     categoria,
-    dettaglio: "2 vittorie · +11",
+    dettaglio: "4 vittorie · +14",
   });
   const finali: FinaleDaComporre[] = [
     {
       fase: "finale_gold",
       nome: "Finale gold",
-      perCategoria: 2,
+      perCategoria: 4,
       candidati: [
-        candidato("m1", "M"),
-        candidato("m2", "M"),
-        candidato("m3", "M"),
-        candidato("f1", "F"),
-        candidato("f2", "F"),
-        candidato("f3", "F"),
+        ...["m1", "m2", "m3", "m4", "m5"].map((id) => candidato(id, "M")),
+        ...["f1", "f2", "f3", "f4", "f5"].map((id) => candidato(id, "F")),
       ],
     },
   ];
 
-  it("accetta 2 uomini + 2 donne tra i candidati, uomini davanti", () => {
+  it("accetta 4 uomini + 4 donne tra i candidati, uomini davanti", () => {
     const esito = verificaSceltaFinali(finali, {
-      finale_gold: ["f2", "m1", "f1", "m3"],
+      finale_gold: ["f2", "m1", "f1", "m3", "f4", "m5", "f3", "m2"],
     });
     expect(esito).toMatchObject({ ok: true });
     if (!esito.ok) return;
     expect(esito.gironi[0].giocatori.map((g) => g.iscrizioneId)).toEqual([
       "m1",
       "m3",
+      "m5",
+      "m2",
       "f2",
       "f1",
+      "f4",
+      "f3",
     ]);
   });
 
-  it("rifiuta 3 + 1, un estraneo e un doppione", () => {
+  it("rifiuta 5 + 3, un estraneo e un doppione", () => {
     expect(
-      verificaSceltaFinali(finali, { finale_gold: ["m1", "m2", "m3", "f1"] }),
+      verificaSceltaFinali(finali, {
+        finale_gold: ["m1", "m2", "m3", "m4", "m5", "f1", "f2", "f3"],
+      }),
     ).toEqual({
       ok: false,
-      messaggio: "Finale gold: scegli 2 uomini e 2 donne.",
+      messaggio: "Finale gold: scegli 4 uomini e 4 donne.",
     });
     expect(
-      verificaSceltaFinali(finali, { finale_gold: ["m1", "m2", "x", "f1"] }),
+      verificaSceltaFinali(finali, {
+        finale_gold: ["m1", "m2", "m3", "x", "f1", "f2", "f3", "f4"],
+      }),
     ).toMatchObject({ ok: false });
     expect(
-      verificaSceltaFinali(finali, { finale_gold: ["m1", "m1", "f1", "f2"] }),
+      verificaSceltaFinali(finali, {
+        finale_gold: ["m1", "m1", "m2", "m3", "f1", "f2", "f3", "f4"],
+      }),
     ).toMatchObject({ ok: false });
   });
 });

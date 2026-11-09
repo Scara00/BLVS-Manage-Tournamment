@@ -46,7 +46,10 @@ export function Tasto({ children }: { children: string }) {
   );
 }
 
-function descriviDestinazione(o: OpzioneDestinazione): string {
+function descriviDestinazione(
+  o: OpzioneDestinazione,
+  dimensione: number,
+): string {
   if (o.valore === NON_ASSEGNATI) {
     return o.giocatori.length === 0
       ? "Nessun giocatore, per ora."
@@ -54,11 +57,13 @@ function descriviDestinazione(o: OpzioneDestinazione): string {
   }
   const n = o.giocatori.length;
   const stato = o.pieno ? " · completo: scegli con chi scambiare" : "";
-  return `${n} su ${REGOLA_GIRONI.dimensione}${stato}`;
+  return `${n} su ${dimensione}${stato}`;
 }
 
 type SpostaDialogProps = {
   composizione: ComposizioneGironi;
+  /** Players of a full group: 8 on a mixed board (4 men + 4 women). */
+  dimensione?: number;
   open: boolean;
   /** The player to move (kept while the dialog fades out). */
   iscrizioneId: string | null;
@@ -83,6 +88,7 @@ type SpostaDialogProps = {
  */
 export function SpostaDialog({
   composizione,
+  dimensione = REGOLA_GIRONI.dimensione,
   open,
   iscrizioneId,
   onOpenChange,
@@ -104,6 +110,7 @@ export function SpostaDialog({
           // A fresh state for every opening.
           key={`${iscrizioneId}:${apertura}`}
           composizione={composizione}
+          dimensione={dimensione}
           iscrizioneId={iscrizioneId}
           onConferma={onConferma}
           destinazioneIniziale={destinazioneIniziale}
@@ -115,6 +122,7 @@ export function SpostaDialog({
 
 function SpostaDialogContenuto({
   composizione: attuale,
+  dimensione,
   iscrizioneId,
   onConferma,
   destinazioneIniziale,
@@ -122,6 +130,7 @@ function SpostaDialogContenuto({
   SpostaDialogProps,
   "composizione" | "onConferma" | "destinazioneIniziale"
 > & {
+  dimensione: number;
   iscrizioneId: string;
 }) {
   // Frozen at opening: the groups change (optimistically) while the
@@ -130,7 +139,11 @@ function SpostaDialogContenuto({
   const confermato = useRef(false);
   const giocatore = trovaGiocatore(composizione, iscrizioneId);
   const da = posizioneGiocatore(composizione, iscrizioneId);
-  const destinazioni = destinazioniSposta(composizione, iscrizioneId);
+  const destinazioni = destinazioniSposta(
+    composizione,
+    iscrizioneId,
+    dimensione,
+  );
 
   const [verso, setVerso] = useState<Destinazione | null>(
     destinazioneIniziale ?? destinazioni[0]?.valore ?? null,
@@ -219,7 +232,9 @@ function SpostaDialogContenuto({
                     </span>
                   }
                   description={
-                    <span className="font-mono">{descriviDestinazione(o)}</span>
+                    <span className="font-mono">
+                      {descriviDestinazione(o, dimensione)}
+                    </span>
                   }
                 />
               ))}
@@ -230,7 +245,7 @@ function SpostaDialogContenuto({
               legend="Scambia con…"
               hint={
                 scelta?.pieno
-                  ? `${scelta.nome} è completo: lo scambio lo tiene a ${REGOLA_GIRONI.dimensione}.`
+                  ? `${scelta.nome} è completo: lo scambio lo tiene a ${dimensione}.`
                   : undefined
               }
               value={scambio}

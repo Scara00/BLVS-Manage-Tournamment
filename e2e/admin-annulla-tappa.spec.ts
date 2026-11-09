@@ -1,5 +1,6 @@
 import type { Page } from "@playwright/test";
 import { expect, expectNoA11yViolations, test } from "./fixtures";
+import { waitForAnimations } from "./storybook-helpers";
 
 /*
  * w-admin-annulla-tappa on w-admin-dashboard, with the demo calendar (no
@@ -38,6 +39,8 @@ test("annulla tappa: da tastiera, focus sull'azione sicura, Esc torna al pulsant
   await expect(
     dialog.getByRole("button", { name: "Non annullare" }),
   ).toBeFocused();
+  // Mid-fade the text is lighter: axe would measure the animation.
+  await waitForAnimations(page);
   await expectNoA11yViolations(page);
 
   await page.keyboard.press("Escape");

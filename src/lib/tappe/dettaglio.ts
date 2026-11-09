@@ -28,7 +28,7 @@ import { FORMATO_DESCRIZIONE, QUOTA_LABEL } from "./formato";
 // ---------------------------------------------------------------------------
 
 export const DETTAGLIO_TAPPA_COLUMNS =
-  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, ritrovo, ritrovo_alle, programma, annullabile_fino_al, formato";
+  "id, nome, luogo, data_inizio, data_fine, stato, iscrizioni_aprono_il, iscrizioni_chiudono_il, ritrovo, ritrovo_alle, programma, annullabile_fino_al, formato, prova";
 
 /** A row of `public.tappe` as the detail reads it. */
 export type DettaglioTappaRow = Pick<
@@ -46,8 +46,9 @@ export type DettaglioTappaRow = Pick<
   | "programma"
   | "annullabile_fino_al"
 > &
-  // Absent in demo rows: a classic stage.
-  Partial<Pick<Tappa, "formato">>;
+  // Absent in demo rows: a classic stage. `prova`: a «tappa di prova»
+  // (the read already turned its `stato` into the playing state).
+  Partial<Pick<Tappa, "formato" | "prova">>;
 
 /**
  * A row of RPC `public.tabelloni_tappa(p_tappa)`. A mixed board comes as

@@ -3,7 +3,7 @@
  * values of each criterion, the explicit «Scambia ↕» swap, the reason and
  * the text announcing the new order.
  */
-import type { CategoriaTabellone } from "@/lib/db/types";
+import type { Categoria, CategoriaTabellone } from "@/lib/db/types";
 import {
   classificaGirone,
   CRITERI,
@@ -63,6 +63,18 @@ function valore(
   }
 }
 
+/** On a mixed board, the category of each player: they are ranked apart. */
+export function categorieParita(
+  dati: Pick<DatiParitaGirone, "categoria" | "giocatori">,
+): Readonly<Record<string, Categoria>> | undefined {
+  if (dati.categoria !== "X") return undefined;
+  return Object.fromEntries(
+    dati.giocatori.flatMap((g) =>
+      g.categoria ? [[g.iscrizioneId, g.categoria] as const] : [],
+    ),
+  );
+}
+
 /**
  * The perfect ties of a group, decided or not. A group still being played
  * shows none: players level before the last match are not a tie to decide
@@ -75,7 +87,10 @@ export function paritaGirone(
   const { tappaId, categoria, gironeId, gironeNome } = dati;
   const vuoto = { tappaId, categoria, gironeId, gironeNome, parita: [] };
   const ids = dati.giocatori.map((g) => g.iscrizioneId);
-  const base = classificaGirone(ids, dati.partite, { regola });
+  const base = classificaGirone(ids, dati.partite, {
+    regola,
+    categorie: categorieParita(dati),
+  });
   if (base.stato === "in_corso" || base.parita.length === 0) return vuoto;
 
   const nomi = new Map(dati.giocatori.map((g) => [g.iscrizioneId, g.nome]));
@@ -100,6 +115,7 @@ export function paritaGirone(
     return {
       firma: p.firma,
       posizione: p.posizione,
+      ...(p.categoria ? { categoria: p.categoria } : {}),
       giocatori: ordine.map((iscrizioneId) => ({
         iscrizioneId,
         nome: nomi.get(iscrizioneId) ?? iscrizioneId,
@@ -169,12 +185,25 @@ export function annuncioOrdine(
   return `${gironeNome}: ordine deciso. ${descriviOrdine(posizione, nomi)}.`;
 }
 
-/** «Parità per il 2º posto» or «Parità dal 2º al 4º posto». */
-export function titoloParita(posizione: number, giocatori: number): string {
+const TRA: Record<Categoria, string> = {
+  M: " tra gli uomini",
+  F: " tra le donne",
+};
+
+/**
+ * «Parità per il 2º posto» or «Parità dal 2º al 4º posto»; on a mixed
+ * board «… tra gli uomini» / «… tra le donne».
+ */
+export function titoloParita(
+  posizione: number,
+  giocatori: number,
+  categoria?: Categoria,
+): string {
   const ultimo = posizione + giocatori - 1;
+  const tra = categoria ? TRA[categoria] : "";
   return giocatori === 2
-    ? `Parità per il ${ordinale(posizione)} posto`
-    : `Parità dal ${ordinale(posizione)} al ${ordinale(ultimo)} posto`;
+    ? `Parità per il ${ordinale(posizione)} posto${tra}`
+    : `Parità dal ${ordinale(posizione)} al ${ordinale(ultimo)} posto${tra}`;
 }
 
 export function isMotivoParita(value: unknown): value is MotivoParita {

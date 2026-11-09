@@ -15,7 +15,7 @@ export const metadata: Metadata = { title: "Girone" };
 /**
  * Cache Components needs one sample to prerender the shell. Other ids
  * render on request; drafts and unknown stages are a real 404 from the
- * proxy (`rewriteTappaNonTrovata`), unknown groups from `notFound()`.
+ * proxy (`controllaTappa`), unknown groups from `notFound()`.
  */
 export function generateStaticParams() {
   return [{ id: "jesolo", gironeId: "jesolo-M-g1" }];

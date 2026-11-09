@@ -11,9 +11,11 @@ import {
   aggiornaScadenzaFinto,
   aperte,
   bozza,
+  bozzaInProva,
   bozzaSenzaScadenza,
   cambiaStatoFinto,
   chiuseAutomaticamente,
+  impostaProvaFinto,
   testoLungo,
 } from "./stories-data";
 
@@ -55,6 +57,7 @@ function Schermata({ tappa, stato = "pronto", offline }: SchermataProps) {
                   tappa={tappa}
                   cambiaStato={cambiaStatoFinto}
                   aggiornaScadenza={aggiornaScadenzaFinto}
+                  impostaProva={impostaProvaFinto}
                   offline={offline}
                 />
               )}
@@ -88,6 +91,9 @@ export const IscrizioniAperte: Story = {};
 
 /** Draft, not visible to players yet: «Apri le iscrizioni». */
 export const Bozza: Story = { args: { tappa: bozza } };
+
+/** «Tappa di prova» on: groups, scores and finals work on the draft. */
+export const BozzaInProva: Story = { args: { tappa: bozzaInProva } };
 
 /** A draft cannot open without a deadline: the reason is written next to it. */
 export const BozzaSenzaScadenza: Story = {

@@ -6,6 +6,7 @@ import {
 import {
   GESTIONE_MESSAGES,
   type CambioStatoAction,
+  type ProvaAction,
   type ScadenzaAction,
 } from "@/lib/tappe/gestione-state";
 
@@ -46,6 +47,13 @@ export const bozzaSenzaScadenza = vista({
   stato: "bozza",
   iscrizioni_aprono_il: null,
   iscrizioni_chiudono_il: null,
+});
+
+/** A draft played end to end to try the app («Tappa di prova»). */
+export const bozzaInProva = vista({
+  stato: "bozza",
+  iscrizioni_aprono_il: null,
+  prova: true,
 });
 
 export const aperte = vista();
@@ -95,6 +103,18 @@ export const aggiornaScadenzaFinto: ScadenzaAction = async () => {
   return {
     status: "success",
     message: GESTIONE_MESSAGES.scadenzaSalvata,
+    at: 1,
+  };
+};
+
+export const impostaProvaFinto: ProvaAction = async (_prev, data) => {
+  await pausa();
+  return {
+    status: "success",
+    message:
+      data.get("prova") === "true"
+        ? GESTIONE_MESSAGES.provaAttivata
+        : GESTIONE_MESSAGES.provaDisattivata,
     at: 1,
   };
 };

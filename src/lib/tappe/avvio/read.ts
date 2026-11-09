@@ -1,4 +1,5 @@
 import "server-only";
+import { inProva, statoDiGioco } from "@/lib/tappe/prova";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { forbidden, notFound } from "next/navigation";
 import { connection } from "next/server";
@@ -43,7 +44,7 @@ async function readFromDb(
 ): Promise<{ tabellone: TabelloneAvvio; problemi: ProblemaAvvio[] } | null> {
   const { data: tappa, error: tappaError } = await supabase
     .from("tappe")
-    .select("id, nome, stato, tabelloni (id, categoria, fase_gioco)")
+    .select("id, nome, stato, prova, tabelloni (id, categoria, fase_gioco)")
     .eq("id", tappaId)
     .maybeSingle();
   if (tappaError) throw new Error(`tappa: ${tappaError.message}`);
@@ -52,6 +53,7 @@ async function readFromDb(
     id: string;
     nome: string;
     stato: StatoTappa;
+    prova?: boolean;
     tabelloni: {
       id: string;
       categoria: CategoriaTabellone;
@@ -105,7 +107,13 @@ async function readFromDb(
 
   return {
     tabellone: {
-      tappa: { id: row.id, nome: row.nome, stato: row.stato },
+      tappa: {
+        id: row.id,
+        nome: row.nome,
+        // A test draft starts its phases like a stage in progress.
+        stato: statoDiGioco(row),
+        ...(inProva(row) ? { prova: true } : {}),
+      },
       categoria,
       tabelloneId: board.id,
       faseGioco: board.fase_gioco,

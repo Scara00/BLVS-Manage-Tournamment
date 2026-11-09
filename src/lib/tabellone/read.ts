@@ -9,6 +9,7 @@ import type { LiveSync } from "@/lib/live/types";
 import { readSupabaseEnv } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import { now } from "@/lib/time/server-time";
+import { FILTRO_TAPPA_VISIBILE } from "@/lib/tappe/prova";
 import {
   datiDaRpc,
   vistaTabellone,
@@ -109,7 +110,7 @@ export async function readTabelloneGiocatore(
     .from("tappe")
     .select("id, nome")
     .eq("id", tappaId)
-    .neq("stato", "bozza")
+    .or(FILTRO_TAPPA_VISIBILE)
     .maybeSingle<{ id: string; nome: string }>();
   if (error) throw new Error(`tappa: ${error.message}`);
   if (!tappa) return { status: "notFound" };

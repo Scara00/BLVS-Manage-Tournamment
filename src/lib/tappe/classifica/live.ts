@@ -10,7 +10,11 @@ import type {
   StageStandings,
 } from "@/lib/live/types";
 import type { ClassificaTappa } from "./classifica";
-import { TABELLONE_NOME, isCategoriaTabellone } from "@/lib/tappe/formato";
+import {
+  TRA_CATEGORIA,
+  TABELLONE_NOME,
+  isCategoriaTabellone,
+} from "@/lib/tappe/formato";
 import { PUNTI_PER_POSIZIONE } from "./punti";
 
 const CATEGORIA: Record<CategoriaTabellone, string> = TABELLONE_NOME;
@@ -87,6 +91,7 @@ export function toStageStandings(
       name: r.nome,
       phase: r.fase,
       position: r.posizione,
+      ...(r.categoria ? { category: r.categoria } : {}),
       phasePosition: r.posizioneFase,
       points: r.punti,
       definitive: r.posizioneDefinitiva,
@@ -159,11 +164,18 @@ export function annuncioClassificaTappa(
   if (standings.change) parti.push(standings.change);
   const mia = rigaMia(standings, me);
   if (mia) {
+    // On a mixed board men and women each have a 1st place: not a tie.
     const tied = standings.rows.some(
-      (r) => r.playerId !== mia.playerId && r.position === mia.position,
+      (r) =>
+        r.playerId !== mia.playerId &&
+        r.position === mia.position &&
+        r.category === mia.category,
     );
+    const tra = mia.category ? TRA_CATEGORIA[mia.category] : "";
     parti.push(
-      `la tua posizione: ${mia.position}ª${tied ? " a pari merito" : ""}, ${puntiRigaLabel(mia.points ?? 0, standings.provisional)}`,
+      standings.category === "X"
+        ? `la tua posizione: ${mia.position}ª${tra}${tied ? " a pari merito" : ""}`
+        : `la tua posizione: ${mia.position}ª${tied ? " a pari merito" : ""}, ${puntiRigaLabel(mia.points ?? 0, standings.provisional)}`,
     );
   }
   return parti.join(": ");

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CategoriaTabellone } from "@/lib/db/types";
+import type { Categoria, CategoriaTabellone } from "@/lib/db/types";
 import {
   toPartitaGirone,
   type PartitaGironeRow,
@@ -27,7 +27,11 @@ type GironeDb = {
   girone_iscrizioni: {
     iscrizione_id: string;
     iscrizioni: UnoOMolti<{
-      utenti: UnoOMolti<{ nome: string; cognome: string }>;
+      utenti: UnoOMolti<{
+        nome: string;
+        cognome: string;
+        categoria?: Categoria | null;
+      }>;
     }>;
   }[];
 };
@@ -69,7 +73,7 @@ export async function leggiDatiParitaTabellone(
   const { data: gironiData, error: gironiError } = await supabase
     .from("gironi")
     .select(
-      "id, nome, posizione, girone_iscrizioni (iscrizione_id, iscrizioni (utenti (nome, cognome)))",
+      "id, nome, posizione, girone_iscrizioni (iscrizione_id, iscrizioni (utenti (nome, cognome, categoria)))",
     )
     .eq("tabellone_id", (tabellone as { id: string }).id)
     .order("posizione");
@@ -103,7 +107,17 @@ export async function leggiDatiParitaTabellone(
     gironeId: g.id,
     gironeNome: g.nome,
     giocatori: g.girone_iscrizioni
-      .map((r) => ({ iscrizioneId: r.iscrizione_id, nome: nomeCompleto(r) }))
+      .map((r) => {
+        const giocatore = {
+          iscrizioneId: r.iscrizione_id,
+          nome: nomeCompleto(r),
+        };
+        const cat = primo(primo(r.iscrizioni)?.utenti ?? null)?.categoria;
+        // Only a mixed board ranks men and women apart.
+        return categoria === "X" && cat
+          ? { ...giocatore, categoria: cat }
+          : giocatore;
+      })
       .sort((a, b) => (a.iscrizioneId < b.iscrizioneId ? -1 : 1)),
     partite: righePartite
       .filter((p) => p.girone_id === g.id)

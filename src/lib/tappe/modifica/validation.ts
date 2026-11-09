@@ -1,6 +1,6 @@
 import { BodyReader } from "@/lib/api/validation";
 import type { CategoriaTabellone } from "@/lib/db/types";
-import { categorieTabelloni } from "@/lib/tappe/formato";
+import { POSTI_MISTO_MULTIPLO, categorieTabelloni } from "@/lib/tappe/formato";
 import {
   NUOVA_TAPPA_MESSAGES,
   POSTI_MAX,
@@ -35,7 +35,7 @@ export type TappaModificaValidation =
 export function errorePosti(
   raw: string,
   iscritti: number,
-  { pari = false }: { pari?: boolean } = {},
+  { misto = false }: { misto?: boolean } = {},
 ): string | undefined {
   const value = raw.trim();
   if (value === "") return "Campo obbligatorio.";
@@ -44,7 +44,7 @@ export function errorePosti(
     return NUOVA_TAPPA_MESSAGES.posti;
   if (posti < iscritti) return maxSottoIscrittiMessage(iscritti);
   if (posti < POSTI_MIN) return NUOVA_TAPPA_MESSAGES.posti;
-  if (pari && posti % 2 !== 0) return M.postiDispari;
+  if (misto && posti % POSTI_MISTO_MULTIPLO !== 0) return M.postiMisto;
   return undefined;
 }
 
@@ -102,7 +102,7 @@ export function validaTappaModifica(
     }
   }
 
-  // One maximum per board: M and F, or the single (even) mixed one.
+  // One maximum per board: M and F, or the single mixed one (multiple of 8).
   const posti: Partial<Record<CategoriaTabellone, number>> = {};
   for (const categoria of categorieTabelloni(originale.formato)) {
     const campo = CAMPO_POSTI_MODIFICA[categoria];
@@ -113,7 +113,7 @@ export function validaTappaModifica(
     const errore = errorePosti(
       raw,
       originale.tabelloni[categoria]?.iscritti ?? 0,
-      { pari: categoria === "X" },
+      { misto: categoria === "X" },
     );
     if (errore) reader.errors[campo] ??= errore;
     else posti[categoria] = Number(raw.trim());

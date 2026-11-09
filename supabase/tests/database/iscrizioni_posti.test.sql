@@ -56,7 +56,10 @@ select is(
   'il tabellone resta al massimo'
 );
 
+-- Come il backend (nessun JWT): solo così la scadenza può essere già passata,
+-- come succede davvero quando l'orologio la supera.
 reset role;
+set local request.jwt.claims to '';
 update public.tappe set iscrizioni_chiudono_il = now() - interval '1 minute'
 where id = 'c0000000-0000-4000-8000-000000001001';
 update public.tabelloni set posti = 16

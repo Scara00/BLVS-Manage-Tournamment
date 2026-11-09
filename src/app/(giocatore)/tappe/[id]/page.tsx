@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Dettaglio tappa" };
  * Cache Components needs one sample to prerender the shell (AppShell reads
  * the pathname). Every other id renders on request inside Suspense. Drafts
  * and unknown ids never get here: the proxy rewrites them to a real 404
- * (`rewriteTappaNonTrovata`); `notFound()` in the read is a second line.
+ * (`controllaTappa`); `notFound()` in the read is a second line.
  */
 export function generateStaticParams() {
   return [{ id: "rimini" }];

@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  CLASSIFICA_CATEGORIA,
+  righePerCategoria,
+  titoloMisto,
+} from "@/lib/tappe/formato";
 import { Fragment, useRef } from "react";
 import { BadgeTu, PuntiProvvisori } from "@/components/classifica-generale";
 import { useLive } from "@/components/live/live-provider";
@@ -113,6 +118,11 @@ function colonne(
       render: (row) => (
         <span className="inline-flex flex-wrap items-center gap-x-space-2 gap-y-space-1">
           <span>{row.name}</span>
+          {titoloMisto(row) ? (
+            <span className="bg-tape px-space-2 font-heading text-xs font-semibold tracking-wider text-primary uppercase">
+              {titoloMisto(row)}
+            </span>
+          ) : null}
           {row.playerId === me ? <BadgeTu /> : null}
           {row.withdrawn ? (
             <span className="font-sans text-sm font-normal">(ritirato)</span>
@@ -141,23 +151,31 @@ function colonne(
 
 type Gruppo = { key: string; caption: string; rows: StageStandingRow[] };
 
-/** Gold final, then silver, then (rarely) a final of unknown phase. */
+/**
+ * Gold final, then silver, then (rarely) a final of unknown phase; on the
+ * mixed board each final has a table for the men and one for the women.
+ */
 function gruppi(
   rows: readonly StageStandingRow[],
   senzaPunti = false,
 ): Gruppo[] {
   const fasi: (FaseTabellone | null)[] = ["gold", "silver", null];
-  return fasi
-    .map((fase) => ({
-      key: fase ?? "altra",
-      caption: fase
-        ? senzaPunti
-          ? FASE_FINALE_LABEL[fase]
-          : `${FASE_FINALE_LABEL[fase]} · punti ${puntiPerPosizioneTesto(fase)}`
-        : "Finale",
-      rows: rows.filter((r) => r.phase === fase),
-    }))
-    .filter((g) => g.rows.length > 0);
+  return fasi.flatMap((fase) => {
+    const caption = fase
+      ? senzaPunti
+        ? FASE_FINALE_LABEL[fase]
+        : `${FASE_FINALE_LABEL[fase]} · punti ${puntiPerPosizioneTesto(fase)}`
+      : "Finale";
+    return righePerCategoria(rows.filter((r) => r.phase === fase))
+      .filter((g) => g.rows.length > 0)
+      .map(({ categoria, rows: delGruppo }) => ({
+        key: `${fase ?? "altra"}-${categoria ?? "tutti"}`,
+        caption: categoria
+          ? `${caption} · ${CLASSIFICA_CATEGORIA[categoria]}`
+          : caption,
+        rows: delGruppo,
+      }));
+  });
 }
 
 /**
@@ -193,9 +211,13 @@ export function ClassificaTappa({
   const rows = standings?.rows ?? [];
   const provvisori = standings?.provisional ?? true;
   const stato = standings?.state ?? "in_attesa";
+  // Mixed board: men and women each have their own places.
   const pari = (row: StageStandingRow) =>
     rows.some(
-      (r) => r.playerId !== row.playerId && r.position === row.position,
+      (r) =>
+        r.playerId !== row.playerId &&
+        r.position === row.position &&
+        r.category === row.category,
     );
   const senzaPunti = categoria === "X";
   const columns = colonne(me, provvisori, still, pari, senzaPunti);

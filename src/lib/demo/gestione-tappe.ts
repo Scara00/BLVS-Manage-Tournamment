@@ -190,6 +190,15 @@ export function cambiaStatoDemo(
   return "ok";
 }
 
+/** `admin_imposta_tappa_prova()` on the demo stages: on only for a draft. */
+export function impostaProvaDemo(id: string, prova: boolean): DemoEsito {
+  const tappa = store().get(id);
+  if (!tappa) return "nonTrovata";
+  if (prova && tappa.row.stato !== "bozza") return "conflitto";
+  tappa.row.prova = prova;
+  return "ok";
+}
+
 export function aggiornaScadenzaDemo(id: string, chiudonoIl: Date): DemoEsito {
   const tappa = store().get(id);
   if (!tappa) return "nonTrovata";

@@ -331,9 +331,13 @@ export function ParitaDialog({
             {girone.gironeNome}
           </DialogTitle>
           <DialogDescription>
-            {titoloParita(parita.posizione, parita.giocatori.length)}: i
-            giocatori sono pari in tutti i criteri. Decidi tu l&apos;ordine, la
-            scelta resta nel registro con il tuo nome.
+            {titoloParita(
+              parita.posizione,
+              parita.giocatori.length,
+              parita.categoria,
+            )}
+            : i giocatori sono pari in tutti i criteri. Decidi tu l&apos;ordine,
+            la scelta resta nel registro con il tuo nome.
           </DialogDescription>
         </DialogHeader>
         <DialogBody className="flex flex-col gap-stack-sm">

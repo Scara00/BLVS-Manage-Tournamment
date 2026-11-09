@@ -28,6 +28,10 @@ import {
   type RegolaSet,
 } from "@/lib/punteggi/regola";
 import { REGOLA_AVVIO, ROTAZIONE_MISTA } from "@/lib/tappe/avvio/regole";
+import {
+  GIRONE_MISTO_PER_CATEGORIA,
+  POSTI_MISTO_MULTIPLO,
+} from "@/lib/tappe/formato";
 import { PUNTI_PER_POSIZIONE } from "@/lib/tappe/classifica/punti";
 import {
   REGOLE_APERTE,
@@ -115,12 +119,13 @@ function passiFormato(c: ConfigRegole): PassoFormato[] {
 }
 
 /** The mixed King & Queen stage, paragraph by paragraph. */
-export function regoleMisto(c: ConfigRegole = CONFIG_REGOLE): string[] {
-  const meta = c.giocatoriGirone / 2;
+export function regoleMisto(): string[] {
+  const meta = GIRONE_MISTO_PER_CATEGORIA;
+  const turni = new Set(ROTAZIONE_MISTA.map((p) => p.turno)).size;
   return [
-    "Alcune tappe sono King & Queen misto: un solo tabellone dove ogni squadra è sempre un uomo e una donna. Il numero massimo di giocatori è diviso a metà, metà posti agli uomini e metà alle donne.",
-    `I gironi sono da ${meta} uomini e ${meta} donne e giocano ${ROTAZIONE_MISTA.length} partite: a ogni partita si cambia compagno, così ognuno fa coppia una volta con ciascuno dei due giocatori dell'altra categoria.`,
-    "Le fasi sono le stesse: il miglior uomo e la miglior donna di ogni girone iniziale vanno nei gironi Gold, gli altri due nei Silver; poi le finali Gold e Silver, sempre metà uomini e metà donne. Fino a 2 gironi per colore in finale vanno il miglior uomo e la miglior donna di ogni girone; con più gironi i finalisti li sceglie l'organizzazione.",
+    `Alcune tappe sono King & Queen misto: un solo tabellone dove ogni squadra è sempre un uomo e una donna. Il numero massimo di giocatori è un multiplo di ${POSTI_MISTO_MULTIPLO}, metà posti agli uomini e metà alle donne.`,
+    `I gironi sono da ${meta} uomini e ${meta} donne e giocano ${ROTAZIONE_MISTA.length} partite in ${turni} turni, 2 partite per turno in contemporanea: ognuno gioca ${turni} partite e fa coppia una volta con ciascuno dei ${meta} giocatori dell'altra categoria.`,
+    "Le fasi sono le stesse: i 2 migliori uomini e le 2 migliori donne di ogni girone iniziale vanno nei gironi Gold, gli altri 2 uomini e 2 donne nei Silver; poi le finali Gold e Silver. Ogni girone, finali comprese, è da 4 uomini e 4 donne. Fino a 2 gironi per colore i finalisti si scelgono in automatico dalle classifiche; con più gironi li sceglie l'organizzazione.",
     "La tappa mista ha la sua classifica ma non assegna punti alla classifica generale.",
   ];
 }
@@ -146,7 +151,7 @@ export function regoleDelCircuito(
     },
     misto: {
       daConfermare: aperta("formato"),
-      contenuto: regoleMisto(config),
+      contenuto: regoleMisto(),
     },
     set: {
       daConfermare: aperta("set"),

@@ -332,10 +332,12 @@ export function PaletteComandi({
         {/* md–lg: icon only, the bar has no room at 200% text. */}
         <span className="md:max-lg:sr-only">Cerca</span>
         <span className="sr-only"> tappe, giocatori e partite</span>
+        {/* The shortcut only with a pointer and room for it: below sm the
+            button would not fit at 200% text. */}
         <span
           aria-hidden
           data-slot="palette-scorciatoia"
-          className="hidden bg-tape px-space-2 font-mono text-xs font-semibold text-primary md:max-lg:hidden pointer-fine:inline"
+          className="hidden bg-tape px-space-2 font-mono text-xs font-semibold text-primary md:max-lg:hidden sm:pointer-fine:inline"
         >
           {scorciatoia}
         </span>

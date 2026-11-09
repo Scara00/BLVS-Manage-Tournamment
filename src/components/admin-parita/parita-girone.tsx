@@ -98,8 +98,8 @@ export function ParitaGirone({
           >
             {p.decisione ? (
               <p className="font-semibold [overflow-wrap:anywhere]">
-                {titoloParita(p.posizione, p.giocatori.length)}: decisa
-                dall&apos;organizzazione
+                {titoloParita(p.posizione, p.giocatori.length, p.categoria)}:
+                decisa dall&apos;organizzazione
                 <span className="block text-sm font-normal">
                   {descriviOrdine(p.posizione, nomi)} · {p.decisione.motivo}
                 </span>
@@ -108,7 +108,7 @@ export function ParitaGirone({
               <>
                 <Badge variant="tape">Parità da risolvere</Badge>
                 <p className="[overflow-wrap:anywhere]">
-                  {titoloParita(p.posizione, p.giocatori.length)}:{" "}
+                  {titoloParita(p.posizione, p.giocatori.length, p.categoria)}:{" "}
                   {nomi.join(", ")}.
                 </p>
               </>

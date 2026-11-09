@@ -1,4 +1,5 @@
 import type {
+  Categoria,
   CategoriaTabellone,
   SetPunteggio,
   StatoPartita,
@@ -9,6 +10,8 @@ export type GiocatorePartita = {
   iscrizioneId: string;
   nome: string;
   cognome: string;
+  /** Mixed board only: men and women are ranked apart. */
+  categoria?: Categoria;
 };
 
 /**
@@ -45,6 +48,8 @@ export type TappaPunteggi = {
   id: string;
   nome: string;
   stato: StatoTappa;
+  /** A test draft: `stato` is then the playing state (in corso). */
+  prova?: boolean;
 };
 
 /** w-admin-live: every group match of a stage. */

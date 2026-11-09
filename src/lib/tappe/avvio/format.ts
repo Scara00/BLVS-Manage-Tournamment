@@ -50,7 +50,7 @@ export function toAvvioFaseView(
     faseGioco: tabellone.faseGioco,
     avviata: faseAvviata(tabellone),
     riepilogo: riepilogoAvvio(tabellone),
-    controlli: controlliView(problemi),
+    controlli: controlliView(problemi, tabellone.categoria === "X"),
     problemi,
     anteprima: tabellone.gironi.map((girone) => ({
       girone,

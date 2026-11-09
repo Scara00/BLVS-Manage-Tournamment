@@ -30,7 +30,9 @@ const HINT_FIELDS: Record<string, TappaModificaFieldErrors> = {
   scadenza_passata: { scadenza: M.scadenzaPassata },
   scadenza_dopo_tappa: { scadenza: M.scadenzaDopoTappa },
   scadenza_mancante: { scadenza: M.scadenzaPassata },
-  posti_dispari: { posti: M.postiDispari },
+  posti_misto: { posti: M.postiMisto },
+  // Raised before migration 20261108100000 (even mixed maximum).
+  posti_dispari: { posti: M.postiMisto },
 };
 
 /** Field errors for table constraints (BLVS-07, BLVS-19). */

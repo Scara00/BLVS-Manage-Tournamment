@@ -1,4 +1,5 @@
 import type {
+  Categoria,
   CategoriaTabellone,
   FaseGioco,
   FaseGirone,
@@ -12,6 +13,8 @@ export type GiocatorePartita = {
   iscrizioneId: string;
   nome: string;
   cognome: string;
+  /** Mixed board only: men and women are ranked apart. */
+  categoria?: Categoria;
 };
 
 /** One match of a board as w-admin-live shows it. */
@@ -33,11 +36,17 @@ export type PartitaLive = {
   sets: SetPunteggio[];
   /** `punteggi.versione` read with the sets: optimistic concurrency. */
   versione: number;
+  /**
+   * On the mixed board: two matches per turn, so the description names the
+   * teams. Absent = a classic board.
+   */
+  misto?: boolean;
 };
 
 /** Everything w-admin-live reads for one board. */
 export type TabelloneLive = {
-  tappa: { id: string; nome: string; stato: StatoTappa };
+  /** `stato` is the playing state: a test draft plays as in progress. */
+  tappa: { id: string; nome: string; stato: StatoTappa; prova?: boolean };
   categoria: CategoriaTabellone;
   /** `tabelloni.id` (`<stage>:<M|F>` in the demo). */
   tabelloneId: string;

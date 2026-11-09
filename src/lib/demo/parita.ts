@@ -1,4 +1,5 @@
 import type { CategoriaTabellone } from "@/lib/db/types";
+import { categorieParita } from "@/lib/gironi/parita/format";
 import {
   ordineValido,
   paritaPerfette,
@@ -106,6 +107,8 @@ export function risolviParitaDemo({
   const parita = paritaPerfette(
     girone.giocatori.map((g) => g.iscrizioneId),
     girone.partite,
+    undefined,
+    categorieParita(girone),
   ).find((p) => p.firma === firma);
   if (!parita) return { ok: false, motivo: "conflict" };
   if (!ordineValido(ordine, parita.iscrizioni)) {

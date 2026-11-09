@@ -146,5 +146,6 @@ export const TAPPA_MODIFICA_MESSAGES = {
     "Quest'ora non esiste per il passaggio all'ora legale: scegline un'altra.",
   dataNonValida: "Data non valida.",
   scadenzaNonValida: "Data e ora non valide.",
-  postiDispari: "Nel misto i posti sono pari: metà uomini e metà donne.",
+  postiMisto:
+    "Nel misto i posti sono un multiplo di 8 (8, 16, 24…): gironi da 4 uomini e 4 donne.",
 } as const;

@@ -2,6 +2,11 @@ import {
   ResponsiveTable,
   type ResponsiveTableColumn,
 } from "@/components/responsive-table/responsive-table";
+import {
+  CLASSIFICA_CATEGORIA,
+  righePerCategoria,
+  titoloMisto,
+} from "@/lib/tappe/formato";
 import { Badge } from "@/components/ui/badge";
 import type {
   ClassificaTappa,
@@ -22,7 +27,28 @@ const columns: ResponsiveTableColumn<RigaClassificaTappa>[] = [
       </span>
     ),
   },
-  { key: "nome", header: "Giocatore", rowHeader: true },
+  {
+    key: "nome",
+    header: "Giocatore",
+    rowHeader: true,
+    render: (r) => {
+      const titolo = titoloMisto({
+        category: r.categoria,
+        phase: r.fase,
+        position: r.posizione,
+      });
+      return (
+        <span className="inline-flex flex-wrap items-center gap-space-2">
+          {r.nome}
+          {titolo ? (
+            <span className="bg-tape px-space-2 font-heading text-xs font-semibold tracking-wider text-primary uppercase">
+              {titolo}
+            </span>
+          ) : null}
+        </span>
+      );
+    },
+  },
   {
     key: "fase",
     header: "Finale",
@@ -47,7 +73,8 @@ const columns: ResponsiveTableColumn<RigaClassificaTappa>[] = [
 
 /**
  * The mixed board's stage standing: places only, it gives no points to the
- * overall standing.
+ * overall standing. Men and women are ranked apart: one table per final
+ * and category, the gold final's 1st man and woman are King and Queen.
  */
 function ClassificaMista({ righe }: { righe: readonly RigaClassificaTappa[] }) {
   return (
@@ -68,14 +95,40 @@ function ClassificaMista({ righe }: { righe: readonly RigaClassificaTappa[] }) {
       {righe.length === 0 ? (
         <p>La classifica si compone con le finali gold e silver.</p>
       ) : (
-        <ResponsiveTable
-          caption="Classifica della tappa"
-          captionHidden
-          columns={columns.filter((c) => c.key !== "punti")}
-          rows={righe}
-          getRowKey={(r) => r.iscrizioneId}
-          emptyMessage="Nessun giocatore nelle finali."
-        />
+        (["gold", "silver", null] as const).flatMap((fase) =>
+          righePerCategoria(
+            righe
+              .filter((r) => r.fase === fase)
+              .map((r) => ({ ...r, category: r.categoria })),
+          )
+            .filter((g) => g.rows.length > 0)
+            .map(({ categoria, rows }) => {
+              const finale = fase
+                ? `Finale ${FASE_LABEL[fase].toLowerCase()}`
+                : "Finale";
+              const titolo = categoria
+                ? `${finale} · ${CLASSIFICA_CATEGORIA[categoria]}`
+                : finale;
+              return (
+                <div
+                  key={`${fase ?? "altra"}-${categoria ?? "tutti"}`}
+                  className="flex flex-col gap-space-2"
+                >
+                  <h3 className="font-heading text-lg font-semibold">
+                    {titolo}
+                  </h3>
+                  <ResponsiveTable
+                    caption={titolo}
+                    captionHidden
+                    columns={columns.filter((c) => c.key !== "punti")}
+                    rows={rows}
+                    getRowKey={(r) => r.iscrizioneId}
+                    emptyMessage="Nessun giocatore nelle finali."
+                  />
+                </div>
+              );
+            }),
+        )
       )}
     </section>
   );

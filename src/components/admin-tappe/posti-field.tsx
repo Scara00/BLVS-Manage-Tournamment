@@ -4,17 +4,21 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { CategoriaTabellone } from "@/lib/db/types";
-import { TABELLONE_NOME } from "@/lib/tappe/formato";
-import { gironiCompleti } from "@/lib/tappe/gironi";
+import { POSTI_MISTO_MULTIPLO, TABELLONE_NOME } from "@/lib/tappe/formato";
+import { gironiCompleti, regolaGironi } from "@/lib/tappe/gironi";
 import { CAMPO_POSTI, POSTI_MAX, POSTI_MIN } from "@/lib/tappe/nuova/types";
 import { AvvisoGironi } from "./avviso-gironi";
 
-/** A maximum the groups warning applies to (out-of-range is an error). */
-function daAvvisare(raw: string): number | null {
+/**
+ * A maximum the groups warning applies to (out-of-range, or a mixed one
+ * that is not a multiple of 8, is an error).
+ */
+function daAvvisare(raw: string, categoria: CategoriaTabellone): number | null {
   if (!/^\d+$/.test(raw.trim())) return null;
   const posti = Number(raw);
   if (posti < POSTI_MIN || posti > POSTI_MAX) return null;
-  return gironiCompleti(posti) ? null : posti;
+  if (categoria === "X" && posti % POSTI_MISTO_MULTIPLO !== 0) return null;
+  return gironiCompleti(posti, regolaGironi(categoria)) ? null : posti;
 }
 
 type PostiFieldProps = {
@@ -38,14 +42,16 @@ export function PostiField({
 }: PostiFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const avvisoId = useId();
-  const [avviso, setAvviso] = useState(() => daAvvisare(String(defaultValue)));
+  const [avviso, setAvviso] = useState(() =>
+    daAvvisare(String(defaultValue), categoria),
+  );
 
   // A restored draft writes the input directly: check its value again.
   useEffect(() => {
     if (restoredAt && inputRef.current) {
-      setAvviso(daAvvisare(inputRef.current.value));
+      setAvviso(daAvvisare(inputRef.current.value, categoria));
     }
-  }, [restoredAt]);
+  }, [restoredAt, categoria]);
 
   function usa(posti: number) {
     const input = inputRef.current;
@@ -53,7 +59,7 @@ export function PostiField({
     input.value = String(posti);
     // Lets the local draft see the new value.
     input.dispatchEvent(new Event("input", { bubbles: true }));
-    setAvviso(daAvvisare(input.value));
+    setAvviso(daAvvisare(input.value, categoria));
     input.focus();
   }
 
@@ -66,7 +72,7 @@ export function PostiField({
       }
       hint={
         categoria === "X"
-          ? `Numero pari tra ${POSTI_MIN} e ${POSTI_MAX}: metà posti agli uomini, metà alle donne (es. 32 = 16 + 16).`
+          ? `Multiplo di ${POSTI_MISTO_MULTIPLO} tra ${POSTI_MISTO_MULTIPLO} e ${POSTI_MAX}: metà posti agli uomini, metà alle donne (es. 32 = 16 + 16), per gironi da 4 uomini e 4 donne.`
           : `Tra ${POSTI_MIN} e ${POSTI_MAX}. Vale solo per il tabellone ${TABELLONE_NOME[categoria]}.`
       }
       required
@@ -78,17 +84,20 @@ export function PostiField({
         name={CAMPO_POSTI[categoria]}
         type="number"
         inputMode="numeric"
-        min={POSTI_MIN}
+        min={categoria === "X" ? POSTI_MISTO_MULTIPLO : POSTI_MIN}
         max={POSTI_MAX}
-        step={categoria === "X" ? 2 : 1}
+        step={categoria === "X" ? POSTI_MISTO_MULTIPLO : 1}
         defaultValue={defaultValue}
         className="max-w-40 font-mono"
         aria-describedby={avviso !== null ? avvisoId : undefined}
-        onBlur={(event) => setAvviso(daAvvisare(event.currentTarget.value))}
+        onBlur={(event) =>
+          setAvviso(daAvvisare(event.currentTarget.value, categoria))
+        }
       />
       <AvvisoGironi
         id={avvisoId}
         categoria={categoria}
+        regola={regolaGironi(categoria)}
         posti={avviso}
         onUsa={usa}
       />

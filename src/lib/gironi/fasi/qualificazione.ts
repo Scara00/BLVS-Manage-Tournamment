@@ -1,9 +1,10 @@
 import type { Categoria, FaseGirone } from "@/lib/db/types";
 import { puoAvanzare, type ClassificaGirone } from "@/lib/gironi/classifica";
-import { uominiDonne } from "@/lib/tappe/formato";
+import { GIRONE_MISTO_DIMENSIONE, uominiDonne } from "@/lib/tappe/formato";
 import { prossimoNomeGirone } from "./fase";
 import {
   REGOLA_FINALI,
+  REGOLA_FINALI_MISTA,
   REGOLA_QUALIFICAZIONE,
   type RegolaFinali,
   type RegolaQualificazione,
@@ -194,16 +195,20 @@ export function proponiGoldSilver(
  * gold/silver groups (R-29, Q-01): one King/Queen group of
  * `regola.giocatori` per colour, made of the best of each group. With n
  * groups of a colour each sends its first `giocatori / n`, so n must divide
- * `giocatori` (1, 2 or 4 groups for a final of 4).
+ * `giocatori` (1, 2 or 4 groups for a final of 4). Without a rule, a mixed
+ * board uses `REGOLA_FINALI_MISTA` (finals of 4 men + 4 women).
  */
 export function proponiFinali(
   gironi: readonly GironeClassificato[],
-  regola: RegolaFinali = REGOLA_FINALI,
+  regolaData?: RegolaFinali,
   { misto = false }: OpzioniProposta = {},
 ): EsitoProposta {
   const bloccato = blocco(gironi);
   if (bloccato) return bloccato;
-  if (misto) return proponiFinaliMiste(gironi, regola);
+  if (misto) {
+    return proponiFinaliMiste(gironi, regolaData ?? REGOLA_FINALI_MISTA);
+  }
+  const regola = regolaData ?? REGOLA_FINALI;
 
   const finali: GironeProposto[] = [];
   for (const [colore, fase, nome] of [
@@ -241,7 +246,7 @@ export function proponiFinali(
 }
 
 // ---------------------------------------------------------------------------
-// Mixed board (King & Queen misto): groups of 2 men + 2 women
+// Mixed board (King & Queen misto): groups of 4 men + 4 women
 // ---------------------------------------------------------------------------
 
 /** Options of the proposals: a mixed board ranks men and women apart. */
@@ -287,43 +292,48 @@ function alPostoMisto(
 }
 
 /**
- * Mixed gold and silver groups: the best man and the best woman of every
- * initial group go to gold, the other two to silver. Each new group is 2
- * men + 2 women, composed like the classic ones (`componiGironi`), so
- * nobody meets their initial group again when there are 4+ groups.
+ * Mixed gold and silver groups: the best 2 men and the best 2 women of
+ * every initial group go to gold, the other 2 + 2 to silver. Each new
+ * group is 4 men + 4 women: the men are composed like the classic groups
+ * (`componiGironi` on the 1st and the 2nd), and so are the women, so with
+ * 4 initial groups each one sends one man and one woman to every gold
+ * group. An odd number of initial groups leaves a last group of 2 + 2,
+ * which the admin completes in the editor.
  */
 function proponiGoldSilverMisto(
   iniziali: readonly GironeClassificato[],
 ): EsitoProposta {
   const proposti: GironeProposto[] = [];
-  for (const [fase, posizione] of [
-    ["gold", 1],
-    ["silver", 2],
+  for (const [fase, primo, secondo] of [
+    ["gold", 1, 2],
+    ["silver", 3, 4],
   ] as const) {
-    const gruppi = componiGironi(
-      iniziali.flatMap((g) => alPostoMisto(g, "M", posizione)),
-      iniziali.flatMap((g) => alPostoMisto(g, "F", posizione)),
+    const [uomini, donne] = (["M", "F"] as const).map((categoria) =>
+      componiGironi(
+        iniziali.flatMap((g) => alPostoMisto(g, categoria, primo)),
+        iniziali.flatMap((g) => alPostoMisto(g, categoria, secondo)),
+      ),
     );
-    for (const giocatori of gruppi) {
+    for (let k = 0; k < Math.max(uomini.length, donne.length); k += 1) {
       proposti.push({
         fase,
         nome: prossimoNomeGirone(proposti, fase),
-        giocatori,
+        giocatori: [...(uomini[k] ?? []), ...(donne[k] ?? [])],
       });
     }
   }
   return {
     esito: "ok",
     gironi: proposti,
-    avvisi: avvisiDimensione(proposti, 4),
+    avvisi: avvisiDimensione(proposti, GIRONE_MISTO_DIMENSIONE),
   };
 }
 
 /**
  * Mixed finals: one group of `giocatori` (half men, half women) per
  * colour. With n groups of a colour each sends its best `giocatori/2/n`
- * men and as many women, so n must divide `giocatori/2` (1 or 2 groups for
- * a final of 4).
+ * men and as many women, so n must divide `giocatori/2` (1, 2 or 4 groups
+ * for a final of 4 + 4).
  */
 const COLORI_FINALI = [
   ["gold", "finale_gold", "Finale gold"],
