@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { Tape } from "@/components/scoreboard";
 import type {
   GiocatoreAvvio,
@@ -26,19 +27,55 @@ function Giocatore({ giocatore }: { giocatore: GiocatoreAvvio }) {
   );
 }
 
-function Squadra({ giocatori }: { giocatori: readonly GiocatoreAvvio[] }) {
+/**
+ * One pair on its own row: the letters side by side, then the surnames
+ * joined by «/» as beach volley writes a pair. Screen readers hear
+ * «A, Rossi e B, Bianchi».
+ */
+function Coppia({ giocatori }: { giocatori: readonly GiocatoreAvvio[] }) {
   return (
-    <span className="inline-flex flex-wrap items-center gap-space-1">
-      {giocatori.map((g, i) => (
+    <div className="flex flex-wrap items-center gap-x-space-3 gap-y-space-1 border-s-4 border-primary py-space-2 ps-space-3 pe-space-2">
+      <span aria-hidden className="flex shrink-0 gap-space-1">
+        {giocatori.map((g) => (
+          <Lettera key={g.iscrizioneId} lettera={g.lettera} />
+        ))}
+      </span>
+      <span className="min-w-0 flex-[1_1_8rem] font-semibold [overflow-wrap:anywhere]">
+        {giocatori.map((g, i) => (
+          <Fragment key={g.iscrizioneId}>
+            {i > 0 ? (
+              <>
+                <span aria-hidden> / </span>
+                <span className="sr-only"> e </span>
+              </>
+            ) : null}
+            <span className="sr-only">{g.lettera}, </span>
+            {g.cognome}
+          </Fragment>
+        ))}
+      </span>
+    </div>
+  );
+}
+
+/** The two pairs stacked, split by a «VS» band (read as «contro»). */
+function Sfida({ partita }: { partita: PartitaAnteprima }) {
+  return (
+    <div className="flex flex-col border border-neutral-200">
+      <Coppia giocatori={partita.squadraA} />
+      <div className="flex items-center gap-space-2 px-space-3">
+        <span aria-hidden className="h-px flex-1 bg-neutral-200" />
         <span
-          key={g.iscrizioneId}
-          className="inline-flex items-center gap-space-1"
+          aria-hidden
+          className="font-mono text-xs font-bold tracking-widest"
         >
-          {i > 0 ? <span>e</span> : null}
-          <Giocatore giocatore={g} />
+          VS
         </span>
-      ))}
-    </span>
+        <span className="sr-only"> contro </span>
+        <span aria-hidden className="h-px flex-1 bg-neutral-200" />
+      </div>
+      <Coppia giocatori={partita.squadraB} />
+    </div>
   );
 }
 
@@ -114,21 +151,15 @@ export function AnteprimaPartite({
               ) : (
                 <ol
                   aria-label={`Partite del ${girone.nome}`}
-                  className="flex flex-col gap-space-2"
+                  className="flex flex-col gap-space-3 border-t border-neutral-200 pt-space-3"
                 >
                   {partite.map((p) => (
-                    <li
-                      key={p.numero}
-                      className="flex flex-col gap-space-1 border-t border-neutral-200 pt-space-2"
-                    >
+                    <li key={p.numero} className="flex flex-col gap-space-1">
                       <span className="font-mono text-sm font-semibold">
                         {etichettaPartita(p, partite)}
+                        <span className="sr-only">: </span>
                       </span>
-                      <span className="flex flex-wrap items-center gap-space-2">
-                        <Squadra giocatori={p.squadraA} />
-                        <span className="font-semibold">contro</span>
-                        <Squadra giocatori={p.squadraB} />
-                      </span>
+                      <Sfida partita={p} />
                     </li>
                   ))}
                 </ol>

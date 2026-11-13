@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1794177986.2597106,
-    "ast_hash": "e145e06a9a41944fb8f091dad2ca3f8f",
+    "mtime": 1794178149.1143556,
+    "ast_hash": "809de2c74b2e5d1f2204869f5ae9ab56",
     "semantic_hash": ""
   },
   "src/lib/supabase/proxy.test.ts": {
@@ -2940,8 +2940,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/anteprima-partite.tsx": {
-    "mtime": 1794177986.2739604,
-    "ast_hash": "17cefbe561f250fce8eee47277d03b13",
+    "mtime": 1794605761.4495015,
+    "ast_hash": "5797ebdf202ae33f2e7566b53d83cfce",
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/avvio-fase-links.tsx": {
@@ -2955,8 +2955,8 @@
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/avvio-fase.test.tsx": {
-    "mtime": 1793121437.7927063,
-    "ast_hash": "2b484b15d882163b6b467703fb50d3e9",
+    "mtime": 1794605705.4205964,
+    "ast_hash": "7089f3e966da5a9919cf49a8facaacd9",
     "semantic_hash": ""
   },
   "src/components/admin-avvio-fase/avvio-fase.tsx": {
@@ -5715,8 +5715,8 @@
     "semantic_hash": ""
   },
   ".impeccable/hook.cache.json": {
-    "mtime": 1794175388.230141,
-    "ast_hash": "4b3b09ae5ac6b52ad12f9d6b1813538c",
+    "mtime": 1794605705.4584732,
+    "ast_hash": "8d6da764c184a1bc574807605c0a3316",
     "semantic_hash": ""
   },
   "e2e/a11y.spec.ts": {

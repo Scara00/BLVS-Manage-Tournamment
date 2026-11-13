@@ -47,7 +47,7 @@ describe("AvvioFase (w-admin-avvio-fase)", () => {
     const partite = screen.getByRole("list", { name: "Partite del Girone A" });
     const [primo] = within(partite).getAllByRole("listitem");
     expect(primo).toHaveTextContent(
-      "Turno 1AA, RossieBB, BianchicontroCC, MarinoeDD, Greco",
+      "Turno 1: ABA, Rossi / e B, BianchiVS contro CDC, Marino / e D, Greco",
     );
   });
 
